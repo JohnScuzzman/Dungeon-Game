@@ -1,21 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h> // Used for random num generation.
 #include <time.h> // Used for seed generation.
+#include <string.h>
 #include "tables.h"
+#include "UI.h"
 #define FLOOR_SIZE_MAX 100
 #define FLOOR '.'
 #define wallW '='
 #define wallL '|'
 
+struct Info information;
 struct Monster m1;
-int **CreateFloor(int row, int col);
-int CreateRoom(int **room, int spacesUsedCol, int spacesUsedRow, int currentSeed);
-void FreeUpRoom(int **room, int row);
-void PrintFloor(int **room);
-void BannerW();
-void BannerL();
-int *RNG();
-void PlaceMonsters(int **room, int floorSizeToPrint);
+
 int seeds[256]; // Array to hold 36 random ints, length and width.
 int floorSizeToPrint = FLOOR_SIZE_MAX - 31;
 
@@ -31,16 +27,16 @@ int *RNG() {
 /**
 Creates the matrix that we will store our room's chars.
  */
-int **CreateFloor(int row, int col) {
+char **CreateFloor(int row, int col) {
     
     // Dynamically allocate memory for array before use.
-    int **room = (int **)malloc(row * sizeof(int *));
+    char **room = (char **)malloc(row * sizeof(char *));
     if (room == NULL) {
         exit(EXIT_FAILURE);; // Handle failure.
     }
      // Allocate memory for each row and col
     for (int i = 0; i < row; i++) {
-        room[i] = (int *)malloc(col * sizeof(int));
+        room[i] = (char *)malloc(col * sizeof(char));
         if (room[i] == NULL) {
             // Handle allocation error & free previously allocated memory
             for (int j = 0; j < i; j++) free(room[j]);
@@ -68,8 +64,6 @@ int **CreateFloor(int row, int col) {
     room[0][floorSizeToPrint] = '#';
     room[floorSizeToPrint - 6][0] = '#';
     room[floorSizeToPrint - 6][floorSizeToPrint] = '#';
-
-    
     return room; // Return the pointer to the allocated memory
 }
 
@@ -80,7 +74,7 @@ int spacesUsedCol is the vertical offset.
 int spacesUsedRow is the horizonal offset.
 int currentSeed tracks which value in array we are currently using.
  */
-int CreateRoom(int **room, int spacesUsedCol, int spacesUsedRow, int currentSeed) {
+int CreateRoom(char **room, int spacesUsedCol, int spacesUsedRow, int currentSeed) {
     int Rows = spacesUsedRow + 1;
     int Cols = spacesUsedCol + 1;
     int r = seeds[currentSeed];
@@ -101,6 +95,7 @@ int CreateRoom(int **room, int spacesUsedCol, int spacesUsedRow, int currentSeed
         Cols = Cols + 1;
 
     // Make a single room of a random size.
+    // Place room randomly along a row of the room.
     for (int i = 0; i < r; i++) {
         for (int j = 0; j < r1; j++){
             if (i == 0 || i == r - 1){
@@ -122,7 +117,7 @@ int CreateRoom(int **room, int spacesUsedCol, int spacesUsedRow, int currentSeed
     switch(oneToFourRand) {
         case 1:
         room[Cols + (r % 10) + r/2][Rows + 1] = ' ';
-        break;
+        break;void FreeUpRoom(char **room, int row);
         case 2:
         room[Cols + (r % 10) + r/2][Rows + r1] = ' ';
         break;
@@ -135,35 +130,71 @@ int CreateRoom(int **room, int spacesUsedCol, int spacesUsedRow, int currentSeed
         default:
         break;
     }
-
-    room[floorSizeToPrint - 9][floorSizeToPrint - 3] = 'G';
      //PLACE PLAYER
     room[floorSizeToPrint - 8][floorSizeToPrint - 2] = 'X';
+
     return (r1); // return length of room we just made.
 }
     
+void CreateUI(char **room, struct Player p) {
+
+    int counter;
+
+    for (int i = 0; i < floorSizeToPrint - 4; i++) {
+        for (int j = floorSizeToPrint + 1; j < FLOOR_SIZE_MAX; j++) {
+            if (i == 4 && j > floorSizeToPrint + 2 && j < FLOOR_SIZE_MAX){ // - 16 to keep final '#' at the end/
+                room[0][j] = '=';
+                room[floorSizeToPrint - 6][j] = '=';
+                room[i][j] = information.info[0][counter];
+                room[i + 1][j] = p.playerName[counter];
+                room[i + 3][j] = information.info[1][counter];
+                room[i + 4][j] = p.playerRace[counter];
+                room[i + 6][j] = information.info[2][counter];
+                room[i + 7][j] = p.playerClass[counter];
+                room[i + 9][j] = information.info[3][counter];
+                room[i + 10][j] = p.playerHP[counter];
+                room[i + 12][j] = information.info[4][counter];
+                room[i + 13][j] = p.playerWeapon[counter];
+
+                counter++;
+            }
+        }  
+        counter = 0;
+    }
+
+     //Create borders and whitespace first to dodge problems of trying to do it all in one for loop.
+    for (int i = 0; i < floorSizeToPrint - 4; i++) {
+        for (int j = floorSizeToPrint + 1; j < FLOOR_SIZE_MAX; j++) {
+            if (room[i][j] == '.') {
+                room[i][j] = ' ';
+            }
+        }  
+    }
+
+}
    
-void PlaceMonsters(int **room, int floorSizeToPrint) {
+void PlaceMonsters(char **room, int monsterRoom[FLOOR_SIZE_MAX][FLOOR_SIZE_MAX], int floorSizeToPrint) {
     int monstersToPlace = 4;
     int row = 0;
     int col = 1;
     for(int i = 0; i < 4; i ++) {
-        for(int j = 0; j < monstersToPlace; j++) {
-            printf("Attempting to place monster at: %d, %d\n", (seeds[row] % 100) + row, (seeds[col] % 100) + col);
-            
+        for(int j = 0; j < monstersToPlace; j++) {          
             if (room[(seeds[row] % 100) + row][(seeds[col] % 100) + col] == '|') {
                 room[(seeds[row] % 100) + row][(seeds[col] % 100) + col - 1] = 'G';
+                monsterRoom[(seeds[col] % 100) + col][row - 1 - (seeds[row] % 100)] = 1;
                 row += seeds[i] % 100;
                 col += seeds[j] % 100;
                 
             }
             if (room[(seeds[row] % 100) + row][(seeds[col] % 100) + col] == '=') {
                 room[(seeds[row] % 100) + row - 1][(seeds[col] % 100) + col] = 'G';
+                monsterRoom[(seeds[col] % 100) + col][row - 1 - (seeds[row] % 100)] = 1;
                 row += seeds[i] % 100;
                 col += seeds[j] % 100;
             }
             else{ 
                 room[(seeds[row] % 100) + row][(seeds[col] % 100) + col] = 'G';
+                monsterRoom[(seeds[col] % 100) + col][row - 1 - (seeds[row] % 100)] = 1;
                 row += seeds[i] % 100;
                 col += seeds[j] % 100;
             }
@@ -177,19 +208,21 @@ void PlaceMonsters(int **room, int floorSizeToPrint) {
     row = floorSizeToPrint;
     for(int i = 0; i < 4; i ++) {
         for(int j = 0; j < monstersToPlace; j++) {
-            printf("2: Attempting to place monster at: %d, %d\n", row - (seeds[row] % 100), (seeds[col] % 100) + col);
             if (room[(seeds[col] % 100) + col][row - (seeds[row] % 100)] == '|') {
                 room[(seeds[col] % 100) + col][row - 1 - (seeds[row] % 100)] = 'G';
+                monsterRoom[(seeds[col] % 100) + col][row - 1 - (seeds[row] % 100)] = 1;
                 row -= seeds[i] % 100;
                 col += seeds[j] % 100;
             }
             if (room[(seeds[col] % 100) + col][row - (seeds[row] % 100)] == '=') {
                 room[(seeds[col] % 100) + col - 1][row - (seeds[row] % 100)] = 'G';
+                monsterRoom[(seeds[col] % 100) + col][row - 1 - (seeds[row] % 100)] = 1;
                 row -= seeds[i] % 100;
                 col += seeds[j] % 100;
             }
             else {
                 room[(seeds[col] % 100) + col][row - (seeds[row] % 100)] = 'G';
+                monsterRoom[(seeds[col] % 100) + col][row - 1 - (seeds[row] % 100)] = 1;
                 row -= seeds[i] % 100;
                 col += seeds[j] % 100;
             }
@@ -200,43 +233,28 @@ void PlaceMonsters(int **room, int floorSizeToPrint) {
         col = 0;
         monstersToPlace = 3;
     }
-    
 }
 
-
-// void PlaceMonsters(int **room, int floorSizeToPrint) {
-//     int monstersToPlace = 30;
-//     for (int i = 0; i < floorSizeToPrint; i++) {
-//         for (int j = 0; j < floorSizeToPrint; j++){
-//             if (room[(seeds[i] % 10)][(seeds[j] % 10)] != wallL &&
-//             room[(seeds[i] % 10)][(seeds[j] % 10)] != wallW && monstersToPlace){
-//                 room[((seeds[i] % 10))][(seeds[j] % 10)] = 'G';
-//                 monstersToPlace--;
-//                 i = i + seeds[i] % 10;
-//                 j = j + seeds[j] % 10;
-//             }
-//         }   
-//     }
-// }
-
-
-void PrintFloor(int **room) {
+/** 
+Prints the floor passed in.
+*/
+void PrintFloor(char **room) {
     //Print entire floor
     for (int i = 0; i < floorSizeToPrint - 5; i++) {
-        for (int j = 0; j < floorSizeToPrint + 1; j++){
-            if ((i == 0 || i == floorSizeToPrint || (room[i][j] == wallW && room[i][j+1] == wallW)) && j < floorSizeToPrint)
-            {
-                printf("%c=", room[i][j]);
+        for (int j = 0; j < FLOOR_SIZE_MAX - 1; j++) {
+                if ((room[i][j] == wallW && room[i][j+1] == wallW) && j < FLOOR_SIZE_MAX - 1) {
+                    printf("%c=", room[i][j]);
+                }
+                else {
+                    printf("%c ", room[i][j]);
+                }
             }
-            else {
-                printf("%c ", room[i][j]);
-            }
-        }  
         printf("\n");
     }
 }
 
-void FreeUpRoom(int **room, int row) {
+
+void FreeUpRoom(char **room, int row) {
     for (int i = 0; i < row; i++) {
         free(room[i]); // Free each row
     }
