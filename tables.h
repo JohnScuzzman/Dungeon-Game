@@ -61,12 +61,13 @@
         char playerName[NAME_SIZE];
         char playerWeapon[NAME_SIZE];
         char playerArmor[NAME_SIZE];
+        char playerRace[NAME_SIZE] = "Human";
+        char playerClass[NAME_SIZE] = "Warrior";
+        char playerHP[4] = "10";
         int playerInventory[INVENTORY_SIZE][NAME_SIZE];
-        int playerHP = 100;
+        int playerHPInt = 10;
         int playerWeaponDMG = 0;
         int playerArmorAC = 0;
-        
-
     } player_t;
 
     // Contains names of monsters and their starting HP
@@ -91,11 +92,22 @@
         "Scimitar", "Acid", "Claws"};
     } monster_t;
 
-int **CreateFloor(int row, int col);
-int CreateRoom(int **room, int spacesUsedCol, int spacesUsedRow, int currentSeed);
-void FreeUpRoom(int **room, int row);
-void PrintFloor(int **room);
+// GamePanel Functions
+char **CreateFloor(int row, int col);
+int CreateRoom(char **room, int spacesUsedCol, int spacesUsedRow, int currentSeed);
+void CreateUI(char **room, struct Player p);
+void PrintFloor(char **room);
 int *RNG();
+void PlaceMonsters(char **room, int monsterRoom[100][100], int floorSizeToPrint);
+int MoveMonsters (int **room, int floorMax);
+void FreeUpRoom(char **room, int row);
+
+// Controls Funtions
+void enableRawMode();
+void disableRawMode();
+void Move(char **room, int colPOS, int rowPOS, char prevPOS);
+char MoveNorth(char **room, int colPOS, int rowPOS, char prevPOS);
+char MoveWest(char **room, int colPOS, int rowPOS, char prevPOS);
+char MoveSouth(char **room, int colPOS, int rowPOS, char prevPOS);
+char MoveEast(char **room, int colPOS, int rowPOS, char prevPOS);
 void EventLog(int currentEvent, int monsterName);
-void Move(int **room, int colPOS, int rowPOS, char prevPOS);
-void PlaceMonsters(int **room, int floorSizeToPrint);
