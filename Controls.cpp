@@ -16,11 +16,6 @@ Fucking abysmal switch statement for movement.
 Update: FIXED keypress requiring enter but only works on linux.
 TODO: Add a windows version?
  */
-void PrintFloor(char **room);
-void EventLog(int currentEvent, int monsterName);
-int MoveMonsters (int **room, int floorMax);
-void enableRawMode();
-void disableRawMode();
 int moveFlag = 0;
 int globalEvent = 1;
 int currentMonster = 0;
@@ -44,7 +39,7 @@ As we move, swap new char we will access and move to it by swapping the chars wi
 If we encounter a wall or enemy, disallow a move.
 If we encounter an enemy, go into the combat loop held in EventLog at the bottom.
 */
-void Move(char **room, int colPOS, int rowPOS, char prevPOS) {
+void Move(char **room, int monsterRoom[100][100], int colPOS, int rowPOS, char prevPOS) {
     char input;
     char POS = prevPOS;
     
@@ -57,7 +52,8 @@ void Move(char **room, int colPOS, int rowPOS, char prevPOS) {
     p.playerWeaponDMG = b.shortSword;
     p.playerArmorAC = a.leatherArmor;
 
-
+    // Place monsters and print the floor & UI.
+    PlaceMonsters(room, monsterRoom, 69);
     CreateUI(room, p);
     PrintFloor(room);
 
@@ -105,7 +101,7 @@ void Move(char **room, int colPOS, int rowPOS, char prevPOS) {
                 }
                 break;
             }
-            
+        MoveMonsters(room, monsterRoom);
         CreateUI(room, p);
         PrintFloor(room);
         EventLog(globalEvent, currentMonster);

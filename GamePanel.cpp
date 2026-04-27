@@ -170,7 +170,6 @@ void CreateUI(char **room, struct Player p) {
             }
         }  
     }
-
 }
    
 void PlaceMonsters(char **room, int monsterRoom[FLOOR_SIZE_MAX][FLOOR_SIZE_MAX], int floorSizeToPrint) {
@@ -234,6 +233,59 @@ void PlaceMonsters(char **room, int monsterRoom[FLOOR_SIZE_MAX][FLOOR_SIZE_MAX],
         monstersToPlace = 3;
     }
 }
+
+void MoveMonsters (char **room1, int room2[100][100]) {
+    int counter = 0;
+    int oneToFourRand = ((seeds[counter]) % 4); //0011223344
+
+    for (int i = 1; i < floorSizeToPrint - 1; i++) {
+        for (int j = 1; j < floorSizeToPrint - 1; j++){ 
+            if(room2[i][j] == 1) {
+                switch(oneToFourRand) {
+                case 1:
+                room2[i][j] = 0;
+                room2[i][j+1] = 1;
+                room1[i][j+1] = 'G';
+                room1[i][j] = '.';
+                j += 2;
+                counter++;
+                oneToFourRand = ((seeds[i]) % 4);
+                break;
+                case 2:
+                room2[i][j] = 0;
+                room2[i][j-1] = 1;
+                room1[i][j-1] = 'G';
+                room1[i][j] = '.';
+                counter++;
+                oneToFourRand = ((seeds[j]) % 4);
+                break;
+                case 3:
+                room2[i][j] = 0;
+                room2[i+1][j] = 1;
+                room1[i+1][j] = 'G';
+                room1[i][j] = '.';
+                oneToFourRand = ((seeds[i]) % 4);
+                counter++;
+                i += 2;
+                break;
+                case 4:
+                room2[i][j] = 0;
+                room2[i-1][j] = 1;
+                room1[i-1][j] = 'G';
+                room1[i][j] = '.';
+                oneToFourRand = ((seeds[j]) % 4);
+                counter++;
+                break;
+                default:
+                counter++;
+                break;
+            }
+            } 
+            counter = 0;
+        }  
+    }
+}
+
 
 /** 
 Prints the floor passed in.
