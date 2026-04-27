@@ -99,15 +99,16 @@ void CreateUI(char **room, struct Player p);
 void PrintFloor(char **room);
 int *RNG();
 void PlaceMonsters(char **room, int monsterRoom[100][100], int floorSizeToPrint);
-int MoveMonsters (int **room, int floorMax);
 void FreeUpRoom(char **room, int row);
+void MoveMonsters (char **room1, int room2[100][100]);
 
 // Controls Funtions
 void enableRawMode();
 void disableRawMode();
-void Move(char **room, int colPOS, int rowPOS, char prevPOS);
+void Move(char **room, int monsterRoom[100][100], int colPOS, int rowPOS, char prevPOS);
 char MoveNorth(char **room, int colPOS, int rowPOS, char prevPOS);
 char MoveWest(char **room, int colPOS, int rowPOS, char prevPOS);
 char MoveSouth(char **room, int colPOS, int rowPOS, char prevPOS);
 char MoveEast(char **room, int colPOS, int rowPOS, char prevPOS);
 void EventLog(int currentEvent, int monsterName);
+

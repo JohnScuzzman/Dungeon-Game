@@ -41,7 +41,7 @@ int main() {
     // Place monsters and print the floor & UI.
     PlaceMonsters(floor, monsterFloor, 69);
     // Begin Main Game loop.
-    Move(floor, 61, 67, '.');
+    Move(floor, monsterFloor, 61, 67, '.');
     FreeUpRoom(floor, 100);
 
     return 0;
