@@ -16,6 +16,9 @@ Fucking abysmal switch statement for movement.
 Update: FIXED keypress requiring enter but only works on linux.
 TODO: Add a windows version?
  */
+
+
+char roomUI[100][100];
 int moveFlag = 0;
 int globalEvent = 1;
 int currentMonster = 0;
@@ -35,16 +38,22 @@ void enableRawMode() {
 /*
 All of the game loops happens here in the move function.
 Start the player off with a Short Sword and Leather Armor, then run main game loop.
-As we move, swap new char we will access and move to it by swapping the chars with players POS.
+As we move, swap new int we will access and move to it by swapping the ints with players POS.
 If we encounter a wall or enemy, disallow a move.
 If we encounter an enemy, go into the combat loop held in EventLog at the bottom.
 */
-void Move(char **room, int monsterRoom[100][100], int colPOS, int rowPOS, char prevPOS) {
+void Move(int **room1, int **room2, int colPOS, int rowPOS, int prevPOS) {
     char input;
-    char POS = prevPOS;
-    
+    int POS = prevPOS;
+
+    // Clear Console.
+    std::system("clear");
+
+    // Print Banner.
+    EventLog(2, currentMonster);
+
     //Get Player's Name
-    printf("Please enter your character's first name: ");
+    printf("\n                              Please enter your name: ");
     scanf("%30[0-9a-zA-Z ]", p.playerName);
 
     strcpy(p.playerWeapon, b.blades[1]);
@@ -52,12 +61,14 @@ void Move(char **room, int monsterRoom[100][100], int colPOS, int rowPOS, char p
     p.playerWeaponDMG = b.shortSword;
     p.playerArmorAC = a.leatherArmor;
 
-    // Place monsters and print the floor & UI.
-    PlaceMonsters(room, monsterRoom, 69);
-    CreateUI(room, p);
-    PrintFloor(room);
 
-    EventLog(2, currentMonster);
+    // Clear Console.
+    std::system("clear");
+
+    // Place monsters and print the floor & UI.
+    PlaceMonsters(room1, room2, 69);
+    CreateUI(room2, roomUI, p);
+    EventLog(1, currentMonster);
     enableRawMode();
 
     // Indicates a successful move action/
@@ -74,36 +85,35 @@ void Move(char **room, int monsterRoom[100][100], int colPOS, int rowPOS, char p
             switch(input) {
                 
                 case 'A':
-                POS = MoveNorth(room, colPOS, rowPOS, POS);
+                POS = MoveNorth(room1, room2, colPOS, rowPOS, POS);
                 if(moveFlag){
                     colPOS--;
                 }
                 break;
 
                 case 'D':
-                POS = MoveWest(room, colPOS, rowPOS, POS);
+                POS = MoveWest(room1, room2, colPOS, rowPOS, POS);
                 if(moveFlag) {
                     rowPOS--;
                 }
                 break;
 
                 case 'B':
-                POS = MoveSouth(room, colPOS, rowPOS, POS);
+                POS = MoveSouth(room1, room2, colPOS, rowPOS, POS);
                 if(moveFlag) {
                     colPOS++;
                 }
                 break;
 
                 case 'C':
-                POS = MoveEast(room, colPOS, rowPOS, POS);
+                POS = MoveEast(room1, room2, colPOS, rowPOS, POS);
                 if(moveFlag) {
                     rowPOS++;
                 }
                 break;
             }
-        MoveMonsters(room, monsterRoom);
-        CreateUI(room, p);
-        PrintFloor(room);
+        MoveMonsters(room1, room2);
+        CreateUI(room2, roomUI, p);
         EventLog(globalEvent, currentMonster);
         globalEvent = 1;
         
@@ -111,29 +121,34 @@ void Move(char **room, int monsterRoom[100][100], int colPOS, int rowPOS, char p
     disableRawMode();
 }
 
-char MoveNorth(char **room, int colPOS, int rowPOS, char prevPOS) {
+int MoveNorth(int **room1, int **room2, int colPOS, int rowPOS, int prevPOS) {
     
-    char nextPOS_N;
-    // Save Next char we will overwrite with X.
-    nextPOS_N = room[colPOS-1][rowPOS];
-    // Check if valid, continue overwriting if so.
-    if(nextPOS_N == ' ' || nextPOS_N == '.' || nextPOS_N == '-') {
-        room[colPOS][rowPOS] = prevPOS;
-        room[colPOS-1][rowPOS] = 'X';
+    int nextPOS_N;
+    // Save Next int we will overwrite with 99/X (Player).
+    nextPOS_N = room1[colPOS-1][rowPOS];
+
+    // Check if valid, move player if so.
+    if(nextPOS_N == 0 || nextPOS_N == 4) {
+        room1[colPOS][rowPOS] = prevPOS;
+        room1[colPOS-1][rowPOS] = 99;
+        room2[colPOS][rowPOS] = prevPOS;
+        room2[colPOS-1][rowPOS] = 99;
         moveFlag = 1;
         return nextPOS_N;
     }
+
+    // Run if collision occurs
     switch(nextPOS_N) {
-    case '|':
+    case 1: // Wall
         break;
-    case '=':
+    case 2:
         break;
-    case 'G': // Goblin
+    case 11: // Goblin
         currentMonster = 0;
         moveFlag = 0;
         globalEvent = 3;
         break;
-    case 'O':
+    case 13: // Orc
         currentMonster = 1;
         globalEvent = 3;
         moveFlag = 0;
@@ -142,86 +157,95 @@ char MoveNorth(char **room, int colPOS, int rowPOS, char prevPOS) {
     moveFlag = 0;
     return prevPOS;
 }
-char MoveWest(char **room, int colPOS, int rowPOS, char prevPOS) {
-    char nextPOS_W;
-    nextPOS_W = room[colPOS][rowPOS-1];
-    if(nextPOS_W == ' ' || nextPOS_W == '.' || nextPOS_W == '-') {
-        room[colPOS][rowPOS] = prevPOS;
-        room[colPOS][rowPOS-1] = 'X';
+
+int MoveWest(int **room1, int **room2, int colPOS, int rowPOS, int prevPOS) {
+    int nextPOS_W;
+    nextPOS_W = room1[colPOS][rowPOS-1];
+    if(nextPOS_W == 0 || nextPOS_W == 4) {
+        room1[colPOS][rowPOS] = prevPOS;
+        room1[colPOS][rowPOS-1] = 99;
+        room2[colPOS][rowPOS] = prevPOS;
+        room2[colPOS][rowPOS-1] = 99;
         moveFlag = 1;
         return nextPOS_W;
     }
     switch(nextPOS_W) {
-    case '|':
+    case 1: // Wall
         break;
-    case '=':
+    case 2:
         break;
-    case 'G': // Goblin
+    case 11: // Goblin
         currentMonster = 0;
         moveFlag = 0;
         globalEvent = 3;
         break;
-    case 'O':
+    case 13: // Orc
         currentMonster = 1;
-        moveFlag = 0;
         globalEvent = 3;
+        moveFlag = 0;
         break;
     }
     moveFlag = 0;
     return prevPOS;
 }
-char MoveSouth(char **room, int colPOS, int rowPOS, char prevPOS) {
-    char nextPOS_S;
-    nextPOS_S = room[colPOS+1][rowPOS];
-    if(nextPOS_S == ' ' || nextPOS_S == '.' || nextPOS_S == '-') {
-        room[colPOS][rowPOS] = prevPOS;
-        room[colPOS+1][rowPOS] = 'X';
+
+int MoveSouth(int **room1,int **room2, int colPOS, int rowPOS, int prevPOS) {
+    int nextPOS_S;
+    nextPOS_S = room1[colPOS+1][rowPOS];
+    if(nextPOS_S == 0 || nextPOS_S == 4) {
+        room1[colPOS][rowPOS] = prevPOS;
+        room1[colPOS+1][rowPOS] = 99;
+        room2[colPOS][rowPOS] = prevPOS;
+        room2[colPOS+1][rowPOS] = 99;
         moveFlag = 1;
         return nextPOS_S;
     }
 
     switch(nextPOS_S) {
-    case '|':
+    case 1: // Wall
         break;
-    case '=':
+    case 2:
         break;
-    case 'G': // Goblin
+    case 11: // Goblin
         currentMonster = 0;
         moveFlag = 0;
         globalEvent = 3;
         break;
-    case 'O':
+    case 13: // Orc
         currentMonster = 1;
-        moveFlag = 0;
         globalEvent = 3;
+        moveFlag = 0;
         break;
     }
     moveFlag = 0;
     return prevPOS;
 }
-char MoveEast(char **room, int colPOS, int rowPOS, char prevPOS){
-    char nextPOS_E;
-    nextPOS_E = room[colPOS][rowPOS+1];
-    if(nextPOS_E == ' ' || nextPOS_E == '.' || nextPOS_E == '-') {
-        room[colPOS][rowPOS] = prevPOS;
-        room[colPOS][rowPOS+1] = 'X';
+
+int MoveEast(int **room1,int **room2, int colPOS, int rowPOS, int prevPOS){
+    int nextPOS_E;
+    nextPOS_E = room1[colPOS][rowPOS+1];
+    if(nextPOS_E == 0 || nextPOS_E == 4){
+        room1[colPOS][rowPOS] = prevPOS;
+        room1[colPOS][rowPOS+1] = 99;
+        room2[colPOS][rowPOS] = prevPOS;
+        room2[colPOS][rowPOS+1] = 99;
         moveFlag = 1;
         return nextPOS_E;
     }
     switch(nextPOS_E) {
-    case '|':
+    case 1: // Wall
         break;
-    case '=':
+    case 2:
         break;
-    case 'G': // Goblin
+    case 11: // Goblin
         currentMonster = 0;
         moveFlag = 0;
         globalEvent = 3;
         break;
-    case 'O':
+    case 13: // Orc
         currentMonster = 1;
-        moveFlag = 0;
         globalEvent = 3;
+        moveFlag = 0;
         break;
     }
     moveFlag = 0;
@@ -239,8 +263,19 @@ void EventLog(int currentEvent, int monsterName) {
             globalEvent = currentEvent;
         break;
         case 2:
-            printf("Welcome to the Dungeon, %s!\nUse the arrow keys to move and attack, or press 'x' to exit.\n", p.playerName);
-            globalEvent = currentEvent;
+        //File reading variables.
+        FILE *fptr;
+        char buffer[255];
+            fptr = fopen("Banner.txt", "r");
+        if (fptr == NULL) {
+            printf("Error: Could not open banner file.\n");
+            break;
+        }
+        while (fgets(buffer, 255, fptr)) {
+            printf("%s", buffer);
+        }
+        fclose(fptr);
+        globalEvent = currentEvent;
         break;
         case 3:
             printf("You swung at the %s with a %s.\n", m.monsterName[monsterName],
