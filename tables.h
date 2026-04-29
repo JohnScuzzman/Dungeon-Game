@@ -93,22 +93,22 @@
     } monster_t;
 
 // GamePanel Functions
-char **CreateFloor(int row, int col);
-int CreateRoom(char **room, int spacesUsedCol, int spacesUsedRow, int currentSeed);
-void CreateUI(char **room, struct Player p);
-void PrintFloor(char **room);
+int **CreateFloor(int row, int col);
+int CreateRoom(int **room1, int **room2, int spacesUsedCol, int spacesUsedRow, int currentSeed);
+void CreateUI(int **room2, char roomUI[100][100], struct Player p);
+void PrintFloor(char room[100][100]);
 int *RNG();
-void PlaceMonsters(char **room, int monsterRoom[100][100], int floorSizeToPrint);
-void FreeUpRoom(char **room, int row);
-void MoveMonsters (char **room1, int room2[100][100]);
+void PlaceMonsters(int **room1, int **room2, int floorSizeToPrint);
+void FreeUpRoom(int **room, int row);
+void MoveMonsters (int **room1, int **room2);
 
 // Controls Funtions
 void enableRawMode();
 void disableRawMode();
-void Move(char **room, int monsterRoom[100][100], int colPOS, int rowPOS, char prevPOS);
-char MoveNorth(char **room, int colPOS, int rowPOS, char prevPOS);
-char MoveWest(char **room, int colPOS, int rowPOS, char prevPOS);
-char MoveSouth(char **room, int colPOS, int rowPOS, char prevPOS);
-char MoveEast(char **room, int colPOS, int rowPOS, char prevPOS);
+void Move(int **room1, int **room2, int colPOS, int rowPOS, int prevPOS);
+int MoveNorth(int **room1, int **room2, int colPOS, int rowPOS, int prevPOS);
+int MoveWest(int **room1, int **room2, int colPOS, int rowPOS, int prevPOS);
+int MoveSouth(int **room1, int **room2, int colPOS, int rowPOS, int prevPOS);
+int MoveEast(int **room1, int **room2, int colPOS, int rowPOS, int prevPOS);
 void EventLog(int currentEvent, int monsterName);
 
