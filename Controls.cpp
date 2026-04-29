@@ -50,7 +50,7 @@ void Move(int **room1, int **room2, int colPOS, int rowPOS, int prevPOS) {
     std::system("clear");
 
     // Print Banner.
-    EventLog(2, currentMonster);
+    EventLog(4, currentMonster);
 
     //Get Player's Name
     printf("\n                              Please enter your name: ");
@@ -262,7 +262,18 @@ void EventLog(int currentEvent, int monsterName) {
             printf("Use the arrow keys to move and attack, or press 'x' to exit.\n");
             globalEvent = currentEvent;
         break;
-        case 2:
+                case 2:
+            printf("You swing at the %s with a %s, but you missed.", m.monsterName[monsterName], 
+            p.playerWeapon);
+            globalEvent = currentEvent;
+        break;
+        break;
+        case 3:
+            printf("You swung at the %s with a %s.\n", m.monsterName[monsterName],
+            p.playerWeapon);
+            globalEvent = currentEvent;
+        break;
+        case 4:
         //File reading variables.
         FILE *fptr;
         char buffer[255];
@@ -276,16 +287,5 @@ void EventLog(int currentEvent, int monsterName) {
         }
         fclose(fptr);
         globalEvent = currentEvent;
-        break;
-        case 3:
-            printf("You swung at the %s with a %s.\n", m.monsterName[monsterName],
-            p.playerWeapon);
-            globalEvent = currentEvent;
-        break;
-        case 4:
-            printf("You swing at the %s with a %s, but you missed.", m.monsterName[monsterName], 
-            p.playerWeapon);
-            globalEvent = currentEvent;
-        break;
     }
 }
