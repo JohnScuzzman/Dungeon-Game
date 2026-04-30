@@ -1,0 +1,1 @@
+g++ -Werror -Wall -o game main.cpp GamePanel.cpp Controls.cpp
