@@ -16,7 +16,6 @@ Monster CreateMonster(Position m_pos, int monsterID)
         AssignKoboldWarrior(&monster);
         break;
         case 2:
-        monster.ch = 'H'; 
         AssignHobgoblinWarrior(&monster);
         break;
         case 3:
