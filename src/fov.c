@@ -1,8 +1,10 @@
 #include <rogue.h>
 
 
-// Makes a radius around the player in which they can see.
-// To increase the radius, increase the variable RADIUS below.
+/* 
+Makes a radius around the player in which they can see.
+To increase the radius, increase the variable RADIUS below.
+*/
 void MakeFOV(Entity* player)
 { 
   int y, x, distance;
@@ -32,6 +34,9 @@ void MakeFOV(Entity* player)
   } 
 } 
 
+/*
+Clear the player's FOV to create it again after moving.
+*/
 void ClearFOV(Entity* player)
 { 
   int y, x;
@@ -47,9 +52,11 @@ void ClearFOV(Entity* player)
   } 
 } 
 
-// Calculates distance between two points.
-// uses the hypotenuse formula.
-// if floor() and sqrt()
+/* 
+Calculates distance between two points.
+Uses the hypotenuse formula.
+If floor() and sqrt() 
+*/ 
 int GetDistance(Position origin, Position target)
 { 
   double dy, dx;
@@ -61,7 +68,7 @@ int GetDistance(Position origin, Position target)
   return distance;
 }
 
-// Simple function to check if the coordinates are within our map or not.
+/* Simple function to check if the coordinates are within our map or not.*/ 
 bool IsInMap(int y, int x)
 { 
   if ((0 < y && y < MAP_HEIGHT - 1) && (0 < x && x < MAP_WIDTH - 1))
@@ -72,10 +79,11 @@ bool IsInMap(int y, int x)
   return false;
 }
 
-// God Bless Steve Register!!!
-// We stand on the shoulders of giants!!!
-// https://roguebasin.com/index.php/Simple_Line_of_Sight
-// This is a mind melting algorithm but I attempted to break it down below.
+/* 
+This is a mind melting algorithm but I attempted to break it down below.
+Based entirely off the algorithm developed by Stever Register.
+https://roguebasin.com/index.php/Simple_Line_of_Sight
+*/
 bool LineOfSight(Position origin, Position target)
 {
   int t, x, y, abs_delta_x, abs_delta_y, sign_x, sign_y, delta_x, delta_y;
@@ -138,7 +146,7 @@ bool LineOfSight(Position origin, Position target)
   /*if y is greater, start y dominate loop.*/
   else
   {
-    // Y dominate loop, basically same as above.
+    /* Y dominate loop, basically same as above.*/
     t = abs_delta_x * 2 - abs_delta_y;
 
     do

@@ -1,34 +1,54 @@
 #include <rogue.h>
 
+/*
+Ask the player for info about their character.
+Uses the TitleScreen ASCII art, and prints to certain areas of it.
+*/
 void AskPlayerInfo(Entity* player) {
     char* name;
     char* race;
     char* class;
     char* armor;
     char* weapon;
-    char inputString[3];
-     //  char + \n
+    int nameBufferSize = 3;
+    char *nameBuffer = (char *)malloc(nameBufferSize * sizeof(char));
+
+    if (nameBuffer == NULL) {
+        printf("Memory allocation error when creating input buffer.\n");
+        return;
+    }
 
     name = (char*)malloc(33);
+
+    if (name == NULL) {
+        printf("Memory allocation error when creating name buffer.\n");
+        return;
+    }
+    
     ChooseName(name);
     free(name);
     
     ChooseRace();
-    mvgetnstr(24, 20, inputString, 2);
-    char input = inputString[0];
+    mvgetnstr(24, 20, nameBuffer, 2);
+    char input = nameBuffer[0];
 
     AssignStats(input);
     
     ChooseClass();
-    mvgetnstr(30, 20, inputString, 2);
-    input = toupper(inputString[0]);
-    AssignGear(input);
-    
+    mvgetnstr(30, 20, nameBuffer, 2);
+    input = toupper(nameBuffer[0]);
+    AssignClass(input);
+
+    free(nameBuffer);
     noecho();           // Hide input again.
     cbreak();           // Set back to raw.
 }   
-    
-void AssignGear(char input) {
+
+/*
+Assigns the class chosen by the player to the Entity struct player.
+Each method is listed in classes.c
+*/
+void AssignClass(char input) {
     switch(input){
         case 'A':
             AssignKnight();
@@ -66,6 +86,10 @@ void AssignGear(char input) {
     }
 }
 
+/*
+Assigns stats based on the race chosen by the player.
+TODO Currently only adjusts HP, but will later adjust CHA, WIS, STR, etc.
+*/
 void AssignStats(char input) {
     switch(input){
         case '0':
@@ -115,6 +139,9 @@ void AssignStats(char input) {
     }
 }
 
+/*
+Prints available races.
+*/
 void ChooseRace() {
     mvprintw(22, 10, "Please Choose a Race: ");
     mvprintw(22, 40, "0 - Human");
@@ -129,6 +156,9 @@ void ChooseRace() {
     mvprintw(26, 60, "9 - Vampire");
 }
 
+/*
+Prints available classes.
+*/
 void ChooseClass() {
     mvprintw(28, 10, "Please Choose a Class: ");
     mvprintw(28, 40, "A - Knight");
@@ -143,7 +173,9 @@ void ChooseClass() {
     mvprintw(32, 60, "J - Cyborg");
 }
 
-
+/*
+Lets the player enter their name.
+*/
 void ChooseName(char* name) {
     echo();             
     nocbreak();         
