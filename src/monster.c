@@ -2,7 +2,7 @@
 
 /* 
 Populates a monster struct with a char and their position.
-monsterID is currently a random int 0-3 passed from map.c
+monsterID is a random int 0-3 passed from map.c
 */ 
 Monster CreateMonster(Position m_pos, int monsterID)
 {   
@@ -10,20 +10,20 @@ Monster CreateMonster(Position m_pos, int monsterID)
     switch (monsterID) {
         /* Call functions from monsterinfo.c */
         case 0:
-        AssignGoblinWarrior(monster);
+        AssignGoblinWarrior(&monster);
         break;
         case 1:
-        AssignKoboldWarrior(monster);
+        AssignKoboldWarrior(&monster);
         break;
         case 2:
         monster.ch = 'H'; 
-        AssignHobgoblinWarrior(monster);
+        AssignHobgoblinWarrior(&monster);
         break;
         case 3:
-        AssignGoblinRanger(monster);
+        AssignGoblinRanger(&monster);
         break;
         default:
-        AssignGoblinWarrior(monster);
+        AssignGoblinWarrior(&monster);
         break; 
     }
 

@@ -143,10 +143,10 @@ Monster CreateMonster(Position m_pos, int monsterID);
 void MoveMonster(Position newPos);
 
 // monsterinfo.c functions
-void AssignGoblinWarrior(Monster monster);
-void AssignKoboldWarrior(Monster monster);
-void AssignGoblinRanger(Monster monster);
-void AssignHobgoblinWarrior(Monster monster);
+void AssignGoblinWarrior(Monster *monster);
+void AssignKoboldWarrior(Monster *monster);
+void AssignGoblinRanger(Monster *monster);
+void AssignHobgoblinWarrior(Monster *monster);
 
 // Externals 
 // Used in tandem with main to let any functions use these outside of main.
