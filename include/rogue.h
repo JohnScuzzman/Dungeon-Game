@@ -1,7 +1,6 @@
-#ifndef ROGUE_H
+#ifndef ROGUE_H // These prevent compiling rogue_h multiple times.
 #define ROGUE_H
 
-// These prevent compiling rogue_h multiple times.
 
 #include <ncurses.h>
 #include <stdlib.h>
@@ -60,6 +59,16 @@ typedef struct
   bool transparent;
   bool visible;
   bool seen;
+  char monsterName[MAX_NAME_SIZE];
+  char monsterRace[MAX_NAME_SIZE];
+  char monsterClass[MAX_NAME_SIZE];
+  char monsterArmor[MAX_NAME_SIZE];
+  char monsterWeapon[MAX_NAME_SIZE];
+  int monsterHP;
+  int monsterAC;
+  int monsterMaxDMG;
+  int monsterMinDMG;
+  int monsterLVL;
 } Monster;
 
 typedef struct
@@ -95,6 +104,7 @@ void AssignCyborg();
 
 // engine.c functions
 bool NcursesSetup(void);
+void DisableMouseWheel();
 void GameLoop(void);
 void CloseGame(void);
 
@@ -103,14 +113,13 @@ Tile** CreateTiles(void);
 void FreeMap(void);
 Position SetupMap(void);
 
-
 // player.c functions
 Entity* CreatePlayer(Position start_pos);
 void PlayerInput(int input);
 void MovePlayer(Position newPos);
 void AskPlayerInfo(Entity* player);
 void AssignStats(char input);
-void AssignGear(char input);
+void AssignClass(char input);
 void ChooseRace();
 void ChooseName(char* name);
 void ChooseClass();
@@ -130,8 +139,14 @@ bool LineOfSight(Position origin, Position target);
 int GetSign(int a);
 
 // monster.c functions
-Monster CreateMonster(Position m_pos, char monsterChar);
+Monster CreateMonster(Position m_pos, int monsterID);
 void MoveMonster(Position newPos);
+
+// monsterinfo.c functions
+void AssignGoblinWarrior(Monster monster);
+void AssignKoboldWarrior(Monster monster);
+void AssignGoblinRanger(Monster monster);
+void AssignHobgoblinWarrior(Monster monster);
 
 // Externals 
 // Used in tandem with main to let any functions use these outside of main.

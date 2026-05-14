@@ -1,8 +1,11 @@
 #include <rogue.h>
 
+/* 
+Reads the main menu's scroll ASCII art and prints it to the screen.
+*/
 void TitleScreen() {
 
-    //File reading variables.
+    /* File reading variables. */
         FILE *fptr;
         char buffer[255];
             fptr = fopen("res/Banner.txt", "r");

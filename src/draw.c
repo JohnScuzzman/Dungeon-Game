@@ -1,6 +1,6 @@
 #include <rogue.h>
 
-// Draw the Map.
+/* Draw the Map to the screen. */
 void DrawMap(void)
 { 
   for (int y = 0; y < MAP_HEIGHT; y++)
@@ -23,14 +23,13 @@ void DrawMap(void)
   } 
 } 
 
-// Draw Entity based on position.
+/* Draw Entity based on position. */
 void DrawEntity(Entity* entity) { 
   mvaddch(entity->pos.y, entity->pos.x, entity->ch | entity->color);
 } 
 
+/* Draw the players stats and equipment in the top right of screen. */
 void DrawStats(Entity* entity) { 
-  // print top and bottom of rightmost UI
-  // draw 40 equals signs
   for (int x = 0; x < 41; x ++) {
     mvprintw(0, 126 + x, "=");
     mvprintw(20, 126 + x, "=");
@@ -55,6 +54,7 @@ void DrawStats(Entity* entity) {
 
 } 
 
+/* Draw a pretty border around the map and stats.*/
 void DrawBorder(void) {
 
   for (int y = 0; y < MAP_HEIGHT; y++) {
@@ -69,7 +69,7 @@ void DrawBorder(void) {
 
 }
 
-// Draw Both
+/*Draw Everything*/ 
 void DrawEverything(void) {
   clear();
   DrawMap();

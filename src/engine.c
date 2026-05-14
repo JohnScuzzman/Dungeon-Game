@@ -1,33 +1,33 @@
 #include <rogue.h>
 
-bool NcursesSetup(void)
-{ 
-  // Starts Ncurses.
+bool NcursesSetup(void) { 
+  /* Starts Ncurses. */
   initscr();
-  // Disable Ncurses from immediately drawing to the screen.
+  /* Disable Ncurses from immediately drawing to the screen. */ 
   noecho();
-  // Make cursor invisible.
+  /* Make cursor invisible. */ 
   curs_set(0);
 
-  // Add color to the console!
-  if (has_colors())
-    {
+  /* Add color to the console! */
+  if (has_colors()) {
         start_color();
 
         init_pair(VISIBLE_COLOR, COLOR_WHITE, COLOR_BLACK);
         init_pair(SEEN_COLOR, COLOR_BLUE, COLOR_BLACK);
         return true;
     }
-  else
-    {
+  else {
         mvprintw(20, 50, "Console does not have color support. Please use another console.");
         getch();
         return false;
     }
 }
 
-void GameLoop(void)
-{ 
+void DisableMouseWheel() {
+    mouseinterval(0);
+}
+
+void GameLoop(void) { 
     int ch;
 
     MakeFOV(player);
@@ -44,12 +44,8 @@ void GameLoop(void)
     } 
 } 
 
-void CloseGame(void)
-{ 
-    
+void CloseGame(void) { 
     endwin();
-    // Free memory allocated by pointer.
+    /* Free memory allocated by pointer. */
     free(player);
-
-
 } 
