@@ -4,7 +4,7 @@
 Ask the player for info about their character.
 Uses the TitleScreen ASCII art, and prints to certain areas of it.
 */
-void AskPlayerInfo(Entity* player) {
+void AskPlayerInfo(Player* player) {
     char* name;
     char* race;
     char* class;
@@ -93,48 +93,48 @@ TODO Currently only adjusts HP, but will later adjust CHA, WIS, STR, etc.
 void AssignStats(char input) {
     switch(input){
         case '0':
-            strcpy(player->entityRace, "Human");
-            player->entityHP = 10;
+            strcpy(player->playerRace, "Human");
+            player->playerHP = 10;
         break;
         case '1':
-            strcpy(player->entityRace, "Elf");
-            player->entityHP = 8;
+            strcpy(player->playerRace, "Elf");
+            player->playerHP = 8;
         break;
         case '2':
-            strcpy(player->entityRace, "Dwarf");
-            player->entityHP = 12;
+            strcpy(player->playerRace, "Dwarf");
+            player->playerHP = 12;
         break;
         case '3':
-            strcpy(player->entityRace, "Dragonborn");
-            player->entityHP = 14;
+            strcpy(player->playerRace, "Dragonborn");
+            player->playerHP = 14;
         break;
         case '4':
-            strcpy(player->entityRace, "Gnoll");
-            player->entityHP = 14;
+            strcpy(player->playerRace, "Gnoll");
+            player->playerHP = 14;
         break;
         case '5':
-            strcpy(player->entityRace, "Skeleton");
-            player->entityHP = 8;
+            strcpy(player->playerRace, "Skeleton");
+            player->playerHP = 8;
         break;
         case '6':
-            strcpy(player->entityRace, "Mantis");
-            player->entityHP = 14;
+            strcpy(player->playerRace, "Mantis");
+            player->playerHP = 14;
         break;
         case '7':
-            strcpy(player->entityRace, "Robot");
-            player->entityHP = 12;
+            strcpy(player->playerRace, "Robot");
+            player->playerHP = 12;
         break;
         case '8':
-            strcpy(player->entityRace, "Werewolf");
-            player->entityHP = 14;
+            strcpy(player->playerRace, "Werewolf");
+            player->playerHP = 14;
         break;
         case '9':
-            strcpy(player->entityRace, "Vampire");
-            player->entityHP = 10;
+            strcpy(player->playerRace, "Vampire");
+            player->playerHP = 10;
         break;
         default:
-            strcpy(player->entityRace, "Human");
-            player->entityHP = 10;
+            strcpy(player->playerRace, "Human");
+            player->playerHP = 10;
         break;
     }
 }
@@ -181,22 +181,23 @@ void ChooseName(char* name) {
     nocbreak();         
     mvprintw(18, 40, "Please Enter your name: ");
     mvgetnstr(20, 44, name, 32);
-    strcpy(player->entityName, name);
+    strcpy(player->playerName, name);
 }
 
-Entity* CreatePlayer(Position start_pos) {
-    Entity* player = calloc(1, sizeof(Entity));
+Player* CreatePlayer(Position start_pos) {
+    Player* player = calloc(1, sizeof(Player));
+    player->noCollision = false;
     player->pos.y = start_pos.y;
     player->pos.x = start_pos.x;
     player->ch = 'X';
     player->color = COLOR_PAIR(VISIBLE_COLOR);
-
+    AssignFloor(start_pos.x, start_pos.y);
     return player;
 }
 
 // Decide what to do with input.
 // Collision determined here as well.
-void PlayerInput(int input) {
+bool PlayerInput(int input) {
     // Get new coordinates.
     Position newPos = { player->pos.y, player->pos.x };
 
@@ -204,23 +205,32 @@ void PlayerInput(int input) {
         //move up
         case 'A':
             newPos.y--;
+            MovePlayer(newPos);
+            return true;
             break;
         //move down
         case 'B':
             newPos.y++;
+            MovePlayer(newPos);
+            return true;
             break;
         //move left
         case 'D':
             newPos.x--;
+            MovePlayer(newPos);
+            return true;
             break;
         //move right
         case 'C':
             newPos.x++;
+            MovePlayer(newPos);
+            return true;
             break;
         default:
             break;
     }
-    MovePlayer(newPos);
+    return false;
+    
 }
 
 // Test for floor tile, move if one is detected.

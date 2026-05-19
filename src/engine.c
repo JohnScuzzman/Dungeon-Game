@@ -27,24 +27,33 @@ void DisableMouseWheel() {
     mouseinterval(0);
 }
 
-void GameLoop(void) { 
+void GameLoop(Entity* mptr, int n_rooms) { 
     int ch;
-
     MakeFOV(player);
-    DrawEverything();
-
-    while(ch = getch())
+    DrawEverything(mptr, n_rooms);
+    bool PMove = false;
+    while((ch = getch()) != 'x')
     { 
-        if (ch == 'x')
-        { 
-        break;
-        } 
-        PlayerInput(ch);
-        DrawEverything();
+        PMove = false;
+        if(ch != ERR) {
+            int i = 0;
+        PMove = PlayerInput(ch);
+        while (!((mptr + i)->hasMoved) && i < n_rooms && PMove == true){
+            Wander(mptr + i);
+            i++;
+        }
+        ResetMoveFlags(mptr, n_rooms);
+        MakeFOV(player);
+        DrawEverything(mptr, n_rooms);
+        PMove = false;
+        }
+
     } 
+        
 } 
 
 void CloseGame(void) { 
+    free(mptr);
     endwin();
     /* Free memory allocated by pointer. */
     free(player);

@@ -1,23 +1,37 @@
 #include <rogue.h>
-Tile** CreateTiles(void) {
-    Tile** tiles = calloc(MAP_HEIGHT, sizeof(Tile *));
+
+Entity** CreateEntities(void) {
+    Entity** map = calloc(MAP_HEIGHT, sizeof(Entity *));
 
 
-    /* Change amount of tiles created based on map dimensions. */ 
+    /* Change amount of wall entities created based on map dimensions. */ 
     for (int y = 0; y < MAP_HEIGHT; y++) {
-        tiles[y] = calloc(MAP_WIDTH, sizeof(Tile));
+        map[y] = calloc(MAP_WIDTH, sizeof(Entity));
         for (int x = 0 ; x < MAP_WIDTH; x++) {
-            tiles[y][x].ch = '#';
-            tiles[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
-            tiles[y][x].noCollision = false;
-            tiles[y][x].transparent = false;
-            tiles[y][x].visible = false;
-            tiles[y][x].seen = false;
+            map[y][x].ch = '#';
+            map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
+            map[y][x].aggroFlag = false;
+            map[y][x].hasMoved = false;
+            map[y][x].noCollision = false;
+            map[y][x].transparent = false;
+            map[y][x].seen = false;
+            map[y][x].visible = false;
+            map[y][x].entityAC = 30;
+            map[y][x].entityAggroRange = 0;
+            map[y][x].entityHP = 1000;
+            map[y][x].entityID = 1;
+            map[y][x].entityLVL = 0;
+            map[y][x].entityMaxDMG = 0;
+            map[y][x].entityMinDMG = 0;
+            strcpy(map[y][x].entityArmor, "None");
+            strcpy(map[y][x].entityClass, "None");
+            strcpy(map[y][x].entityName, "Stone Wall");
+            strcpy(map[y][x].entityRace, "None");
+            strcpy(map[y][x].entityWeapon, "None");
         }
     }
-
-    /* Return a 2D arr thats a pointer that points at pointers that point to tiles. */ 
-    return tiles;
+    /* Return a 2D arr thats a pointer that points at pointers that point to our wall entities. */ 
+    return map;
 }
 
 /* 
@@ -25,60 +39,58 @@ Fills map with randomly sized rooms full of dots.
 Place a monster in the center of the room as well.
 Since rooms can currently overlap, this appears as random monster placement.
 */ 
-Position SetupMap(void) {
-    int y, x, height, width, n_rooms, n_monsters;
-    /* Create random number between 10 and 20.*/ 
-    n_rooms =  (rand() % 11) + 10;
-
-
+Position SetupMap(Entity* mptr, int n_rooms) {
+    int y, x, height, width, n_monsters;
     Room* rooms = calloc(n_rooms, sizeof(Room));
-    Monster* monsters = calloc(n_rooms, sizeof(Monster));
     Position start_pos;
     
 
-  for (int i = 0; i < n_rooms; i++) {
-    // define upper left corner of room
-    // 1-15
-    y = (rand() % (MAP_HEIGHT - 15)) + 1;
-    // 1-80
-    x = (rand() % (MAP_WIDTH - 25)) + 1;
+    for (int i = 0; i < n_rooms; i++) {
+        // left corner of room.
+        y = (rand() % (MAP_HEIGHT - 15)) + 1; // 1-15
+        x = (rand() % (MAP_WIDTH - 25)) + 1; // 1-80
+        height = (rand() % 7) + 3; // 3-9
+        width = (rand() % 15) + 5;// 5-19
+
+        rooms[i] = CreateRoom(y, x, height, width);
+
+        
+        
+        /* Add the created room to the map */
+        AddRoomToMap(rooms[i]);
 
 
-    // 3-9
-    height = (rand() % 7) + 3;
+        /* If not the first room, run this to create hallways. */ 
+        if (i > 0) {
+            start_pos.y = rooms[i - 1].center.y;
+            start_pos.x = rooms[i - 1].center.x;
+            ConnectRooms(rooms[i-1].center, rooms[i].center);
+            int monsterID = i + 1;
+            /* Add 10-20 monsters to the map. with monster.c's AddMonster. */
+            /* Create and save monsters to use later. */
+            n_monsters = (rand() % 4);
+            mptr[i - 1] = AssignMonster(rooms[i].center, n_monsters, monsterID); 
 
-    // 5-19
-    width = (rand() % 15) + 5;
-
-    rooms[i] = CreateRoom(y, x, height, width);
-
-    // Create random monster using int from  0 - 3.
-    /* Create random number between 0 and 3.*/
-    n_monsters = (rand() % 4);
-    monsters[i] = CreateMonster(rooms[i].center, n_monsters); 
-    
-    
-    AddRoomToMap(rooms[i]);
-
-
-    /* If not the first room, run this to create hallways. */ 
-    if (i > 0) {
-        start_pos.y = rooms[i].center.y;
-        start_pos.x = rooms[i].center.x;
-        ConnectRooms(rooms[i-1].center, rooms[i].center);
-        /* Add 10-20 goblins to the map. with room.c's AddMonster. */
-        AddMonster(monsters[i]);
+            /* Use the list of monsters we just made and move them to our 2D matrix of entities.*/
+            UpdateMonsters(mptr, n_rooms - 1);
+        }
     }
-  }
 
     start_pos.y = rooms[0].center.y;
     start_pos.x = rooms[0].center.x;
-    free(monsters);
     free(rooms);
     return start_pos;
 }
 
-// USE FOR PREVENTING ROOMS FROM OVERLAPPING.
+void FreeMap(void) {
+    for (int y = 0; y < MAP_HEIGHT; y++)
+    {
+        free(map[y]);
+    }
+    free(map);
+}
+
+/* Prevent rooms from overlapping if desired. */
 // bool roomOverlaps(Room* rooms, int rooms_counter, int y, int x, int height, int width) {
 //   for (int i = 0; i < rooms_counter; i++) {
 //     if (x >= rooms[i].pos.x + rooms[i].width || rooms[i].pos.x >= x + width) {
@@ -93,11 +105,3 @@ Position SetupMap(void) {
 
 //   return false;
 // }
-
-void FreeMap(void) {
-    for (int y = 0; y < MAP_HEIGHT; y++)
-    {
-        free(map[y]);
-    }
-    free(map);
-}

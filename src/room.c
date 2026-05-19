@@ -44,10 +44,7 @@ void ConnectRooms(Position centerOne, Position centerTwo)
         temp.y--;
     else
         break;
-
-    map[temp.y][temp.x].ch = '.';
-    map[temp.y][temp.x].noCollision = true;
-    map[temp.y][temp.x].transparent = true;
+    AssignFloor(temp.x, temp.y);
     }
 } 
 
@@ -58,18 +55,9 @@ void AddRoomToMap(Room room)
   {
     for (int x = room.pos.x; x < room.pos.x + room.width; x++)
         {
-            map[y][x].ch = '.';
-            map[y][x].noCollision = true;
-            map[y][x].transparent = true;
+            AssignFloor(x, y);
         }
 
     }
-}
-
-// Adds a monster to the map based on preset coordinates.
-void AddMonster(Monster monster) {
-    map[monster.pos.y][monster.pos.x].ch = monster.ch;
-    map[monster.pos.y][monster.pos.x].noCollision = false;
-    map[monster.pos.y][monster.pos.x].transparent = true;
 }
 
