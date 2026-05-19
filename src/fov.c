@@ -5,39 +5,40 @@
 Makes a radius around the player in which they can see.
 To increase the radius, increase the variable RADIUS below.
 */
-void MakeFOV(Entity* player)
-{ 
-  int y, x, distance;
-  int RADIUS = 15;
-  Position target;
+void MakeFOV(Player* player)
+	{ 
+	int y, x, distance;
+	int RADIUS = 15;
+	Position target;
+	map[player->pos.y][player->pos.x].visible = true;
+	map[player->pos.y][player->pos.x].seen = true;
 
-  map[player->pos.y][player->pos.x].visible = true;
-  map[player->pos.y][player->pos.x].seen = true;
+	for (y = player->pos.y - RADIUS; y < player->pos.y + RADIUS; y++) { 
+		for (x = player->pos.x - RADIUS; x < player->pos.x + RADIUS; x++) { 
+		target.y = y;
+		target.x = x;
+		distance = GetDistance(player->pos, target);
 
-  for (y = player->pos.y - RADIUS; y < player->pos.y + RADIUS; y++)
-  { 
-    for (x = player->pos.x - RADIUS; x < player->pos.x + RADIUS; x++)
-    { 
-      target.y = y;
-      target.x = x;
-      distance = GetDistance(player->pos, target);
-
-      if (distance < RADIUS)
-      { 
-        if (IsInMap(y, x) && LineOfSight(player->pos, target))
-        { 
-          map[y][x].visible = true;
-          map[y][x].seen = true;
-        } 
-      } 
-    } 
-  } 
+			if (distance < RADIUS) { 
+				if (IsInMap(y, x) && LineOfSight(player->pos, target) && map[y][x].entityID < 2) { 
+						map[y][x].visible = true;
+						map[y][x].seen = true;
+				}
+        /* UNSTABLE*/
+        /* Use for a later psychic ability*/
+        // else if (IsInMap(y, x) && !LineOfSight(player->pos, target)) {
+        //     map[y][x].visible = false;
+        // }
+			} 
+		} 
+	} 
 } 
+  
 
 /*
 Clear the player's FOV to create it again after moving.
 */
-void ClearFOV(Entity* player)
+void ClearFOV(Player* player)
 { 
   int y, x;
   int RADIUS = 15;
