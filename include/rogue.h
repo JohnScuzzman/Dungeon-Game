@@ -34,6 +34,12 @@ typedef struct {
   int playerMaxDMG;
   int playerMinDMG;
   int playerLVL;
+  int CHA;
+  int CON;
+  int DEX;
+  int INT;
+  int STR;
+  int WIS;
   int color;
   Position pos;
   char playerName[MAX_NAME_SIZE];
@@ -83,15 +89,18 @@ void TitleScreen();
 
 
 // assign.c functions
-Entity AssignMonster(Position pos, int RNG, int monsterID);
+void AssignClass(int input);
 void AssignFloor(int x, int y);
 void AssignGoblinWarrior(Entity* monster);
-void AssignKoboldWarrior(Entity* monster);
 void AssignGoblinRanger(Entity* monster);
 void AssignHobgoblinWarrior(Entity* monster);
+void AssignKoboldWarrior(Entity* monster);
+Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
+void AssignStats(int input);
 
-// class.c functions
+
+// classes.c functions
 void AssignKnight();
 void AssignSwashbuckler();
 void AssignWizard();
@@ -157,8 +166,6 @@ Player* CreatePlayer(Position start_pos);
 bool PlayerInput(int input);
 void MovePlayer(Position newPos);
 void AskPlayerInfo(Player* player);
-void AssignStats(int input);
-void AssignClass(int input);
 void ChooseRace();
 void ChooseName(char* name);
 void ChooseClass();

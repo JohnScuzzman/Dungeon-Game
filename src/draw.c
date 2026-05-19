@@ -64,9 +64,16 @@ void DrawStats(Player* player) {
   mvprintw(8, 128, "Armor: %s", player->playerArmor);
   mvprintw(10, 128, "Armor Class: %d", player->playerAC);
   mvprintw(12, 128, "Weapon: %s", player->playerWeapon),
-  mvprintw(14, 128, "Equipped Weapons Damage: %d-%d", player->playerMinDMG, player->playerMaxDMG);
+  mvprintw(14, 128, "Weapon DMG: %d-%d", player->playerMinDMG, player->playerMaxDMG);
   mvprintw(16, 128, "HP: %d", player->playerHP);
-  mvprintw(18, 128, "LVL: %d", player->playerLVL);
+ 
+  mvprintw(2, 155, "LVL: %d", player->playerLVL);
+  mvprintw(4, 155, "CHA: %d", player->CHA);
+  mvprintw(6, 155, "CON: %d", player->CON);
+  mvprintw(8, 155, "DEX: %d", player->DEX);
+  mvprintw(10, 155, "INT: %d", player->INT);
+  mvprintw(12, 155, "STR: %d", player->STR);
+  mvprintw(14, 155, "WIS: %d", player->WIS);
 
   // mvprintw(5, 126, "HP: %d", player->&playerHP);
 
