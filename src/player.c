@@ -25,59 +25,176 @@ void AskPlayerInfo(Player* player) {
         return;
     }
     
+    keypad(stdscr, TRUE);
+
     ChooseName(name);
     free(name);
-    
-    ChooseRace();
-    mvgetnstr(24, 20, nameBuffer, 2);
-    char input = nameBuffer[0];
-
-    AssignStats(input);
-    
-    ChooseClass();
-    mvgetnstr(30, 20, nameBuffer, 2);
-    input = toupper(nameBuffer[0]);
-    AssignClass(input);
-
     free(nameBuffer);
+    
     noecho();           // Hide input again.
+    keypad(stdscr, FALSE);
     cbreak();           // Set back to raw.
+    ChooseRace();
+    ChooseClass();
+    
 }   
+
+void ChooseRace() {
+    int ch;
+    int cursorBoundY = 22;
+    int cursorBoundX = 40;
+    PrintRaces();
+    Cursor(cursorBoundY, cursorBoundX, 11);
+    while((ch = getch()) != ' ' && ch != '\n')
+    { 
+        Cursor(cursorBoundY, cursorBoundX, 11);
+        switch(ch) {
+            case 'A':
+            if (cursorBoundY == 22) {
+                break;
+            }
+            else {
+                RemoveCursor(cursorBoundY, cursorBoundX, 11);
+                cursorBoundY--;
+                Cursor(cursorBoundY, cursorBoundX, 11);
+            }
+            break;
+            //move down
+            case 'B':
+                if (cursorBoundY == 26) {
+                    break;
+                }
+                else {
+                    RemoveCursor(cursorBoundY, cursorBoundX, 11);
+                    cursorBoundY++;
+                    Cursor(cursorBoundY, cursorBoundX, 11);
+                }
+                break;
+            //move left
+            case 'D':
+                if (cursorBoundX == 40) {
+                    break;
+                }
+                else {
+                    RemoveCursor(cursorBoundY, cursorBoundX, 11);
+                    cursorBoundX = cursorBoundX - 20;
+                    Cursor(cursorBoundY, cursorBoundX, 11);
+                }
+                break;
+            case 'C':
+                if (cursorBoundX == 60) {
+                    break;
+                }
+                else {
+                    RemoveCursor(cursorBoundY, cursorBoundX, 11);
+                    cursorBoundX = cursorBoundX + 20;
+                }
+                break;
+            default:
+                Cursor(cursorBoundY, cursorBoundX, 11);
+                refresh();
+                break;
+            }
+            Cursor(cursorBoundY, cursorBoundX, 11);
+            refresh();
+        }
+    AssignStats((cursorBoundY + cursorBoundX));
+}
+
+void ChooseClass() {
+    int ch;
+    int cursorBoundY = 28;
+    int cursorBoundX = 40;
+    PrintClasses();
+    Cursor(cursorBoundY, cursorBoundX, 13);
+    while((ch = getch()) != ' ' && ch != '\n') {
+    Cursor(cursorBoundY, cursorBoundX, 13);
+    switch(ch) {
+        //move up
+        case 'A':
+            if (cursorBoundY == 28) {
+                break;
+            }
+            else {
+                RemoveCursor(cursorBoundY, cursorBoundX, 13);
+                cursorBoundY--;
+            }
+        break;
+        //move down
+        case 'B':
+            if (cursorBoundY == 32) {
+                break;
+            }
+            else {
+                RemoveCursor(cursorBoundY, cursorBoundX, 13);
+                cursorBoundY++;
+            }
+            break;
+        //move left
+        case 'D':
+            if (cursorBoundX == 40) {
+                break;
+            }
+            else {
+                RemoveCursor(cursorBoundY, cursorBoundX, 13);
+                cursorBoundX = cursorBoundX - 20;
+            }
+            break;
+        case 'C':
+            if (cursorBoundX == 60) {
+                break;
+            }
+            else {
+                RemoveCursor(cursorBoundY, cursorBoundX, 13);
+                cursorBoundX = cursorBoundX + 20;
+            }
+            break;
+        default:
+            Cursor(cursorBoundY, cursorBoundX, 13);
+            refresh();
+            break;
+        }
+        Cursor(cursorBoundY, cursorBoundX, 13);
+        refresh();
+    }
+    AssignClass((cursorBoundY + cursorBoundX));   
+}
+
 
 /*
 Assigns the class chosen by the player to the Entity struct player.
 Each method is listed in classes.c
 */
-void AssignClass(char input) {
+void AssignClass(int input) {
     switch(input){
-        case 'A':
+        case 68:
             AssignKnight();
             break;
-        case 'B':
+        case 69:
             AssignSwashbuckler();
             break;
-        case 'C':
+        case 70:
             AssignWizard();
             break;
-        case 'D':
+        case 71:
             AssignNecromancer();
             break;
-        case 'E':
+        case 72:
             AssignGunslinger();
             break;
-        case 'F':
+        case 88:
             AssignRanger();
             break;
-        case 'G':
+        case 89:
             AssignDarkKnight();
             break;
-        case 'H':
+        case 90:
             AssignAlchemist();
             break;
-        case 'I':
+        case 91:
             AssignConjurer();
             break;
-        case 'J':
+        case 92:
             AssignCyborg();
             break;
         default:
@@ -90,45 +207,45 @@ void AssignClass(char input) {
 Assigns stats based on the race chosen by the player.
 TODO Currently only adjusts HP, but will later adjust CHA, WIS, STR, etc.
 */
-void AssignStats(char input) {
+void AssignStats(int input) {
     switch(input){
-        case '0':
+        case 62:
             strcpy(player->playerRace, "Human");
             player->playerHP = 10;
         break;
-        case '1':
+        case 63:
             strcpy(player->playerRace, "Elf");
             player->playerHP = 8;
         break;
-        case '2':
+        case 64:
             strcpy(player->playerRace, "Dwarf");
             player->playerHP = 12;
         break;
-        case '3':
+        case 65:
             strcpy(player->playerRace, "Dragonborn");
             player->playerHP = 14;
         break;
-        case '4':
+        case 66:
             strcpy(player->playerRace, "Gnoll");
             player->playerHP = 14;
         break;
-        case '5':
+        case 82:
             strcpy(player->playerRace, "Skeleton");
             player->playerHP = 8;
         break;
-        case '6':
+        case 83:
             strcpy(player->playerRace, "Mantis");
             player->playerHP = 14;
         break;
-        case '7':
+        case 84:
             strcpy(player->playerRace, "Robot");
             player->playerHP = 12;
         break;
-        case '8':
+        case 85:
             strcpy(player->playerRace, "Werewolf");
             player->playerHP = 14;
         break;
-        case '9':
+        case 86:
             strcpy(player->playerRace, "Vampire");
             player->playerHP = 10;
         break;
@@ -137,40 +254,6 @@ void AssignStats(char input) {
             player->playerHP = 10;
         break;
     }
-}
-
-/*
-Prints available races.
-*/
-void ChooseRace() {
-    mvprintw(22, 10, "Please Choose a Race: ");
-    mvprintw(22, 40, "0 - Human");
-    mvprintw(23, 40, "1 - Elf");
-    mvprintw(24, 40, "2 - Dwarf");
-    mvprintw(25, 40, "3 - Dragonborn");
-    mvprintw(26, 40, "4 - Gnoll");
-    mvprintw(22, 60, "5 - Skeleton");
-    mvprintw(23, 60, "6 - Mantis");
-    mvprintw(24, 60, "7 - Robot");
-    mvprintw(25, 60, "8 - Werewolf");
-    mvprintw(26, 60, "9 - Vampire");
-}
-
-/*
-Prints available classes.
-*/
-void ChooseClass() {
-    mvprintw(28, 10, "Please Choose a Class: ");
-    mvprintw(28, 40, "A - Knight");
-    mvprintw(29, 40, "B - Swashbuckler");
-    mvprintw(30, 40, "C - Wizard");
-    mvprintw(31, 40, "D - Necromancer");
-    mvprintw(32, 40, "E - Gunslinger");
-    mvprintw(28, 60, "F - Ranger");
-    mvprintw(29, 60, "G - Dark Knight");
-    mvprintw(30, 60, "H - Alchemist");
-    mvprintw(31, 60, "I - Conjurer");
-    mvprintw(32, 60, "J - Cyborg");
 }
 
 /*
@@ -243,3 +326,39 @@ void MovePlayer(Position newPos) {
     MakeFOV(player);
   }
 }
+
+
+/*
+Prints available races.
+*/
+void PrintRaces() {
+    mvprintw(22, 10, "Please Choose a Race: ");
+    mvprintw(22, 40, "Human");
+    mvprintw(23, 40, "Elf");
+    mvprintw(24, 40, "Dwarf");
+    mvprintw(25, 40, "Dragonborn");
+    mvprintw(26, 40, "Gnoll");
+    mvprintw(22, 60, "Skeleton");
+    mvprintw(23, 60, "Mantis");
+    mvprintw(24, 60, "Robot");
+    mvprintw(25, 60, "Werewolf");
+    mvprintw(26, 60, "Vampire");
+}
+
+/*
+Prints available classes.
+*/
+void PrintClasses() {
+    mvprintw(28, 10, "Please Choose a Class: ");
+    mvprintw(28, 40, "Knight");
+    mvprintw(29, 40, "Swashbuckler");
+    mvprintw(30, 40, "Wizard");
+    mvprintw(31, 40, "Necromancer");
+    mvprintw(32, 40, "Gunslinger");
+    mvprintw(28, 60, "Ranger");
+    mvprintw(29, 60, "Dark Knight");
+    mvprintw(30, 60, "Alchemist");
+    mvprintw(31, 60, "Conjurer");
+    mvprintw(32, 60, "Cyborg");
+}
+

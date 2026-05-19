@@ -14,6 +14,7 @@
 #define VISIBLE_COLOR 1
 #define SEEN_COLOR 2
 #define MONSTER_COLOR 2
+#define HIGHLIGHT_COLOR 3
 #define MAX_NAME_SIZE 33
 
 /* IMPORTANT*/
@@ -109,14 +110,17 @@ void DrawEverything(Entity* mptr, int n_rooms);
 void DrawMap();
 void DrawMonsters(Entity* mptr, int n_rooms);
 void DrawPlayer(Player* player);
+void DrawPlayerBlink(Player* player);
 void DrawStats(Player* player);
 
 
 // engine.c functions
 bool NcursesSetup(void);
-void DisableMouseWheel();
 void GameLoop(Entity* mptr, int n_rooms);
 void CloseGame(void);
+void Cursor(int x, int y, int length);
+void RemoveCursor(int x, int y, int length);
+
 
 // fov.c functions
 void MakeFOV(Player* playerint);
@@ -153,11 +157,13 @@ Player* CreatePlayer(Position start_pos);
 bool PlayerInput(int input);
 void MovePlayer(Position newPos);
 void AskPlayerInfo(Player* player);
-void AssignStats(char input);
-void AssignClass(char input);
+void AssignStats(int input);
+void AssignClass(int input);
 void ChooseRace();
 void ChooseName(char* name);
 void ChooseClass();
+void PrintRaces();
+void PrintClasses();
 
 // room.c functions
 Room CreateRoom(int y, int x, int height, int width);
