@@ -130,3 +130,165 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->pos.y = m_pos.y;
     monster->pos.x = m_pos.x;
 }
+
+
+/*
+Assigns the class chosen by the player to the Entity struct player.
+Each method is listed in classes.c
+*/
+void AssignClass(int input) {
+    switch(input){
+        case 68:
+            AssignKnight();
+            break;
+        case 69:
+            AssignSwashbuckler();
+            break;
+        case 70:
+            AssignWizard();
+            break;
+        case 71:
+            AssignNecromancer();
+            break;
+        case 72:
+            AssignGunslinger();
+            break;
+        case 88:
+            AssignRanger();
+            break;
+        case 89:
+            AssignDarkKnight();
+            break;
+        case 90:
+            AssignAlchemist();
+            break;
+        case 91:
+            AssignConjurer();
+            break;
+        case 92:
+            AssignCyborg();
+            break;
+        default:
+            AssignKnight();
+            break;
+    }
+}
+
+/*
+Assigns stats based on the race chosen by the player.
+TODO Currently only adjusts HP, but will later adjust CHA, WIS, STR, etc.
+*/
+void AssignStats(int input) {
+    switch(input){
+        case 62:
+            strcpy(player->playerRace, "Human");
+            player->playerHP = 10;
+            player->CHA = 12;
+            player->CON = 12;
+            player->DEX = 12;
+            player->INT = 12;
+            player->STR = 12;
+            player->WIS = 12;
+        break;
+        case 63:
+            strcpy(player->playerRace, "Elf");
+            player->playerHP = 8;
+            player->CHA = 12;
+            player->CON = 10;
+            player->DEX = 16;
+            player->INT = 14;
+            player->STR = 10;
+            player->WIS = 12;
+        break;
+        case 64:
+            strcpy(player->playerRace, "Dwarf");
+            player->playerHP = 10;
+            player->CHA = 10;
+            player->CON = 14;
+            player->DEX = 10;
+            player->INT = 10;
+            player->STR = 14;
+            player->WIS = 16;
+        break;
+        case 65:
+            strcpy(player->playerRace, "Dragonborn");
+            player->playerHP = 12;
+            player->CHA = 10;
+            player->CON = 16;
+            player->DEX = 8;
+            player->INT = 10;
+            player->STR = 16;
+            player->WIS = 10;
+        break;
+        case 66:
+            strcpy(player->playerRace, "Gnoll");
+            player->playerHP = 12;
+            player->CHA = 10;
+            player->CON = 16;
+            player->DEX = 10;
+            player->INT = 8;
+            player->STR = 16;
+            player->WIS = 10;
+        break;
+        case 82:
+            strcpy(player->playerRace, "Skeleton");
+            player->playerHP = 8;
+            player->CHA = 10;
+            player->CON = 14;
+            player->DEX = 12;
+            player->INT = 16;
+            player->STR = 8;
+            player->WIS = 14;
+        break;
+        case 83:
+            strcpy(player->playerRace, "Mantis");
+            player->playerHP = 12;
+            player->CHA = 8;
+            player->CON = 14;
+            player->DEX = 12;
+            player->INT = 10;
+            player->STR = 16;
+            player->WIS = 10;
+        break;
+        case 84:
+            strcpy(player->playerRace, "Robot");
+            player->playerHP = 10;
+            player->CHA = 10;
+            player->CON = 16;
+            player->DEX = 10;
+            player->INT = 12;
+            player->STR = 14;
+            player->WIS = 10;
+        break;
+        case 85:
+            strcpy(player->playerRace, "Werewolf");
+            player->playerHP = 12;
+            player->CHA = 10;
+            player->CON = 16;
+            player->DEX = 14;
+            player->INT = 8;
+            player->STR = 16;
+            player->WIS = 8;
+        break;
+        case 86:
+            strcpy(player->playerRace, "Vampire");
+            player->playerHP = 10;
+            player->CHA = 16;
+            player->CON = 10;
+            player->DEX = 12;
+            player->INT = 14;
+            player->STR = 10;
+            player->WIS = 10;
+        break;
+        default:
+            strcpy(player->playerRace, "Human");
+            player->playerHP = 10;
+            player->CHA = 12;
+            player->CON = 12;
+            player->DEX = 12;
+            player->INT = 12;
+            player->STR = 12;
+            player->WIS = 12;
+        break;
+    }
+}

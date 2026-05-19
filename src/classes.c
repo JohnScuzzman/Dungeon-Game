@@ -9,6 +9,8 @@ void AssignKnight() {
     player->playerMaxDMG = 10;
     player->playerMinDMG = 1;
     player->playerLVL = 1;
+    player->CON += 2;
+    player->STR += 2;
 }
 
 void AssignSwashbuckler() {
@@ -20,6 +22,8 @@ void AssignSwashbuckler() {
     player->playerMaxDMG = 7;
     player->playerMinDMG = 2;
     player->playerLVL = 1;
+    player->DEX += 2;
+    player->CHA += 2;
 }
 void AssignWizard() {
     strcpy(player->playerClass, "Wizard");
@@ -30,6 +34,7 @@ void AssignWizard() {
     player->playerMaxDMG = 4;
     player->playerMinDMG = 1;
     player->playerLVL = 1;
+    player->INT += 4;
 }
 void AssignNecromancer() {
     strcpy(player->playerClass, "Necormancer");
@@ -40,6 +45,8 @@ void AssignNecromancer() {
     player->playerMaxDMG = 4;
     player->playerMinDMG = 1;
     player->playerLVL = 1;
+    player->INT += 2;
+    player->WIS += 2;
 }
 void AssignGunslinger() {
     strcpy(player->playerClass, "Gunslinger");
@@ -50,6 +57,7 @@ void AssignGunslinger() {
     player->playerMaxDMG = 10;
     player->playerMinDMG = 1;
     player->playerLVL = 1;
+    player->DEX += 4;
 }
 void AssignRanger() {
     strcpy(player->playerClass, "Ranger");
@@ -60,6 +68,8 @@ void AssignRanger() {
     player->playerMaxDMG = 8;
     player->playerMinDMG = 1;
     player->playerLVL = 1;
+    player->DEX += 2;
+    player->WIS += 2;
 }
 void AssignDarkKnight() {
     strcpy(player->playerClass, "Dark Knight");
@@ -70,6 +80,7 @@ void AssignDarkKnight() {
     player->playerMaxDMG = 10;
     player->playerMinDMG = 1;
     player->playerLVL = 1;
+    player->STR += 4;
 }
 void AssignAlchemist() {
     strcpy(player->playerClass, "Alchemist");
@@ -80,6 +91,8 @@ void AssignAlchemist() {
     player->playerMaxDMG = 8;
     player->playerMinDMG = 1;
     player->playerLVL = 1;
+    player->DEX += 2;
+    player->INT += 2;
 }
 void AssignConjurer() {
     strcpy(player->playerClass, "Conjurer");
@@ -90,6 +103,8 @@ void AssignConjurer() {
     player->playerMaxDMG = 4;
     player->playerMinDMG = 1;
     player->playerLVL = 1;
+    player->INT += 2;
+    player->CHA += 2;
 }
 void AssignCyborg() {
     strcpy(player->playerClass, "Cyborg");
@@ -100,6 +115,7 @@ void AssignCyborg() {
     player->playerMaxDMG = 6;
     player->playerMinDMG = 1;
     player->playerLVL = 1;
+    player->CON += 4;
 }
 
 
