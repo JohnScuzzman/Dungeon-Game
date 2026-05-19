@@ -35,8 +35,16 @@ void DrawMap()
 
 /* Draw Player based on position. */
 void DrawPlayer(Player* player) { 
-  mvaddch(player->pos.y, player->pos.x, player->ch | player->color);
-} 
+	mvaddch(player->pos.y, player->pos.x, player->ch | player->color | A_BOLD | A_DIM);
+  refresh();
+	} 
+
+void DrawPlayerBlink(Player* player) { 
+	// attron(A_STANDOUT);
+	mvaddch(player->pos.y, player->pos.x, player->ch | player->color | A_BOLD | A_DIM | A_BLINK);
+  refresh();
+	// attroff(A_STANDOUT); 
+	}  
 
 /* Draw the players stats and equipment in the top right of screen. */
 void DrawStats(Player* player) { 
@@ -83,7 +91,8 @@ void DrawBorder(void) {
 void DrawDebug(Entity* mptr, int n_rooms) {
   for (int i = 0; i < n_rooms ; i++) {
 	  mvprintw(22, 128, "Player POS x:%d, y:%d", player->pos.x, player->pos.y);
-    mvprintw(23 + i, 128, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
+    // mvprintw(23 + i, 128, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
+    mvprintw(23 + i, 128, "isAggro: %d Range: %d ", mptr[i].aggroFlag, mptr[i].entityAggroRange);
   }
   
 }

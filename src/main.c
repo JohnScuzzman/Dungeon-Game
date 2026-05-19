@@ -22,6 +22,7 @@ int main(void)
   
   if (compatibleTerminal)
   {
+    mousemask(BUTTON1_CLICKED, NULL);
     Position start_pos;
     /* Generate seeds */
     srand(time(NULL));
@@ -45,12 +46,13 @@ int main(void)
     /* Place player using method in player.c*/
     player = CreatePlayer(start_pos);
 
-
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
 
     /* Ask info about the player's character from functions in player.c */
     AskPlayerInfo(player);
+
+    keypad(stdscr, TRUE);
 
     /* Start main game loop located in engine.c */
     /* Pass the pointer to monsterList[0]. */
