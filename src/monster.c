@@ -19,6 +19,11 @@ void UpdateMonsters(Entity* monster, int n_monsters) {
     }
 }
 
+/* Credit to Harpy for helping me prototype this function. */
+/* This would have taken signifiantly longer without her, I owe her a case of monster for this.*/
+/* Monster attempts to move to a new tile chosen at random. */
+/* If legal spot, monster moves, then updates the previous square they moved from. */
+/* KeepMonsterIntegrity ensures the previous tile keeps all prior visible and seen values. */
 void Wander(Entity* mptr){
     int randDirection = (rand() % 4); //0-3
     bool oldSeen;
@@ -111,7 +116,7 @@ void Wander(Entity* mptr){
                     mptr->seen = true;
                     KeepMonsterIntegrity(mptr, oldSeen, oldVisible);
                 }
-                    if (!newSeen) {
+                if (!newSeen) {
                     mptr->seen = false;
                     KeepMonsterIntegrity(mptr, oldSeen, oldVisible);
                 }

@@ -112,6 +112,7 @@ void AssignAlchemist();
 void AssignConjurer();
 void AssignCyborg();
 
+
 // draw.c functions
 void DrawBorder(void);
 void DrawDebug(Entity* mptr, int n_rooms);
@@ -139,6 +140,14 @@ bool IsInMap(int y, int x);
 bool LineOfSight(Position origin, Position target);
 int GetSign(int a);
 
+// makeplayer.c functions
+Player* CreatePlayer(Position start_pos);
+void AskPlayerInfo(Player* player);
+void ChooseRace();
+void ChooseName(char* name);
+void ChooseClass();
+void PrintRaces();
+void PrintClasses();
 
 // map.c functions
 Entity** CreateEntities(void);
@@ -162,15 +171,9 @@ void Wander(Entity* mptr);
 
 
 // player.c functions
-Player* CreatePlayer(Position start_pos);
 bool PlayerInput(int input);
 void MovePlayer(Position newPos);
-void AskPlayerInfo(Player* player);
-void ChooseRace();
-void ChooseName(char* name);
-void ChooseClass();
-void PrintRaces();
-void PrintClasses();
+bool CheckPlayerAdjacent(Position origin);
 
 // room.c functions
 Room CreateRoom(int y, int x, int height, int width);

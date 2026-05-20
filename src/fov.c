@@ -20,7 +20,7 @@ void MakeFOV(Player* player)
 		distance = GetDistance(player->pos, target);
 
 			if (distance < RADIUS) { 
-				if (IsInMap(y, x) && LineOfSight(player->pos, target) && map[y][x].entityID < 2) { 
+				if (IsInMap(y, x) && LineOfSight(player->pos, target)) { 
 						map[y][x].visible = true;
 						map[y][x].seen = true;
 				}
