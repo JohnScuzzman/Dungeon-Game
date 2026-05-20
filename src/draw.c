@@ -62,18 +62,18 @@ void DrawStats(Player* player) {
   mvprintw(4, 128, "Race: %s", player->playerRace);
   mvprintw(6, 128, "Class: %s", player->playerClass);
   mvprintw(8, 128, "Armor: %s", player->playerArmor);
-  mvprintw(10, 128, "Armor Class: %d", player->playerAC);
+  mvprintw(10, 128, "Armor Class: %d", player->playerStats.AC);
   mvprintw(12, 128, "Weapon: %s", player->playerWeapon),
-  mvprintw(14, 128, "Weapon DMG: %d-%d", player->playerMinDMG, player->playerMaxDMG);
-  mvprintw(16, 128, "HP: %d", player->playerHP);
+  mvprintw(14, 128, "Weapon DMG: %d-%d", player->playerStats.minDMG, player->playerStats.maxDMG);
+  mvprintw(16, 128, "HP: %d", player->playerStats.HP);
  
-  mvprintw(2, 155, "LVL: %d", player->playerLVL);
-  mvprintw(4, 155, "CHA: %d", player->CHA);
-  mvprintw(6, 155, "CON: %d", player->CON);
-  mvprintw(8, 155, "DEX: %d", player->DEX);
-  mvprintw(10, 155, "INT: %d", player->INT);
-  mvprintw(12, 155, "STR: %d", player->STR);
-  mvprintw(14, 155, "WIS: %d", player->WIS);
+  mvprintw(2, 155, "LVL: %d", player->playerStats.LVL);
+  mvprintw(4, 155, "CHA: %d", player->playerStats.CHA);
+  mvprintw(6, 155, "CON: %d", player->playerStats.CON);
+  mvprintw(8, 155, "DEX: %d", player->playerStats.DEX);
+  mvprintw(10, 155, "INT: %d", player->playerStats.INT);
+  mvprintw(12, 155, "STR: %d", player->playerStats.STR);
+  mvprintw(14, 155, "WIS: %d", player->playerStats.WIS);
 
   // mvprintw(5, 126, "HP: %d", player->&playerHP);
 

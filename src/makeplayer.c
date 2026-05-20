@@ -205,4 +205,3 @@ void PrintClasses() {
     mvprintw(31, 60, "Conjurer");
     mvprintw(32, 60, "Cyborg");
 }
-

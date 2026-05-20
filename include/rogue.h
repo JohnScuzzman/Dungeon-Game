@@ -16,6 +16,7 @@
 #define MONSTER_COLOR 2
 #define HIGHLIGHT_COLOR 3
 #define MAX_NAME_SIZE 33
+#define INVENTORY_SIZE 64
 
 /* IMPORTANT*/
 /* "typedef" is used instead of "struct cat_t" so that we dont have to */
@@ -27,20 +28,102 @@ typedef struct {
 } Position;
 
 typedef struct {
-  bool noCollision;
-  char ch;
-  int playerHP;
-  int playerAC;
-  int playerMaxDMG;
-  int playerMinDMG;
-  int playerLVL;
+  int ATK;
   int CHA;
   int CON;
   int DEX;
   int INT;
   int STR;
   int WIS;
+  int AC;
+  int HP;
+  int LVL;
+  int maxDMG;
+  int minDMG;
+} Stats;
+
+// typedef struct {
+//   int amuletID;
+//   int value;
+//   CopperAmulet copperAmulet;
+//   silverAmulet silverAmulet;
+// } Amulets;
+
+// typedef struct {
+//   int cyberneticID;
+//   int value;
+//   MetallicSkin metallicSkin;
+//   ChromeFists chromeFists;
+// } Cybernetics;
+
+// typedef struct {
+//   int ringID;
+//   int value;
+// } Rings;
+
+// typedef struct {
+//   int backID;
+//   int value;
+// } Back;
+
+// typedef struct {
+//   int foodID;
+//   int value;
+// } Foods;
+
+// typedef struct {
+//   int potionID;
+//   int value;
+//   AcidPotion acidPotion;
+// } Potions;
+
+// typedef struct {
+//   int meleeID;
+//   int value;
+//   ChromeFists chromeFists;
+//   Cutlass cutlass;
+//   Dagger dagger;
+//   Shortsword shortSword;
+//   Longsword longSword;
+//   Quarterstaff quarterstaff;
+// } MeleeWeapons;
+
+// typedef struct {
+//   int rangedID;
+//   int value;
+//   FlintlockPistol flintlockPistol;
+//   Longbow longBow;
+//   Shortbow shortBow;
+//   Potions AcidPotion;
+// } RangedWeapons;
+
+// typedef struct {
+//   int armorID;
+//   int value;
+//   Chainmail chainmail;
+//   Leather leather;
+//   MetallicSkin metallicSkin;
+//   RangersCloak rangersCloak;
+//   Robes robes;
+// } Armors;
+
+// typedef struct {
+//   Amulets amulets;
+//   Armors armors;
+//   Back back;
+//   Foods foods;
+//   MeleeWeapons meleeWeapons;
+//   Potions potions;
+//   RangedWeapons rangedWeapons;
+//   Rings rings;
+//   Cybernetics cybernetics;
+// } Inventory;
+
+typedef struct {
+  bool noCollision;
+  char ch;
   int color;
+  Stats playerStats;
   Position pos;
   char playerName[MAX_NAME_SIZE];
   char playerRace[MAX_NAME_SIZE];
@@ -48,7 +131,7 @@ typedef struct {
   char playerArmor[MAX_NAME_SIZE];
   char playerWeapon[MAX_NAME_SIZE];
 } Player;
-
+  
 typedef struct {
   bool aggroFlag;
   bool hasMoved;
@@ -59,13 +142,9 @@ typedef struct {
   char ch;
   char staticCh;
   int color;
-  int entityAC;
   int entityAggroRange;
-  int entityHP;
   int entityID;
-  int entityLVL;
-  int entityMaxDMG;
-  int entityMinDMG;
+  Stats entityStats;
   Position pos;
   char entityName[MAX_NAME_SIZE];
   char entityRace[MAX_NAME_SIZE];
@@ -73,6 +152,7 @@ typedef struct {
   char entityArmor[MAX_NAME_SIZE];
   char entityWeapon[MAX_NAME_SIZE];
 } Entity;
+
 
 typedef struct
 {
@@ -99,6 +179,8 @@ Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 void AssignStats(int input);
 
+//combat.c functions 
+bool AttackPlayer(Entity* attacker);
 
 // classes.c functions
 void AssignKnight();
