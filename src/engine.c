@@ -56,11 +56,20 @@ void GameLoop(Entity* mptr, int n_rooms) {
         PMove = false;
         if(ch != ERR) {
             int i = 0;
-        PMove = PlayerInput(ch);
-        while (!((mptr + i)->hasMoved) && i < n_rooms && PMove == true){
-            Wander(mptr + i);
-            i++;
+            PMove = PlayerInput(ch);
+            // If there is no adjacent player, move freely.
+            while (!((mptr + i)->hasMoved) && i < n_rooms && PMove == true){
+                if (!CheckPlayerAdjacent((mptr + i)->pos)){
+                    Wander(mptr + i);
+                    i++;
+                }
+                else{
+                    // Combat
+                    i++;
+                }
+                
         }
+
         ResetMoveFlags(mptr, n_rooms);
         MakeFOV(player);
         DrawEverything(mptr, n_rooms);
