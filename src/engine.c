@@ -64,7 +64,7 @@ void GameLoop(Entity* mptr, int n_rooms) {
                     i++;
                 }
                 else{
-                    // Combat
+                    // Combat function will go here.
                     i++;
                 }
                 

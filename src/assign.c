@@ -39,13 +39,20 @@ void AssignFloor(int x, int y) {
     map[y][x].transparent = true;
     map[y][x].seen = false;
     map[y][x].visible = false;
-    map[y][x].entityAC = 0;
     map[y][x].entityAggroRange = 0;
-    map[y][x].entityHP = 0;
     map[y][x].entityID = 0;
-    map[y][x].entityLVL = 0;
-    map[y][x].entityMaxDMG = 0;
-    map[y][x].entityMinDMG = 0;
+    map[y][x].entityStats.ATK = 0;
+    map[y][x].entityStats.CHA = 0;
+    map[y][x].entityStats.CON = 0;
+    map[y][x].entityStats.DEX = 0;
+    map[y][x].entityStats.INT = 0;
+    map[y][x].entityStats.STR = 0;
+    map[y][x].entityStats.WIS = 0;
+    map[y][x].entityStats.AC = 0;
+    map[y][x].entityStats.HP = 0;
+    map[y][x].entityStats.LVL = 0;
+    map[y][x].entityStats.maxDMG = 0;
+    map[y][x].entityStats.minDMG = 0;
     strcpy(map[y][x].entityArmor, "None");
     strcpy(map[y][x].entityClass, "None");
     strcpy(map[y][x].entityName, "Floor");
@@ -55,14 +62,20 @@ void AssignFloor(int x, int y) {
 
 
 void AssignGoblinWarrior(Entity* monster) {
+    monster->entityStats.CHA = 8;
+    monster->entityStats.CON = 8;
+    monster->entityStats.DEX = 10;
+    monster->entityStats.INT = 8;
+    monster->entityStats.STR = 12;
+    monster->entityStats.WIS = 8;
     monster->ch = 'G';
     monster->staticCh = 'G'; 
-    monster->entityAC = 1;
     monster->entityAggroRange = 15;
-    monster->entityHP = 4;
-    monster->entityLVL = 1;
-    monster->entityMaxDMG = 1;
-    monster->entityMinDMG = 4;
+    monster->entityStats.AC = 1;
+    monster->entityStats.HP = 4;
+    monster->entityStats.LVL = 1;
+    monster->entityStats.maxDMG = 1;
+    monster->entityStats.minDMG = 4;
     strcpy(monster->entityArmor, "Leather Armor");
     strcpy(monster->entityClass, "Warrior");
     strcpy(monster->entityName, "Goblin Warrior");
@@ -71,14 +84,20 @@ void AssignGoblinWarrior(Entity* monster) {
 }
 
 void AssignKoboldWarrior(Entity* monster) {
+    monster->entityStats.CHA = 8;
+    monster->entityStats.CON = 8;
+    monster->entityStats.DEX = 12;
+    monster->entityStats.INT = 8;
+    monster->entityStats.STR = 10;
+    monster->entityStats.WIS = 8;
     monster->ch = 'K';
     monster->staticCh = 'K'; 
-    monster->entityAC = 1;
     monster->entityAggroRange = 20;
-    monster->entityLVL = 1;
-    monster->entityHP = 4;
-    monster->entityMaxDMG = 1;
-    monster->entityMinDMG = 4;
+    monster->entityStats.AC = 1;
+    monster->entityStats.LVL = 1;
+    monster->entityStats.HP = 4;
+    monster->entityStats.maxDMG = 1;
+    monster->entityStats.minDMG = 4;
     strcpy(monster->entityArmor, "Leather Armor");
     strcpy(monster->entityClass, "Warrior");
     strcpy(monster->entityName, "Kobold Warrior");
@@ -87,14 +106,20 @@ void AssignKoboldWarrior(Entity* monster) {
 }
 
 void AssignGoblinRanger(Entity* monster) {
+    monster->entityStats.CHA = 8;
+    monster->entityStats.CON = 10;
+    monster->entityStats.DEX = 14;
+    monster->entityStats.INT = 8;
+    monster->entityStats.STR = 8;
+    monster->entityStats.WIS = 8;
     monster->ch = 'G';
     monster->staticCh = 'G'; 
-    monster->entityAC = 0;
     monster->entityAggroRange = 15;
-    monster->entityLVL = 1;
-    monster->entityHP = 4;
-    monster->entityMaxDMG = 1;
-    monster->entityMinDMG = 3;
+    monster->entityStats.AC = 0;
+    monster->entityStats.LVL = 1;
+    monster->entityStats.HP = 4;
+    monster->entityStats.maxDMG = 1;
+    monster->entityStats.minDMG = 3;
     strcpy(monster->entityArmor, "Leather Armor");
     strcpy(monster->entityClass, "Ranger");
     strcpy(monster->entityName, "Goblin Ranger");
@@ -103,14 +128,20 @@ void AssignGoblinRanger(Entity* monster) {
 }
 
 void AssignHobgoblinWarrior(Entity* monster) {
+    monster->entityStats.CHA = 8;
+    monster->entityStats.CON = 12;
+    monster->entityStats.DEX = 12;
+    monster->entityStats.INT = 8;
+    monster->entityStats.STR = 12;
+    monster->entityStats.WIS = 8;
     monster->ch = 'H'; 
     monster->staticCh = 'H'; 
-    monster->entityAC = 1;
     monster->entityAggroRange = 12;
-    monster->entityHP = 6;
-    monster->entityLVL = 1;
-    monster->entityMaxDMG = 1;
-    monster->entityMinDMG = 6;
+    monster->entityStats.AC = 1;
+    monster->entityStats.HP = 6;
+    monster->entityStats.LVL = 1;
+    monster->entityStats.maxDMG = 1;
+    monster->entityStats.minDMG = 6;
     strcpy(monster->entityName, "Hoboblin Warrior");
     strcpy(monster->entityRace, "Hobgoblin");
     strcpy(monster->entityClass, "Warrior");
@@ -119,6 +150,7 @@ void AssignHobgoblinWarrior(Entity* monster) {
 }
 
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
+    monster->entityStats.ATK = 0;
     monster->aggroFlag = false;
     monster->hasMoved = false;
     monster->noCollision = false;
@@ -182,113 +214,113 @@ void AssignStats(int input) {
     switch(input){
         case 62:
             strcpy(player->playerRace, "Human");
-            player->playerHP = 10;
-            player->CHA = 12;
-            player->CON = 12;
-            player->DEX = 12;
-            player->INT = 12;
-            player->STR = 12;
-            player->WIS = 12;
+            player->playerStats.HP = 10;
+            player->playerStats.CHA = 12;
+            player->playerStats.CON = 12;
+            player->playerStats.DEX = 12;
+            player->playerStats.INT = 12;
+            player->playerStats.STR = 12;
+            player->playerStats.WIS = 12;
         break;
         case 63:
             strcpy(player->playerRace, "Elf");
-            player->playerHP = 8;
-            player->CHA = 12;
-            player->CON = 10;
-            player->DEX = 16;
-            player->INT = 14;
-            player->STR = 10;
-            player->WIS = 12;
+            player->playerStats.HP = 8;
+            player->playerStats.CHA = 12;
+            player->playerStats.CON = 10;
+            player->playerStats.DEX = 16;
+            player->playerStats.INT = 14;
+            player->playerStats.STR = 10;
+            player->playerStats.WIS = 12;
         break;
         case 64:
             strcpy(player->playerRace, "Dwarf");
-            player->playerHP = 10;
-            player->CHA = 10;
-            player->CON = 14;
-            player->DEX = 10;
-            player->INT = 10;
-            player->STR = 14;
-            player->WIS = 16;
+            player->playerStats.HP = 10;
+            player->playerStats.CHA = 10;
+            player->playerStats.CON = 14;
+            player->playerStats.DEX = 10;
+            player->playerStats.INT = 10;
+            player->playerStats.STR = 14;
+            player->playerStats.WIS = 16;
         break;
         case 65:
             strcpy(player->playerRace, "Dragonborn");
-            player->playerHP = 12;
-            player->CHA = 10;
-            player->CON = 16;
-            player->DEX = 8;
-            player->INT = 10;
-            player->STR = 16;
-            player->WIS = 10;
+            player->playerStats.HP = 12;
+            player->playerStats.CHA = 10;
+            player->playerStats.CON = 16;
+            player->playerStats.DEX = 8;
+            player->playerStats.INT = 10;
+            player->playerStats.STR = 16;
+            player->playerStats.WIS = 10;
         break;
         case 66:
             strcpy(player->playerRace, "Gnoll");
-            player->playerHP = 12;
-            player->CHA = 10;
-            player->CON = 16;
-            player->DEX = 10;
-            player->INT = 8;
-            player->STR = 16;
-            player->WIS = 10;
+            player->playerStats.HP = 12;
+            player->playerStats.CHA = 10;
+            player->playerStats.CON = 16;
+            player->playerStats.DEX = 10;
+            player->playerStats.INT = 8;
+            player->playerStats.STR = 16;
+            player->playerStats.WIS = 10;
         break;
         case 82:
             strcpy(player->playerRace, "Skeleton");
-            player->playerHP = 8;
-            player->CHA = 10;
-            player->CON = 14;
-            player->DEX = 12;
-            player->INT = 16;
-            player->STR = 8;
-            player->WIS = 14;
+            player->playerStats.HP = 8;
+            player->playerStats.CHA = 10;
+            player->playerStats.CON = 14;
+            player->playerStats.DEX = 12;
+            player->playerStats.INT = 16;
+            player->playerStats.STR = 8;
+            player->playerStats.WIS = 14;
         break;
         case 83:
             strcpy(player->playerRace, "Mantis");
-            player->playerHP = 12;
-            player->CHA = 8;
-            player->CON = 14;
-            player->DEX = 12;
-            player->INT = 10;
-            player->STR = 16;
-            player->WIS = 10;
+            player->playerStats.HP = 12;
+            player->playerStats.CHA = 8;
+            player->playerStats.CON = 14;
+            player->playerStats.DEX = 12;
+            player->playerStats.INT = 10;
+            player->playerStats.STR = 16;
+            player->playerStats.WIS = 10;
         break;
         case 84:
             strcpy(player->playerRace, "Robot");
-            player->playerHP = 10;
-            player->CHA = 10;
-            player->CON = 16;
-            player->DEX = 10;
-            player->INT = 12;
-            player->STR = 14;
-            player->WIS = 10;
+            player->playerStats.HP = 10;
+            player->playerStats.CHA = 10;
+            player->playerStats.CON = 16;
+            player->playerStats.DEX = 10;
+            player->playerStats.INT = 12;
+            player->playerStats.STR = 14;
+            player->playerStats.WIS = 10;
         break;
         case 85:
             strcpy(player->playerRace, "Werewolf");
-            player->playerHP = 12;
-            player->CHA = 10;
-            player->CON = 16;
-            player->DEX = 14;
-            player->INT = 8;
-            player->STR = 16;
-            player->WIS = 8;
+            player->playerStats.HP = 12;
+            player->playerStats.CHA = 10;
+            player->playerStats.CON = 16;
+            player->playerStats.DEX = 14;
+            player->playerStats.INT = 8;
+            player->playerStats.STR = 16;
+            player->playerStats.WIS = 8;
         break;
         case 86:
             strcpy(player->playerRace, "Vampire");
-            player->playerHP = 10;
-            player->CHA = 16;
-            player->CON = 10;
-            player->DEX = 12;
-            player->INT = 14;
-            player->STR = 10;
-            player->WIS = 10;
+            player->playerStats.HP = 10;
+            player->playerStats.CHA = 16;
+            player->playerStats.CON = 10;
+            player->playerStats.DEX = 12;
+            player->playerStats.INT = 14;
+            player->playerStats.STR = 10;
+            player->playerStats.WIS = 10;
         break;
         default:
             strcpy(player->playerRace, "Human");
-            player->playerHP = 10;
-            player->CHA = 12;
-            player->CON = 12;
-            player->DEX = 12;
-            player->INT = 12;
-            player->STR = 12;
-            player->WIS = 12;
+            player->playerStats.HP = 10;
+            player->playerStats.CHA = 12;
+            player->playerStats.CON = 12;
+            player->playerStats.DEX = 12;
+            player->playerStats.INT = 12;
+            player->playerStats.STR = 12;
+            player->playerStats.WIS = 12;
         break;
     }
 }
