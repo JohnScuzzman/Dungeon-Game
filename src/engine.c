@@ -79,7 +79,17 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
             PMove = PlayerInput(ch, combatHistory);
 
             // Check if player tried to attack something.
+            // Then check if they used a ranged or melee weapon
+            // Set max and min DMG accoridingly and attack the monster.
             if (combatHistory->playerCombat && combatHistory->defender.entityID > 1) {
+                if (combatHistory->playerUsedRanged == true) {
+                    player->playerStats.maxDMG = player->equippedRanged.maxDMG;
+                    player->playerStats.minDMG = player->equippedRanged.minDMG;
+                }
+                else {
+                    player->playerStats.maxDMG = player->equippedMelee.maxDMG;
+                    player->playerStats.minDMG = player->equippedMelee.minDMG;
+                }
                 Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
                 playerCombat = AttackEntity(target, combatHistory, player);
             }
@@ -91,6 +101,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
                     i++;
                 }
                 else if (CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->entityID > 1){
+                    // Change the 'false' to true later for a ranged attack.
                     monsterCombat = AttackPlayer(mptr + i, combatHistory, player);
                     if(!monsterCombat) {
                         leaveFlag = true;

@@ -37,6 +37,9 @@ bool PlayerInput(int input, CombatHistory* combatHistory) {
     Position newPos = { player->pos.y, player->pos.x };
 
     switch(input) {
+        case 32: // space bar
+            return true;
+            break;
         //move up
         case KEY_UP:
             newPos.y--;
@@ -61,12 +64,14 @@ bool PlayerInput(int input, CombatHistory* combatHistory) {
             MovePlayer(newPos, combatHistory);
             return true;
             break;
+        case 102: // f key
+            bool rangedAttack = PlayerRangedAttack();
+            return rangedAttack;
         default:
-            return true;
             break;
+            
     }
     return false;
-    
 }
 
 // Test for floor tile, move if one is detected.

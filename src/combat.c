@@ -7,6 +7,7 @@ CombatHistory* CreateCombatHistory(Entity monster) {
     combatHistory->playerResult = false; // 0 = miss, 1 = hit
     combatHistory->entityResult = false;
     combatHistory->playerCombat = false; // true if player combat occurred
+    combatHistory->playerUsedRanged = false;
     combatHistory->attackerATKMod = 0;
     combatHistory->attackerAccRoll = 0;
     combatHistory->attackerDMG = 0;
@@ -28,13 +29,16 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
     int playerDodgeMod = player->playerStats.DEX;
     int playerAC = player->playerStats.AC;
     playerDodgeMod = ((playerDodgeMod - 10) / 2);
+
     int attackerAccRoll = (rand() % 20) + 1;
     attackerAccRoll = attackerAccRoll + attackerATKMod;
     playerAC = (playerAC + playerDodgeMod + 10);
+
     int maxDMG = attacker->entityStats.maxDMG;
     int minDMG = attacker->entityStats.minDMG;
     int playerHP = player->playerStats.HP;
     int attackerDMG = (rand() % maxDMG) + minDMG;
+
     if (attackerAccRoll >= playerAC) {
         player->playerStats.HP = (playerHP - attackerDMG);
         if (player->playerStats.HP <= 0) {
@@ -70,13 +74,16 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     int defenderDodgeMod = defender->entityStats.DEX;
     int defenderAC = defender->entityStats.AC;
     defenderDodgeMod = ((defenderDodgeMod - 10) / 2);
+
     int playerAccRoll = (rand() % 20) + 1;
     playerAccRoll = playerAccRoll + playerATKMod;
     defenderAC = (defenderAC + defenderDodgeMod + 10);
+
     int maxDMG = player->playerStats.maxDMG;
     int minDMG = player->playerStats.minDMG;
     int defenderHP = defender->entityStats.HP;
     int playerDMG = (rand() % maxDMG) + minDMG;
+
     if (playerAccRoll >= defenderAC) {
         defender->entityStats.HP = (defenderHP - playerDMG);
         if (defender->entityStats.HP <= 0) {
@@ -112,7 +119,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     return true;
 }
 
-void ResetCombatHistory(CombatHistory* combatHistory) {
+void UpdateCombatHistory() {
     combatHistory->playerResult = false; // 0 = miss, 1 = hit
     combatHistory->entityResult = false;
     combatHistory->playerCombat = false; // true if player combat occurred
@@ -126,4 +133,82 @@ void ResetCombatHistory(CombatHistory* combatHistory) {
     combatHistory->playerDMG = 0;
     combatHistory->playerDodgeMod = 0;
     combatHistory->playerAC = 0;
+}
+
+bool PlayerRangedAttack(){
+    int ch;
+    int x = player->pos.x;
+    int y = player->pos.y;
+    Cursor(y, x, 1);
+    while((ch = getch()) != 32 && ch != 102) {
+    Cursor(y, x, 1);
+    switch(ch) {
+        //move up
+        case KEY_UP:
+            if (y == 0) {
+                break;
+            }
+            else {
+                RemoveCursor(y, x, 1);
+                y--;
+            }
+        break;
+        //move down
+        case KEY_DOWN:
+            if (y == 50) {
+                break;
+            }
+            else {
+                RemoveCursor(y, x,13);
+                y++;
+            }
+            break;
+        //move left
+        case KEY_LEFT:
+            if (x == 0) {
+                break;
+            }
+            else {
+                RemoveCursor(y, x, 1);
+                x--;
+            }
+            break;
+        case KEY_RIGHT:
+            if (x == 125) {
+                break;
+            }
+            else {
+                RemoveCursor(y, x, 1);
+                x++;
+            }
+            break;
+        default:
+            Cursor(y, x, 1);
+            break;
+        }
+        Cursor(y, x, 1);
+    }
+    return ShootTarget(x, y);
+}
+
+bool ShootTarget(int x, int y) {
+    if (player->equippedRanged.isRanged) {
+            // Player selected a monster.
+        if (map[y][x].entityID > 1 && LineOfSight(player->pos, map[y][x].pos)) {
+            combatHistory->playerCombat = true;
+            combatHistory->playerUsedRanged = true;
+            combatHistory->defender = map[y][x];
+            return true;
+        }
+        if (map[y][x].entityID > 1 && !LineOfSight(player->pos, map[y][x].pos)) {
+            combatHistory->playerUsedRanged = false;
+            mvprintw(23, 128, "Target not in line of sight.");
+            return false;
+        }
+        else {
+            mvprintw(23, 128, "Not a valid target.");
+            combatHistory->playerUsedRanged = false;
+            return false;
+        }
+    }
 }
