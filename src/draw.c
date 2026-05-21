@@ -132,16 +132,13 @@ void DrawPlayerAttack(Entity defender, bool combatResult) {
 		mvprintw(23, 128, "You rolled: %d", combatHistory->playerAccRoll);
 		mvprintw(24, 128, "You hit the %s", defender.entityName);
 		mvprintw(25, 128, "dealing %d damage.", combatHistory->playerDMG);	
-		if (defender.entityStats.HP <= 0 && defender.entityID > 1) {
-			mvprintw(26, 128, "You kill the %s!", defender.entityName);
-		}
 	}
 	if (!combatResult) {
 		mvprintw(23, 128, "You attack the %s.", defender.entityName);
 		mvprintw(24, 128, "You miss with a %d.", combatHistory->playerAccRoll);
 	}
 	if (defender.entityID == 0) {
-		mvprintw(25, 128, "You kill the %s", defender.entityName);
+		mvprintw(26, 128, "You kill the %s", defender.entityName);
 	}
 
 }
