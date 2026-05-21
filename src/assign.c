@@ -175,7 +175,7 @@ void AssignHobgoblinWarrior(Entity* monster) {
     strcpy(monster->entityRace, "Hobgoblin");
     strcpy(monster->entityClass, "Warrior");
     strcpy(monster->entityArmor, "Leather Armor");
-    strcpy(monster->entityWeapon, "Long Sword");
+    strcpy(monster->entityWeapon, "Scimitar");
 }
 
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {

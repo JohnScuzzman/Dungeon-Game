@@ -11,12 +11,12 @@ CombatHistory* CreateCombatHistory(Entity monster) {
     combatHistory->attackerAccRoll = 0;
     combatHistory->attackerDMG = 0;
     combatHistory->defenderDodgeMod = 0;
-    combatHistory->defenderDodgeRoll = 0;
+    combatHistory->defenderAC = 0;
     combatHistory->playerATKMod = 0;
     combatHistory->playerAccRoll = 0;
     combatHistory->playerDMG = 0;
     combatHistory->playerDodgeMod = 0;
-    combatHistory->playerDodgeRoll = 0;
+    combatHistory->playerAC = 0;
     combatHistory->defender = monster;
     return combatHistory;
 }
@@ -30,13 +30,12 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
     playerDodgeMod = ((playerDodgeMod - 10) / 2);
     int attackerAccRoll = (rand() % 20) + 1;
     attackerAccRoll = attackerAccRoll + attackerATKMod;
-    int playerDodgeRoll = (rand() % 20) + 1;
-    playerDodgeRoll = playerDodgeRoll + playerDodgeMod + playerAC;
+    playerAC = (playerAC + playerDodgeMod + 10);
     int maxDMG = attacker->entityStats.maxDMG;
-    int minDMG = attacker->entityStats.maxDMG;
+    int minDMG = attacker->entityStats.minDMG;
     int playerHP = player->playerStats.HP;
     int attackerDMG = (rand() % maxDMG) + minDMG;
-    if (attackerAccRoll >= playerDodgeRoll) {
+    if (attackerAccRoll >= playerAC) {
         player->playerStats.HP = (playerHP - attackerDMG);
         if (player->playerStats.HP <= 0) {
             //Player dead, Game is over.
@@ -47,7 +46,7 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
         combatHistory->defender = *attacker;
         combatHistory->playerDodgeMod = playerDodgeMod;
         combatHistory->attackerAccRoll = attackerAccRoll;
-        combatHistory->playerDodgeRoll = playerDodgeRoll;
+        combatHistory->playerAC = playerAC;
         combatHistory->attackerDMG = attackerDMG;
         combatHistory->entityResult = true;
         combatHistory->monsterKilled = false;
@@ -57,7 +56,7 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
         combatHistory->defender = *attacker;
         combatHistory->playerDodgeMod = playerDodgeMod;
         combatHistory->attackerAccRoll = attackerAccRoll;
-        combatHistory->playerDodgeRoll = playerDodgeRoll;
+        combatHistory->playerAC = playerAC;
         combatHistory->attackerDMG = attackerDMG;
         combatHistory->entityResult = false;
         combatHistory->monsterKilled = false;
@@ -73,13 +72,12 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     defenderDodgeMod = ((defenderDodgeMod - 10) / 2);
     int playerAccRoll = (rand() % 20) + 1;
     playerAccRoll = playerAccRoll + playerATKMod;
-    int defenderDodgeRoll = (rand() % 20) + 1;
-    defenderDodgeRoll = defenderDodgeRoll + defenderDodgeMod + defenderAC;
+    defenderAC = (defenderAC + defenderDodgeMod + 10);
     int maxDMG = player->playerStats.maxDMG;
     int minDMG = player->playerStats.minDMG;
     int defenderHP = defender->entityStats.HP;
     int playerDMG = (rand() % maxDMG) + minDMG;
-    if (playerAccRoll >= defenderDodgeRoll) {
+    if (playerAccRoll >= defenderAC) {
         defender->entityStats.HP = (defenderHP - playerDMG);
         if (defender->entityStats.HP <= 0) {
             AssignCorpse(defender);
@@ -87,7 +85,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
             combatHistory->playerATKMod = playerATKMod;
             combatHistory->defenderDodgeMod = defenderDodgeMod;
             combatHistory->playerAccRoll = playerAccRoll;
-            combatHistory->defenderDodgeRoll = defenderDodgeRoll;
+            combatHistory->defenderAC = defenderAC;
             combatHistory->playerDMG = playerDMG;
             // combatHistory->monsterKilled = true;
             combatHistory->playerResult = true;
@@ -97,7 +95,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
         combatHistory->playerATKMod = playerATKMod;
         combatHistory->defenderDodgeMod = defenderDodgeMod;
         combatHistory->playerAccRoll = playerAccRoll;
-        combatHistory->defenderDodgeRoll = defenderDodgeRoll;
+        combatHistory->defenderAC = defenderAC;
         combatHistory->playerDMG = playerDMG;
         combatHistory->monsterKilled = false;
         combatHistory->playerResult = true;
@@ -107,7 +105,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     combatHistory->playerATKMod = playerATKMod;
     combatHistory->defenderDodgeMod = defenderDodgeMod;
     combatHistory->playerAccRoll = playerAccRoll;
-    combatHistory->defenderDodgeRoll = defenderDodgeRoll;
+    combatHistory->defenderAC = defenderAC;
     combatHistory->playerDMG = playerDMG;
     combatHistory->playerResult = false;
     combatHistory->monsterKilled = false;
@@ -122,10 +120,10 @@ void ResetCombatHistory(CombatHistory* combatHistory) {
     combatHistory->attackerAccRoll = 0;
     combatHistory->attackerDMG = 0;
     combatHistory->defenderDodgeMod = 0;
-    combatHistory->defenderDodgeRoll = 0;
+    combatHistory->defenderAC = 0;
     combatHistory->playerATKMod = 0;
     combatHistory->playerAccRoll = 0;
     combatHistory->playerDMG = 0;
     combatHistory->playerDodgeMod = 0;
-    combatHistory->playerDodgeRoll = 0;
+    combatHistory->playerAC = 0;
 }

@@ -62,7 +62,6 @@ int main(void)
     /* Pass the pointer to monsterList[0]. */
     /* Pass the number of monsters and rooms made. */
     GameLoop(mptr, combatHistory, n_monsters);
-
     CloseGame();
   }
   else

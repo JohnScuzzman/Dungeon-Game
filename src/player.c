@@ -38,30 +38,31 @@ bool PlayerInput(int input, CombatHistory* combatHistory) {
 
     switch(input) {
         //move up
-        case 'A':
+        case KEY_UP:
             newPos.y--;
             MovePlayer(newPos, combatHistory);
             return true;
             break;
         //move down
-        case 'B':
+        case KEY_DOWN:
             newPos.y++;
             MovePlayer(newPos, combatHistory);
             return true;
             break;
         //move left
-        case 'D':
+        case KEY_LEFT:
             newPos.x--;
             MovePlayer(newPos, combatHistory);
             return true;
             break;
         //move right
-        case 'C':
+        case KEY_RIGHT:
             newPos.x++;
             MovePlayer(newPos, combatHistory);
             return true;
             break;
         default:
+            return true;
             break;
     }
     return false;
@@ -77,14 +78,18 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory) {
         player->pos.y = newPos.y;
         player->pos.x = newPos.x;
         MakeFOV(player);
+        combatHistory->playerCombat = false;
+        return;
     }
     // Attempted to move into monster, flag and prepare for combat.
     else if (map[newPos.y][newPos.x].entityID > 1 && !combatHistory->monsterKilled){
         combatHistory->playerCombat = true;
         combatHistory->defender = map[newPos.y][newPos.x];
+        return;
     }
-    if (!combatHistory->monsterKilled){
+    else if (!combatHistory->monsterKilled){
         combatHistory->monsterKilled = false;
+        return;
     }
 
 }

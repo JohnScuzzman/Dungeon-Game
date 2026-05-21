@@ -38,7 +38,9 @@
 //   int value;
 //   ChromeFists chromeFists;
 //   Cutlass cutlass;
+//   Falcion;
 //   Dagger dagger;
+//   Scimitar scimitar;
 //   Shortsword shortSword;
 //   Longsword longSword;
 //   Quarterstaff quarterstaff;
