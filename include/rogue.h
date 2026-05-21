@@ -9,6 +9,7 @@
 #include <unistd.h> // File reading
 #include <string.h> // String copying
 #include <ctype.h> // toupper functions
+#include "items.h"
 
 // color pairs
 #define VISIBLE_COLOR 1
@@ -41,71 +42,6 @@ typedef struct {
   int maxDMG;
   int minDMG;
 } Stats;
-
-// typedef struct {
-//   int amuletID;
-//   int value;
-//   CopperAmulet copperAmulet;
-//   silverAmulet silverAmulet;
-// } Amulets;
-
-// typedef struct {
-//   int cyberneticID;
-//   int value;
-//   MetallicSkin metallicSkin;
-//   ChromeFists chromeFists;
-// } Cybernetics;
-
-// typedef struct {
-//   int ringID;
-//   int value;
-// } Rings;
-
-// typedef struct {
-//   int backID;
-//   int value;
-// } Back;
-
-// typedef struct {
-//   int foodID;
-//   int value;
-// } Foods;
-
-// typedef struct {
-//   int potionID;
-//   int value;
-//   AcidPotion acidPotion;
-// } Potions;
-
-// typedef struct {
-//   int meleeID;
-//   int value;
-//   ChromeFists chromeFists;
-//   Cutlass cutlass;
-//   Dagger dagger;
-//   Shortsword shortSword;
-//   Longsword longSword;
-//   Quarterstaff quarterstaff;
-// } MeleeWeapons;
-
-// typedef struct {
-//   int rangedID;
-//   int value;
-//   FlintlockPistol flintlockPistol;
-//   Longbow longBow;
-//   Shortbow shortBow;
-//   Potions AcidPotion;
-// } RangedWeapons;
-
-// typedef struct {
-//   int armorID;
-//   int value;
-//   Chainmail chainmail;
-//   Leather leather;
-//   MetallicSkin metallicSkin;
-//   RangersCloak rangersCloak;
-//   Robes robes;
-// } Armors;
 
 // typedef struct {
 //   Amulets amulets;
@@ -153,6 +89,23 @@ typedef struct {
   char entityWeapon[MAX_NAME_SIZE];
 } Entity;
 
+typedef struct {
+    Entity defender;
+    bool monsterKilled;
+    bool playerResult; // 0 = miss, 1 = hit
+    bool entityResult;
+    bool playerCombat; // true if player combat occurred
+    int attackerATKMod;
+    int attackerAccRoll;
+    int attackerDMG;
+    int defenderDodgeMod;
+    int defenderDodgeRoll;
+    int playerATKMod;
+    int playerAccRoll;
+    int playerDMG;
+    int playerDodgeMod;
+    int playerDodgeRoll;
+} CombatHistory;
 
 typedef struct
 {
@@ -170,6 +123,7 @@ void TitleScreen();
 
 // assign.c functions
 void AssignClass(int input);
+void AssignCorpse(Entity* entity);
 void AssignFloor(int x, int y);
 void AssignGoblinWarrior(Entity* monster);
 void AssignGoblinRanger(Entity* monster);
@@ -180,7 +134,10 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 void AssignStats(int input);
 
 //combat.c functions 
-bool AttackPlayer(Entity* attacker);
+CombatHistory* CreateCombatHistory(Entity monster);
+bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player);
+bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player);
+void ResetCombatHistory(CombatHistory* combatHistory);
 
 // classes.c functions
 void AssignKnight();
@@ -197,10 +154,12 @@ void AssignCyborg();
 
 // draw.c functions
 void DrawBorder(void);
-void DrawDebug(Entity* mptr, int n_rooms);
-void DrawEverything(Entity* mptr, int n_rooms);
+void DrawEntityAttack(Entity attacker, bool combatResult);
+void DrawPlayerAttack(Entity defender, bool combatResult);
+void DrawDebug(Entity* mptr, int n_monsters);
+void DrawEverything(Entity* mptr, int n_monsters, bool playeCombat, bool monsterCombat, CombatHistory* combatHistory);
 void DrawMap();
-void DrawMonsters(Entity* mptr, int n_rooms);
+void DrawMonsters(Entity* mptr, int n_monsters);
 void DrawPlayer(Player* player);
 void DrawPlayerBlink(Player* player);
 void DrawStats(Player* player);
@@ -208,7 +167,7 @@ void DrawStats(Player* player);
 
 // engine.c functions
 bool NcursesSetup(void);
-void GameLoop(Entity* mptr, int n_rooms);
+void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters);
 void CloseGame(void);
 void Cursor(int x, int y, int length);
 void RemoveCursor(int x, int y, int length);
@@ -237,8 +196,10 @@ Position SetupMap(Entity* mptr, int n_rooms);
 void FreeMap(void);
 
 // monster.c functions
-Entity* MonsterList(int n_rooms);
+Entity* MonsterList(int n_monsters);
+void UpdateMonsterMap(Entity* monster, int n_monsters);
 void UpdateMonsters(Entity* monster, int n_monsters);
+void UpdateMonster(Entity* monster, int monsterID, int n_monsters);
 void MoveMonster(Entity* monster, Position newPOS);
 void UpdateMonsterVisible(Entity* monster, Player* player);
 // void MoveMonster(Monster monster);
@@ -247,14 +208,15 @@ void UpdateMonsterVisible(Entity* monster, Player* player);
 // void MoveAllMonsters();
 // void SetMonsterListLen(int n_rooms);
 void KeepMonsterIntegrity(Entity* mptr, bool oldSeen, bool oldVisible);
-void ResetMoveFlags(Entity* monster, int n_rooms);
+void ResetMoveFlags(Entity* monster, int n_monsters);
 void Wander(Entity* mptr);
+Entity* FindMonsterInList(int monsterID, int n_monsters);
 
 
 
 // player.c functions
-bool PlayerInput(int input);
-void MovePlayer(Position newPos);
+bool PlayerInput(int input, CombatHistory* combatHistory);
+void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool CheckPlayerAdjacent(Position origin);
 
 // room.c functions
@@ -275,6 +237,8 @@ extern Player* player;
 extern Entity** map;
 // Pointer to the list of monsters
 extern Entity* mptr;
+// Combat History
+extern CombatHistory* combatHistory;
 
 
 

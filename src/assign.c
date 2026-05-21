@@ -30,6 +30,36 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
     return monster;
 }
 
+void AssignCorpse(Entity* entity) {
+    int x = entity->pos.x;
+    int y = entity->pos.y;
+    AssignFloor(x,y);
+    entity->ch = 'X';
+    entity->color = COLOR_PAIR(VISIBLE_COLOR);
+    entity->aggroFlag = false;
+    entity->hasMoved = true;
+    entity->noCollision = true;
+    entity->transparent = true;
+    entity->seen = true;
+    entity->visible = true;
+    entity->entityAggroRange = 0;
+    entity->entityID = 0;
+    entity->entityStats.ATK = 0;
+    entity->entityStats.CHA = 0;
+    entity->entityStats.CON = 0;
+    entity->entityStats.DEX = 0;
+    entity->entityStats.INT = 0;
+    entity->entityStats.STR = 0;
+    entity->entityStats.WIS = 0;
+    entity->entityStats.AC = 0;
+    entity->entityStats.HP = 0;
+    entity->entityStats.LVL = 0;
+    entity->entityStats.maxDMG = 0;
+    entity->entityStats.minDMG = 0;
+    // strcpy(entity->entityName, "Corpse");
+    map[entity->pos.y][entity->pos.x].ch = entity->ch;
+}
+
 void AssignFloor(int x, int y) {
     map[y][x].ch = '.';
     map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
@@ -60,22 +90,21 @@ void AssignFloor(int x, int y) {
     strcpy(map[y][x].entityWeapon, "None");
 }
 
-
 void AssignGoblinWarrior(Entity* monster) {
+    monster->ch = 'G';
+    monster->staticCh = 'G'; 
     monster->entityStats.CHA = 8;
     monster->entityStats.CON = 8;
     monster->entityStats.DEX = 10;
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 12;
     monster->entityStats.WIS = 8;
-    monster->ch = 'G';
-    monster->staticCh = 'G'; 
     monster->entityAggroRange = 15;
     monster->entityStats.AC = 1;
     monster->entityStats.HP = 4;
     monster->entityStats.LVL = 1;
-    monster->entityStats.maxDMG = 1;
-    monster->entityStats.minDMG = 4;
+    monster->entityStats.maxDMG = 4;
+    monster->entityStats.minDMG = 1;
     strcpy(monster->entityArmor, "Leather Armor");
     strcpy(monster->entityClass, "Warrior");
     strcpy(monster->entityName, "Goblin Warrior");
@@ -84,20 +113,20 @@ void AssignGoblinWarrior(Entity* monster) {
 }
 
 void AssignKoboldWarrior(Entity* monster) {
+    monster->ch = 'K';
+    monster->staticCh = 'K'; 
     monster->entityStats.CHA = 8;
     monster->entityStats.CON = 8;
     monster->entityStats.DEX = 12;
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 10;
     monster->entityStats.WIS = 8;
-    monster->ch = 'K';
-    monster->staticCh = 'K'; 
     monster->entityAggroRange = 20;
     monster->entityStats.AC = 1;
     monster->entityStats.LVL = 1;
     monster->entityStats.HP = 4;
-    monster->entityStats.maxDMG = 1;
-    monster->entityStats.minDMG = 4;
+    monster->entityStats.maxDMG = 4;
+    monster->entityStats.minDMG = 1;
     strcpy(monster->entityArmor, "Leather Armor");
     strcpy(monster->entityClass, "Warrior");
     strcpy(monster->entityName, "Kobold Warrior");
@@ -106,20 +135,20 @@ void AssignKoboldWarrior(Entity* monster) {
 }
 
 void AssignGoblinRanger(Entity* monster) {
+    monster->ch = 'G';
+    monster->staticCh = 'G'; 
     monster->entityStats.CHA = 8;
     monster->entityStats.CON = 10;
     monster->entityStats.DEX = 14;
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 8;
     monster->entityStats.WIS = 8;
-    monster->ch = 'G';
-    monster->staticCh = 'G'; 
     monster->entityAggroRange = 15;
     monster->entityStats.AC = 0;
     monster->entityStats.LVL = 1;
     monster->entityStats.HP = 4;
-    monster->entityStats.maxDMG = 1;
-    monster->entityStats.minDMG = 3;
+    monster->entityStats.maxDMG = 3;
+    monster->entityStats.minDMG = 1;
     strcpy(monster->entityArmor, "Leather Armor");
     strcpy(monster->entityClass, "Ranger");
     strcpy(monster->entityName, "Goblin Ranger");
@@ -128,20 +157,20 @@ void AssignGoblinRanger(Entity* monster) {
 }
 
 void AssignHobgoblinWarrior(Entity* monster) {
+    monster->ch = 'H'; 
+    monster->staticCh = 'H'; 
     monster->entityStats.CHA = 8;
     monster->entityStats.CON = 12;
     monster->entityStats.DEX = 12;
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 12;
     monster->entityStats.WIS = 8;
-    monster->ch = 'H'; 
-    monster->staticCh = 'H'; 
     monster->entityAggroRange = 12;
     monster->entityStats.AC = 1;
     monster->entityStats.HP = 6;
     monster->entityStats.LVL = 1;
-    monster->entityStats.maxDMG = 1;
-    monster->entityStats.minDMG = 6;
+    monster->entityStats.maxDMG = 6;
+    monster->entityStats.minDMG = 1;
     strcpy(monster->entityName, "Hoboblin Warrior");
     strcpy(monster->entityRace, "Hobgoblin");
     strcpy(monster->entityClass, "Warrior");

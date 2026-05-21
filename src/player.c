@@ -32,7 +32,7 @@ bool CheckPlayerAdjacent(Position origin) {
 
 // Decide what to do with input.
 // Collision determined here as well.
-bool PlayerInput(int input) {
+bool PlayerInput(int input, CombatHistory* combatHistory) {
     // Get new coordinates.
     Position newPos = { player->pos.y, player->pos.x };
 
@@ -40,25 +40,25 @@ bool PlayerInput(int input) {
         //move up
         case 'A':
             newPos.y--;
-            MovePlayer(newPos);
+            MovePlayer(newPos, combatHistory);
             return true;
             break;
         //move down
         case 'B':
             newPos.y++;
-            MovePlayer(newPos);
+            MovePlayer(newPos, combatHistory);
             return true;
             break;
         //move left
         case 'D':
             newPos.x--;
-            MovePlayer(newPos);
+            MovePlayer(newPos, combatHistory);
             return true;
             break;
         //move right
         case 'C':
             newPos.x++;
-            MovePlayer(newPos);
+            MovePlayer(newPos, combatHistory);
             return true;
             break;
         default:
@@ -69,14 +69,24 @@ bool PlayerInput(int input) {
 }
 
 // Test for floor tile, move if one is detected.
-void MovePlayer(Position newPos) { 
-  if (map[newPos.y][newPos.x].noCollision) {
-    // Update FOV
-    ClearFOV(player);
-    player->pos.y = newPos.y;
-    player->pos.x = newPos.x;
-    MakeFOV(player);
-  }
+void MovePlayer(Position newPos, CombatHistory* combatHistory) { 
+    Entity* monster;
+    if (map[newPos.y][newPos.x].noCollision && !combatHistory->monsterKilled) {
+        // Update FOV
+        ClearFOV(player);
+        player->pos.y = newPos.y;
+        player->pos.x = newPos.x;
+        MakeFOV(player);
+    }
+    // Attempted to move into monster, flag and prepare for combat.
+    else if (map[newPos.y][newPos.x].entityID > 1 && !combatHistory->monsterKilled){
+        combatHistory->playerCombat = true;
+        combatHistory->defender = map[newPos.y][newPos.x];
+    }
+    if (!combatHistory->monsterKilled){
+        combatHistory->monsterKilled = false;
+    }
+
 }
 
 
