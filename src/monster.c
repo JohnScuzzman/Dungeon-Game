@@ -1,21 +1,52 @@
 #include <rogue.h>
 
 /* Create a dynamic list of monsters.*/
-Entity* MonsterList(int n_rooms) {
+Entity* MonsterList(int n_monsters) {
     /* Create an Array to hold our Monster Structs. */
     /* Can be accessed anywhere with mptr declared below. */
     Entity* mptr;
-    mptr = (Entity *)malloc(n_rooms * sizeof(Entity));
+    mptr = (Entity *)malloc(n_monsters * sizeof(Entity));
     return mptr; // return pointer to the array.
 }
 
 /* update monster positions on map from mptr. */
-void UpdateMonsters(Entity* monster, int n_monsters) {
+void UpdateMonsterMap(Entity* monster, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
         int y, x;
         y = monster[i].pos.y;
         x = monster[i].pos.x;
         map[y][x] = monster[i];
+    }
+}
+
+/* update monster list based on map*/
+void UpdateMonsters(Entity* monster, int n_monsters) {
+    for (int i = 0; i < n_monsters; i++) {
+        int y, x;
+        y = monster[i].pos.y;
+        x = monster[i].pos.x;
+        monster[i] = map[y][x];
+    }
+}
+
+/* update a single monster the list on map from mptr. */
+void UpdateMonster(Entity* monster, int monsterID, int n_monsters) {
+    for (int i = 0; i < n_monsters; i++) {
+        int y, x;
+        y = monster[i].pos.y;
+        x = monster[i].pos.x;
+        if (monsterID == monster[i].entityID) {
+            monster[i] = map[y][x];
+        }
+    }
+}
+
+Entity* FindMonsterInList(int monsterID, int n_monsters) {
+    for (int i = 0; i < n_monsters; i++) {
+        // Monster found
+        if(monsterID == mptr[i].entityID) {
+            return (mptr + i);
+        }
     }
 }
 
@@ -205,8 +236,8 @@ void UpdateMonsterVisible(Entity* monster, Player* player){
     }
  }
 
-void ResetMoveFlags(Entity* monster, int n_rooms) {
-    for (int i = 0; i < n_rooms; i++) {
+void ResetMoveFlags(Entity* monster, int n_monsters) {
+    for (int i = 0; i < n_monsters; i++) {
         monster[i].hasMoved = false;
     }
 }

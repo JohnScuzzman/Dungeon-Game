@@ -78,7 +78,7 @@ Position SetupMap(Entity* mptr, int n_rooms) {
             mptr[i - 1] = AssignMonster(rooms[i].center, n_monsters, monsterID); 
 
             /* Use the list of monsters we just made and move them to our 2D matrix of entities.*/
-            UpdateMonsters(mptr, n_rooms - 1);
+            UpdateMonsterMap(mptr, n_rooms - 1);
         }
     }
 

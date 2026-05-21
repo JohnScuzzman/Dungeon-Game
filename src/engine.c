@@ -32,16 +32,19 @@ void RemoveCursor(int x, int y, int length) {
     mvchgat(x, y, length, A_NORMAL, 0, NULL);
 }
 
-void GameLoop(Entity* mptr, int n_rooms) { 
+void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) { 
     bool leaveFlag = false;
+    bool playerCombat = false;
+    bool monsterCombat = false;
     int ch, next_ch;
     MakeFOV(player);
-    DrawEverything(mptr, n_rooms);
+    DrawEverything(mptr, n_monsters, playerCombat, monsterCombat, combatHistory);
     DrawPlayerBlink(player);
     bool PMove = false;
     keypad(stdscr, FALSE);
     while(!leaveFlag)
     { 
+        UpdateMonsterMap(mptr, n_monsters);
         ch = getch();
         if (ch == 27) { 
             // check for esape.
@@ -54,33 +57,58 @@ void GameLoop(Entity* mptr, int n_rooms) {
         }
         // Pmove = false spam here used to help force monsters to move once.
         PMove = false;
+        playerCombat = false;
+        monsterCombat = false;
         if(ch != ERR) {
             int i = 0;
-            PMove = PlayerInput(ch);
+
+            // Attempt to make game wait for player to take full turn.
+            while(i == 0) {
+                PMove = PlayerInput(ch, combatHistory);
+                i = 1;
+            }
+
+            i = 0;
+
+            // Check if player tried to attack something.
+            if (combatHistory->playerCombat && combatHistory->defender.entityID > 1) {
+                Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
+                playerCombat = AttackEntity(target, combatHistory, player);
+            }
+            
             // If there is no adjacent player, move freely.
-            while (!((mptr + i)->hasMoved) && i < n_rooms && PMove == true){
-                if (!CheckPlayerAdjacent((mptr + i)->pos)){
+            while (!((mptr + i)->hasMoved) && i < n_monsters && PMove == true){
+                if (!CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->entityID > 1){
                     Wander(mptr + i);
                     i++;
                 }
-                else{
-                    // Combat function will go here.
+                else if (CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->entityID > 1){
+                    monsterCombat = AttackPlayer(mptr + i, combatHistory, player);
+                    if(!monsterCombat) {
+                        leaveFlag = true;
+                    }
                     i++;
                 }
-                
+                else {
+                    i++;
+                }
+            }
         }
-
-        ResetMoveFlags(mptr, n_rooms);
+        UpdateMonsterMap(mptr, n_monsters);
+        ResetMoveFlags(mptr, n_monsters);
         MakeFOV(player);
-        DrawEverything(mptr, n_rooms);
+        DrawEverything(mptr, n_monsters, playerCombat, monsterCombat, combatHistory);
+        combatHistory->monsterKilled = false;
+        // ResetCombatHistory(combatHistory);
         PMove = false;
         }
     }
-    }  
+    
 
 void CloseGame(void) { 
+    free(combatHistory);
+    free(player);
     free(mptr);
     endwin();
     /* Free memory allocated by pointer. */
-    free(player);
 } 

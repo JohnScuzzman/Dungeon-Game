@@ -91,11 +91,9 @@ void ChooseRace() {
                 break;
             default:
                 Cursor(cursorBoundY, cursorBoundX, 11);
-                refresh();
                 break;
             }
             Cursor(cursorBoundY, cursorBoundX, 11);
-            refresh();
         }
     AssignStats((cursorBoundY + cursorBoundX));
 }
@@ -150,11 +148,9 @@ void ChooseClass() {
             break;
         default:
             Cursor(cursorBoundY, cursorBoundX, 13);
-            refresh();
             break;
         }
         Cursor(cursorBoundY, cursorBoundX, 13);
-        refresh();
     }
     AssignClass((cursorBoundY + cursorBoundX));   
 }

@@ -25,24 +25,16 @@ void DrawMap()
     } 
   } 
 }
-// void DrawMonsters(Entity* mptr, int n_rooms) {
-//   for (int i = 0; i < n_rooms; i++)
-//     { 
-//       mvaddch(mptr->pos.y, mptr->pos.x, mptr->ch  | map[mptr->pos.y][mptr->pos.x].color);
-//     } 
-//   } 
-
 
 /* Draw Player based on position. */
 void DrawPlayer(Player* player) { 
 	mvaddch(player->pos.y, player->pos.x, player->ch | player->color | A_BOLD | A_DIM);
-  refresh();
+  	refresh();
 	} 
 
 void DrawPlayerBlink(Player* player) { 
 	// attron(A_STANDOUT);
 	mvaddch(player->pos.y, player->pos.x, player->ch | player->color | A_BOLD | A_DIM | A_BLINK);
-  refresh();
 	// attroff(A_STANDOUT); 
 	}  
 
@@ -95,21 +87,61 @@ void DrawBorder(void) {
 }
 
 
-void DrawDebug(Entity* mptr, int n_rooms) {
-  for (int i = 0; i < n_rooms ; i++) {
-	  mvprintw(22, 128, "Player POS x:%d, y:%d", player->pos.x, player->pos.y);
+void DrawDebug(Entity* mptr, int n_monsters) {
+  for (int i = 0; i < n_monsters ; i++) {
+	  // mvprintw(22, 128, "Player POS x:%d, y:%d", player->pos.x, player->pos.y);
     // mvprintw(23 + i, 128, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
-    mvprintw(23 + i, 128, "isAggro: %d Range: %d ", mptr[i].aggroFlag, mptr[i].entityAggroRange);
+    // mvprintw(23 + i, 128, "isAggro: %d Range: %d ", mptr[i].aggroFlag, mptr[i].entityAggroRange);
+	mvprintw(30, 128, "CH: %c x:%d, y:%d ID:%d", combatHistory->defender.ch, combatHistory->defender.pos.x, combatHistory->defender.pos.y, combatHistory->defender.entityID);
+
+
   }
   
 }
 
 /*Draw Everything*/ 
-void DrawEverything(Entity* mptr, int n_rooms) {
-  clear();
-  DrawMap();
-  DrawPlayer(player);
-  DrawStats(player);
-  DrawBorder();
-  DrawDebug(mptr, n_rooms);
-} 
+void DrawEverything(Entity* mptr, int n_monsters, bool playerCombat, bool monsterCombat, CombatHistory* combatHistory) {
+	clear();
+	DrawMap();
+	DrawPlayer(player);
+	DrawStats(player);
+	DrawBorder();
+	DrawDebug(mptr, n_monsters);
+	if (monsterCombat){
+		DrawEntityAttack(combatHistory->defender, combatHistory->entityResult);
+	}
+	if (playerCombat){
+		DrawPlayerAttack(combatHistory->defender, combatHistory->playerResult);
+	}
+}
+
+void DrawEntityAttack(Entity attacker, bool combatResult) {
+	if (combatResult) {
+		mvprintw(23, 128, "The %s rolls a %d", attacker.entityName, combatHistory->attackerAccRoll);
+		mvprintw(24, 128, "And hits with a %s.", attacker.entityWeapon);
+		mvprintw(25, 128, "dealing %d damage.", combatHistory->attackerDMG);
+	}
+	if (!combatResult){
+		mvprintw(23, 128, "The: %s attacks.", attacker.entityName);
+		mvprintw(23, 128, "The: %s missees.", attacker.entityName);
+	}
+}
+
+void DrawPlayerAttack(Entity defender, bool combatResult) {
+	if (combatResult) {
+		mvprintw(26, 128, "You rolled: %d", combatHistory->playerAccRoll);
+		mvprintw(27, 128, "You hit the %s", defender.entityName);
+		mvprintw(28, 128, "dealing %d damage.", combatHistory->playerDMG);	
+		if (defender.entityStats.HP <= 0 && defender.entityID > 1) {
+			mvprintw(29, 128, "You kill the %s!", defender.entityName);
+		}
+	}
+	if (!combatResult) {
+		mvprintw(26, 128, "You attack the %s.", defender.entityName);
+		mvprintw(27, 128, "You miss.");
+	}
+	if (defender.entityID == 0) {
+		mvprintw(23, 128, "You kill the %s", defender.entityName);
+	}
+
+}

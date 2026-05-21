@@ -13,6 +13,7 @@ const int MAX_MONSTER_NAME = 33;
 Player* player;
 Entity** map;
 Entity* mptr;
+CombatHistory* combatHistory;
 
 int main(void)
 {
@@ -46,6 +47,9 @@ int main(void)
     /* Place player using method in player.c*/
     player = CreatePlayer(start_pos);
 
+    /* Create Combat History */
+    combatHistory = CreateCombatHistory(mptr[0]);
+    
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
 
@@ -57,7 +61,7 @@ int main(void)
     /* Start main game loop located in engine.c */
     /* Pass the pointer to monsterList[0]. */
     /* Pass the number of monsters and rooms made. */
-    GameLoop(mptr, n_monsters);
+    GameLoop(mptr, combatHistory, n_monsters);
 
     CloseGame();
   }
