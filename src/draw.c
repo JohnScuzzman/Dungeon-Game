@@ -106,7 +106,7 @@ void DrawEverything(Entity* mptr, int n_monsters, bool playerCombat, bool monste
 	DrawPlayer(player);
 	DrawStats(player);
 	DrawBorder();
-	DrawDebug(mptr, n_monsters);
+	// DrawDebug(mptr, n_monsters);
 	if (monsterCombat){
 		DrawEntityAttack(combatHistory->defender, combatHistory->entityResult);
 	}
@@ -117,31 +117,31 @@ void DrawEverything(Entity* mptr, int n_monsters, bool playerCombat, bool monste
 
 void DrawEntityAttack(Entity attacker, bool combatResult) {
 	if (combatResult) {
-		mvprintw(23, 128, "The %s rolls a %d", attacker.entityName, combatHistory->attackerAccRoll);
-		mvprintw(24, 128, "And hits with a %s.", attacker.entityWeapon);
-		mvprintw(25, 128, "dealing %d damage.", combatHistory->attackerDMG);
+		mvprintw(28, 128, "The %s rolls a %d", attacker.entityName, combatHistory->attackerAccRoll);
+		mvprintw(29, 128, "And hits with a %s.", attacker.entityWeapon);
+		mvprintw(30, 128, "dealing %d damage.", combatHistory->attackerDMG);
 	}
 	if (!combatResult){
-		mvprintw(23, 128, "The: %s attacks.", attacker.entityName);
-		mvprintw(23, 128, "The: %s missees.", attacker.entityName);
+		mvprintw(28, 128, "The: %s attacks.", attacker.entityName);
+		mvprintw(29, 128, "The: %s misses with %d.", attacker.entityName, combatHistory->attackerAccRoll);
 	}
 }
 
 void DrawPlayerAttack(Entity defender, bool combatResult) {
 	if (combatResult) {
-		mvprintw(26, 128, "You rolled: %d", combatHistory->playerAccRoll);
-		mvprintw(27, 128, "You hit the %s", defender.entityName);
-		mvprintw(28, 128, "dealing %d damage.", combatHistory->playerDMG);	
+		mvprintw(23, 128, "You rolled: %d", combatHistory->playerAccRoll);
+		mvprintw(24, 128, "You hit the %s", defender.entityName);
+		mvprintw(25, 128, "dealing %d damage.", combatHistory->playerDMG);	
 		if (defender.entityStats.HP <= 0 && defender.entityID > 1) {
-			mvprintw(29, 128, "You kill the %s!", defender.entityName);
+			mvprintw(26, 128, "You kill the %s!", defender.entityName);
 		}
 	}
 	if (!combatResult) {
-		mvprintw(26, 128, "You attack the %s.", defender.entityName);
-		mvprintw(27, 128, "You miss.");
+		mvprintw(23, 128, "You attack the %s.", defender.entityName);
+		mvprintw(24, 128, "You miss with a %d.", combatHistory->playerAccRoll);
 	}
 	if (defender.entityID == 0) {
-		mvprintw(23, 128, "You kill the %s", defender.entityName);
+		mvprintw(25, 128, "You kill the %s", defender.entityName);
 	}
 
 }

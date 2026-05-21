@@ -1,13 +1,15 @@
 #include <rogue.h>
 
 bool NcursesSetup(void) { 
+
+    /* Makes escape key press register instantly.*/
+    setenv("ESCDELAY", "25", 1);
     /* Starts Ncurses. */
     initscr();
     /* Disable Ncurses from immediately drawing to the screen. */ 
     noecho();
     /* Make cursor invisible. */ 
     curs_set(0);
-
     /* Add color to the console! */
     if (has_colors()) {
         start_color();
@@ -36,18 +38,22 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
     bool leaveFlag = false;
     bool playerCombat = false;
     bool monsterCombat = false;
+    bool PMove = false;
     int ch, next_ch;
+    int playerRegen = 0;
     MakeFOV(player);
     DrawEverything(mptr, n_monsters, playerCombat, monsterCombat, combatHistory);
     DrawPlayerBlink(player);
-    bool PMove = false;
-    keypad(stdscr, FALSE);
+
+    // Force use of keyboard and disable mouse clicks.
+    keypad(stdscr, TRUE);
+
     while(!leaveFlag)
     { 
         UpdateMonsterMap(mptr, n_monsters);
         ch = getch();
         if (ch == 27) { 
-            // check for esape.
+            // check for escape.
             nodelay(stdscr, TRUE);
             next_ch = getch();
             nodelay(stdscr, FALSE);
@@ -62,13 +68,15 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
         if(ch != ERR) {
             int i = 0;
 
-            // Attempt to make game wait for player to take full turn.
-            while(i == 0) {
-                PMove = PlayerInput(ch, combatHistory);
-                i = 1;
+            if (playerRegen >= 20) {
+                player->playerStats.HP++;
+                playerRegen = 0;
+            }
+            else{
+                playerRegen++;
             }
 
-            i = 0;
+            PMove = PlayerInput(ch, combatHistory);
 
             // Check if player tried to attack something.
             if (combatHistory->playerCombat && combatHistory->defender.entityID > 1) {
@@ -100,10 +108,17 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
         DrawEverything(mptr, n_monsters, playerCombat, monsterCombat, combatHistory);
         combatHistory->monsterKilled = false;
         // ResetCombatHistory(combatHistory);
-        PMove = false;
+        PMove = false;   
         }
+        Gameover();
     }
     
+void Gameover() {
+    clear();
+    keypad(stdscr, TRUE);
+    mvprintw(20, 40, "Game Over.");
+    getch();
+}
 
 void CloseGame(void) { 
     free(combatHistory);

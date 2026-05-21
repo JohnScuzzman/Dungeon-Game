@@ -99,12 +99,12 @@ typedef struct {
     int attackerAccRoll;
     int attackerDMG;
     int defenderDodgeMod;
-    int defenderDodgeRoll;
+    int defenderAC;
     int playerATKMod;
     int playerAccRoll;
     int playerDMG;
     int playerDodgeMod;
-    int playerDodgeRoll;
+    int playerAC;
 } CombatHistory;
 
 typedef struct
@@ -171,6 +171,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters);
 void CloseGame(void);
 void Cursor(int x, int y, int length);
 void RemoveCursor(int x, int y, int length);
+void Gameover();
 
 
 // fov.c functions
