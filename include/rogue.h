@@ -1,3 +1,6 @@
+
+#include <items.h>
+
 #ifndef ROGUE_H // These prevent compiling rogue_h multiple times.
 #define ROGUE_H
 
@@ -9,7 +12,6 @@
 #include <unistd.h> // File reading
 #include <string.h> // String copying
 #include <ctype.h> // toupper functions
-#include "items.h"
 
 // color pairs
 #define VISIBLE_COLOR 1
@@ -61,6 +63,9 @@ typedef struct {
   int color;
   Stats playerStats;
   Position pos;
+  Weapon equippedMelee;
+  Weapon equippedRanged;
+  Armor equippedArmor;
   char playerName[MAX_NAME_SIZE];
   char playerRace[MAX_NAME_SIZE];
   char playerClass[MAX_NAME_SIZE];
@@ -95,6 +100,7 @@ typedef struct {
     bool playerResult; // 0 = miss, 1 = hit
     bool entityResult;
     bool playerCombat; // true if player combat occurred
+    bool playerUsedRanged;
     int attackerATKMod;
     int attackerAccRoll;
     int attackerDMG;
@@ -138,6 +144,8 @@ CombatHistory* CreateCombatHistory(Entity monster);
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player);
 bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player);
 void ResetCombatHistory(CombatHistory* combatHistory);
+bool PlayerRangedAttack();
+bool ShootTarget(int x, int y);
 
 // classes.c functions
 void AssignKnight();

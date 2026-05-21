@@ -1,5 +1,4 @@
 #include <rogue.h>
-
 /*  If you change MAP_HEIGHT or MAP_WIDTH, 
 You need to also modify the parameters we are using to create our rooms,
 so that they are within the dimensions of the map.

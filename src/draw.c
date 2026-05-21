@@ -53,9 +53,9 @@ void DrawStats(Player* player) {
   mvprintw(2, 128, "Name: %s", player->playerName);
   mvprintw(4, 128, "Race: %s", player->playerRace);
   mvprintw(6, 128, "Class: %s", player->playerClass);
-  mvprintw(8, 128, "Armor: %s", player->playerArmor);
+  mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
   mvprintw(10, 128, "Armor Class: %d", player->playerStats.AC);
-  mvprintw(12, 128, "Weapon: %s", player->playerWeapon),
+  mvprintw(12, 128, "Weapon: %s", player->equippedMelee.weaponName),
   mvprintw(14, 128, "Weapon DMG: %d-%d", player->playerStats.minDMG, player->playerStats.maxDMG);
   mvprintw(16, 128, "HP: %d", player->playerStats.HP);
  
@@ -129,8 +129,8 @@ void DrawEntityAttack(Entity attacker, bool combatResult) {
 
 void DrawPlayerAttack(Entity defender, bool combatResult) {
 	if (combatResult) {
-		mvprintw(23, 128, "You rolled: %d", combatHistory->playerAccRoll);
-		mvprintw(24, 128, "You hit the %s", defender.entityName);
+    mvprintw(24, 128, "You attack the %s", defender.entityName);
+		mvprintw(23, 128, "You hit with a %d", combatHistory->playerAccRoll);
 		mvprintw(25, 128, "dealing %d damage.", combatHistory->playerDMG);	
 	}
 	if (!combatResult) {
