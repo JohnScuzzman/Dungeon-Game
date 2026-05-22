@@ -14,16 +14,15 @@ Player* CreatePlayer(Position start_pos) {
 
 /* checks if the player is adjacent to the passed coordinates. */
 bool CheckPlayerAdjacent(Position origin) {
-    if (origin.y == (player->pos.y))
-    {
+    if (origin.y == (player->pos.y) || origin.y == ((player->pos.y) - 1) || origin.y == ((player->pos.y) + 1)) {
         if (origin.x == (player->pos.x - 1) || origin.x == (player->pos.x + 1)) {
             return true;
     }
     }
-    if (origin.x == (player->pos.x)){
+    if (origin.x == (player->pos.x) || origin.x == ((player->pos.x) - 1) || origin.x == ((player->pos.y) + 1)){
         if (origin.y == (player->pos.y - 1) || origin.y == (player->pos.y + 1)) {
-        return true;
-    }
+            return true;
+        }
     }
     return false;
 }

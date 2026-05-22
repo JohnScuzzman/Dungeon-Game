@@ -239,6 +239,10 @@ void MoveUp(Entity* mptr);
 void MoveDown(Entity* mptr);
 void MoveLeft(Entity* mptr);
 void MoveRight(Entity* mptr);
+void MoveDownRight(Entity* mptr);
+void MoveDownLeft(Entity* mptr);
+void MoveUpRight(Entity* mptr);
+void MoveUpLeft(Entity* mptr);
 
 
 

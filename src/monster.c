@@ -64,50 +64,100 @@ Entity* MonsterList(int n_monsters) {
 bool MoveTowards(Entity* entity, Position pos) {
     int x = entity->pos.x;
     int y = entity->pos.y;
-    if (!CheckPlayerAdjacent(entity->pos)){
-        //move up, y--
-        if (y > pos.y) {
-            if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
-                MoveUp(entity);
-                KeepMonsterIntegrity(entity);
-                map[entity->pos.y + 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
+    if (!CheckPlayerAdjacent(entity->pos)) {
+        // up and left
+        if (y == pos.y || x == pos.x) {
+            //move up, y--
+            if (y > pos.y && x == pos.x) {
+                if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
+                    MoveUp(entity);
+                    KeepMonsterIntegrity(entity);
+                    map[entity->pos.y + 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
+                    map[entity->pos.y][entity->pos.x] = *entity;
+                    UpdateMonsterVisible(entity, player);
+                    return true;
+                }
+            }
+            //move left, x--
+            if (x > pos.x && y == pos.y) {
+                if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+                    MoveLeft(entity);
+                    KeepMonsterIntegrity(entity);
+                    map[entity->pos.y][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
+                    map[entity->pos.y][entity->pos.x] = *entity;
+                    UpdateMonsterVisible(entity, player);
+                    return true;
+                }
+            }
+            //move down, y++
+            if (y < pos.y && x == pos.x) {
+                if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
+                    MoveDown(entity);
+                    KeepMonsterIntegrity(entity);
+                    map[entity->pos.y - 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
+                    map[entity->pos.y][entity->pos.x] = *entity;
+                    UpdateMonsterVisible(entity, player);
+                    return true;
+                }
+            }
+            //move right, x++
+            if (x < pos.x && y == pos.y) {
+                if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+                    MoveRight(entity);
+                    KeepMonsterIntegrity(entity);
+                    map[entity->pos.y][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
+                    map[entity->pos.y][entity->pos.x] = *entity;
+                    UpdateMonsterVisible(entity, player);
+                    return true;
+                }
             }
         }
-        //move left, x--
-        if (x > pos.x) {
-            if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                MoveLeft(entity);
-                KeepMonsterIntegrity(entity);
-                map[entity->pos.y][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
+        
+        else {
+            if (y > pos.y && x > pos.x) {
+                if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+                    MoveUpLeft(entity);
+                    KeepMonsterIntegrity(entity);
+                    map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
+                    map[entity->pos.y][entity->pos.x] = *entity;
+                    UpdateMonsterVisible(entity, player);
+                    return true;
+                }
             }
-        }
-        //move down, y++
-        if (y < pos.y) {
-            if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
-                MoveDown(entity);
-                KeepMonsterIntegrity(entity);
-                map[entity->pos.y - 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
+            // down & left
+            if (y < pos.y && x > pos.x) {
+                if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+                    MoveDownLeft(entity);
+                    KeepMonsterIntegrity(entity);
+                    map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
+                    map[entity->pos.y][entity->pos.x] = *entity;
+                    UpdateMonsterVisible(entity, player);
+                    return true;
+                }
             }
-        }
-        //move right, x++
-        if (x < pos.x) {
-            if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                MoveRight(entity);
-                KeepMonsterIntegrity(entity);
-                map[entity->pos.y][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
+            // down & right
+            if (y < pos.y && x < pos.x) {
+                if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+                    MoveDownRight(entity);
+                    KeepMonsterIntegrity(entity);
+                    map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
+                    map[entity->pos.y][entity->pos.x] = *entity;
+                    UpdateMonsterVisible(entity, player);
+                    return true;
+                }
             }
+            // move up & right
+            if (y > pos.y && x < pos.x) {
+                if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+                    MoveUpRight(entity);
+                    KeepMonsterIntegrity(entity);
+                    map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
+                    map[entity->pos.y][entity->pos.x] = *entity;
+                    UpdateMonsterVisible(entity, player);
+                    return true;
+                }
+            }
+            
         }
     }
     return false;
@@ -328,57 +378,88 @@ void MoveRight(Entity* mptr){
     if(mptr->mapInfo.newChar == 'X') {
         mptr->mapInfo.newChar = mptr->staticCh;
     }
-    // G.X
-    // .GX
-    // .XG
-    // .XXG
-    
 }
 
+void MoveDownRight(Entity* mptr){
+    mptr->pos.x = mptr->pos.x + 1;
+    mptr->pos.y = mptr->pos.y + 1;
+    mptr->hasMoved = true;
+    mptr->mapInfo.oldSeen = map[mptr->pos.y - 1][mptr->pos.x - 1].seen;
+    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
+    mptr->mapInfo.oldVisible = map[mptr->pos.y - 1][mptr->pos.x - 1].seen;
+    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
+    mptr->mapInfo.oldChar = map[mptr->pos.y - 1][mptr->pos.x - 1].ch;
+    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
+    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
+        map[mptr->pos.y][mptr->pos.x].ch = '.';
+    }
+    if(map[mptr->pos.y - 1][mptr->pos.x - 1].ch == 'X') {
+        map[mptr->pos.y - 1][mptr->pos.x - 1].ch = '.';
+    }
+    if(mptr->mapInfo.newChar == 'X') {
+        mptr->mapInfo.newChar = mptr->staticCh;
+    }
+}
 
-        /* TO ADD DIAGONAL MOVEMENT IN THE FUTURE USE THESE AND ADD enty->pos.x == x to the above. */
+void MoveDownLeft(Entity* mptr){
+    mptr->pos.x = mptr->pos.x - 1;
+    mptr->pos.y = mptr->pos.y + 1;
+    mptr->hasMoved = true;
+    mptr->mapInfo.oldSeen = map[mptr->pos.y - 1][mptr->pos.x + 1].seen;
+    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
+    mptr->mapInfo.oldVisible = map[mptr->pos.y - 1][mptr->pos.x + 1].seen;
+    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
+    mptr->mapInfo.oldChar = map[mptr->pos.y - 1][mptr->pos.x + 1].ch;
+    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
+    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
+        map[mptr->pos.y][mptr->pos.x].ch = '.';
+    }
+    if(map[mptr->pos.y - 1][mptr->pos.x + 1].ch == 'X') {
+        map[mptr->pos.y - 1][mptr->pos.x + 1].ch = '.';
+    }
+    if(mptr->mapInfo.newChar == 'X') {
+        mptr->mapInfo.newChar = mptr->staticCh;
+    }
+}
 
-        // // Diag down right, x++, y++
-        // if (x < pos.x && y < pos.y) {
-        //     if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-        //         MoveDiagRight(entity);
-        //         KeepMonsterIntegrity(entity);
-        //         map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-        //         map[entity->pos.y][entity->pos.x] = *entity;
-        //         UpdateMonsterVisible(entity, player);
-        //         return true;
-        //     }
-        // }
-        // // Diag down left, x--, y++
-        // if (x > pos.x && y < pos.y) {
-        //     if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-        //         MoveUp(entity);
-        //         KeepMonsterIntegrity(entity);
-        //         map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-        //         map[entity->pos.y][entity->pos.x] = *entity;
-        //         UpdateMonsterVisible(entity, player);
-        //         return true;
-        //     }
-        // }
-        // // Diag up right, x++, y--
-        // if (x < pos.x && y < pos.y) {
-        //     if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-        //         MoveUp(entity);
-        //         KeepMonsterIntegrity(entity);
-        //         map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-        //         map[entity->pos.y][entity->pos.x] = *entity;
-        //         UpdateMonsterVisible(entity, player);
-        //         return true;
-        //     }
-        // }
-        // // Diag up left, x--, y--
-        // if (x > pos.x && y > pos.y) {
-        //     if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-        //         MoveUp(entity);
-        //         KeepMonsterIntegrity(entity);
-        //         map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-        //         map[entity->pos.y][entity->pos.x] = *entity;
-        //         UpdateMonsterVisible(entity, player);
-        //         return true;
-        //     }
-        // }
+void MoveUpRight(Entity* mptr){
+    mptr->pos.x = mptr->pos.x + 1;
+    mptr->pos.y = mptr->pos.y - 1;
+    mptr->hasMoved = true;
+    mptr->mapInfo.oldSeen = map[mptr->pos.y + 1][mptr->pos.x - 1].seen;
+    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
+    mptr->mapInfo.oldVisible = map[mptr->pos.y + 1][mptr->pos.x - 1].seen;
+    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
+    mptr->mapInfo.oldChar = map[mptr->pos.y + 1][mptr->pos.x - 1].ch;
+    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
+    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
+        map[mptr->pos.y][mptr->pos.x].ch = '.';
+    }
+    if(map[mptr->pos.y + 1][mptr->pos.x - 1].ch == 'X') {
+        map[mptr->pos.y + 1][mptr->pos.x - 1].ch = '.';
+    }
+    if(mptr->mapInfo.newChar == 'X') {
+        mptr->mapInfo.newChar = mptr->staticCh;
+    }
+}
+
+void MoveUpLeft(Entity* mptr){
+    mptr->pos.x = mptr->pos.x - 1;
+    mptr->pos.y = mptr->pos.y - 1;
+    mptr->hasMoved = true;
+    mptr->mapInfo.oldSeen = map[mptr->pos.y + 1][mptr->pos.x + 1].seen;
+    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
+    mptr->mapInfo.oldVisible = map[mptr->pos.y + 1][mptr->pos.x + 1].seen;
+    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
+    mptr->mapInfo.oldChar = map[mptr->pos.y + 1][mptr->pos.x + 1].ch;
+    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
+    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
+        map[mptr->pos.y][mptr->pos.x].ch = '.';
+    }
+    if(map[mptr->pos.y + 1][mptr->pos.x + 1].ch == 'X') {
+        map[mptr->pos.y + 1][mptr->pos.x + 1].ch = '.';
+    }
+    if(mptr->mapInfo.newChar == 'X') {
+        mptr->mapInfo.newChar = mptr->staticCh;
+    }
+}
