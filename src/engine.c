@@ -25,6 +25,8 @@ bool NcursesSetup(void) {
     }
 }
 
+
+
 void Cursor(int x, int y, int length){
     //A_BLINK 
     mvchgat(x, y, length, A_BOLD | A_STANDOUT | A_DIM, VISIBLE_COLOR, NULL);
@@ -39,6 +41,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
     bool playerCombat = false;
     bool monsterCombat = false;
     bool PMove = false;
+    bool isAggro = false;
     int ch, next_ch;
     int playerRegen = 0;
     MakeFOV(player);
@@ -82,24 +85,31 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
             // Then check if they used a ranged or melee weapon
             // Set max and min DMG accoridingly and attack the monster.
             if (combatHistory->playerCombat && combatHistory->defender.entityID > 1) {
-                if (combatHistory->playerUsedRanged == true) {
-                    player->playerStats.maxDMG = player->equippedRanged.maxDMG;
-                    player->playerStats.minDMG = player->equippedRanged.minDMG;
-                }
-                else {
-                    player->playerStats.maxDMG = player->equippedMelee.maxDMG;
-                    player->playerStats.minDMG = player->equippedMelee.minDMG;
-                }
+                PlayerMeleeOrRanged(player);
                 Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
                 playerCombat = AttackEntity(target, combatHistory, player);
             }
             
-            // If there is no adjacent player, move freely.
+
+            /* Wander fires first and moves monsters randomly*/
+            /* Wander checks if LOS to player and flips aggro is they are in range.*/
+            /* (mptr + i)->entityID > 1 ensures we iterate over corpses.*/ 
             while (!((mptr + i)->hasMoved) && i < n_monsters && PMove == true){
-                if (!CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->entityID > 1){
+
+                /* Check if player is in aggro range. */
+                (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
+
+                /* If no adjacent Player, Wander.*/
+                if (!CheckPlayerAdjacent((mptr + i)->pos) && (!(mptr + i)->aggroFlag) && (mptr + i)->entityID > 1){
                     Wander(mptr + i);
+                    
+                    /* If they move in range of the player, set aggro flag.*/
+                    if (!isAggro){
+                        (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
+                    }
                     i++;
                 }
+                /* If adjacent to player, attack them.*/
                 else if (CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->entityID > 1){
                     // Change the 'false' to true later for a ranged attack.
                     monsterCombat = AttackPlayer(mptr + i, combatHistory, player);
@@ -108,15 +118,23 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
                     }
                     i++;
                 }
+                /* If not adjacent, but aggro, move towards player.*/
+                else if ((mptr + i)->aggroFlag && (mptr + i)->entityID > 1){
+                    /* Check if player is in range AND LOS*/
+                    AggroMove(mptr + i);
+                    i++;
+                }
                 else {
                     i++;
                 }
+                // UpdateMonsters(mptr, n_monsters);
             }
         }
         UpdateMonsterMap(mptr, n_monsters);
         ResetMoveFlags(mptr, n_monsters);
         MakeFOV(player);
         DrawEverything(mptr, n_monsters, playerCombat, monsterCombat, combatHistory);
+        
         combatHistory->monsterKilled = false;
         // ResetCombatHistory(combatHistory);
         PMove = false;   

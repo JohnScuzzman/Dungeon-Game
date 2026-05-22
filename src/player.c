@@ -76,7 +76,6 @@ bool PlayerInput(int input, CombatHistory* combatHistory) {
 
 // Test for floor tile, move if one is detected.
 void MovePlayer(Position newPos, CombatHistory* combatHistory) { 
-    Entity* monster;
     if (map[newPos.y][newPos.x].noCollision && !combatHistory->monsterKilled) {
         // Update FOV
         ClearFOV(player);
