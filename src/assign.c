@@ -42,7 +42,7 @@ void AssignCorpse(Entity* entity) {
     entity->transparent = true;
     entity->seen = true;
     entity->visible = true;
-    entity->entityAggroRange = 0;
+    entity->aggroRange = 0;
     entity->entityID = 0;
     entity->entityStats.ATK = 0;
     entity->entityStats.CHA = 0;
@@ -69,7 +69,7 @@ void AssignFloor(int x, int y) {
     map[y][x].transparent = true;
     map[y][x].seen = false;
     map[y][x].visible = false;
-    map[y][x].entityAggroRange = 0;
+    map[y][x].aggroRange = 0;
     map[y][x].entityID = 0;
     map[y][x].entityStats.ATK = 0;
     map[y][x].entityStats.CHA = 0;
@@ -99,7 +99,7 @@ void AssignGoblinWarrior(Entity* monster) {
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 12;
     monster->entityStats.WIS = 8;
-    monster->entityAggroRange = 15;
+    monster->aggroRange = 15;
     monster->entityStats.AC = 1;
     monster->entityStats.HP = 4;
     monster->entityStats.LVL = 1;
@@ -121,7 +121,7 @@ void AssignKoboldWarrior(Entity* monster) {
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 10;
     monster->entityStats.WIS = 8;
-    monster->entityAggroRange = 20;
+    monster->aggroRange = 20;
     monster->entityStats.AC = 1;
     monster->entityStats.LVL = 1;
     monster->entityStats.HP = 4;
@@ -143,7 +143,7 @@ void AssignGoblinRanger(Entity* monster) {
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 8;
     monster->entityStats.WIS = 8;
-    monster->entityAggroRange = 15;
+    monster->aggroRange = 15;
     monster->entityStats.AC = 0;
     monster->entityStats.LVL = 1;
     monster->entityStats.HP = 4;
@@ -165,7 +165,7 @@ void AssignHobgoblinWarrior(Entity* monster) {
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 12;
     monster->entityStats.WIS = 8;
-    monster->entityAggroRange = 12;
+    monster->aggroRange = 12;
     monster->entityStats.AC = 1;
     monster->entityStats.HP = 6;
     monster->entityStats.LVL = 1;
@@ -190,6 +190,8 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->color = COLOR_PAIR(VISIBLE_COLOR);
     monster->pos.y = m_pos.y;
     monster->pos.x = m_pos.x;
+    monster->playerLastPos.x = 0;
+    monster->playerLastPos.y = 0;
 }
 
 

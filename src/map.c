@@ -16,7 +16,7 @@ Entity** CreateEntities(void) {
             map[y][x].transparent = false;
             map[y][x].seen = false;
             map[y][x].visible = false;
-            map[y][x].entityAggroRange = 0;
+            map[y][x].aggroRange = 0;
             map[y][x].entityID = 1;
             map[y][x].entityStats.CHA = 0;
             map[y][x].entityStats.CON = 0;

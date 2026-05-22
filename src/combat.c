@@ -119,21 +119,17 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     return true;
 }
 
-void UpdateCombatHistory() {
-    combatHistory->playerResult = false; // 0 = miss, 1 = hit
-    combatHistory->entityResult = false;
-    combatHistory->playerCombat = false; // true if player combat occurred
-    combatHistory->attackerATKMod = 0;
-    combatHistory->attackerAccRoll = 0;
-    combatHistory->attackerDMG = 0;
-    combatHistory->defenderDodgeMod = 0;
-    combatHistory->defenderAC = 0;
-    combatHistory->playerATKMod = 0;
-    combatHistory->playerAccRoll = 0;
-    combatHistory->playerDMG = 0;
-    combatHistory->playerDodgeMod = 0;
-    combatHistory->playerAC = 0;
+void PlayerMeleeOrRanged(Player* player){
+    if (combatHistory->playerUsedRanged == true) {
+        player->playerStats.maxDMG = player->equippedRanged.maxDMG;
+        player->playerStats.minDMG = player->equippedRanged.minDMG;
+    }
+    else {
+        player->playerStats.maxDMG = player->equippedMelee.maxDMG;
+        player->playerStats.minDMG = player->equippedMelee.minDMG;
+    }
 }
+
 
 bool PlayerRangedAttack(){
     int ch;
@@ -192,6 +188,7 @@ bool PlayerRangedAttack(){
 }
 
 bool ShootTarget(int x, int y) {
+    // Will check if the ranged is not "none".
     if (player->equippedRanged.isRanged) {
             // Player selected a monster.
         if (map[y][x].entityID > 1 && LineOfSight(player->pos, map[y][x].pos)) {
@@ -211,4 +208,12 @@ bool ShootTarget(int x, int y) {
             return false;
         }
     }
+    else {
+        mvprintw(23, 128, "No ranged weapons equipped.");
+        combatHistory->playerUsedRanged = false;
+        return false;
+    }
 }
+
+
+

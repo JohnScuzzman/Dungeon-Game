@@ -25,6 +25,16 @@
 /* "typedef" is used instead of "struct cat_t" so that we dont have to */
 /* type "struct" everytime we declare a struct variable.*/
 
+
+typedef struct {
+    bool oldSeen;
+    bool newSeen;
+    bool oldVisible;
+    bool newVisible;
+    bool oldChar;
+    bool newChar;
+} MapInfo;
+
 typedef struct {
     int y;
     int x;
@@ -82,17 +92,20 @@ typedef struct {
   bool visible;
   char ch;
   char staticCh;
+  int aggroRange;
   int color;
-  int entityAggroRange;
   int entityID;
   Stats entityStats;
   Position pos;
+  Position playerLastPos;
+  MapInfo mapInfo;
   char entityName[MAX_NAME_SIZE];
   char entityRace[MAX_NAME_SIZE];
   char entityClass[MAX_NAME_SIZE];
   char entityArmor[MAX_NAME_SIZE];
   char entityWeapon[MAX_NAME_SIZE];
 } Entity;
+
 
 typedef struct {
     Entity defender;
@@ -139,13 +152,16 @@ Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 void AssignStats(int input);
 
+
 //combat.c functions 
 CombatHistory* CreateCombatHistory(Entity monster);
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player);
 bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player);
 void ResetCombatHistory(CombatHistory* combatHistory);
+void PlayerMeleeOrRanged(Player* player);
 bool PlayerRangedAttack();
 bool ShootTarget(int x, int y);
+
 
 // classes.c functions
 void AssignKnight();
@@ -205,21 +221,24 @@ Position SetupMap(Entity* mptr, int n_rooms);
 void FreeMap(void);
 
 // monster.c functions
+void AggroMove(Entity* mptr);
+bool CheckAggro(Entity* mptr, Player* player);
+Entity* FindMonsterInList(int monsterID, int n_monsters);
+void KeepMonsterIntegrity(Entity* mptr);
+void KeepMonsterMapIntegrity(Entity* mptr);
 Entity* MonsterList(int n_monsters);
+void MoveMonster(Entity* monster, Position newPOS);
+void ResetMoveFlags(Entity* monster, int n_monsters);
 void UpdateMonsterMap(Entity* monster, int n_monsters);
 void UpdateMonsters(Entity* monster, int n_monsters);
 void UpdateMonster(Entity* monster, int monsterID, int n_monsters);
-void MoveMonster(Entity* monster, Position newPOS);
 void UpdateMonsterVisible(Entity* monster, Player* player);
-// void MoveMonster(Monster monster);
-// bool CheckAggroRange(Position monsterPos, Position playerLastPos, int aggroRange);
-// void MoveTowardsPlayer(Monster monster);
-// void MoveAllMonsters();
-// void SetMonsterListLen(int n_rooms);
-void KeepMonsterIntegrity(Entity* mptr, bool oldSeen, bool oldVisible);
-void ResetMoveFlags(Entity* monster, int n_monsters);
 void Wander(Entity* mptr);
-Entity* FindMonsterInList(int monsterID, int n_monsters);
+bool MoveTowards(Entity* entity, Position pos);
+void MoveUp(Entity* mptr);
+void MoveDown(Entity* mptr);
+void MoveLeft(Entity* mptr);
+void MoveRight(Entity* mptr);
 
 
 
@@ -227,6 +246,8 @@ Entity* FindMonsterInList(int monsterID, int n_monsters);
 bool PlayerInput(int input, CombatHistory* combatHistory);
 void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool CheckPlayerAdjacent(Position origin);
+
+
 
 // room.c functions
 Room CreateRoom(int y, int x, int height, int width);
