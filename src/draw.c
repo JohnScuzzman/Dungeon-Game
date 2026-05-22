@@ -106,7 +106,7 @@ void DrawEverything(Entity* mptr, int n_monsters, bool playerCombat, bool monste
 	DrawPlayer(player);
 	DrawStats(player);
 	DrawBorder();
-	DrawDebug(mptr, n_monsters);
+	// DrawDebug(mptr, n_monsters);
 	if (monsterCombat){
 		DrawEntityAttack(combatHistory->defender, combatHistory->entityResult);
 	}
