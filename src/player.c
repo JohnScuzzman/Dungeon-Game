@@ -31,7 +31,7 @@ bool CheckPlayerAdjacent(Position origin) {
 
 // Decide what to do with input.
 // Collision determined here as well.
-bool PlayerInput(int input, CombatHistory* combatHistory) {
+bool PlayerInput(int input, CombatHistory* combatHistory, int n_monsters) {
     // Get new coordinates.
     Position newPos = { player->pos.y, player->pos.x };
 
@@ -63,8 +63,36 @@ bool PlayerInput(int input, CombatHistory* combatHistory) {
             MovePlayer(newPos, combatHistory);
             return true;
             break;
+        //move up and left
+        case KEY_IC:
+            newPos.y--;
+            newPos.x--;
+            MovePlayer(newPos, combatHistory);
+            return true;
+            break;
+        //move down and left
+        case KEY_DC:
+            newPos.y++;
+            newPos.x--;
+            MovePlayer(newPos, combatHistory);
+            return true;
+            break;
+        //move down and right
+        case KEY_NPAGE:
+            newPos.y++;
+            newPos.x++;
+            MovePlayer(newPos, combatHistory);
+            return true;
+            break;
+        //move up and right
+        case KEY_PPAGE:
+            newPos.y--;
+            newPos.x++;
+            MovePlayer(newPos, combatHistory);
+            return true;
+            break;
         case 102: // f key
-            bool rangedAttack = PlayerRangedAttack();
+            bool rangedAttack = PlayerRangedAttack(n_monsters);
             return rangedAttack;
         default:
             break;

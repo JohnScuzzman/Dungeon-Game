@@ -131,10 +131,18 @@ void PlayerMeleeOrRanged(Player* player){
 }
 
 
-bool PlayerRangedAttack(){
+bool PlayerRangedAttack(int n_monsters){
     int ch;
+    int closest = FindClosestMonster(mptr, n_monsters);
     int x = player->pos.x;
     int y = player->pos.y;
+
+    /* monster in range */
+    if (closest >= 0) {
+        x = (mptr + closest)->pos.x;
+        y = (mptr + closest)->pos.y;
+    }
+    
     Cursor(y, x, 1);
     while((ch = getch()) != 32 && ch != 102) {
     Cursor(y, x, 1);

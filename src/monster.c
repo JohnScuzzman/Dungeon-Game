@@ -42,6 +42,29 @@ bool CheckAggro(Entity* mptr, Player* player) {
 }
 
 
+/* returns i value of closest monster */
+/* use this to find an int to add to mptr to get the monster */
+int FindClosestMonster(Entity* mptr, int n_monsters) {
+    int closestMonster = 0;
+    int closest = GetDistance(player->pos, (mptr)->pos);
+    int temp = 0;
+    for (int i = 0; i < n_monsters; i++) {
+        if(LineOfSight(player->pos, (mptr + i)->pos) && GetDistance(player->pos, (mptr + i)->pos) <= 15 && (mptr + i)->entityID > 1) {
+            temp = GetDistance(player->pos, (mptr + i)->pos);
+            if(temp < closest) {
+                closest = temp;
+                closestMonster = i;
+            }
+        }
+    }
+    /* no monsters found*/
+    /* returns a floor entity */
+    if (closest == GetDistance(player->pos, (mptr)->pos) && !LineOfSight(player->pos, (mptr)->pos)){
+        return -2;
+    }
+    return closestMonster;
+}
+
 Entity* FindMonsterInList(int monsterID, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
         // Monster found
@@ -114,6 +137,7 @@ bool MoveTowards(Entity* entity, Position pos) {
         }
         
         else {
+            // up & left
             if (y > pos.y && x > pos.x) {
                 if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
                     MoveUpLeft(entity);
@@ -293,173 +317,5 @@ void UpdateMonsterVisible(Entity* monster, Player* player){
 void ResetMoveFlags(Entity* monster, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
         monster[i].hasMoved = false;
-    }
-}
-
-void MoveUp(Entity* mptr){
-    mptr->pos.y = mptr->pos.y - 1;
-    mptr->hasMoved = true;
-    mptr->mapInfo.oldSeen = map[mptr->pos.y + 1][mptr->pos.x].seen;
-    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldVisible = map[mptr->pos.y + 1][mptr->pos.x].seen;
-    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldChar = map[mptr->pos.y + 1][mptr->pos.x].ch;
-    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
-    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x].ch = '.';
-    }
-    if(map[mptr->pos.y + 1][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y + 1][mptr->pos.x].ch = '.';
-    }
-    if(mptr->mapInfo.newChar == 'X') {
-        mptr->mapInfo.newChar = mptr->staticCh;
-    }
-}
-
-
-void MoveDown(Entity* mptr){
-    mptr->pos.y = mptr->pos.y + 1;
-    mptr->hasMoved = true;
-    mptr->mapInfo.oldSeen = map[mptr->pos.y - 1][mptr->pos.x].seen;
-    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldVisible = map[mptr->pos.y - 1][mptr->pos.x].seen;
-    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldChar = map[mptr->pos.y - 1][mptr->pos.x].ch;
-    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
-    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x].ch = '.';
-    }
-    if(map[mptr->pos.y - 1][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y - 1][mptr->pos.x].ch = '.';
-    }
-    if(mptr->mapInfo.newChar == 'X') {
-        mptr->mapInfo.newChar = mptr->staticCh;
-    }
-
-}
-
-
-void MoveLeft(Entity* mptr){
-    mptr->pos.x = mptr->pos.x - 1;
-    mptr->hasMoved = true;
-    mptr->mapInfo.oldSeen = map[mptr->pos.y][mptr->pos.x + 1].seen;
-    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldVisible = map[mptr->pos.y][mptr->pos.x + 1].seen;
-    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldChar = map[mptr->pos.y][mptr->pos.x + 1].ch;
-    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
-    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x].ch = '.';
-    }
-    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x + 1].ch = '.';
-    }
-    if(mptr->mapInfo.newChar == 'X') {
-        mptr->mapInfo.newChar = mptr->staticCh;
-    }
-}
-
-
-void MoveRight(Entity* mptr){
-    mptr->pos.x = mptr->pos.x + 1;
-    mptr->hasMoved = true;
-    mptr->mapInfo.oldSeen = map[mptr->pos.y][mptr->pos.x - 1].seen;
-    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldVisible = map[mptr->pos.y][mptr->pos.x - 1].seen;
-    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldChar = map[mptr->pos.y][mptr->pos.x - 1].ch;
-    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
-    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x].ch = '.';
-    }
-    if(map[mptr->pos.y][mptr->pos.x - 1].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x - 1].ch = '.';
-    }
-    if(mptr->mapInfo.newChar == 'X') {
-        mptr->mapInfo.newChar = mptr->staticCh;
-    }
-}
-
-void MoveDownRight(Entity* mptr){
-    mptr->pos.x = mptr->pos.x + 1;
-    mptr->pos.y = mptr->pos.y + 1;
-    mptr->hasMoved = true;
-    mptr->mapInfo.oldSeen = map[mptr->pos.y - 1][mptr->pos.x - 1].seen;
-    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldVisible = map[mptr->pos.y - 1][mptr->pos.x - 1].seen;
-    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldChar = map[mptr->pos.y - 1][mptr->pos.x - 1].ch;
-    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
-    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x].ch = '.';
-    }
-    if(map[mptr->pos.y - 1][mptr->pos.x - 1].ch == 'X') {
-        map[mptr->pos.y - 1][mptr->pos.x - 1].ch = '.';
-    }
-    if(mptr->mapInfo.newChar == 'X') {
-        mptr->mapInfo.newChar = mptr->staticCh;
-    }
-}
-
-void MoveDownLeft(Entity* mptr){
-    mptr->pos.x = mptr->pos.x - 1;
-    mptr->pos.y = mptr->pos.y + 1;
-    mptr->hasMoved = true;
-    mptr->mapInfo.oldSeen = map[mptr->pos.y - 1][mptr->pos.x + 1].seen;
-    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldVisible = map[mptr->pos.y - 1][mptr->pos.x + 1].seen;
-    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldChar = map[mptr->pos.y - 1][mptr->pos.x + 1].ch;
-    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
-    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x].ch = '.';
-    }
-    if(map[mptr->pos.y - 1][mptr->pos.x + 1].ch == 'X') {
-        map[mptr->pos.y - 1][mptr->pos.x + 1].ch = '.';
-    }
-    if(mptr->mapInfo.newChar == 'X') {
-        mptr->mapInfo.newChar = mptr->staticCh;
-    }
-}
-
-void MoveUpRight(Entity* mptr){
-    mptr->pos.x = mptr->pos.x + 1;
-    mptr->pos.y = mptr->pos.y - 1;
-    mptr->hasMoved = true;
-    mptr->mapInfo.oldSeen = map[mptr->pos.y + 1][mptr->pos.x - 1].seen;
-    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldVisible = map[mptr->pos.y + 1][mptr->pos.x - 1].seen;
-    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldChar = map[mptr->pos.y + 1][mptr->pos.x - 1].ch;
-    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
-    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x].ch = '.';
-    }
-    if(map[mptr->pos.y + 1][mptr->pos.x - 1].ch == 'X') {
-        map[mptr->pos.y + 1][mptr->pos.x - 1].ch = '.';
-    }
-    if(mptr->mapInfo.newChar == 'X') {
-        mptr->mapInfo.newChar = mptr->staticCh;
-    }
-}
-
-void MoveUpLeft(Entity* mptr){
-    mptr->pos.x = mptr->pos.x - 1;
-    mptr->pos.y = mptr->pos.y - 1;
-    mptr->hasMoved = true;
-    mptr->mapInfo.oldSeen = map[mptr->pos.y + 1][mptr->pos.x + 1].seen;
-    mptr->mapInfo.newSeen = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldVisible = map[mptr->pos.y + 1][mptr->pos.x + 1].seen;
-    mptr->mapInfo.newVisible = map[mptr->pos.y][mptr->pos.x].seen;
-    mptr->mapInfo.oldChar = map[mptr->pos.y + 1][mptr->pos.x + 1].ch;
-    mptr->mapInfo.newChar = map[mptr->pos.y][mptr->pos.x].ch;
-    if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
-        map[mptr->pos.y][mptr->pos.x].ch = '.';
-    }
-    if(map[mptr->pos.y + 1][mptr->pos.x + 1].ch == 'X') {
-        map[mptr->pos.y + 1][mptr->pos.x + 1].ch = '.';
-    }
-    if(mptr->mapInfo.newChar == 'X') {
-        mptr->mapInfo.newChar = mptr->staticCh;
     }
 }

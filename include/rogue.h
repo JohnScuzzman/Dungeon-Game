@@ -159,7 +159,7 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
 bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player);
 void ResetCombatHistory(CombatHistory* combatHistory);
 void PlayerMeleeOrRanged(Player* player);
-bool PlayerRangedAttack();
+bool PlayerRangedAttack(int n_monsters);
 bool ShootTarget(int x, int y);
 
 
@@ -234,6 +234,9 @@ void UpdateMonsters(Entity* monster, int n_monsters);
 void UpdateMonster(Entity* monster, int monsterID, int n_monsters);
 void UpdateMonsterVisible(Entity* monster, Player* player);
 void Wander(Entity* mptr);
+int FindClosestMonster(Entity* mptr, int n_monsters);
+
+// movemonster.c functions
 bool MoveTowards(Entity* entity, Position pos);
 void MoveUp(Entity* mptr);
 void MoveDown(Entity* mptr);
@@ -245,12 +248,10 @@ void MoveUpRight(Entity* mptr);
 void MoveUpLeft(Entity* mptr);
 
 
-
 // player.c functions
-bool PlayerInput(int input, CombatHistory* combatHistory);
+bool PlayerInput(int input, CombatHistory* combatHistorybool, int n_monsters);
 void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool CheckPlayerAdjacent(Position origin);
-
 
 
 // room.c functions

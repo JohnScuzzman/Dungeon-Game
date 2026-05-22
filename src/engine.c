@@ -79,7 +79,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
                 playerRegen++;
             }
 
-            PMove = PlayerInput(ch, combatHistory);
+            PMove = PlayerInput(ch, combatHistory, n_monsters);
 
             // Check if player tried to attack something.
             // Then check if they used a ranged or melee weapon
