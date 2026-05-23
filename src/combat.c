@@ -199,7 +199,7 @@ bool ShootTarget(int x, int y) {
     // Will check if the ranged is not "none".
     if (player->equippedRanged.isRanged) {
             // Player selected a monster.
-        if (map[y][x].entityID > 1 && LineOfSight(player->pos, map[y][x].pos)) {
+        if (map[y][x].entityID > 1 && LineOfSight(player->pos, map[y][x].pos) && GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedRanged = true;
             combatHistory->defender = map[y][x];
