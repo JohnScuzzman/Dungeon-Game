@@ -3,6 +3,7 @@
 Player* CreatePlayer(Position start_pos) {
     Player* player = calloc(1, sizeof(Player));
     player->noCollision = false;
+    player->moveTowardsDoor = true;
     player->pos.y = start_pos.y;
     player->pos.x = start_pos.x;
     player->ch = '@';
@@ -29,8 +30,12 @@ bool CheckPlayerAdjacent(Position origin) {
 
 
 
-// Decide what to do with input.
-// Collision determined here as well.
+
+
+/* Combat history passed to record events that happen in combat. */
+/* If player moves into monster, fight, count it as a move.*/
+/* If player fires their ranged weapon, count it as a move. */
+/* If legal move, move player. */
 bool PlayerInput(int input, CombatHistory* combatHistory, int n_monsters) {
     // Get new coordinates.
     Position newPos = { player->pos.y, player->pos.x };
@@ -94,6 +99,9 @@ bool PlayerInput(int input, CombatHistory* combatHistory, int n_monsters) {
         case 102: // f key
             bool rangedAttack = PlayerRangedAttack(n_monsters);
             return rangedAttack;
+        case KEY_HOME:
+            return true;
+            break;
         default:
             break;
             
@@ -124,5 +132,69 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory) {
     }
 
 }
+
+/* Run FindClosestUnexplored, break if it returns a monster. */
+/* return true if monster was found immediately and broke */
+/* return false if monster was found or no more to explore */
+// bool AutoExplore(CombatHistory* combatHistory){
+//     bool playerMoved = false;
+//     Position newPos = { player->pos.y, player->pos.x };
+//     // Position targetPos = FindClosestUnexplored();
+//     // if(map[targetPos.y][targetPos.x].entityID > 1) {
+//     //         playerMoved = true;
+//     //     }
+//     if (!playerMoved) {
+//         targetPos = FindClosestDoor();
+        
+//         if (map[(player->pos.y) - 1][(player->pos.x) - 1].noCollision && targetPos.x < player->pos.x && targetPos.y < player->pos.y){
+//             newPos.x--;
+//             newPos.y--;
+//             MovePlayer(newPos, combatHistory);
+//             playerMoved = true;
+//         }
+//         else if (map[(player->pos.y) + 1][(player->pos.x) - 1].noCollision && targetPos.x < player->pos.x && targetPos.y > player->pos.y){
+//             newPos.x--;
+//             newPos.y++;
+//             MovePlayer(newPos, combatHistory);
+//             playerMoved = true;
+//         }
+//         else if (map[(player->pos.y) + 1][(player->pos.x) + 1].noCollision && targetPos.x > player->pos.x && targetPos.y > player->pos.y){
+//             newPos.x++;
+//             newPos.y++;
+//             MovePlayer(newPos, combatHistory);
+//             playerMoved = true;
+//         }
+//         else if (map[(player->pos.y) - 1][(player->pos.x) + 1].noCollision && targetPos.x > player->pos.x && targetPos.y < player->pos.y){
+//             newPos.x++;
+//             newPos.y--;
+//             MovePlayer(newPos, combatHistory);
+//             playerMoved = true;
+//         }
+//         else if (map[(player->pos.y) - 1][player->pos.x].noCollision && targetPos.y < player->pos.y){
+//             newPos.y--;
+//             MovePlayer(newPos, combatHistory);
+//             playerMoved = true;
+//         }
+//         else if (map[(player->pos.y) + 1][player->pos.x].noCollision && targetPos.y > player->pos.y){
+//             newPos.y++;
+//             MovePlayer(newPos, combatHistory);
+//             playerMoved = true;
+//         }
+//         else if (map[player->pos.y][(player->pos.x) - 1].noCollision && targetPos.x < player->pos.x){
+//             newPos.x--;
+//             MovePlayer(newPos, combatHistory);
+//             playerMoved = true;
+//         }
+//         else if (map[player->pos.y][(player->pos.x) + 1].noCollision && targetPos.x > player->pos.x){
+//             newPos.x++;
+//             MovePlayer(newPos, combatHistory);
+//             playerMoved = true;
+//         }
+//         playerMoved = true;
+//     }
+
+
+// }
+    
 
 

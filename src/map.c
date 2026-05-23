@@ -88,6 +88,7 @@ Position SetupMap(Entity* mptr, int n_rooms) {
     return start_pos;
 }
 
+
 void FreeMap(void) {
     for (int y = 0; y < MAP_HEIGHT; y++)
     {
@@ -95,6 +96,39 @@ void FreeMap(void) {
     }
     free(map);
 }
+
+
+// /* return farthest unexplored region in players FOV. */
+// /* return monsters pos if monster found. */
+// /* return players pos if no valid unexplored tile.*/
+// Position FindClosestUnexplored() {
+//     int y, x, distance;
+// 	int RADIUS = 15;
+// 	Position target;
+
+//     for (y = player->pos.y - RADIUS; y < player->pos.y + RADIUS; y++) { 
+//             for (x = player->pos.x - RADIUS; x < player->pos.x + RADIUS; x++) { 
+//                 target.y = y;
+//                 target.x = x;
+//                 distance = GetDistance(player->pos, target);
+//                 if (distance < RADIUS && IsInMap(y, x) && !(map[y][x].seen) && (map[y][x].ch == '.' && LineOfSight(player->pos, target))) { 
+//                     if (map[y][x].entityID > 1) {
+//                         target.x = x;
+//                         target.y = y;
+//                         return target;
+//                     }
+//                     target.x = x;
+//                     target.y = y;
+//                     return target;
+//                 }
+// 			} 
+// 		} 
+//     if (IsInMap(target.y, target.x)){
+//         return(target);
+//     }
+//     return(FindClosestDoor());
+// }
+
 
 /* Prevent rooms from overlapping if desired. */
 // bool roomOverlaps(Room* rooms, int rooms_counter, int y, int x, int height, int width) {
@@ -110,4 +144,35 @@ void FreeMap(void) {
 //   }
 
 //   return false;
+// }
+
+// Position FindClosestDoor() {
+//     int y, x, distance;
+// 	int RADIUS = 15;
+// 	Position target;
+
+//     for (y = player->pos.y - RADIUS; y < player->pos.y + RADIUS; y++) { 
+//             for (x = player->pos.x - RADIUS; x < player->pos.x + RADIUS; x++) { 
+//                 target.y = y;
+//                 target.x = x;
+//                 distance = GetDistance(player->pos, target);
+//                 if(distance < RADIUS && IsInMap(y, x) && (map[y][x].entityID == 0)){
+//                     if ((map[y + 1][x].entityID == 1 && map[y - 1][x].entityID == 1)) {
+//                         target.x = x;
+//                         target.y = y;	
+//                         if (IsInMap(target.y, target.x)){
+//                             return(target);
+//                         }
+//                     }
+//                     if ((map[y][x + 1].entityID == 1 && map[y][x - 1].entityID == 1)) {
+//                         target.x = x;
+//                         target.y = y;	
+//                         if (IsInMap(target.y, target.x)){
+//                             return(target);
+//                         }
+//                     }
+//                 }  
+//             }
+// 		} 
+//     return(FindClosestUnexplored());
 // }

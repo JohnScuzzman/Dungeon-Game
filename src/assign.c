@@ -58,6 +58,7 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.minDMG = 0;
     // strcpy(entity->entityName, "Corpse");
     map[entity->pos.y][entity->pos.x].ch = entity->ch;
+    map[entity->pos.y][entity->pos.x].entityID = entity->entityID;
 }
 
 void AssignFloor(int x, int y) {

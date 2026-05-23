@@ -69,6 +69,7 @@ typedef struct {
 
 typedef struct {
   bool noCollision;
+  bool moveTowardsDoor;
   char ch;
   int color;
   Stats playerStats;
@@ -217,8 +218,11 @@ void PrintClasses();
 
 // map.c functions
 Entity** CreateEntities(void);
+// Position FindClosestUnexplored(void);
 Position SetupMap(Entity* mptr, int n_rooms);
 void FreeMap(void);
+// Position FindClosestUnexplored();
+// Position FindClosestDoor();
 
 // monster.c functions
 void AggroMove(Entity* mptr);
@@ -252,7 +256,7 @@ void MoveUpLeft(Entity* mptr);
 bool PlayerInput(int input, CombatHistory* combatHistorybool, int n_monsters);
 void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool CheckPlayerAdjacent(Position origin);
-
+// bool AutoExplore(CombatHistory* combatHistory);
 
 // room.c functions
 Room CreateRoom(int y, int x, int height, int width);
