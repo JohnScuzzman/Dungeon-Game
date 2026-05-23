@@ -89,100 +89,98 @@ bool MoveTowards(Entity* entity, Position pos) {
     int y = entity->pos.y;
     if (!CheckPlayerAdjacent(entity->pos)) {
         // up and left
-        if (y == pos.y || x == pos.x) {
-            //move up, y--
-            if (y > pos.y && x == pos.x) {
-                if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
-                    MoveUp(entity);
-                    KeepMonsterIntegrity(entity);
-                    map[entity->pos.y + 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
-                    map[entity->pos.y][entity->pos.x] = *entity;
-                    UpdateMonsterVisible(entity, player);
-                    return true;
-                }
+        // up & left
+        if (y > pos.y && x > pos.x) {
+            if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+                MoveUpLeft(entity);
+                KeepMonsterIntegrity(entity);
+                map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
+                map[entity->pos.y][entity->pos.x] = *entity;
+                UpdateMonsterVisible(entity, player);
+                return true;
             }
-            //move left, x--
-            if (x > pos.x && y == pos.y) {
-                if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                    MoveLeft(entity);
-                    KeepMonsterIntegrity(entity);
-                    map[entity->pos.y][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-                    map[entity->pos.y][entity->pos.x] = *entity;
-                    UpdateMonsterVisible(entity, player);
-                    return true;
-                }
+        }
+        // down & left
+        if (y < pos.y && x > pos.x) {
+            if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+                MoveDownLeft(entity);
+                KeepMonsterIntegrity(entity);
+                map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
+                map[entity->pos.y][entity->pos.x] = *entity;
+                UpdateMonsterVisible(entity, player);
+                return true;
             }
-            //move down, y++
-            if (y < pos.y && x == pos.x) {
-                if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
-                    MoveDown(entity);
-                    KeepMonsterIntegrity(entity);
-                    map[entity->pos.y - 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
-                    map[entity->pos.y][entity->pos.x] = *entity;
-                    UpdateMonsterVisible(entity, player);
-                    return true;
-                }
+        }
+        // down & right
+        if (y < pos.y && x < pos.x) {
+            if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+                MoveDownRight(entity);
+                KeepMonsterIntegrity(entity);
+                map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
+                map[entity->pos.y][entity->pos.x] = *entity;
+                UpdateMonsterVisible(entity, player);
+                return true;
             }
-            //move right, x++
-            if (x < pos.x && y == pos.y) {
-                if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                    MoveRight(entity);
-                    KeepMonsterIntegrity(entity);
-                    map[entity->pos.y][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-                    map[entity->pos.y][entity->pos.x] = *entity;
-                    UpdateMonsterVisible(entity, player);
-                    return true;
-                }
+        }
+        // move up & right
+        if (y > pos.y && x < pos.x) {
+            if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+                MoveUpRight(entity);
+                KeepMonsterIntegrity(entity);
+                map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
+                map[entity->pos.y][entity->pos.x] = *entity;
+                UpdateMonsterVisible(entity, player);
+                return true;
             }
         }
         
-        else {
-            // up & left
-            if (y > pos.y && x > pos.x) {
-                if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                    MoveUpLeft(entity);
-                    KeepMonsterIntegrity(entity);
-                    map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-                    map[entity->pos.y][entity->pos.x] = *entity;
-                    UpdateMonsterVisible(entity, player);
-                    return true;
-                }
+        //move up, y--
+        if (y > pos.y && x == pos.x) {
+            if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
+                MoveUp(entity);
+                KeepMonsterIntegrity(entity);
+                map[entity->pos.y + 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
+                map[entity->pos.y][entity->pos.x] = *entity;
+                UpdateMonsterVisible(entity, player);
+                return true;
             }
-            // down & left
-            if (y < pos.y && x > pos.x) {
-                if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                    MoveDownLeft(entity);
-                    KeepMonsterIntegrity(entity);
-                    map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-                    map[entity->pos.y][entity->pos.x] = *entity;
-                    UpdateMonsterVisible(entity, player);
-                    return true;
-                }
-            }
-            // down & right
-            if (y < pos.y && x < pos.x) {
-                if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                    MoveDownRight(entity);
-                    KeepMonsterIntegrity(entity);
-                    map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-                    map[entity->pos.y][entity->pos.x] = *entity;
-                    UpdateMonsterVisible(entity, player);
-                    return true;
-                }
-            }
-            // move up & right
-            if (y > pos.y && x < pos.x) {
-                if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                    MoveUpRight(entity);
-                    KeepMonsterIntegrity(entity);
-                    map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-                    map[entity->pos.y][entity->pos.x] = *entity;
-                    UpdateMonsterVisible(entity, player);
-                    return true;
-                }
-            }
-            
         }
+        //move left, x--
+        if (x > pos.x && y == pos.y) {
+            if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+                MoveLeft(entity);
+                KeepMonsterIntegrity(entity);
+                map[entity->pos.y][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
+                map[entity->pos.y][entity->pos.x] = *entity;
+                UpdateMonsterVisible(entity, player);
+                return true;
+            }
+        }
+        //move down, y++
+        if (y < pos.y && x == pos.x) {
+            if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
+                MoveDown(entity);
+                KeepMonsterIntegrity(entity);
+                map[entity->pos.y - 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
+                map[entity->pos.y][entity->pos.x] = *entity;
+                UpdateMonsterVisible(entity, player);
+                return true;
+            }
+        }
+        //move right, x++
+        if (x < pos.x && y == pos.y) {
+            if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+                MoveRight(entity);
+                KeepMonsterIntegrity(entity);
+                map[entity->pos.y][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
+                map[entity->pos.y][entity->pos.x] = *entity;
+                UpdateMonsterVisible(entity, player);
+                return true;
+            }
+        }
+
+        
+        
     }
     return false;
 }
