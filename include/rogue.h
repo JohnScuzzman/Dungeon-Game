@@ -91,6 +91,7 @@ typedef struct {
   bool seen;
   bool transparent;
   bool visible;
+  bool isMonster;
   char ch;
   char staticCh;
   int aggroRange;

@@ -2,22 +2,24 @@
 
 void AggroMove(Entity* mptr) {
     /* If they are in both LOS and range, move towards them. */
-    bool isAggro = CheckAggro(mptr, player);
-    if (isAggro) {
+    mptr->aggroFlag = CheckAggro(mptr, player);
+    if (mptr->aggroFlag) {
+        mptr->playerLastPos.x = player->pos.x;
+        mptr->playerLastPos.y = player->pos.y;
         mptr->hasMoved = MoveTowards(mptr, player->pos);
     }
 
     /* If they are not in LOS/Range but are still aggro, move towards last seen position.*/
     /* lastPos > 0 means a players was last seen at that x/y location. */
-    else if (!isAggro && mptr->playerLastPos.x > 0 && mptr->playerLastPos.y > 0) {
-        mptr->hasMoved = MoveTowards(mptr, mptr->playerLastPos);
+    if (!(mptr->aggroFlag) && (mptr->playerLastPos.x > 0) && (mptr->playerLastPos.y > 0)){
+            mptr->hasMoved = MoveTowards(mptr, mptr->playerLastPos);
     }
 
     /* if we get here, mptr has navigated to players last POS*/
-    else if (!isAggro && mptr->playerLastPos.x == mptr->pos.x && mptr->playerLastPos.y == mptr->pos.y){
+    else if (!(mptr->aggroFlag) && mptr->playerLastPos.x == mptr->pos.x && mptr->playerLastPos.y == mptr->pos.y){
         /* Check if player is in sight again */ 
-        isAggro = CheckAggro(mptr, player);
-        if(isAggro) {
+        mptr->aggroFlag = CheckAggro(mptr, player);
+        if(mptr->aggroFlag) {
             mptr->aggroFlag = true; 
         }
         else {
@@ -29,9 +31,6 @@ void AggroMove(Entity* mptr) {
 
 /* Check if a monster has LOS of player and is in their aggro range.*/
 bool CheckAggro(Entity* mptr, Player* player) {
-    if (mptr->aggroFlag) {
-        return true;
-    }
     if (GetDistance(mptr->pos, player->pos) < mptr->aggroRange  && LineOfSight(mptr->pos, player->pos)) {
         mptr->aggroFlag = true;
         mptr->playerLastPos.x = player->pos.x;
@@ -49,7 +48,7 @@ int FindClosestMonster(Entity* mptr, int n_monsters) {
     int closest = GetDistance(player->pos, (mptr)->pos);
     int temp = 0;
     for (int i = 0; i < n_monsters; i++) {
-        if(LineOfSight(player->pos, (mptr + i)->pos) && GetDistance(player->pos, (mptr + i)->pos) <= 15 && (mptr + i)->entityID > 1) {
+        if(LineOfSight(player->pos, (mptr + i)->pos) && GetDistance(player->pos, (mptr + i)->pos) <= 15 && ((mptr + i)->isMonster)) {
             temp = GetDistance(player->pos, (mptr + i)->pos);
             if(temp < closest) {
                 closest = temp;
@@ -57,12 +56,17 @@ int FindClosestMonster(Entity* mptr, int n_monsters) {
             }
         }
     }
-    /* no monsters found*/
+    /* no monsters in LOS*/
     /* returns a floor entity */
     if (closest == GetDistance(player->pos, (mptr)->pos) && !LineOfSight(player->pos, (mptr)->pos)){
         return -2;
     }
-    return closestMonster;
+    if ((mptr + closestMonster)->isMonster){
+        return (closestMonster);
+    }
+
+    return -2;
+    
 }
 
 Entity* FindMonsterInList(int monsterID, int n_monsters) {

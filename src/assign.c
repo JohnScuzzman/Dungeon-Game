@@ -41,7 +41,8 @@ void AssignCorpse(Entity* entity) {
     entity->noCollision = true;
     entity->transparent = true;
     entity->seen = true;
-    entity->visible = true;
+    entity->visible = false;
+    entity->isMonster = false;
     entity->aggroRange = 0;
     entity->entityID = 0;
     entity->entityStats.ATK = 0;
@@ -57,8 +58,9 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
     // strcpy(entity->entityName, "Corpse");
-    map[entity->pos.y][entity->pos.x].ch = entity->ch;
+    // map[entity->pos.y][entity->pos.x].ch = entity->ch;
     map[entity->pos.y][entity->pos.x].entityID = entity->entityID;
+    map[entity->pos.y][entity->pos.x].isMonster = false;
 }
 
 void AssignFloor(int x, int y) {
@@ -70,6 +72,7 @@ void AssignFloor(int x, int y) {
     map[y][x].transparent = true;
     map[y][x].seen = false;
     map[y][x].visible = false;
+    map[y][x].isMonster = false;
     map[y][x].aggroRange = 0;
     map[y][x].entityID = 0;
     map[y][x].entityStats.ATK = 0;
@@ -187,6 +190,7 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->seen = false;
     monster->transparent = false;
     monster->visible = false;
+    monster->isMonster = true;
     monster->entityID = monsterID;
     monster->color = COLOR_PAIR(VISIBLE_COLOR);
     monster->pos.y = m_pos.y;

@@ -84,10 +84,16 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
             // Check if player tried to attack something.
             // Then check if they used a ranged or melee weapon
             // Set max and min DMG accoridingly and attack the monster.
-            if (combatHistory->playerCombat && combatHistory->defender.entityID > 1) {
+            if (combatHistory->playerCombat) {
                 PlayerMeleeOrRanged(player);
                 Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
-                playerCombat = AttackEntity(target, combatHistory, player);
+                if (target->isMonster) {
+                    playerCombat = AttackEntity(target, combatHistory, player);
+                }
+                if(combatHistory->monsterKilled){
+                    //Do something
+                    UpdateMonsterMap(mptr, n_monsters);
+                }
             }
             
 
@@ -100,7 +106,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
                 (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
 
                 /* If no adjacent Player, Wander.*/
-                if (!CheckPlayerAdjacent((mptr + i)->pos) && (!(mptr + i)->aggroFlag) && (mptr + i)->entityID > 1){
+                if (!CheckPlayerAdjacent((mptr + i)->pos) && (!(mptr + i)->aggroFlag) && (mptr + i)->isMonster == true){
                     Wander(mptr + i);
                     
                     /* If they move in range of the player, set aggro flag.*/
@@ -110,17 +116,17 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
                     i++;
                 }
                 /* If adjacent to player, attack them.*/
-                else if (CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->entityID > 1){
+                else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->isMonster == true){
                     // Change the 'false' to true later for a ranged attack.
-                    monsterCombat = AttackPlayer(mptr + i, combatHistory, player);
+                    monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
                     if(!monsterCombat) {
                         leaveFlag = true;
                     }
                     i++;
                 }
-                /* If not adjacent, but aggro, move towards player.*/
-                else if ((mptr + i)->aggroFlag && (mptr + i)->entityID > 1){
-                    /* Check if player is in range AND LOS*/
+                /* If player was seen, move towards player.*/
+                else if ((mptr +i)->playerLastPos.x != 0 && (mptr + i)->playerLastPos.y != 0 && (mptr + i)->isMonster == true){
+                    /* Move towards players last known locations.*/
                     AggroMove(mptr + i);
                     i++;
                 }

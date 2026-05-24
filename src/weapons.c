@@ -9,7 +9,7 @@
 #include <rogue.h>
 Weapon Dagger() {
     Weapon dagger;
-    dagger.weaponID = 0;
+    dagger.weaponID = 1;
     dagger.value = 5;
     dagger.minDMG = 1;
     dagger.maxDMG = 4;
@@ -21,7 +21,7 @@ Weapon Dagger() {
 
 Weapon Shortsword() {
     Weapon shortSword;
-    shortSword.weaponID = 1;
+    shortSword.weaponID = 2;
     shortSword.value = 10;
     shortSword.minDMG = 1;
     shortSword.maxDMG = 6;
@@ -33,7 +33,7 @@ Weapon Shortsword() {
 
 Weapon Longsword() {
     Weapon longSword;
-    longSword.weaponID = 2;
+    longSword.weaponID = 3;
     longSword.value = 20;
     longSword.minDMG = 1;
     longSword.maxDMG = 8;
@@ -45,7 +45,7 @@ Weapon Longsword() {
 
 Weapon Greatsword() {
     Weapon greatSword;
-    greatSword.weaponID = 3;
+    greatSword.weaponID = 4;
     greatSword.value = 45;
     greatSword.minDMG = 1;
     greatSword.maxDMG = 10;
@@ -57,7 +57,7 @@ Weapon Greatsword() {
 
 Weapon Cutlass() {
     Weapon cutlass;
-    cutlass.weaponID = 4;
+    cutlass.weaponID = 5;
     cutlass.value = 25;
     cutlass.minDMG = 1;
     cutlass.maxDMG = 8;
@@ -69,7 +69,7 @@ Weapon Cutlass() {
 
 Weapon Quarterstaff() {
     Weapon quarterstaff;
-    quarterstaff.weaponID = 5;
+    quarterstaff.weaponID = 6;
     quarterstaff.value = 10;
     quarterstaff.minDMG = 1;
     quarterstaff.maxDMG = 4;
@@ -81,7 +81,7 @@ Weapon Quarterstaff() {
 
 Weapon ChromeFists() {
     Weapon chromeFists;
-    chromeFists.weaponID = 6;
+    chromeFists.weaponID = 7;
     chromeFists.value = 100;
     chromeFists.minDMG = 1;
     chromeFists.maxDMG = 6;
@@ -93,7 +93,7 @@ Weapon ChromeFists() {
 
 Weapon AcidPotion() {
     Weapon acidPotion;
-    acidPotion.weaponID = 7;
+    acidPotion.weaponID = 8;
     acidPotion.value = 25;
     acidPotion.minDMG = 2;
     acidPotion.maxDMG = 8;
@@ -105,7 +105,7 @@ Weapon AcidPotion() {
 
 Weapon Shortbow() {
     Weapon shortbow;
-    shortbow.weaponID = 8;
+    shortbow.weaponID = 9;
     shortbow.value = 25;
     shortbow.minDMG = 1;
     shortbow.maxDMG = 6;
@@ -117,7 +117,7 @@ Weapon Shortbow() {
 
 Weapon Longbow() {
     Weapon longbow;
-    longbow.weaponID = 9;
+    longbow.weaponID = 10;
     longbow.value = 50;
     longbow.minDMG = 1;
     longbow.maxDMG = 8;
@@ -129,7 +129,7 @@ Weapon Longbow() {
 
 Weapon FlintlockPistol() {
     Weapon flintlockPistol;
-    flintlockPistol.weaponID = 10;
+    flintlockPistol.weaponID = 11;
     flintlockPistol.value = 75;
     flintlockPistol.minDMG = 1;
     flintlockPistol.maxDMG = 10;
@@ -141,7 +141,7 @@ Weapon FlintlockPistol() {
 
 Weapon MagicMissile() {
     Weapon magicMissile;
-    magicMissile.weaponID = 10;
+    magicMissile.weaponID = 12;
     magicMissile.value = 75;
     magicMissile.minDMG = 2;
     magicMissile.maxDMG = 8;

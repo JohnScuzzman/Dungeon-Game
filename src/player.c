@@ -121,7 +121,7 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory) {
         return;
     }
     // Attempted to move into monster, flag and prepare for combat.
-    else if (map[newPos.y][newPos.x].entityID > 1 && !combatHistory->monsterKilled){
+    else if (map[newPos.y][newPos.x].isMonster && !combatHistory->monsterKilled){
         combatHistory->playerCombat = true;
         combatHistory->defender = map[newPos.y][newPos.x];
         return;
