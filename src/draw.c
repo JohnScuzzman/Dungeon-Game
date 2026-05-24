@@ -66,6 +66,7 @@ void DrawStats(Player* player) {
   mvprintw(10, 157, "INT: %d", player->playerStats.INT);
   mvprintw(12, 157, "STR: %d", player->playerStats.STR);
   mvprintw(14, 157, "WIS: %d", player->playerStats.WIS);
+  mvprintw(16, 157, "EXP: %d", player->playerStats.EXP);
 
   // mvprintw(5, 126, "HP: %d", player->&playerHP);
 
@@ -91,8 +92,8 @@ void DrawDebug(Entity* mptr, int n_monsters) {
   // Position closest = FindClosestUnexplored();
     for (int i = 0; i < n_monsters ; i++) {
 	  // mvprintw(22, 128, "Player POS x:%d, y:%d", player->pos.x, player->pos.y);
-    mvprintw(23 + i, 128, "Playerlast x:%d y:%d ", mptr[i].playerLastPos.x, mptr[i].playerLastPos.y);
-    // mvprintw(23 + i, 128, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
+    // mvprintw(23 + i, 128, "Playerlast x:%d y:%d ", mptr[i].playerLastPos.x, mptr[i].playerLastPos.y);
+    mvprintw(23 + i, 128, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
     // mvprintw(23 + i, 128, "ID %c x:%d, y:%d MapID:%d, Mapc:%c", ((mptr + i)->entityID), mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
     // mvprintw(23 + i, 128, "isAggro: %d Range: %d Range: %d", mptr[i].aggroFlag, mptr[i].aggroRange, GetDistance(player->pos, (mptr + i)->pos));
 	  // mvprintw(30, 128, "CH: %c x:%d, y:%d ID:%d", combatHistory->defender.ch, combatHistory->defender.pos.x, combatHistory->defender.pos.y, combatHistory->defender.entityID);

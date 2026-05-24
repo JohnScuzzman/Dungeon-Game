@@ -55,12 +55,14 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.AC = 0;
     entity->entityStats.HP = 0;
     entity->entityStats.LVL = 0;
+    entity->entityStats.EXP = 0;
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
     // strcpy(entity->entityName, "Corpse");
     // map[entity->pos.y][entity->pos.x].ch = entity->ch;
-    map[entity->pos.y][entity->pos.x].entityID = entity->entityID;
-    map[entity->pos.y][entity->pos.x].isMonster = false;
+    // map[entity->pos.y][entity->pos.x].transparent = true;
+    // map[entity->pos.y][entity->pos.x].entityID = entity->entityID;
+    // map[entity->pos.y][entity->pos.x].isMonster = false;
 }
 
 void AssignFloor(int x, int y) {
@@ -85,6 +87,7 @@ void AssignFloor(int x, int y) {
     map[y][x].entityStats.AC = 0;
     map[y][x].entityStats.HP = 0;
     map[y][x].entityStats.LVL = 0;
+    map[y][x].entityStats.EXP = 0;
     map[y][x].entityStats.maxDMG = 0;
     map[y][x].entityStats.minDMG = 0;
     strcpy(map[y][x].entityArmor, "None");
@@ -106,6 +109,7 @@ void AssignGoblinWarrior(Entity* monster) {
     monster->aggroRange = 15;
     monster->entityStats.AC = 1;
     monster->entityStats.HP = 4;
+    monster->entityStats.EXP = 10;
     monster->entityStats.LVL = 1;
     monster->entityStats.maxDMG = 4;
     monster->entityStats.minDMG = 1;
@@ -127,8 +131,9 @@ void AssignKoboldWarrior(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->aggroRange = 20;
     monster->entityStats.AC = 1;
-    monster->entityStats.LVL = 1;
+    monster->entityStats.EXP = 10;
     monster->entityStats.HP = 4;
+    monster->entityStats.LVL = 1;
     monster->entityStats.maxDMG = 4;
     monster->entityStats.minDMG = 1;
     strcpy(monster->entityArmor, "Leather Armor");
@@ -149,8 +154,9 @@ void AssignGoblinRanger(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->aggroRange = 15;
     monster->entityStats.AC = 0;
-    monster->entityStats.LVL = 1;
     monster->entityStats.HP = 4;
+    monster->entityStats.LVL = 1;
+    monster->entityStats.EXP = 10;
     monster->entityStats.maxDMG = 3;
     monster->entityStats.minDMG = 1;
     strcpy(monster->entityArmor, "Leather Armor");
@@ -173,6 +179,7 @@ void AssignHobgoblinWarrior(Entity* monster) {
     monster->entityStats.AC = 1;
     monster->entityStats.HP = 6;
     monster->entityStats.LVL = 1;
+    monster->entityStats.EXP = 20;
     monster->entityStats.maxDMG = 6;
     monster->entityStats.minDMG = 1;
     strcpy(monster->entityName, "Hoboblin Warrior");

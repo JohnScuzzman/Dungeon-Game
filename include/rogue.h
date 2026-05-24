@@ -51,6 +51,7 @@ typedef struct {
   int AC;
   int HP;
   int LVL;
+  int EXP;
   int maxDMG;
   int minDMG;
 } Stats;

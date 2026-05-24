@@ -18,7 +18,7 @@ Entity** CreateEntities(void) {
             map[y][x].visible = false;
             map[y][x].isMonster = false;
             map[y][x].aggroRange = 0;
-            map[y][x].entityID = 0;
+            map[y][x].entityID = 1;
             map[y][x].entityStats.CHA = 0;
             map[y][x].entityStats.CON = 0;
             map[y][x].entityStats.DEX = 0;
@@ -27,6 +27,7 @@ Entity** CreateEntities(void) {
             map[y][x].entityStats.WIS = 0;
             map[y][x].entityStats.AC = 30;
             map[y][x].entityStats.HP = 1000;
+            map[y][x].entityStats.EXP = 0;
             map[y][x].entityStats.LVL = 0;
             map[y][x].entityStats.maxDMG = 0;
             map[y][x].entityStats.minDMG = 0;

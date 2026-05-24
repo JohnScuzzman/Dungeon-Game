@@ -85,6 +85,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     if (playerAccRoll >= defenderAC) {
         defender->entityStats.HP = (defenderHP - playerDMG);
         if (defender->entityStats.HP <= 0) {
+            player->playerStats.EXP += (defender->entityStats.EXP);
             AssignCorpse(defender);
             combatHistory->defender = *defender;
             combatHistory->playerATKMod = playerATKMod;

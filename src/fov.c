@@ -82,7 +82,7 @@ bool IsInMap(int y, int x)
 
 /* 
 This is a mind melting algorithm but I attempted to break it down below.
-Based entirely off the algorithm developed by Stever Register.
+Based entirely off the algorithm developed by Steven Register.
 https://roguebasin.com/index.php/Simple_Line_of_Sight
 */
 bool LineOfSight(Position origin, Position target)

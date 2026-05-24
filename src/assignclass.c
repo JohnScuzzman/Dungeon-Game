@@ -18,7 +18,6 @@ void AssignKnight() {
     player->playerStats.STR += 2;
     player->playerStats.ATK = (player->playerStats.STR - 10) / 2;
 }
-
 void AssignSwashbuckler() {
     strcpy(player->playerClass, "Swashbuckler");
     player->equippedArmor = LeatherArmor();
