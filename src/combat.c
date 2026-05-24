@@ -24,7 +24,6 @@ CombatHistory* CreateCombatHistory(Entity monster) {
 
 /* Passed entity tries to attack player */
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player) {
-    int entityID = attacker->entityID;
     int attackerATKMod = attacker->entityStats.ATK;
     int playerDodgeMod = player->playerStats.DEX;
     int playerAC = player->playerStats.AC;
@@ -69,7 +68,6 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
 
 /* Player tries to attack entity */
 bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player) {
-    int entityID = defender->entityID;
     int playerATKMod = player->playerStats.ATK;
     int defenderDodgeMod = defender->entityStats.DEX;
     int defenderAC = defender->entityStats.AC;
@@ -199,13 +197,13 @@ bool ShootTarget(int x, int y) {
     // Will check if the ranged is not "none".
     if (player->equippedRanged.isRanged) {
             // Player selected a monster.
-        if (map[y][x].entityID > 1 && LineOfSight(player->pos, map[y][x].pos) && GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
+        if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedRanged = true;
             combatHistory->defender = map[y][x];
             return true;
         }
-        if (map[y][x].entityID > 1 && !LineOfSight(player->pos, map[y][x].pos)) {
+        if (map[y][x].isMonster && !LineOfSight(player->pos, map[y][x].pos)) {
             combatHistory->playerUsedRanged = false;
             mvprintw(23, 128, "Target not in line of sight.");
             return false;
