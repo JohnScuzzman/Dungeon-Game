@@ -55,6 +55,9 @@ typedef struct {
 } Armor;
 
 // weapon.c functions
+Weapon None();
+Weapon Fists();
+Weapon Claws();
 Weapon Dagger();
 Weapon Shortsword();
 Weapon Longsword();
