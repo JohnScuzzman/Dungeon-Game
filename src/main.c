@@ -7,6 +7,7 @@ const int MAP_HEIGHT = 50;
 const int MAP_WIDTH = 125;
 const int MAX_MONSTER_NAME = 33;
 
+
 /* These are like global pointers.*/ 
 /* We can use these in any function without declaring them over and over.*/
 Player* player;
@@ -48,7 +49,7 @@ int main(void)
 
     /* Create Combat History */
     combatHistory = CreateCombatHistory(mptr[0]);
-    
+
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
 

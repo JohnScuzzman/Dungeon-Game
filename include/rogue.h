@@ -165,6 +165,8 @@ void PlayerMeleeOrRanged(Player* player);
 bool PlayerRangedAttack(int n_monsters);
 bool ShootTarget(int x, int y);
 
+// combatlog.c functions
+void CreateLog();
 
 // classes.c functions
 void AssignKnight();
