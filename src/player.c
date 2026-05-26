@@ -29,9 +29,6 @@ bool CheckPlayerAdjacent(Position origin) {
 }
 
 
-
-
-
 /* Combat history passed to record events that happen in combat. */
 /* If player moves into monster, fight, count it as a move.*/
 /* If player fires their ranged weapon, count it as a move. */
@@ -68,28 +65,28 @@ bool PlayerInput(int input, CombatHistory* combatHistory, int n_monsters) {
             MovePlayer(newPos, combatHistory);
             return true;
             break;
-        //move up and left
+        //move up and left with insert
         case KEY_IC:
             newPos.y--;
             newPos.x--;
             MovePlayer(newPos, combatHistory);
             return true;
             break;
-        //move down and left
+        //move down and left with End
         case KEY_DC:
             newPos.y++;
             newPos.x--;
             MovePlayer(newPos, combatHistory);
             return true;
             break;
-        //move down and right
+        //move down and right with pagedown
         case KEY_NPAGE:
             newPos.y++;
             newPos.x++;
             MovePlayer(newPos, combatHistory);
             return true;
             break;
-        //move up and right
+        //move up and right with pageup
         case KEY_PPAGE:
             newPos.y--;
             newPos.x++;
