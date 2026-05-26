@@ -36,7 +36,7 @@ bool CheckPlayerAdjacent(Position origin) {
 bool PlayerInput(int input, CombatHistory* combatHistory, int n_monsters) {
     // Get new coordinates.
     Position newPos = { player->pos.y, player->pos.x };
-
+    bool rangedAttack;
     switch(input) {
         case 32: // space bar
             return true;
@@ -94,10 +94,19 @@ bool PlayerInput(int input, CombatHistory* combatHistory, int n_monsters) {
             return true;
             break;
         case 102: // f key
-            bool rangedAttack = PlayerRangedAttack(n_monsters);
+            rangedAttack = PlayerRangedAttack(n_monsters);
+            return rangedAttack;
+        case 70: // F key
+            rangedAttack = PlayerRangedAttack(n_monsters);
             return rangedAttack;
         case KEY_HOME:
             return true;
+            break;
+        case 104: // h key
+            CreateLog();
+            break;
+        case 72: // H key
+            CreateLog();
             break;
         default:
             break;
