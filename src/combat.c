@@ -77,6 +77,10 @@ bool PlayerRangedAttack(int n_monsters){
         x = (mptr + closest)->pos.x;
         y = (mptr + closest)->pos.y;
     }
+    if (closest == -2) {
+        x = player->pos.x;
+        y = player->pos.y;
+    }
     Cursor(y, x, 1);
     while((ch = getch()) != 32 && ch != 102) {
     Cursor(y, x, 1);
