@@ -119,9 +119,9 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
                 else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->isMonster == true){
                     // Change the 'false' to true later for a ranged attack.
                     monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
-                    if(!monsterCombat) {
-                        leaveFlag = true;
-                    }
+                    // if(!monsterCombat) {
+                    //     leaveFlag = true;
+                    // }
                     i++;
                 }
                 /* If player was seen, move towards player.*/

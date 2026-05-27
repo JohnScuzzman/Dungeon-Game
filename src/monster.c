@@ -7,27 +7,21 @@ void AggroMove(Entity* mptr) {
         mptr->playerLastPos.x = player->pos.x;
         mptr->playerLastPos.y = player->pos.y;
         mptr->hasMoved = MoveTowards(mptr, player->pos);
+        KeepMonsterIntegrity(mptr);
     }
 
     /* If they are not in LOS/Range but are still aggro, move towards last seen position.*/
     /* lastPos > 0 means a players was last seen at that x/y location. */
-    if (!(mptr->aggroFlag) && (mptr->playerLastPos.x > 0) && (mptr->playerLastPos.y > 0)){
+    else {
             mptr->hasMoved = MoveTowards(mptr, mptr->playerLastPos);
-    }
-
-    /* if we get here, mptr has navigated to players last POS*/
-    else if (!(mptr->aggroFlag) && mptr->playerLastPos.x == mptr->pos.x && mptr->playerLastPos.y == mptr->pos.y){
-        /* Check if player is in sight again */ 
-        mptr->aggroFlag = CheckAggro(mptr, player);
-        if(mptr->aggroFlag) {
-            mptr->aggroFlag = true; 
-        }
-        else {
-            mptr->aggroFlag = false; 
-        }
+            KeepMonsterIntegrity(mptr);
+             /* if we get here, mptr has navigated to players last POS*/
+            if (mptr->playerLastPos.x == mptr->pos.x && mptr->playerLastPos.y == mptr->pos.y){
+                /* Check if player is in sight again */ 
+                mptr->aggroFlag = CheckAggro(mptr, player);
+            }
     }
 }
-
 
 /* Check if a monster has LOS of player and is in their aggro range.*/
 bool CheckAggro(Entity* mptr, Player* player) {
@@ -182,9 +176,6 @@ bool MoveTowards(Entity* entity, Position pos) {
                 return true;
             }
         }
-
-        
-        
     }
     return false;
 }
@@ -222,7 +213,7 @@ void Wander(Entity* mptr){
         //newPOS.y--;
             if ((map[mptr->pos.y - 1][(mptr->pos.x)].noCollision) && (!mptr->hasMoved)){
                 MoveUp(mptr);
-                KeepMonsterMapIntegrity(mptr);
+                KeepMonsterIntegrity(mptr);
                 // set new location to old location (have mptr still)
                 map[mptr->pos.y + 1][mptr->pos.x] = map[mptr->pos.y][mptr->pos.x];
                 //finally set new location to mptr
@@ -233,7 +224,7 @@ void Wander(Entity* mptr){
             //newPOS.y++;
             if ((map[mptr->pos.y + 1][(mptr->pos.x)].noCollision) && (!mptr->hasMoved)){
                 MoveDown(mptr);
-                KeepMonsterMapIntegrity(mptr);
+                KeepMonsterIntegrity(mptr);
                 map[mptr->pos.y - 1][mptr->pos.x] = map[mptr->pos.y][mptr->pos.x];
             }
         break;
@@ -242,7 +233,7 @@ void Wander(Entity* mptr){
             //newPOS.x--;
             if ((map[mptr->pos.y][(mptr->pos.x - 1)].noCollision) && (!mptr->hasMoved)){
                 MoveLeft(mptr);
-                KeepMonsterMapIntegrity(mptr);
+                KeepMonsterIntegrity(mptr);
                 map[mptr->pos.y][mptr->pos.x + 1] = map[mptr->pos.y][mptr->pos.x];
             }
         break;
@@ -251,7 +242,7 @@ void Wander(Entity* mptr){
         //newPOS.x++;
             if ((map[mptr->pos.y][(mptr->pos.x + 1)].noCollision) && (!mptr->hasMoved)){
                 MoveRight(mptr);
-                KeepMonsterMapIntegrity(mptr);
+                KeepMonsterIntegrity(mptr);
                 map[mptr->pos.y][mptr->pos.x - 1] = map[mptr->pos.y][mptr->pos.x];
             }
         break;
@@ -262,23 +253,23 @@ void Wander(Entity* mptr){
     UpdateMonsterVisible(mptr, player);
 }
 
-void KeepMonsterMapIntegrity(Entity* mptr) {
+void KeepMonsterIntegrity(Entity* mptr) {
     // if new has been seen before fix mptr/old location
     if (mptr->mapInfo.newSeen == true){
         mptr->seen = true;
-        KeepMonsterIntegrity(mptr);
+        KeepMonsterMapIntegrity(mptr);
     }
     if (mptr->mapInfo.newSeen == false) {
         mptr->seen = false;
-        KeepMonsterIntegrity(mptr);
+        KeepMonsterMapIntegrity(mptr);
     }
     if (mptr->mapInfo.newVisible == true) {
         mptr->seen = true;
-        KeepMonsterIntegrity(mptr);
+        KeepMonsterMapIntegrity(mptr);
     }                
 }
 
-void KeepMonsterIntegrity(Entity* mptr) {
+void KeepMonsterMapIntegrity(Entity* mptr) {
     if (mptr->mapInfo.oldSeen == false){
         map[mptr->pos.y][mptr->pos.x].seen = false;
     }
