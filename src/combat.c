@@ -43,8 +43,8 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     if (playerAccRoll >= defenderAC) {
         defender->entityStats.HP = (defenderHP - playerDMG);
         if (defender->entityStats.HP <= 0) {
-            AssignCorpse(defender);
             RecordPlayerKill(defender, combatHistory, playerAccRoll, playerDMG);
+            AssignCorpse(defender);
             return true;
         }
         RecordPlayerHit(defender, combatHistory, playerAccRoll, playerDMG);
@@ -77,7 +77,6 @@ bool PlayerRangedAttack(int n_monsters){
         x = (mptr + closest)->pos.x;
         y = (mptr + closest)->pos.y;
     }
-    
     Cursor(y, x, 1);
     while((ch = getch()) != 32 && ch != 102) {
     Cursor(y, x, 1);
@@ -140,19 +139,22 @@ bool ShootTarget(int x, int y) {
             combatHistory->defender = map[y][x];
             return true;
         }
-        if (map[y][x].isMonster && !LineOfSight(player->pos, map[y][x].pos)) {
-            combatHistory->playerUsedRanged = false;
-            mvprintw(23, 128, "Target not in line of sight.");
+        else if (map[y][x].isMonster && !LineOfSight(player->pos, map[y][x].pos)) {
+            combatHistory->playerUsedRanged = true;
+            combatHistory->playerCombat = false;
+            // mvprintw(23, 128, "Target not in line of sight.");
             return false;
         }
         else {
-            mvprintw(23, 128, "Not a valid target.");
+            // mvprintw(23, 128, "Not a valid target.");
             combatHistory->playerUsedRanged = false;
+            combatHistory->playerCombat = false;
             return false;
         }
     }
     else {
-        mvprintw(23, 128, "No ranged weapons equipped.");
+        // mvprintw(23, 128, "No ranged weapons equipped.");
+        combatHistory->playerCombat = false;
         combatHistory->playerUsedRanged = false;
         return false;
     }
