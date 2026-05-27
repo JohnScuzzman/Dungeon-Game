@@ -217,6 +217,7 @@ void DrawMonsters(Entity* mptr, int n_monsters);
 void DrawPlayer(Player* player);
 void DrawPlayerBlink(Player* player);
 void DrawStats(Player* player);
+void DrawCombatLog();
 
 
 // engine.c functions

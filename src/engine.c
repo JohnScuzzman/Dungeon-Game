@@ -41,7 +41,6 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
     bool playerCombat = false;
     bool monsterCombat = false;
     bool PMove = false;
-    bool isAggro = false;
     int ch, next_ch;
     int playerRegen = 0;
     MakeFOV(player);
@@ -88,11 +87,12 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
                 PlayerMeleeOrRanged(player);
                 Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
                 if (target->isMonster) {
-                    playerCombat = AttackEntity(target, combatHistory, player);
+                    combatHistory->playerCombat = AttackEntity(target, combatHistory, player);
                 }
+                // needed to make sure monsters still get to move if player kills something.
                 if(combatHistory->monsterKilled){
-                    //Do something
-                    UpdateMonsterMap(mptr, n_monsters);
+                    ResetMoveFlags(mptr, n_monsters);
+                    combatHistory->monsterKilled = false;
                 }
             }
             
@@ -102,6 +102,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             /* (mptr + i)->entityID > 1 ensures we iterate over corpses.*/ 
             while (!((mptr + i)->hasMoved) && i < n_monsters && PMove == true){
 
+
                 /* Check if player is in aggro range. */
                 (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
 
@@ -110,22 +111,23 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
                     Wander(mptr + i);
                     
                     /* If they move in range of the player, set aggro flag.*/
-                    if (!isAggro){
+                    if ((!(mptr + i)->aggroFlag)){
                         (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
                     }
                     i++;
                 }
+
                 /* If adjacent to player, attack them.*/
                 else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->isMonster == true){
-                    // Change the 'false' to true later for a ranged attack.
                     monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
-                    // if(!monsterCombat) {
-                    //     leaveFlag = true;
-                    // }
+                    /* If player dies aka monsterCombat = false, end the game.*/
+                    if (monsterCombat == false) {
+                        leaveFlag = true;
+                    }
                     i++;
                 }
                 /* If player was seen, move towards player.*/
-                else if ((mptr +i)->playerLastPos.x != 0 && (mptr + i)->playerLastPos.y != 0 && (mptr + i)->isMonster == true){
+                else if ((mptr + i)->aggroFlag == true && (mptr + i)->isMonster == true){
                     /* Move towards players last known locations.*/
                     AggroMove(mptr + i);
                     i++;
@@ -140,7 +142,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
         ResetMoveFlags(mptr, n_monsters);
         MakeFOV(player);
         DrawEverything(mptr, n_monsters, playerCombat, monsterCombat, combatHistory);
-        
+        combatHistory->playerCombat = false;
         combatHistory->monsterKilled = false;
         // ResetCombatHistory(combatHistory);
         PMove = false;   
