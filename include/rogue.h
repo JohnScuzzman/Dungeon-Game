@@ -19,15 +19,17 @@
 #define MONSTER_COLOR 2
 #define HIGHLIGHT_COLOR 3
 #define MAX_NAME_SIZE 33
-#define MAX_LOG_SIZE 100
+#define MAX_EVENT_SIZE 50
 #define INVENTORY_SIZE 64
+#define MAX_LOG_SIZE 100
+
 
 /* IMPORTANT*/
 /* "typedef" is used instead of "struct cat_t" so that we dont have to */
 /* type "struct" everytime we declare a struct variable.*/
 
 typedef struct {
-  char events[MAX_LOG_SIZE][MAX_NAME_SIZE];
+  char events[MAX_LOG_SIZE][MAX_EVENT_SIZE];
   int front;
   int rear;
 } LogQueue;
@@ -129,7 +131,7 @@ typedef struct {
     int playerAccRoll;
     int playerDMG;
     int playerAC;
-    char events[MAX_LOG_SIZE][MAX_NAME_SIZE];
+    char event[MAX_EVENT_SIZE];
 } CombatHistory;
 
 typedef struct
@@ -177,7 +179,7 @@ int CalculatePlayerAC();
 
 // combatlog.c functions
 void CreateLogWindow(LogQueue *q);
-void MakeCombatLogQueue (LogQueue *q);
+LogQueue* MakeCombatLogQueue();
 bool IsEmpty(LogQueue *q);
 bool IsFull(LogQueue *q);
 void QueueEvent(LogQueue *q, char* event);
@@ -302,6 +304,11 @@ void ConnectRooms(Position centerOne, Position centerTwo);
 extern const int MAP_HEIGHT;
 extern const int MAP_WIDTH;
 extern const int MAX_MONSTER_NAME;
+extern const int EVENT_SIZE;
+extern const int LOG_WIDTH;
+extern const int LOG_HEIGHT;
+extern const int LOG_SIZE;
+
 
 extern Player* player;
 // Array of tiles
@@ -310,6 +317,8 @@ extern Entity** map;
 extern Entity* mptr;
 // Combat History
 extern CombatHistory* combatHistory;
+// Combat Log
+extern LogQueue* q;
 
 
 

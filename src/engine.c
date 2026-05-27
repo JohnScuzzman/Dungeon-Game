@@ -156,6 +156,7 @@ void Gameover() {
 }
 
 void CloseGame(void) { 
+    free(q);
     free(combatHistory);
     free(player);
     free(mptr);

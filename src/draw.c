@@ -55,8 +55,8 @@ void DrawStats(Player* player) {
   mvprintw(6, 128, "Class: %s", player->playerClass);
   mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
   mvprintw(10, 128, "Armor Class: %d", player->playerStats.AC);
-  mvprintw(12, 128, "Equipped Melee: %s", player->equippedMelee.weaponName);
-  mvprintw(14, 128, "Equipped Ranged: %s", player->equippedRanged.weaponName);
+  mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
+  mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
   mvprintw(16, 128, "HP: %d", player->playerStats.HP);
   
   mvprintw(2, 157, "LVL: %d", player->playerStats.LVL);

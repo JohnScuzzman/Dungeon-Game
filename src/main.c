@@ -3,9 +3,15 @@
 You need to also modify the parameters we are using to create our rooms,
 so that they are within the dimensions of the map.
 Otherwise, the game will crash when it tries to allocate a room outside of the map. */
+const int MAX_MONSTER_NAME = 33;
 const int MAP_HEIGHT = 50;
 const int MAP_WIDTH = 125;
-const int MAX_MONSTER_NAME = 33;
+const int EVENT_SIZE = 50;
+const int LOG_HEIGHT = 47;
+const int LOG_SIZE  =100;
+const int LOG_WIDTH = 128;
+
+
 
 
 /* These are like global pointers.*/ 
@@ -14,6 +20,7 @@ Player* player;
 Entity** map;
 Entity* mptr;
 CombatHistory* combatHistory;
+LogQueue* q;
 
 int main(void)
 {
@@ -25,7 +32,6 @@ int main(void)
   {
     mousemask(BUTTON1_CLICKED, NULL);
     Position start_pos;
-    LogQueue q;
     /* Generate seeds */
     srand(time(NULL));
 
@@ -51,7 +57,7 @@ int main(void)
     /* Create Combat History */
     combatHistory = CreateCombatHistory(mptr[0]);
 
-    MakeCombatLogQueue(&q);
+    q = MakeCombatLogQueue();
 
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
@@ -64,7 +70,7 @@ int main(void)
     /* Start main game loop located in engine.c */
     /* Pass the pointer to monsterList[0]. */
     /* Pass the number of monsters and rooms made. */
-    GameLoop(mptr, combatHistory, n_monsters, &q);
+    GameLoop(mptr, combatHistory, n_monsters, q);
     CloseGame();
   }
   else

@@ -1,8 +1,18 @@
 #include <rogue.h>
 
-#define LOG_WIDTH 128
-#define LOG_HEIGHT 47
-#define LOG_SIZE 100
+
+/* Create the queue for the combat log */
+/* Run this first to initialize it.*/
+LogQueue* MakeCombatLogQueue() {
+    LogQueue* q;
+    q = calloc(1, sizeof(LogQueue));
+    for (int i = 0; i < LOG_SIZE; i++) {
+        q->events[i][0] = *(" ");
+    }
+    q->front = -1;
+    q->rear = 0;
+    return q;
+}
 
 /* Make a window that displays the combat log and lets the user scroll through it.*/
 void CreateLogWindow(LogQueue *q) {
@@ -39,15 +49,6 @@ void CreateLogWindow(LogQueue *q) {
     endwin();
 }
 
-/* Create the queue for the combat log */
-/* Run this first to initialize it.*/
-void MakeCombatLogQueue (LogQueue *q) {
-    for (int i = 0; i < LOG_SIZE; i++) {
-        q->events[i][0] = *(" ");
-    }
-    q->front = -1;
-    q->rear = 0;
-}
 
 bool IsEmpty(LogQueue *q) {
     return(q->front == q->rear - 1);
@@ -61,10 +62,14 @@ bool IsFull(LogQueue *q) {
 void QueueEvent(LogQueue *q, char* event) {
     if (IsFull(q)) {
         DequeueEvent(q);
-        return;
+        q->events[q->rear][0] = *event;
+        q->rear++;
     }
-    q->events[q->rear][0] = *event;
-    q->rear++;
+    else {
+        q->events[q->rear][0] = *event;
+        q->rear++;
+    }
+    
 }
 
 void DequeueEvent (LogQueue *q) {
@@ -92,15 +97,18 @@ void PrintCombatQueue (LogQueue *q, WINDOW *pad) {
 }
 
 
-
-
 void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG) {
-    player->playerStats.EXP += (defender->entityStats.EXP);
     combatHistory->defender = *defender;
+    player->playerStats.EXP += (defender->entityStats.EXP);
     combatHistory->playerAccRoll = playerAccRoll;
     combatHistory->playerDMG = playerDMG;
     // combatHistory->monsterKilled = true; Causes issues at the moment
     combatHistory->playerResult = true;
+    strcpy(combatHistory->event, "You kill the ");
+    strcat(combatHistory->event, combatHistory->defender.entityName);
+    strcat(combatHistory->event, ".");
+    QueueEvent(q, combatHistory->event);
+    
 }
 
 void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC) {
@@ -109,22 +117,42 @@ void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int player
     combatHistory->defenderAC = defenderAC;
     combatHistory->entityResult = false;
     combatHistory->monsterKilled = false;
+    strcpy(combatHistory->event, "You miss the ");
+    strcat(combatHistory->event, combatHistory->defender.entityName);
+    strcat(combatHistory->event, ".");
+    QueueEvent(q, combatHistory->event);
 }
 
 void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG) {
+    char eventDMGBuffer[EVENT_SIZE];
     combatHistory->defender = *defender;
     combatHistory->playerAccRoll = playerAccRoll;
     combatHistory->playerDMG = playerDMG;
     combatHistory->monsterKilled = false;
     combatHistory->playerResult = true;
+    strcpy(combatHistory->event, "You hit the ");
+    strcat(combatHistory->event, combatHistory->defender.entityName);
+    strcat(combatHistory->event, " dealing ");
+    snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d", playerDMG);
+    strcat(combatHistory->event, eventDMGBuffer);
+    strcat(combatHistory->event, " damage.");
+    QueueEvent(q, combatHistory->event);
 }
 
 void RecordMonsterHit(Entity* attacker, CombatHistory* combatHistory, int attackerAccRoll, int attackerDMG) {
+    char eventDMGBuffer[EVENT_SIZE];
     combatHistory->defender = *attacker;
     combatHistory->attackerAccRoll = attackerAccRoll;
     combatHistory->attackerDMG = attackerDMG;
     combatHistory->entityResult = true;
     combatHistory->monsterKilled = false;
+    strcpy(combatHistory->event, "The ");
+    strcat(combatHistory->event, combatHistory->defender.entityName);
+    strcat(combatHistory->event, "hits you, dealing ");
+    snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d", attackerDMG);
+    strcat(combatHistory->event, eventDMGBuffer);
+    strcat(combatHistory->event, " damage.");
+    QueueEvent(q, combatHistory->event);
 }
 
 void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attackerAccRoll, int playerAC) {
@@ -133,4 +161,8 @@ void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attac
     combatHistory->playerAC = playerAC;
     combatHistory->playerResult = false;
     combatHistory->monsterKilled = false;
+    strcpy(combatHistory->event, "The ");
+    strcat(combatHistory->event, combatHistory->defender.entityName);
+    strcat(combatHistory->event, " misses.");
+    QueueEvent(q, combatHistory->event);
 }
