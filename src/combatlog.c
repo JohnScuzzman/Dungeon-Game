@@ -1,18 +1,18 @@
 #include <rogue.h>
 
-const int LOG_WIDTH = 128;
-const int LOG_HEIGHT = 47;
-const int LOG_SIZE = 100;
+#define LOG_WIDTH 128
+#define LOG_HEIGHT 47
+#define LOG_SIZE 100
 
-void CreateLog() {
+/* Make a window that displays the combat log and lets the user scroll through it.*/
+void CreateLogWindow(LogQueue *q) {
 
     /* Create a pad for the log to use.*/
     WINDOW *pad = newpad(LOG_SIZE, 50);
     scrollok(pad, TRUE); // Allow the pad to scroll internally
     
-    for (int i = 0; i < LOG_SIZE; i++) {
-        wprintw(pad, "Combat Event #%d\n", i);
-    }
+
+    PrintCombatQueue(q, pad);
 
     int current_line = 0;
     while (1) {
@@ -37,4 +37,100 @@ void CreateLog() {
     }
 
     endwin();
+}
+
+/* Create the queue for the combat log */
+/* Run this first to initialize it.*/
+void MakeCombatLogQueue (LogQueue *q) {
+    for (int i = 0; i < LOG_SIZE; i++) {
+        q->events[i][0] = *(" ");
+    }
+    q->front = -1;
+    q->rear = 0;
+}
+
+bool IsEmpty(LogQueue *q) {
+    return(q->front == q->rear - 1);
+}
+
+bool IsFull(LogQueue *q) {
+    return(q->rear == LOG_SIZE);
+}
+
+/* Queues a combat event as a string, if full, dequeues the front by incrementing it by one.*/
+void QueueEvent(LogQueue *q, char* event) {
+    if (IsFull(q)) {
+        DequeueEvent(q);
+        return;
+    }
+    q->events[q->rear][0] = *event;
+    q->rear++;
+}
+
+void DequeueEvent (LogQueue *q) {
+    if (IsEmpty(q)){
+        return;
+    }
+    q->front++;
+}
+
+char* PeekCombatQueue (LogQueue *q) {
+    if (IsEmpty(q)){
+        return "Log is Empty, Cannot peek.";
+    }
+    return q->events[q->front + 1];
+}
+
+/* Prints the contents of the queue to the small scrollable window called pad.*/
+void PrintCombatQueue (LogQueue *q, WINDOW *pad) {
+    if (IsEmpty(q)){
+        return;
+    }
+    for (int i = q->front + 1; i < q->rear; i++) {
+        wprintw(pad, "%s", q->events[i]);
+    }
+}
+
+
+
+
+void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG) {
+    player->playerStats.EXP += (defender->entityStats.EXP);
+    combatHistory->defender = *defender;
+    combatHistory->playerAccRoll = playerAccRoll;
+    combatHistory->playerDMG = playerDMG;
+    // combatHistory->monsterKilled = true; Causes issues at the moment
+    combatHistory->playerResult = true;
+}
+
+void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC) {
+    combatHistory->defender = *attacker;
+    combatHistory->playerAccRoll = playerAccRoll;
+    combatHistory->defenderAC = defenderAC;
+    combatHistory->entityResult = false;
+    combatHistory->monsterKilled = false;
+}
+
+void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG) {
+    combatHistory->defender = *defender;
+    combatHistory->playerAccRoll = playerAccRoll;
+    combatHistory->playerDMG = playerDMG;
+    combatHistory->monsterKilled = false;
+    combatHistory->playerResult = true;
+}
+
+void RecordMonsterHit(Entity* attacker, CombatHistory* combatHistory, int attackerAccRoll, int attackerDMG) {
+    combatHistory->defender = *attacker;
+    combatHistory->attackerAccRoll = attackerAccRoll;
+    combatHistory->attackerDMG = attackerDMG;
+    combatHistory->entityResult = true;
+    combatHistory->monsterKilled = false;
+}
+
+void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attackerAccRoll, int playerAC) {
+    combatHistory->defender = *defender;
+    combatHistory->attackerAccRoll = attackerAccRoll;
+    combatHistory->playerAC = playerAC;
+    combatHistory->playerResult = false;
+    combatHistory->monsterKilled = false;
 }

@@ -19,12 +19,18 @@
 #define MONSTER_COLOR 2
 #define HIGHLIGHT_COLOR 3
 #define MAX_NAME_SIZE 33
+#define MAX_LOG_SIZE 100
 #define INVENTORY_SIZE 64
 
 /* IMPORTANT*/
 /* "typedef" is used instead of "struct cat_t" so that we dont have to */
 /* type "struct" everytime we declare a struct variable.*/
 
+typedef struct {
+  char events[MAX_LOG_SIZE][MAX_NAME_SIZE];
+  int front;
+  int rear;
+} LogQueue;
 
 typedef struct {
     bool oldSeen;
@@ -117,16 +123,13 @@ typedef struct {
     bool entityResult;
     bool playerCombat; // true if player combat occurred
     bool playerUsedRanged;
-    int attackerATKMod;
     int attackerAccRoll;
     int attackerDMG;
-    int defenderDodgeMod;
     int defenderAC;
-    int playerATKMod;
     int playerAccRoll;
     int playerDMG;
-    int playerDodgeMod;
     int playerAC;
+    char events[MAX_LOG_SIZE][MAX_NAME_SIZE];
 } CombatHistory;
 
 typedef struct
@@ -164,9 +167,29 @@ void ResetCombatHistory(CombatHistory* combatHistory);
 void PlayerMeleeOrRanged(Player* player);
 bool PlayerRangedAttack(int n_monsters);
 bool ShootTarget(int x, int y);
+int CalculateEntityAccuracy(Entity* attacker) ;
+int CalculateEntityDMG(Entity* attacker);
+int CalculateEntityAC(Entity* defender);
+int CalculatePlayerAccuracy();
+int CalculatePlayerDamage();
+int CalculatePlayerAC();
+
 
 // combatlog.c functions
-void CreateLog();
+void CreateLogWindow(LogQueue *q);
+void MakeCombatLogQueue (LogQueue *q);
+bool IsEmpty(LogQueue *q);
+bool IsFull(LogQueue *q);
+void QueueEvent(LogQueue *q, char* event);
+void DequeueEvent (LogQueue *q);
+char* PeekCombatQueue (LogQueue *q);
+void PrintCombatQueue (LogQueue*q, WINDOW *pad);
+void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
+void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC);
+void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
+void RecordMonsterHit(Entity* attacker, CombatHistory* combatHistory, int attackerAccRoll, int attackerDMG);
+void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attackerAccRoll, int playerAC);
+
 
 // classes.c functions
 void AssignKnight();
@@ -196,7 +219,7 @@ void DrawStats(Player* player);
 
 // engine.c functions
 bool NcursesSetup(void);
-void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters);
+void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q);
 void CloseGame(void);
 void Cursor(int x, int y, int length);
 void RemoveCursor(int x, int y, int length);
@@ -211,6 +234,7 @@ bool IsInMap(int y, int x);
 bool LineOfSight(Position origin, Position target);
 int GetSign(int a);
 
+
 // makeplayer.c functions
 Player* CreatePlayer(Position start_pos);
 void AskPlayerInfo(Player* player);
@@ -220,6 +244,7 @@ void ChooseClass();
 void PrintRaces();
 void PrintClasses();
 
+
 // map.c functions
 Entity** CreateEntities(void);
 // Position FindClosestUnexplored(void);
@@ -227,6 +252,7 @@ Position SetupMap(Entity* mptr, int n_rooms);
 void FreeMap(void);
 // Position FindClosestUnexplored();
 // Position FindClosestDoor();
+
 
 // monster.c functions
 void AggroMove(Entity* mptr);
@@ -244,6 +270,7 @@ void UpdateMonsterVisible(Entity* monster, Player* player);
 void Wander(Entity* mptr);
 int FindClosestMonster(Entity* mptr, int n_monsters);
 
+
 // movemonster.c functions
 bool MoveTowards(Entity* entity, Position pos);
 void MoveUp(Entity* mptr);
@@ -257,10 +284,11 @@ void MoveUpLeft(Entity* mptr);
 
 
 // player.c functions
-bool PlayerInput(int input, CombatHistory* combatHistorybool, int n_monsters);
+bool PlayerInput(int input, LogQueue *q, int n_monsters);
 void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool CheckPlayerAdjacent(Position origin);
 // bool AutoExplore(CombatHistory* combatHistory);
+
 
 // room.c functions
 Room CreateRoom(int y, int x, int height, int width);
