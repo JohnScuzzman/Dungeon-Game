@@ -36,7 +36,7 @@ void RemoveCursor(int x, int y, int length) {
     mvchgat(x, y, length, A_NORMAL, 0, NULL);
 }
 
-void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) { 
+void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q) { 
     bool leaveFlag = false;
     bool playerCombat = false;
     bool monsterCombat = false;
@@ -79,7 +79,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters) {
                 playerRegen++;
             }
 
-            PMove = PlayerInput(ch, combatHistory, n_monsters);
+            PMove = PlayerInput(ch, q, n_monsters);
 
             // Check if player tried to attack something.
             // Then check if they used a ranged or melee weapon

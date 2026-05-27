@@ -25,6 +25,7 @@ int main(void)
   {
     mousemask(BUTTON1_CLICKED, NULL);
     Position start_pos;
+    LogQueue q;
     /* Generate seeds */
     srand(time(NULL));
 
@@ -50,6 +51,8 @@ int main(void)
     /* Create Combat History */
     combatHistory = CreateCombatHistory(mptr[0]);
 
+    MakeCombatLogQueue(&q);
+
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
 
@@ -61,7 +64,7 @@ int main(void)
     /* Start main game loop located in engine.c */
     /* Pass the pointer to monsterList[0]. */
     /* Pass the number of monsters and rooms made. */
-    GameLoop(mptr, combatHistory, n_monsters);
+    GameLoop(mptr, combatHistory, n_monsters, &q);
     CloseGame();
   }
   else

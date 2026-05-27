@@ -3,118 +3,54 @@
 CombatHistory* CreateCombatHistory(Entity monster) {
     CombatHistory* combatHistory;
     combatHistory = calloc(1, sizeof(CombatHistory));
-    combatHistory->monsterKilled = false;
-    combatHistory->playerResult = false; // 0 = miss, 1 = hit
-    combatHistory->entityResult = false;
-    combatHistory->playerCombat = false; // true if player combat occurred
-    combatHistory->playerUsedRanged = false;
-    combatHistory->attackerATKMod = 0;
-    combatHistory->attackerAccRoll = 0;
-    combatHistory->attackerDMG = 0;
-    combatHistory->defenderDodgeMod = 0;
-    combatHistory->defenderAC = 0;
-    combatHistory->playerATKMod = 0;
-    combatHistory->playerAccRoll = 0;
-    combatHistory->playerDMG = 0;
-    combatHistory->playerDodgeMod = 0;
-    combatHistory->playerAC = 0;
     combatHistory->defender = monster;
     return combatHistory;
 }
 
+
+
 /* Passed entity tries to attack player */
+/* Returning false means they killed the player and the game will end.*/
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player) {
-    int attackerATKMod = attacker->entityStats.ATK;
-    int playerDodgeMod = player->playerStats.DEX;
-    int playerAC = player->playerStats.AC;
-    playerDodgeMod = ((playerDodgeMod - 10) / 2);
-
-    int attackerAccRoll = (rand() % 20) + 1;
-    attackerAccRoll = attackerAccRoll + attackerATKMod;
-    playerAC = (playerAC + playerDodgeMod + 10);
-
-    int maxDMG = attacker->entityStats.maxDMG;
-    int minDMG = attacker->entityStats.minDMG;
+    int playerAC = CalculatePlayerAC();
+    int attackerAccRoll = CalculateEntityAccuracy(attacker);
+    int attackerDMG = CalculateEntityDMG(attacker);
     int playerHP = player->playerStats.HP;
-    int attackerDMG = (rand() % maxDMG) + minDMG;
 
     if (attackerAccRoll >= playerAC) {
         player->playerStats.HP = (playerHP - attackerDMG);
         if (player->playerStats.HP <= 0) {
             //Player dead, Game is over.
-            // Gameover()
             return false;
         }
-    // Hit
-        combatHistory->defender = *attacker;
-        combatHistory->playerDodgeMod = playerDodgeMod;
-        combatHistory->attackerAccRoll = attackerAccRoll;
-        combatHistory->playerAC = playerAC;
-        combatHistory->attackerDMG = attackerDMG;
-        combatHistory->entityResult = true;
-        combatHistory->monsterKilled = false;
+        RecordMonsterHit(attacker, combatHistory, attackerAccRoll, attackerDMG);
         return true;
     }
-    // Miss
-        combatHistory->defender = *attacker;
-        combatHistory->playerDodgeMod = playerDodgeMod;
-        combatHistory->attackerAccRoll = attackerAccRoll;
-        combatHistory->playerAC = playerAC;
-        combatHistory->attackerDMG = attackerDMG;
-        combatHistory->entityResult = false;
-        combatHistory->monsterKilled = false;
-        return true;
+    RecordMonsterMiss(attacker, combatHistory, attackerAccRoll, playerAC);
+    return true;
 }
 
+
+
 /* Player tries to attack entity */
+/* Returns true if combat happens at all. */
 bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player) {
-    int playerATKMod = player->playerStats.ATK;
-    int defenderDodgeMod = defender->entityStats.DEX;
-    int defenderAC = defender->entityStats.AC;
-    defenderDodgeMod = ((defenderDodgeMod - 10) / 2);
-
-    int playerAccRoll = (rand() % 20) + 1;
-    playerAccRoll = playerAccRoll + playerATKMod;
-    defenderAC = (defenderAC + defenderDodgeMod + 10);
-
-    int maxDMG = player->playerStats.maxDMG;
-    int minDMG = player->playerStats.minDMG;
+    int defenderAC = CalculateEntityAC(defender);
+    int playerAccRoll = CalculatePlayerAccuracy();
+    int playerDMG = CalculatePlayerDamage();
     int defenderHP = defender->entityStats.HP;
-    int playerDMG = (rand() % maxDMG) + minDMG;
 
     if (playerAccRoll >= defenderAC) {
         defender->entityStats.HP = (defenderHP - playerDMG);
         if (defender->entityStats.HP <= 0) {
-            player->playerStats.EXP += (defender->entityStats.EXP);
             AssignCorpse(defender);
-            combatHistory->defender = *defender;
-            combatHistory->playerATKMod = playerATKMod;
-            combatHistory->defenderDodgeMod = defenderDodgeMod;
-            combatHistory->playerAccRoll = playerAccRoll;
-            combatHistory->defenderAC = defenderAC;
-            combatHistory->playerDMG = playerDMG;
-            // combatHistory->monsterKilled = true;
-            combatHistory->playerResult = true;
+            RecordPlayerKill(defender, combatHistory, playerAccRoll, playerDMG);
             return true;
         }
-        combatHistory->defender = *defender;
-        combatHistory->playerATKMod = playerATKMod;
-        combatHistory->defenderDodgeMod = defenderDodgeMod;
-        combatHistory->playerAccRoll = playerAccRoll;
-        combatHistory->defenderAC = defenderAC;
-        combatHistory->playerDMG = playerDMG;
-        combatHistory->monsterKilled = false;
-        combatHistory->playerResult = true;
+        RecordPlayerHit(defender, combatHistory, playerAccRoll, playerDMG);
         return true;
     }
-    combatHistory->defender = *defender;
-    combatHistory->playerATKMod = playerATKMod;
-    combatHistory->defenderDodgeMod = defenderDodgeMod;
-    combatHistory->playerAccRoll = playerAccRoll;
-    combatHistory->defenderAC = defenderAC;
-    combatHistory->playerDMG = playerDMG;
-    combatHistory->playerResult = false;
-    combatHistory->monsterKilled = false;
+    RecordPlayerMiss(defender, combatHistory, playerAccRoll, defenderAC);
     return true;
 }
 
@@ -198,7 +134,7 @@ bool ShootTarget(int x, int y) {
     // Will check if the ranged is not "none".
     if (player->equippedRanged.isRanged) {
             // Player selected a monster.
-        if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
+        if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && (GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range)) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedRanged = true;
             combatHistory->defender = map[y][x];
@@ -222,5 +158,46 @@ bool ShootTarget(int x, int y) {
     }
 }
 
+int CalculateEntityAccuracy(Entity* attacker) {
+    int attackerATKMod = attacker->entityStats.ATK;
+    int attackerAccRoll = (rand() % 20) + 1;
+    attackerAccRoll = attackerAccRoll + attackerATKMod;
+    return attackerAccRoll;
+}
 
+int CalculateEntityDMG(Entity* attacker) {
+    int maxDMG = attacker->entityStats.maxDMG;
+    int minDMG = attacker->entityStats.minDMG;
+    int attackerDMG = (rand() % maxDMG) + minDMG;
+    return attackerDMG;
+}
 
+int CalculateEntityAC(Entity* defender) {
+    int defenderDodgeMod = defender->entityStats.DEX;
+    int defenderAC = defender->entityStats.AC;
+    defenderDodgeMod = ((defenderDodgeMod - 10) / 2);
+    defenderAC = (defenderAC + defenderDodgeMod + 10);
+    return defenderAC;
+}
+
+int CalculatePlayerAccuracy() {
+    int playerATKMod = player->playerStats.ATK;
+    int playerAccRoll = (rand() % 20) + 1;
+    playerAccRoll = playerAccRoll + playerATKMod;
+    return playerAccRoll;
+}
+
+int CalculatePlayerDamage() {
+    int maxDMG = player->playerStats.maxDMG;
+    int minDMG = player->playerStats.minDMG;
+    int playerDMG = (rand() % maxDMG) + minDMG;
+    return playerDMG;
+}
+
+int CalculatePlayerAC() {
+    int playerDodgeMod = player->playerStats.DEX;
+    int playerAC = player->playerStats.AC;
+    playerDodgeMod = ((playerDodgeMod - 10) / 2);
+    playerAC = (playerAC + playerDodgeMod + 10);
+    return playerAC;
+}

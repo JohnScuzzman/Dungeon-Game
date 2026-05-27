@@ -33,7 +33,7 @@ bool CheckPlayerAdjacent(Position origin) {
 /* If player moves into monster, fight, count it as a move.*/
 /* If player fires their ranged weapon, count it as a move. */
 /* If legal move, move player. */
-bool PlayerInput(int input, CombatHistory* combatHistory, int n_monsters) {
+bool PlayerInput(int input, LogQueue *q, int n_monsters) {
     // Get new coordinates.
     Position newPos = { player->pos.y, player->pos.x };
     bool rangedAttack;
@@ -103,10 +103,10 @@ bool PlayerInput(int input, CombatHistory* combatHistory, int n_monsters) {
             return true;
             break;
         case 104: // h key
-            CreateLog();
+            CreateLogWindow(q);
             break;
         case 72: // H key
-            CreateLog();
+            CreateLogWindow(q);
             break;
         default:
             break;
