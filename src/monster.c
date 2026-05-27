@@ -13,13 +13,13 @@ void AggroMove(Entity* mptr) {
     /* If they are not in LOS/Range but are still aggro, move towards last seen position.*/
     /* lastPos > 0 means a players was last seen at that x/y location. */
     else {
-            mptr->hasMoved = MoveTowards(mptr, mptr->playerLastPos);
-            KeepMonsterIntegrity(mptr);
-             /* if we get here, mptr has navigated to players last POS*/
-            if (mptr->playerLastPos.x == mptr->pos.x && mptr->playerLastPos.y == mptr->pos.y){
-                /* Check if player is in sight again */ 
-                mptr->aggroFlag = CheckAggro(mptr, player);
-            }
+        mptr->hasMoved = MoveTowards(mptr, mptr->playerLastPos);
+        KeepMonsterIntegrity(mptr);
+            /* if we get here, mptr has navigated to players last POS*/
+        if (mptr->playerLastPos.x == mptr->pos.x && mptr->playerLastPos.y == mptr->pos.y){
+            /* Check if player is in sight again */ 
+            mptr->aggroFlag = CheckAggro(mptr, player);
+        }
     }
 }
 
