@@ -103,10 +103,8 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
             return true;
             break;
         case 104: // h key
-            CreateLogWindow(q);
             break;
         case 72: // H key
-            CreateLogWindow(q);
             break;
         default:
             break;

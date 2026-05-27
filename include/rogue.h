@@ -21,7 +21,7 @@
 #define MAX_NAME_SIZE 33
 #define MAX_EVENT_SIZE 64
 #define INVENTORY_SIZE 64
-#define MAX_LOG_SIZE 100
+#define MAX_LOG_SIZE 27 //26?
 
 
 /* IMPORTANT*/
@@ -178,7 +178,7 @@ int CalculatePlayerAC();
 
 
 // combatlog.c functions
-void CreateLogWindow(LogQueue *q);
+// void CreateLogWindow(LogQueue *q);
 LogQueue* MakeCombatLogQueue();
 bool IsEmpty(LogQueue *q);
 bool IsFull(LogQueue *q);

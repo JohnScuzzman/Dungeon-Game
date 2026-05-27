@@ -114,19 +114,15 @@ void DrawEverything(Entity* mptr, int n_monsters, bool playerCombat, bool monste
 
 
 void DrawCombatLog() {
-  if (IsEmpty(q)){
+ 	if (IsEmpty(q)){
         return;
     }
-    for (int i = q->front + 1; i < q->rear; i++) {
-      	if (i < 26){
-			mvprintw(47 - (i - 1), 128, "%s", q->events[i]);
-		}
-		else {
-			DequeueEvent(q);
-			i--;
-		}
-    }
+	for (int i = 0; i <= q->rear; i++) {
+   		mvprintw(LOG_HEIGHT - i, LOG_WIDTH, "%s", q->events[i]);
+  	}
 }
+
+
 void DrawEntityAttack(Entity attacker, bool combatResult) {
 	// if (combatResult) {
 	// 	mvprintw(28, 128, "The %s rolls a %d", attacker.entityName, combatHistory->attackerAccRoll);

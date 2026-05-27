@@ -9,7 +9,7 @@ void AssignKnight() {
     player->equippedArmor = Chainmail();
     player->equippedMelee = Greatsword();
     player->equippedRanged = Shortbow();
-    player->playerStats.HP += 6;
+    player->playerStats.HP += 600;
     player->playerStats.AC = 3;
     player->playerStats.maxDMG = 10;
     player->playerStats.minDMG = 1;

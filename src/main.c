@@ -7,8 +7,8 @@ const int MAX_MONSTER_NAME = 33;
 const int MAP_HEIGHT = 50;
 const int MAP_WIDTH = 125;
 const int EVENT_SIZE = 33;
-const int LOG_HEIGHT = 47;
-const int LOG_SIZE  = 25;
+const int LOG_HEIGHT = 48;
+const int LOG_SIZE  = 26;
 const int LOG_WIDTH = 128;
 
 
