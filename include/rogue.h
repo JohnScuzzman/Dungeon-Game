@@ -164,26 +164,25 @@ void AssignStats(int input);
 CombatHistory* CreateCombatHistory(Entity monster);
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player);
 bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player);
-void PlayerMeleeOrRanged(Player* player);
-void PlayerPrepareCombat(int n_monsters);
-bool PlayerRangedAttack(int n_monsters);
-void ResetCombatHistory(CombatHistory* combatHistory);
-bool ShootTarget(int x, int y);
 int CalculateEntityAccuracy(Entity* attacker) ;
 int CalculateEntityDMG(Entity* attacker);
 int CalculateEntityAC(Entity* defender);
 int CalculatePlayerAccuracy();
 int CalculatePlayerDamage();
 int CalculatePlayerAC();
+void PlayerMeleeOrRanged(Player* player);
+void PlayerPrepareCombat(int n_monsters);
+bool PlayerRangedAttack(int n_monsters);
+void ResetCombatHistory(CombatHistory* combatHistory);
+bool ShootTarget(int x, int y);
 
 
 // combatlog.c functions
-// void CreateLogWindow(LogQueue *q);
-LogQueue* MakeCombatLogQueue();
 bool IsEmpty(LogQueue *q);
 bool IsFull(LogQueue *q);
-void QueueEvent(LogQueue *q, char* event);
 void DequeueEvent (LogQueue *q);
+LogQueue* MakeCombatLogQueue();
+void QueueEvent(LogQueue *q, char* event);
 char* PeekCombatQueue (LogQueue *q);
 void PrintCombatQueue (LogQueue*q, WINDOW *pad);
 void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
@@ -208,55 +207,55 @@ void AssignCyborg();
 
 // draw.c functions
 void DrawBorder(void);
-void DrawEntityAttack(Entity attacker, bool combatResult);
-void DrawPlayerAttack(Entity defender, bool combatResult);
+void DrawCombatLog();
 void DrawDebug(Entity* mptr, int n_monsters);
+void DrawEntityAttack(Entity attacker, bool combatResult);
 void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory);
+void DrawPlayerAttack(Entity defender, bool combatResult);
 void DrawMap();
 void DrawMonsters(Entity* mptr, int n_monsters);
 void DrawPlayer(Player* player);
 void DrawPlayerBlink(Player* player);
 void DrawStats(Player* player);
-void DrawCombatLog();
 
 
 // engine.c functions
-bool NcursesSetup(void);
 bool CheckEscape(int ch);
-void Cursor(int x, int y, int length);
-void RemoveCursor(int x, int y, int length);
-bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove);
-void RefreshGamestate(Entity* mptr, int n_monsters);
-void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q);
 void CloseGame(void);
+void Cursor(int x, int y, int length);
+void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q);
 void Gameover();
 void Greeting();
+bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove);
+bool NcursesSetup(void);
+void RefreshGamestate(Entity* mptr, int n_monsters);
+void RemoveCursor(int x, int y, int length);
 
 
 // fov.c functions
-void MakeFOV(Player* playerint);
 void ClearFOV(Player* player);
 int GetDistance(Position origin, Position target);
+int GetSign(int a);
 bool IsInMap(int y, int x);
 bool LineOfSight(Position origin, Position target);
-int GetSign(int a);
+void MakeFOV(Player* playerint);
 
 
 // makeplayer.c functions
-Player* CreatePlayer(Position start_pos);
 void AskPlayerInfo(Player* player);
-void ChooseRace();
-void ChooseName(char* name);
 void ChooseClass();
+void ChooseName(char* name);
+void ChooseRace();
+Player* CreatePlayer(Position start_pos);
 void PrintRaces();
 void PrintClasses();
 
 
 // map.c functions
 Entity** CreateEntities(void);
-// Position FindClosestUnexplored(void);
-Position SetupMap(Entity* mptr, int n_rooms);
 void FreeMap(void);
+Position SetupMap(Entity* mptr, int n_rooms);
+// Position FindClosestUnexplored(void);
 // Position FindClosestUnexplored();
 // Position FindClosestDoor();
 
@@ -264,6 +263,7 @@ void FreeMap(void);
 // monster.c functions
 void AggroMove(Entity* mptr);
 bool CheckAggro(Entity* mptr, Player* player);
+int FindClosestMonster(Entity* mptr, int n_monsters);
 Entity* FindMonsterInList(int monsterID, int n_monsters);
 void KeepMonsterIntegrity(Entity* mptr);
 void KeepMonsterMapIntegrity(Entity* mptr);
@@ -275,7 +275,6 @@ void UpdateMonsters(Entity* monster, int n_monsters);
 void UpdateMonster(Entity* monster, int monsterID, int n_monsters);
 void UpdateMonsterVisible(Entity* monster, Player* player);
 void Wander(Entity* mptr);
-int FindClosestMonster(Entity* mptr, int n_monsters);
 
 
 // movemonster.c functions
@@ -289,20 +288,24 @@ void MoveDownLeft(Entity* mptr);
 void MoveUpRight(Entity* mptr);
 void MoveUpLeft(Entity* mptr);
 
+//pause.c functions
+bool MakePauseMenu();
+bool ProcessPauseSelect(int choice, WINDOW* menu);
+void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options);
+
 
 // player.c functions
-bool PlayerInput(int input, LogQueue *q, int n_monsters);
-void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool CheckPlayerAdjacent(Position origin);
+void MovePlayer(Position newPos, CombatHistory* combatHistory);
+bool PlayerInput(int input, LogQueue *q, int n_monsters);
 void PlayerRegen(int *playerRegen);
 // bool AutoExplore(CombatHistory* combatHistory);
 
 
 // room.c functions
-Room CreateRoom(int y, int x, int height, int width);
 void AddRoomToMap(Room room);
+Room CreateRoom(int y, int x, int height, int width);
 void ConnectRooms(Position centerOne, Position centerTwo);
-
 
 
 // Externals 
