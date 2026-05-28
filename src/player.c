@@ -20,7 +20,7 @@ bool CheckPlayerAdjacent(Position origin) {
             return true;
     }
     }
-    if (origin.x == (player->pos.x) || origin.x == ((player->pos.x) - 1) || origin.x == ((player->pos.y) + 1)){
+    if (origin.x == (player->pos.x) || origin.x == ((player->pos.x) - 1) || origin.x == ((player->pos.x) + 1)){
         if (origin.y == (player->pos.y - 1) || origin.y == (player->pos.y + 1)) {
             return true;
         }

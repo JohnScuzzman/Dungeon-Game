@@ -21,7 +21,7 @@
 #define MAX_NAME_SIZE 33
 #define MAX_EVENT_SIZE 64
 #define INVENTORY_SIZE 64
-#define MAX_LOG_SIZE 27 //26?
+#define MAX_LOG_SIZE 28
 
 
 /* IMPORTANT*/

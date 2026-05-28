@@ -24,6 +24,7 @@ void QueueEvent(LogQueue *q, char* event) {
     if (IsFull(q)) {
         strcpy(q->events[q->rear], event);
         DequeueEvent(q);
+        strcpy(q->events[q->rear], " ");
         
         return;
     }
@@ -31,8 +32,6 @@ void QueueEvent(LogQueue *q, char* event) {
         strcpy(q->events[q->rear], event);
         q->rear++;
     }
-    
-    
 }
 
 void DequeueEvent (LogQueue *q) {
