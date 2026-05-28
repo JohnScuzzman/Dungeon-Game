@@ -91,7 +91,7 @@ void DrawBorder(void) {
 void DrawDebug(Entity* mptr, int n_monsters) {
   // Position closest = FindClosestUnexplored();
     for (int i = 0; i < n_monsters ; i++) {
-	  // mvprintw(22, 128, "Player POS x:%d, y:%d", player->pos.x, player->pos.y);
+	  mvprintw(22, 128, "Player POS x:%d, y:%d", player->pos.x, player->pos.y);
     // mvprintw(23 + i, 128, "Playerlast x:%d y:%d ", mptr[i].playerLastPos.x, mptr[i].playerLastPos.y);
     mvprintw(23 + i, 128, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
     // mvprintw(23 + i, 128, "ID %c x:%d, y:%d MapID:%d, Mapc:%c", ((mptr + i)->entityID), mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
@@ -109,7 +109,8 @@ void DrawEverything(Entity* mptr, int n_monsters, bool playerCombat, bool monste
 	DrawPlayer(player);
 	DrawStats(player);
 	DrawBorder();
-	DrawCombatLog();
+  DrawDebug(mptr, n_monsters);
+	// DrawCombatLog();
 }
 
 

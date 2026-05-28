@@ -70,7 +70,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
         if(ch != ERR) {
             int i = 0;
 
-            if (playerRegen >= 20) {
+            if (playerRegen >= 20 && (player->playerStats.HP < player->playerStats.maxHP)) {
                 player->playerStats.HP++;
                 playerRegen = 0;
             }
@@ -100,7 +100,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             /* Wander fires first and moves monsters randomly*/
             /* Wander checks if LOS to player and flips aggro is they are in range.*/
             /* (mptr + i)->entityID > 1 ensures we iterate over corpses.*/ 
-            while (!((mptr + i)->hasMoved) && i < n_monsters && PMove == true){
+            while (!((mptr + i)->hasMoved) && i <= n_monsters && PMove == true){
 
 
                 /* Check if player is in aggro range. */
@@ -130,12 +130,13 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
                 else if ((mptr + i)->aggroFlag == true && (mptr + i)->isMonster == true){
                     /* Move towards players last known locations.*/
                     AggroMove(mptr + i);
+                    UpdateMonsterMap(mptr, n_monsters);
                     i++;
                 }
                 else {
                     i++;
                 }
-                // UpdateMonsters(mptr, n_monsters);
+
             }
         }
         UpdateMonsterMap(mptr, n_monsters);
@@ -143,7 +144,6 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
         MakeFOV(player);
         DrawEverything(mptr, n_monsters, playerCombat, monsterCombat, combatHistory);
         combatHistory->playerCombat = false;
-        combatHistory->monsterKilled = false;
         // ResetCombatHistory(combatHistory);
         PMove = false;   
         }
