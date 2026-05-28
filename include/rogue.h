@@ -21,7 +21,7 @@
 #define MAX_NAME_SIZE 33
 #define MAX_EVENT_SIZE 64
 #define INVENTORY_SIZE 64
-#define MAX_LOG_SIZE 27 //26?
+#define MAX_LOG_SIZE 28
 
 
 /* IMPORTANT*/
@@ -90,8 +90,6 @@ typedef struct {
   char playerName[MAX_NAME_SIZE];
   char playerRace[MAX_NAME_SIZE];
   char playerClass[MAX_NAME_SIZE];
-  char playerArmor[MAX_NAME_SIZE];
-  char playerWeapon[MAX_NAME_SIZE];
 } Player;
   
 typedef struct {
@@ -166,9 +164,10 @@ void AssignStats(int input);
 CombatHistory* CreateCombatHistory(Entity monster);
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player);
 bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player);
-void ResetCombatHistory(CombatHistory* combatHistory);
 void PlayerMeleeOrRanged(Player* player);
+void PlayerPrepareCombat(int n_monsters);
 bool PlayerRangedAttack(int n_monsters);
+void ResetCombatHistory(CombatHistory* combatHistory);
 bool ShootTarget(int x, int y);
 int CalculateEntityAccuracy(Entity* attacker) ;
 int CalculateEntityDMG(Entity* attacker);
@@ -212,7 +211,7 @@ void DrawBorder(void);
 void DrawEntityAttack(Entity attacker, bool combatResult);
 void DrawPlayerAttack(Entity defender, bool combatResult);
 void DrawDebug(Entity* mptr, int n_monsters);
-void DrawEverything(Entity* mptr, int n_monsters, bool playeCombat, bool monsterCombat, CombatHistory* combatHistory);
+void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory);
 void DrawMap();
 void DrawMonsters(Entity* mptr, int n_monsters);
 void DrawPlayer(Player* player);
@@ -223,11 +222,15 @@ void DrawCombatLog();
 
 // engine.c functions
 bool NcursesSetup(void);
-void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q);
-void CloseGame(void);
+bool CheckEscape(int ch);
 void Cursor(int x, int y, int length);
 void RemoveCursor(int x, int y, int length);
+bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove);
+void RefreshGamestate(Entity* mptr, int n_monsters);
+void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q);
+void CloseGame(void);
 void Gameover();
+void Greeting();
 
 
 // fov.c functions
@@ -291,6 +294,7 @@ void MoveUpLeft(Entity* mptr);
 bool PlayerInput(int input, LogQueue *q, int n_monsters);
 void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool CheckPlayerAdjacent(Position origin);
+void PlayerRegen(int *playerRegen);
 // bool AutoExplore(CombatHistory* combatHistory);
 
 

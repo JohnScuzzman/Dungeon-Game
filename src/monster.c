@@ -42,7 +42,7 @@ int FindClosestMonster(Entity* mptr, int n_monsters) {
     int closest = GetDistance(player->pos, (mptr)->pos);
     int temp = 0;
     for (int i = 0; i < n_monsters; i++) {
-        if(LineOfSight(player->pos, (mptr + i)->pos) && GetDistance(player->pos, (mptr + i)->pos) <= 15 && ((mptr + i)->isMonster == true)) {
+        if(((mptr + i)->visible) && GetDistance(player->pos, (mptr + i)->pos) <= 15 && ((mptr + i)->isMonster == true)) {
             temp = GetDistance(player->pos, (mptr + i)->pos);
             if(temp <= closest) {
                 closest = temp;
@@ -256,6 +256,11 @@ void Wander(Entity* mptr){
     }
     map[mptr->pos.y][mptr->pos.x] = *mptr;
     UpdateMonsterVisible(mptr, player);
+
+    /* If they move in range of the player, set aggro flag.*/
+    if ((!(mptr)->aggroFlag)){
+        (mptr)->aggroFlag = CheckAggro((mptr), player);
+    }
 }
 
 void KeepMonsterIntegrity(Entity* mptr) {

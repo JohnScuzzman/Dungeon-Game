@@ -25,7 +25,21 @@ bool NcursesSetup(void) {
     }
 }
 
-
+/* Returns true if escape was passed in.*/
+/* Usually the passed in int 'ch' will be from getch().*/
+bool CheckEscape(int ch) {
+    int next_ch;
+    if (ch == 27) { 
+            // check for escape.
+            nodelay(stdscr, TRUE);
+            next_ch = getch();
+            nodelay(stdscr, FALSE);
+        }
+        if (next_ch == ERR) {
+            return true;
+        }
+    return false;
+}
 
 void Cursor(int x, int y, int length){
     //A_BLINK 
@@ -36,120 +50,78 @@ void RemoveCursor(int x, int y, int length) {
     mvchgat(x, y, length, A_NORMAL, 0, NULL);
 }
 
+/* Moves monsters, returns false unless player dies.*/
+bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
+    int i = 0;
+    bool monsterCombat;
+    /* Wander checks if LOS to player and flips aggro is they are in range.*/
+    while (!((mptr + i)->hasMoved) && i < n_monsters && PMove == true){
+        /* Check if player is in aggro range. */
+        (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
+
+        /* If no adjacent Player, Wander.*/
+        if (!CheckPlayerAdjacent((mptr + i)->pos) && (!(mptr + i)->aggroFlag) && (mptr + i)->isMonster == true){
+            Wander(mptr + i);
+            i++;
+        }
+        /* If adjacent to player, attack them.*/
+        else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->isMonster == true){
+            monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
+            /* If monsterCombat = false, player died, end the game.*/
+            if (monsterCombat == false) {
+                return true;
+            }
+            i++;
+        }
+        /* If player was seen, move towards player.*/
+        else if ((mptr + i)->aggroFlag == true && (mptr + i)->isMonster == true){
+            /* Move towards players last known locations.*/
+            AggroMove(mptr + i);
+            UpdateMonsterMap(mptr, n_monsters);
+            i++;
+        }
+        else {
+            i++;
+        }
+    }
+    return false;
+
+}
+
+void RefreshGamestate(Entity* mptr, int n_monsters) {
+    UpdateMonsterMap(mptr, n_monsters);
+    MakeFOV(player);
+    DrawEverything(mptr, n_monsters, combatHistory);
+    ResetMoveFlags(mptr, n_monsters);
+    combatHistory->playerCombat = false;
+}
+
 void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q) { 
     bool leaveFlag = false;
-    bool playerCombat = false;
-    bool monsterCombat = false;
     bool PMove = false;
     int ch, next_ch;
     int playerRegen = 0;
-    MakeFOV(player);
-    DrawEverything(mptr, n_monsters, playerCombat, monsterCombat, combatHistory);
+    Greeting();
+    RefreshGamestate(mptr, n_monsters);
     DrawPlayerBlink(player);
-
-    // Force use of keyboard and disable mouse clicks.
-    keypad(stdscr, TRUE);
-
-    while(!leaveFlag)
-    { 
-        UpdateMonsterMap(mptr, n_monsters);
+    while(!leaveFlag){ 
         ch = getch();
-        if (ch == 27) { 
-            // check for escape.
-            nodelay(stdscr, TRUE);
-            next_ch = getch();
-            nodelay(stdscr, FALSE);
-        }
-        if (next_ch == ERR) {
-            leaveFlag = true;
-        }
-        // Pmove = false spam here used to help force monsters to move once.
+        leaveFlag = CheckEscape(ch);
         PMove = false;
-        playerCombat = false;
-        monsterCombat = false;
         if(ch != ERR) {
-            int i = 0;
-
-            if (playerRegen >= 20 && (player->playerStats.HP < player->playerStats.maxHP)) {
-                player->playerStats.HP++;
-                playerRegen = 0;
-            }
-            else{
-                playerRegen++;
-            }
-
+            PlayerRegen(&playerRegen);
             PMove = PlayerInput(ch, q, n_monsters);
-
-            // Check if player tried to attack something.
-            // Then check if they used a ranged or melee weapon
-            // Set max and min DMG accoridingly and attack the monster.
             if (combatHistory->playerCombat) {
-                PlayerMeleeOrRanged(player);
-                Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
-                if (target->isMonster) {
-                    combatHistory->playerCombat = AttackEntity(target, combatHistory, player);
-                }
-                // needed to make sure monsters still get to move if player kills something.
-                if(combatHistory->monsterKilled){
-                    ResetMoveFlags(mptr, n_monsters);
-                    combatHistory->monsterKilled = false;
-                }
+                PlayerPrepareCombat(n_monsters);
             }
-            
-
-            /* Wander fires first and moves monsters randomly*/
-            /* Wander checks if LOS to player and flips aggro is they are in range.*/
-            /* (mptr + i)->entityID > 1 ensures we iterate over corpses.*/ 
-            while (!((mptr + i)->hasMoved) && i <= n_monsters && PMove == true){
-
-
-                /* Check if player is in aggro range. */
-                (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
-
-                /* If no adjacent Player, Wander.*/
-                if (!CheckPlayerAdjacent((mptr + i)->pos) && (!(mptr + i)->aggroFlag) && (mptr + i)->isMonster == true){
-                    Wander(mptr + i);
-                    
-                    /* If they move in range of the player, set aggro flag.*/
-                    if ((!(mptr + i)->aggroFlag)){
-                        (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
-                    }
-                    i++;
-                }
-
-                /* If adjacent to player, attack them.*/
-                else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->isMonster == true){
-                    monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
-                    /* If player dies aka monsterCombat = false, end the game.*/
-                    if (monsterCombat == false) {
-                        leaveFlag = true;
-                    }
-                    i++;
-                }
-                /* If player was seen, move towards player.*/
-                else if ((mptr + i)->aggroFlag == true && (mptr + i)->isMonster == true){
-                    /* Move towards players last known locations.*/
-                    AggroMove(mptr + i);
-                    UpdateMonsterMap(mptr, n_monsters);
-                    i++;
-                }
-                else {
-                    i++;
-                }
-
-            }
+            leaveFlag = MoveMonsterLoop(mptr, n_monsters, PMove);
         }
-        UpdateMonsterMap(mptr, n_monsters);
-        ResetMoveFlags(mptr, n_monsters);
-        MakeFOV(player);
-        DrawEverything(mptr, n_monsters, playerCombat, monsterCombat, combatHistory);
-        combatHistory->playerCombat = false;
-        // ResetCombatHistory(combatHistory);
-        PMove = false;   
-        }
-        Gameover();
+        RefreshGamestate(mptr, n_monsters);
+        PMove = false;  
     }
-    
+    Gameover();
+}
+
 void Gameover() {
     clear();
     keypad(stdscr, TRUE);
@@ -165,3 +137,47 @@ void CloseGame(void) {
     endwin();
     /* Free memory allocated by pointer. */
 } 
+
+void Greeting(){
+    strcpy(combatHistory->event, "Welcome to the dungeon,");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, player->playerName);
+    strcat(combatHistory->event, "!");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, "Use arrow keys to move & fight.");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, "Press 'F' to use ranged attacks.");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, "Press ESC to exit at anytime.");
+    QueueEvent(q, combatHistory->event);
+}
+
+
+/* Check if player is in aggro range. */
+                // (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
+
+                // /* If no adjacent Player, Wander.*/
+                // if (!CheckPlayerAdjacent((mptr + i)->pos) && (!(mptr + i)->aggroFlag)){
+                //     Wander(mptr + i);
+                //     i++;
+                // }
+
+                // /* If adjacent to player, attack them.*/
+                // else if (CheckPlayerAdjacent((mptr + i)->pos) == true){
+                //     monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
+                //     /* If monsterCombat = false, player died, end the game.*/
+                //     if (monsterCombat == false) {
+                //         leaveFlag = true;
+                //     }
+                //     i++;
+                // }
+                // /* If player was seen, move towards player.*/
+                // else if ((mptr + i)->aggroFlag == true){
+                //     /* Move towards players last known locations.*/
+                //     AggroMove(mptr + i);
+                //     UpdateMonsterMap(mptr, n_monsters);
+                //     i++;
+                // }
+                // else {
+                //     i++;
+                // }

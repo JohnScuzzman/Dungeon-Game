@@ -20,7 +20,7 @@ bool CheckPlayerAdjacent(Position origin) {
             return true;
     }
     }
-    if (origin.x == (player->pos.x) || origin.x == ((player->pos.x) - 1) || origin.x == ((player->pos.y) + 1)){
+    if (origin.x == (player->pos.x) || origin.x == ((player->pos.x) - 1) || origin.x == ((player->pos.x) + 1)){
         if (origin.y == (player->pos.y - 1) || origin.y == (player->pos.y + 1)) {
             return true;
         }
@@ -138,6 +138,17 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory) {
         combatHistory->monsterKilled = false;
         return;
     }
+
+}
+
+void PlayerRegen(int *playerRegen){
+        if (*playerRegen >= 20 && (player->playerStats.HP < player->playerStats.maxHP)) {
+            player->playerStats.HP++;
+            *playerRegen = 0;
+        }
+        else{
+            ++*playerRegen;
+        }
 
 }
 

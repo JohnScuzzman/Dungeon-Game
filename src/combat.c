@@ -65,6 +65,21 @@ void PlayerMeleeOrRanged(Player* player){
     }
 }
 
+/* Check if player tried to attack something.*/ 
+/* Then check if they used a ranged or melee weapon.*/ 
+/* Set players current max and min DMG accoridingly and then attack the monster.*/ 
+void PlayerPrepareCombat(int n_monsters) {
+    PlayerMeleeOrRanged(player);
+    Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
+    if (target->isMonster) {
+        combatHistory->playerCombat = AttackEntity(target, combatHistory, player);
+    }
+    // needed to make sure monsters still get to move if player kills something.
+    if(combatHistory->monsterKilled){
+        ResetMoveFlags(mptr, n_monsters);
+        combatHistory->monsterKilled = false;
+    }
+}
 
 bool PlayerRangedAttack(int n_monsters){
     int ch;
@@ -72,7 +87,7 @@ bool PlayerRangedAttack(int n_monsters){
     int x = player->pos.x;
     int y = player->pos.y;
 
-    /* monster in range */
+    /* make sure monster is in range */
     if (closest >= 0) {
         x = (mptr + closest)->pos.x;
         y = (mptr + closest)->pos.y;
@@ -81,6 +96,7 @@ bool PlayerRangedAttack(int n_monsters){
         x = player->pos.x;
         y = player->pos.y;
     }
+
     Cursor(y, x, 1);
     while((ch = getch()) != 32 && ch != 102) {
     Cursor(y, x, 1);
@@ -137,32 +153,42 @@ bool ShootTarget(int x, int y) {
     // Will check if the ranged is not "none".
     if (player->equippedRanged.isRanged) {
             // Player selected a monster.
-        if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && (GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range)) {
+        if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && 
+        (GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range)) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedRanged = true;
             combatHistory->defender = map[y][x];
             return true;
         }
-        else if (map[y][x].isMonster && !LineOfSight(player->pos, map[y][x].pos)) {
-            combatHistory->playerUsedRanged = true;
+        else if (map[y][x].isMonster && !(LineOfSight(player->pos, map[y][x].pos)) && 
+        GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
+            combatHistory->playerUsedRanged = false;
             combatHistory->playerCombat = false;
+            strcpy(combatHistory->event, "Target not in line of sight.");
+            QueueEvent(q, combatHistory->event);
             // mvprintw(23, 128, "Target not in line of sight.");
             return false;
         }
-        else {
+        else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
+        GetDistance(player->pos, map[y][x].pos) > player->equippedRanged.range){
             // mvprintw(23, 128, "Not a valid target.");
             combatHistory->playerUsedRanged = false;
             combatHistory->playerCombat = false;
+            strcpy(combatHistory->event, "Target not in range.");
+            QueueEvent(q, combatHistory->event);
             return false;
         }
     }
     else {
-        // mvprintw(23, 128, "No ranged weapons equipped.");
-        combatHistory->playerCombat = false;
         combatHistory->playerUsedRanged = false;
+        combatHistory->playerCombat = false;
+        strcpy(combatHistory->event, "No ranged weapons equipped.");
+        QueueEvent(q, combatHistory->event);
         return false;
     }
+    
 }
+
 
 int CalculateEntityAccuracy(Entity* attacker) {
     int attackerATKMod = attacker->entityStats.ATK;
