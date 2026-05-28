@@ -103,7 +103,7 @@ void DrawDebug(Entity* mptr, int n_monsters) {
 }
 
 /*Draw Everything*/ 
-void DrawEverything(Entity* mptr, int n_monsters, bool playerCombat, bool monsterCombat, CombatHistory* combatHistory) {
+void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
 	clear();
 	DrawMap();
 	DrawPlayer(player);

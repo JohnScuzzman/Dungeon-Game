@@ -141,6 +141,17 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory) {
 
 }
 
+void PlayerRegen(int *playerRegen){
+        if (*playerRegen >= 20 && (player->playerStats.HP < player->playerStats.maxHP)) {
+            player->playerStats.HP++;
+            *playerRegen = 0;
+        }
+        else{
+            ++*playerRegen;
+        }
+
+}
+
 /* Run FindClosestUnexplored, break if it returns a monster. */
 /* return true if monster was found immediately and broke */
 /* return false if monster was found or no more to explore */
