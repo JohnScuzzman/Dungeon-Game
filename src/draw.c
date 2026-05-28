@@ -119,7 +119,7 @@ void DrawCombatLog() {
         return;
     }
 	for (int i = 0; i <= q->rear; i++) {
-   		mvprintw(LOG_HEIGHT - i, LOG_WIDTH, "%s", q->events[i]);
+   		mvprintw(LOG_HEIGHT + i, LOG_WIDTH, "%s", q->events[i]);
   	}
 }
 
