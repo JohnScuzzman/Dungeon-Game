@@ -99,6 +99,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
 void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q) { 
     bool leaveFlag = false;
     bool PMove = false;
+    bool escPressed = false;
     int ch, next_ch;
     int playerRegen = 0;
 
@@ -108,7 +109,10 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
     
     while(!leaveFlag){ 
         ch = getch();
-        leaveFlag = CheckEscape(ch);
+        escPressed = CheckEscape(ch);
+        if(escPressed){
+            leaveFlag = MakePauseMenu();
+        }
         PMove = false;
         if(ch != ERR) {
             PlayerRegen(&playerRegen);
