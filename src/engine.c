@@ -101,9 +101,11 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
     bool PMove = false;
     int ch, next_ch;
     int playerRegen = 0;
+
     Greeting();
     RefreshGamestate(mptr, n_monsters);
     DrawPlayerBlink(player);
+    
     while(!leaveFlag){ 
         ch = getch();
         leaveFlag = CheckEscape(ch);
@@ -114,7 +116,9 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             if (combatHistory->playerCombat) {
                 PlayerPrepareCombat(n_monsters);
             }
-            leaveFlag = MoveMonsterLoop(mptr, n_monsters, PMove);
+            if(MoveMonsterLoop(mptr, n_monsters, PMove)){
+                leaveFlag = true;
+            }
         }
         RefreshGamestate(mptr, n_monsters);
         PMove = false;  
