@@ -69,7 +69,7 @@ Weapon AcidPotion();
 Weapon Shortbow();
 Weapon Longbow();
 Weapon FlintlockPistol();
-Weapon MagicMissile();
+Weapon LightningWand();
 
 //armor.c functions
 Armor Robes();

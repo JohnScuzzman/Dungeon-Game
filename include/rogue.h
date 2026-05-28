@@ -1,5 +1,6 @@
 
 #include <items.h>
+#include <classes.h>
 
 #ifndef ROGUE_H // These prevent compiling rogue_h multiple times.
 #define ROGUE_H
@@ -58,7 +59,9 @@ typedef struct {
   int WIS;
   int AC;
   int HP;
+  int mana;
   int maxHP;
+  int maxMana;
   int LVL;
   int EXP;
   int maxDMG;
@@ -87,9 +90,10 @@ typedef struct {
   Weapon equippedMelee;
   Weapon equippedRanged;
   Armor equippedArmor;
+  Ability equippedAbility;
+  Class playerClass;
   char playerName[MAX_NAME_SIZE];
   char playerRace[MAX_NAME_SIZE];
-  char playerClass[MAX_NAME_SIZE];
 } Player;
   
 typedef struct {

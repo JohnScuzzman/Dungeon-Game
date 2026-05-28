@@ -20,7 +20,6 @@ Weapon None() {
     return none;
 }
 
-
 Weapon Fists() {
     Weapon fists;
     fists.weaponID = 1;
@@ -97,8 +96,8 @@ Weapon Cutlass() {
     Weapon cutlass;
     cutlass.weaponID = 7;
     cutlass.value = 25;
-    cutlass.minDMG = 1;
-    cutlass.maxDMG = 8;
+    cutlass.minDMG = 2;
+    cutlass.maxDMG = 7;
     cutlass.range = 0;
     cutlass.isRanged = false;
     strcpy(cutlass.weaponName, "Cutlass");
@@ -170,21 +169,21 @@ Weapon FlintlockPistol() {
     flintlockPistol.weaponID = 13;
     flintlockPistol.value = 75;
     flintlockPistol.minDMG = 1;
-    flintlockPistol.maxDMG = 10;
-    flintlockPistol.range = 6;
+    flintlockPistol.maxDMG = 8;
+    flintlockPistol.range = 5;
     flintlockPistol.isRanged = true;
     strcpy(flintlockPistol.weaponName, "Flintlock Pistol");
     return flintlockPistol;
 }
 
-Weapon MagicMissile() {
-    Weapon magicMissile;
-    magicMissile.weaponID = 14;
-    magicMissile.value = 75;
-    magicMissile.minDMG = 2;
-    magicMissile.maxDMG = 8;
-    magicMissile.range = 12;
-    magicMissile.isRanged = true;
-    strcpy(magicMissile.weaponName, "Magic Missile");
-    return magicMissile;
+Weapon LightningWand() {
+    Weapon lightningWand;
+    lightningWand.weaponID = 14;
+    lightningWand.value = 75;
+    lightningWand.minDMG = 1;
+    lightningWand.maxDMG = 8;
+    lightningWand.range = 10;
+    lightningWand.isRanged = true;
+    strcpy(lightningWand.weaponName, "Lightning Wand");
+    return lightningWand;
 }

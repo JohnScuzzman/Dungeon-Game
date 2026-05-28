@@ -4,131 +4,154 @@
 // This makes it so stacking dex is not always the go to option.
 // Original Fallout games had this problem, where stack AGIL was always #1.
 
+/* Initializes the 1st level version of a class and assigns that class to the player.*/
+
 void AssignKnight() {
-    strcpy(player->playerClass, "Knight");
+    player->playerClass = Knight();
     player->equippedArmor = Chainmail();
     player->equippedMelee = Greatsword();
     player->equippedRanged = Shortbow();
-    player->playerStats.HP += 6;
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 10;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 10;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
-    player->playerStats.CON += 2;
-    player->playerStats.STR += 2;
+    player->playerStats.CON += player->playerClass.mainStat;
+    player->playerStats.STR += player->playerClass.secondaryStat;
     player->playerStats.ATK = (player->playerStats.STR - 10) / 2;
 }
 void AssignSwashbuckler() {
-    strcpy(player->playerClass, "Swashbuckler");
+    player->playerClass = Swashbuckler();
     player->equippedArmor = LeatherArmor();
     player->equippedMelee = Cutlass();
     player->equippedRanged = FlintlockPistol();
-    player->playerStats.HP += 4;
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 10;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 10;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
-    player->playerStats.DEX += 2;
-    player->playerStats.CHA += 2;
+    player->playerStats.DEX += player->playerClass.mainStat;
+    player->playerStats.CHA += player->playerClass.secondaryStat;
     player->playerStats.ATK = (player->playerStats.DEX - 10) / 2;
 }
 void AssignWizard() {
-    strcpy(player->playerClass, "Wizard");
+    player->playerClass = Wizard();
     player->equippedArmor = Robes();
     player->equippedMelee = Quarterstaff();
-    player->equippedRanged = MagicMissile();
-    player->playerStats.HP += 2;
+    player->equippedRanged = LightningWand();
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 20;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
     player->playerStats.INT += 4;
     player->playerStats.ATK = (player->playerStats.INT - 10) / 2;
 }
 void AssignNecromancer() {
-    strcpy(player->playerClass, "Necromancer");
+    player->playerClass = Necromancer();
     player->equippedArmor = Robes();
     player->equippedMelee = Dagger();
     player->equippedRanged = AcidPotion();
-    player->playerStats.HP += 2;
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 16;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
-    player->playerStats.INT += 2;
-    player->playerStats.WIS += 2;
+    player->playerStats.INT += player->playerClass.mainStat;
+    player->playerStats.WIS += player->playerClass.secondaryStat;
     player->playerStats.ATK = (player->playerStats.INT - 10) / 2;
 }
 void AssignGunslinger() {
-    strcpy(player->playerClass, "Gunslinger");
+    player->playerClass = Gunslinger();
     player->equippedArmor = LeatherArmor();
-    player->equippedMelee = Shortsword();
+    player->equippedMelee = Fists();
     player->equippedRanged = FlintlockPistol();
-    player->playerStats.HP += 4;
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 10;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 10;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
     player->playerStats.DEX += 4;
     player->playerStats.ATK = (player->playerStats.DEX - 10) / 2;
 }
 void AssignRanger() {
-    strcpy(player->playerClass, "Ranger");
+    player->playerClass = Ranger();
     player->equippedArmor = RangersCloak();
     player->equippedMelee = Longsword();
     player->equippedRanged = Longbow();
-    player->playerStats.HP += 4;
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 10;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 10;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
-    player->playerStats.DEX += 2;
-    player->playerStats.WIS += 2;
+    player->playerStats.DEX += player->playerClass.mainStat;
+    player->playerStats.WIS += player->playerClass.secondaryStat;
     player->playerStats.ATK = (player->playerStats.DEX - 10) / 2;
 }
 void AssignDarkKnight() {
-    strcpy(player->playerClass, "Dark Knight");
+    player->playerClass = DarkKnight();
     player->equippedArmor = Chainmail();
     player->equippedMelee = Greatsword();
-    player->equippedRanged = Shortbow();
-    player->playerStats.HP += 6;
+    player->equippedRanged = None();
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 10;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 10;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
     player->playerStats.STR += 4;
     player->playerStats.ATK = (player->playerStats.STR - 10) / 2;
 }
 void AssignAlchemist() {
-    strcpy(player->playerClass, "Alchemist");
+    player->playerClass = Alchemist();
     player->equippedArmor = Robes();
-    player->equippedMelee = Quarterstaff();
+    player->equippedMelee = Fists();
     player->equippedRanged = AcidPotion();
-    player->playerStats.HP += 4;
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 10;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 10;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
-    player->playerStats.DEX += 2;
-    player->playerStats.INT += 2;
+    player->playerStats.DEX += player->playerClass.mainStat;
+    player->playerStats.INT += player->playerClass.secondaryStat;
     player->playerStats.ATK = (player->playerStats.DEX - 10) / 2;
 }
 void AssignConjurer() {
-    strcpy(player->playerClass, "Conjurer");
+    player->playerClass = Conjurer();
     player->equippedArmor = Robes();
     player->equippedMelee = Quarterstaff();
-    player->equippedRanged = MagicMissile();
-    player->playerStats.HP += 2;
+    player->equippedRanged = None();
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 16;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
-    player->playerStats.INT += 2;
-    player->playerStats.CHA += 2;
+    player->playerStats.INT += player->playerClass.mainStat;
+    player->playerStats.CHA += player->playerClass.secondaryStat;
     player->playerStats.ATK = (player->playerStats.CHA - 10) / 2;
 }
+
 void AssignCyborg() {
-    strcpy(player->playerClass, "Cyborg");
+    player->playerClass = Cyborg();
     player->equippedArmor = MetallicSkin();
     player->equippedMelee = ChromeFists();
     player->equippedRanged = None();
-    player->playerStats.HP += 6;
+    player->playerStats.HP += player->playerClass.hpPerLVL;
+    player->playerStats.mana = 10;
     player->playerStats.maxHP = player->playerStats.HP;
+    player->playerStats.maxMana = 10;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
-    player->playerStats.STR += 2;
-    player->playerStats.DEX += 2;
+    player->playerStats.STR += player->playerClass.mainStat;
+    player->playerStats.DEX += player->playerClass.secondaryStat;
     player->playerStats.ATK = (player->playerStats.STR - 10) / 2;
 }
 
