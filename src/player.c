@@ -103,8 +103,12 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
             return true;
             break;
         case 104: // h key
+        //DEBUG
+            player->playerStats.HP += 600;
             break;
         case 72: // H key
+        //DEBUG
+            player->playerStats.HP += 600;
             break;
         default:
             break;

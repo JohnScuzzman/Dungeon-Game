@@ -6,7 +6,8 @@ monsterID is a random int 0-3 passed from map.c
 */ 
 Entity AssignMonster(Position pos, int RNG, int monsterID)
 {   
-    Entity monster;
+    if (map[pos.y][pos.x].noCollision) {
+         Entity monster;
     switch (RNG) {
         /* Call functions from assign.c */
         case 0:
@@ -26,8 +27,13 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
         break; 
     }
 
-    AssignMonsterDefaults(&monster, pos, monsterID);
-    return monster;
+        AssignMonsterDefaults(&monster, pos, monsterID);
+        return monster;
+    }
+    else{ 
+        AssignFloor(pos.x, pos.y);
+    }
+   
 }
 
 void AssignCorpse(Entity* entity) {
@@ -54,6 +60,7 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.WIS = 0;
     entity->entityStats.AC = 0;
     entity->entityStats.HP = 0;
+    entity->entityStats.maxHP = 0;
     entity->entityStats.LVL = 0;
     entity->entityStats.EXP = 0;
     entity->entityStats.maxDMG = 0;
@@ -63,6 +70,7 @@ void AssignCorpse(Entity* entity) {
     // map[entity->pos.y][entity->pos.x].transparent = true;
     // map[entity->pos.y][entity->pos.x].entityID = entity->entityID;
     // map[entity->pos.y][entity->pos.x].isMonster = false;
+    map[entity->pos.y][entity->pos.x] = *entity;
 }
 
 void AssignFloor(int x, int y) {
@@ -86,6 +94,7 @@ void AssignFloor(int x, int y) {
     map[y][x].entityStats.WIS = 0;
     map[y][x].entityStats.AC = 0;
     map[y][x].entityStats.HP = 0;
+    map[y][x].entityStats.maxHP = 0;
     map[y][x].entityStats.LVL = 0;
     map[y][x].entityStats.EXP = 0;
     map[y][x].entityStats.maxDMG = 0;
@@ -108,7 +117,7 @@ void AssignGoblinWarrior(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->aggroRange = 15;
     monster->entityStats.AC = 1;
-    monster->entityStats.HP = 4;
+    monster->entityStats.maxHP = 4;
     monster->entityStats.EXP = 10;
     monster->entityStats.LVL = 1;
     monster->entityStats.maxDMG = 4;
@@ -132,7 +141,7 @@ void AssignKoboldWarrior(Entity* monster) {
     monster->aggroRange = 20;
     monster->entityStats.AC = 1;
     monster->entityStats.EXP = 10;
-    monster->entityStats.HP = 4;
+    monster->entityStats.maxHP = 4;
     monster->entityStats.LVL = 1;
     monster->entityStats.maxDMG = 4;
     monster->entityStats.minDMG = 1;
@@ -154,7 +163,7 @@ void AssignGoblinRanger(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->aggroRange = 15;
     monster->entityStats.AC = 0;
-    monster->entityStats.HP = 4;
+    monster->entityStats.maxHP = 4;
     monster->entityStats.LVL = 1;
     monster->entityStats.EXP = 10;
     monster->entityStats.maxDMG = 3;
@@ -177,7 +186,7 @@ void AssignHobgoblinWarrior(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->aggroRange = 12;
     monster->entityStats.AC = 1;
-    monster->entityStats.HP = 6;
+    monster->entityStats.maxHP = 6;
     monster->entityStats.LVL = 1;
     monster->entityStats.EXP = 20;
     monster->entityStats.maxDMG = 6;
@@ -199,6 +208,7 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->visible = false;
     monster->isMonster = true;
     monster->entityID = monsterID;
+    monster->entityStats.HP = monster->entityStats.maxHP;
     monster->color = COLOR_PAIR(VISIBLE_COLOR);
     monster->pos.y = m_pos.y;
     monster->pos.x = m_pos.x;

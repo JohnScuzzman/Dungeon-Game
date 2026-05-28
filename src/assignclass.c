@@ -9,7 +9,8 @@ void AssignKnight() {
     player->equippedArmor = Chainmail();
     player->equippedMelee = Greatsword();
     player->equippedRanged = Shortbow();
-    player->playerStats.HP += 600;
+    player->playerStats.HP += 6;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 3;
     player->playerStats.maxDMG = 10;
     player->playerStats.minDMG = 1;
@@ -24,6 +25,7 @@ void AssignSwashbuckler() {
     player->equippedMelee = Cutlass();
     player->equippedRanged = FlintlockPistol();
     player->playerStats.HP += 4;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 2;
     player->playerStats.maxDMG = 7;
     player->playerStats.minDMG = 2;
@@ -38,6 +40,7 @@ void AssignWizard() {
     player->equippedMelee = Quarterstaff();
     player->equippedRanged = MagicMissile();
     player->playerStats.HP += 2;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 1;
     player->playerStats.maxDMG = 4;
     player->playerStats.minDMG = 1;
@@ -51,6 +54,7 @@ void AssignNecromancer() {
     player->equippedMelee = Dagger();
     player->equippedRanged = AcidPotion();
     player->playerStats.HP += 2;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 1;
     player->playerStats.maxDMG = 4;
     player->playerStats.minDMG = 1;
@@ -65,6 +69,7 @@ void AssignGunslinger() {
     player->equippedMelee = Shortsword();
     player->equippedRanged = FlintlockPistol();
     player->playerStats.HP += 4;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 2;
     player->playerStats.maxDMG = 10;
     player->playerStats.minDMG = 1;
@@ -78,6 +83,7 @@ void AssignRanger() {
     player->equippedMelee = Longsword();
     player->equippedRanged = Longbow();
     player->playerStats.HP += 4;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 2;
     player->playerStats.maxDMG = 8;
     player->playerStats.minDMG = 1;
@@ -92,6 +98,7 @@ void AssignDarkKnight() {
     player->equippedMelee = Greatsword();
     player->equippedRanged = Shortbow();
     player->playerStats.HP += 6;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 3;
     player->playerStats.maxDMG = 10;
     player->playerStats.minDMG = 1;
@@ -105,6 +112,7 @@ void AssignAlchemist() {
     player->equippedMelee = Quarterstaff();
     player->equippedRanged = AcidPotion();
     player->playerStats.HP += 4;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 1;
     player->playerStats.maxDMG = 8;
     player->playerStats.minDMG = 2;
@@ -119,6 +127,7 @@ void AssignConjurer() {
     player->equippedMelee = Quarterstaff();
     player->equippedRanged = MagicMissile();
     player->playerStats.HP += 2;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 2;
     player->playerStats.maxDMG = 4;
     player->playerStats.minDMG = 1;
@@ -133,6 +142,7 @@ void AssignCyborg() {
     player->equippedMelee = ChromeFists();
     player->equippedRanged = Shortbow();
     player->playerStats.HP += 6;
+    player->playerStats.maxHP = player->playerStats.HP;
     player->playerStats.AC = 3;
     player->playerStats.maxDMG = 6;
     player->playerStats.minDMG = 1;

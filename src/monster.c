@@ -44,7 +44,7 @@ int FindClosestMonster(Entity* mptr, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
         if(LineOfSight(player->pos, (mptr + i)->pos) && GetDistance(player->pos, (mptr + i)->pos) <= 15 && ((mptr + i)->isMonster == true)) {
             temp = GetDistance(player->pos, (mptr + i)->pos);
-            if(temp < closest) {
+            if(temp <= closest) {
                 closest = temp;
                 closestMonster = i;
             }
@@ -184,9 +184,14 @@ bool MoveTowards(Entity* entity, Position pos) {
 void UpdateMonsterMap(Entity* monster, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
         int y, x;
-        y = monster[i].pos.y;
-        x = monster[i].pos.x;
-        map[y][x] = monster[i];
+        y = (monster + i)->pos.y;
+        x = (monster + i)->pos.x;
+        if((monster + i)->isMonster) {
+            map[y][x] = monster[i];
+        }
+        if(!((monster + i)->isMonster) && !(map[y][x].isMonster)) {
+            map[y][x] = monster[i];
+        }
     }
 }
 

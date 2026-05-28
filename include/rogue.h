@@ -58,6 +58,7 @@ typedef struct {
   int WIS;
   int AC;
   int HP;
+  int maxHP;
   int LVL;
   int EXP;
   int maxDMG;
