@@ -52,7 +52,7 @@ void DrawStats(Player* player) {
 
   mvprintw(2, 128, "Name: %s", player->playerName);
   mvprintw(4, 128, "Race: %s", player->playerRace);
-  mvprintw(6, 128, "Class: %s", player->playerClass);
+  mvprintw(6, 128, "Class: %s", player->playerClass.className);
   mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
   mvprintw(10, 128, "Armor Class: %d", player->playerStats.AC);
   mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
