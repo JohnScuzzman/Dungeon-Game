@@ -63,6 +63,7 @@ char* PeekCombatQueue (LogQueue *q) {
 
 
 void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG) {
+    char eventDMGBuffer[EVENT_SIZE];
     combatHistory->defender = *defender;
     player->playerStats.EXP += (defender->entityStats.EXP);
     combatHistory->playerAccRoll = playerAccRoll;
@@ -72,6 +73,11 @@ void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int player
     strcpy(combatHistory->event, "You kill the ");
     strcat(combatHistory->event, combatHistory->defender.entityName);
     strcat(combatHistory->event, ".");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, "Dealing ");
+    snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d", playerDMG);
+    strcat(combatHistory->event, eventDMGBuffer);
+    strcat(combatHistory->event, " total damage.");
     QueueEvent(q, combatHistory->event);
     
 }
