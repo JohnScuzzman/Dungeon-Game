@@ -2,6 +2,7 @@
 
 Class Knight(){
     Class knight;
+    knight.isCaster = false;
     knight.hpPerLVL = 6;
     knight.manaPerLVL = 5;
     knight.mainStat = 2;
@@ -15,6 +16,7 @@ Class Knight(){
 
 Class Swashbuckler(){
     Class swashbuckler;
+    swashbuckler.isCaster = false;
     swashbuckler.hpPerLVL = 4;
     swashbuckler.manaPerLVL = 5;
     swashbuckler.mainStat = 2;
@@ -28,6 +30,7 @@ Class Swashbuckler(){
 
 Class Wizard(){
     Class wizard;
+    wizard.isCaster = true;
     wizard.hpPerLVL = 2;
     wizard.manaPerLVL = 7;
     wizard.mainStat = 4;
@@ -41,6 +44,7 @@ Class Wizard(){
 
 Class Necromancer(){
     Class necromancer;
+    necromancer.isCaster = true;
     necromancer.hpPerLVL = 2;
     necromancer.manaPerLVL = 7;
     necromancer.mainStat = 2;
@@ -54,6 +58,7 @@ Class Necromancer(){
 
 Class Gunslinger(){
     Class gunslinger;
+    gunslinger.isCaster = false;
     gunslinger.hpPerLVL = 4;
     gunslinger.manaPerLVL = 5;
     gunslinger.mainStat = 4;
@@ -67,6 +72,7 @@ Class Gunslinger(){
 
 Class Ranger(){
     Class ranger;
+    ranger.isCaster = false;
     ranger.hpPerLVL = 4;
     ranger.manaPerLVL = 5;
     ranger.mainStat = 2;
@@ -80,6 +86,7 @@ Class Ranger(){
 
 Class DarkKnight(){
     Class darkKnight;
+    darkKnight.isCaster = true;
     darkKnight.hpPerLVL = 6;
     darkKnight.manaPerLVL = 5;
     darkKnight.mainStat = 4;
@@ -93,6 +100,7 @@ Class DarkKnight(){
 
 Class Alchemist(){
     Class alchemist;
+    alchemist.isCaster = false;
     alchemist.hpPerLVL = 4;
     alchemist.manaPerLVL = 5;
     alchemist.mainStat = 2;
@@ -106,6 +114,7 @@ Class Alchemist(){
 
 Class Conjurer(){
     Class conjurer;
+    conjurer.isCaster = true;
     conjurer.hpPerLVL = 2;
     conjurer.manaPerLVL = 7;
     conjurer.mainStat = 2;
@@ -119,11 +128,12 @@ Class Conjurer(){
 
 Class Cyborg(){
     Class cyborg;
+    cyborg.isCaster = false;
     cyborg.hpPerLVL = 6;
     cyborg.manaPerLVL = 5;
     cyborg.mainStat = 2;
     cyborg.secondaryStat = 2;
-    cyborg.abilities[0] = Charge();
+    cyborg.abilities[0] = SelfRepair();
     cyborg.abilities[1] = Electrify();
     strcpy(cyborg.className, "Cyborg");
     strcpy(cyborg.classDesc, "A Cyborg, out of time.");

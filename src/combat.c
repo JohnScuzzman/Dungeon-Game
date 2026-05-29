@@ -54,14 +54,23 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     return true;
 }
 
+
 void PlayerMeleeOrRanged(Player* player){
+    if (combatHistory->playerUsedAbility == true && player->equippedAbility.isAttack == true) {
+        player->playerStats.maxDMG = player->equippedAbility.maxDMG;
+        player->playerStats.minDMG = player->equippedAbility.minDMG;
+        return;
+        
+    }
     if (combatHistory->playerUsedRanged == true) {
         player->playerStats.maxDMG = player->equippedRanged.maxDMG;
         player->playerStats.minDMG = player->equippedRanged.minDMG;
+        return;
     }
     else {
         player->playerStats.maxDMG = player->equippedMelee.maxDMG;
         player->playerStats.minDMG = player->equippedMelee.minDMG;
+        return;
     }
 }
 
@@ -146,7 +155,60 @@ bool PlayerRangedAttack(int n_monsters){
         }
         Cursor(y, x, 1);
     }
-    return ShootTarget(x, y);
+    if(combatHistory->playerUsedAbility){
+        return ShootTargetWithAbility(x, y);
+    }
+    else{
+        return ShootTarget(x, y);
+    }
+    
+}
+
+bool ShootTargetWithAbility(int x, int y) {
+    // Will check if the ranged is not "none".
+    if (player->equippedAbility.isRanged && (player->playerStats.mana >= player->equippedAbility.manaCost)) {
+            // Player selected a monster.
+        if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && 
+        (GetDistance(player->pos, map[y][x].pos) <= player->equippedAbility.range)) {
+            combatHistory->playerCombat = true;
+            combatHistory->playerUsedAbility = true;
+            combatHistory->defender = map[y][x];
+            return true;
+        }
+        else if (map[y][x].isMonster && !(LineOfSight(player->pos, map[y][x].pos)) && 
+        GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
+            combatHistory->playerUsedAbility = false;
+            combatHistory->playerCombat = false;
+            strcpy(combatHistory->event, "Target not in line of sight.");
+            QueueEvent(q, combatHistory->event);
+            // mvprintw(23, 128, "Target not in line of sight.");
+            return false;
+        }
+        else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
+        GetDistance(player->pos, map[y][x].pos) > player->equippedAbility.range){
+            // mvprintw(23, 128, "Not a valid target.");
+            combatHistory->playerUsedAbility = false;
+            combatHistory->playerCombat = false;
+            strcpy(combatHistory->event, "Target not in range.");
+            QueueEvent(q, combatHistory->event);
+            return false;
+        }
+    }
+    else {
+        combatHistory->playerUsedAbility = false;
+        combatHistory->playerCombat = false;
+        if(player->playerClass.isCaster){
+            strcpy(combatHistory->event, "Not enough mana.");
+            QueueEvent(q, combatHistory->event);
+        }
+        else {
+            strcpy(combatHistory->event, "Not enough energy.");
+            QueueEvent(q, combatHistory->event);
+        }
+
+        return false;
+    }
+    
 }
 
 bool ShootTarget(int x, int y) {
@@ -213,7 +275,13 @@ int CalculateEntityAC(Entity* defender) {
 }
 
 int CalculatePlayerAccuracy() {
-    int playerATKMod = player->playerStats.ATK;
+    int playerATKMod;
+    if (combatHistory->playerUsedAbility == true && player->equippedAbility.isAttack == true){
+        playerATKMod = player->equippedAbility.abilitySave;
+    }
+    else{
+        playerATKMod = player->playerStats.ATK;
+    }
     int playerAccRoll = (rand() % 20) + 1;
     playerAccRoll = playerAccRoll + playerATKMod;
     return playerAccRoll;

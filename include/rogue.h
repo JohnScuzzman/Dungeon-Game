@@ -128,6 +128,7 @@ typedef struct {
     bool entityResult;
     bool playerCombat; // true if player combat occurred
     bool playerUsedRanged;
+    bool playerUsedAbility;
     int attackerAccRoll;
     int attackerDMG;
     int defenderAC;
@@ -175,10 +176,12 @@ int CalculatePlayerAccuracy();
 int CalculatePlayerDamage();
 int CalculatePlayerAC();
 void PlayerMeleeOrRanged(Player* player);
+void PlayerUsingAbility(Player* player);
 void PlayerPrepareCombat(int n_monsters);
 bool PlayerRangedAttack(int n_monsters);
 void ResetCombatHistory(CombatHistory* combatHistory);
 bool ShootTarget(int x, int y);
+bool ShootTargetWithAbility(int x, int y);
 
 
 // combatlog.c functions
@@ -194,7 +197,7 @@ void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int player
 void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
 void RecordMonsterHit(Entity* attacker, CombatHistory* combatHistory, int attackerAccRoll, int attackerDMG);
 void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attackerAccRoll, int playerAC);
-
+void RecordAbilityUse();
 
 // classes.c functions
 void AssignKnight();
@@ -303,6 +306,7 @@ bool CheckPlayerAdjacent(Position origin);
 void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool PlayerInput(int input, LogQueue *q, int n_monsters);
 void PlayerRegen(int *playerRegen);
+void ManaRegen(int *manaRegen);
 // bool AutoExplore(CombatHistory* combatHistory);
 
 
