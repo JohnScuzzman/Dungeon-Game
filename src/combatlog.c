@@ -68,6 +68,7 @@ void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int player
     combatHistory->playerAccRoll = playerAccRoll;
     combatHistory->playerDMG = playerDMG;
     combatHistory->playerResult = true;
+    RecordAbilityUse();
     strcpy(combatHistory->event, "You kill the ");
     strcat(combatHistory->event, combatHistory->defender.entityName);
     strcat(combatHistory->event, ".");
@@ -81,6 +82,7 @@ void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int player
     combatHistory->defenderAC = defenderAC;
     combatHistory->entityResult = false;
     combatHistory->monsterKilled = false;
+    RecordAbilityUse();
     strcpy(combatHistory->event, "You miss the ");
     strcat(combatHistory->event, combatHistory->defender.entityName);
     strcat(combatHistory->event, ".");
@@ -94,6 +96,7 @@ void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerA
     combatHistory->playerDMG = playerDMG;
     combatHistory->monsterKilled = false;
     combatHistory->playerResult = true;
+    RecordAbilityUse();
     strcpy(combatHistory->event, "You hit the ");
     strcat(combatHistory->event, combatHistory->defender.entityName);
     strcat(combatHistory->event, " for ");
@@ -131,6 +134,21 @@ void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attac
     QueueEvent(q, combatHistory->event);
 }
 
+
+void RecordAbilityUse(){
+    if (combatHistory->playerUsedAbility && player->equippedAbility.isMagic) {
+        strcpy(combatHistory->event, "You cast ");
+        strcat(combatHistory->event, player->equippedAbility.abilityName);
+        strcat(combatHistory->event, ".");
+        QueueEvent(q, combatHistory->event);
+    }
+    else if (combatHistory->playerUsedAbility) {
+        strcpy(combatHistory->event, "You use ");
+        strcat(combatHistory->event, player->equippedAbility.abilityName);
+        strcat(combatHistory->event, ".");
+        QueueEvent(q, combatHistory->event);
+    }
+}
 // /* Make a window that displays the combat log and lets the user scroll through it.*/
 // void CreateLogWindow(LogQueue *q) {
 

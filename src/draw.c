@@ -40,7 +40,7 @@ void DrawPlayerBlink(Player* player) {
 
 /* Draw the players stats and equipment in the top right of screen. */
 void DrawStats(Player* player) { 
-  for (int x = 0; x < 41; x ++) {
+  for (int x = 0; x < 41; x++) {
     mvprintw(0, 126 + x, "=");
     mvprintw(20, 126 + x, "=");
     mvprintw(50, 126 + x, "=");
@@ -50,15 +50,29 @@ void DrawStats(Player* player) {
     mvprintw(y, 166, "|");
   }
 
+  for (int x = 0; x < (MAP_WIDTH); x++) {
+    mvprintw(48, x, "=");
+  }
+
   mvprintw(2, 128, "Name: %s", player->playerName);
   mvprintw(4, 128, "Race: %s", player->playerRace);
-  mvprintw(6, 128, "Class: %s", player->playerClass);
+  mvprintw(6, 128, "Class: %s", player->playerClass.className);
   mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
   mvprintw(10, 128, "Armor Class: %d", player->playerStats.AC);
   mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
   mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
   mvprintw(16, 128, "HP: %d", player->playerStats.HP);
+  if(player->playerClass.isCaster) {
+    mvprintw(18, 128, "Mana: %d", player->playerStats.mana);
+  }
+  else {
+    mvprintw(18, 128, "Energy: %d", player->playerStats.mana);
+  }
   
+  mvprintw(49, 2, "%s", "Abilities: ");
+  mvprintw(49, 13, "1:%s", player->playerClass.abilities[0].abilityName);
+  mvprintw(49, 16 + strlen(player->playerClass.abilities[0].abilityName), 
+  "2:%s", player->playerClass.abilities[1].abilityName);
   mvprintw(2, 157, "LVL: %d", player->playerStats.LVL);
   mvprintw(4, 157, "CHA: %d", player->playerStats.CHA);
   mvprintw(6, 157, "CON: %d", player->playerStats.CON);
