@@ -8,7 +8,9 @@
 
 
 typedef struct {
+    bool isAttack;
     bool isMagic;
+    bool isRanged;
     bool isSummon;
     int duration;
     int minDMG;
@@ -16,6 +18,7 @@ typedef struct {
     int manaCost;
     int range;
     int abilitySave;
+    int miscStat;
     char abilityName[MAX_NAME_SIZE];
     char abilityDesc[MAX_DESC_SIZE];
 } Ability;
@@ -44,6 +47,7 @@ Ability AimedShot();
 Ability MakeHealthPotion();
 Ability SelfRepair();
 Ability Electrify();
+void CastSelfRepair();
 
 // classes.c functions
 Class Knight();

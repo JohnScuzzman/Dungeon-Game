@@ -94,6 +94,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     DrawEverything(mptr, n_monsters, combatHistory);
     ResetMoveFlags(mptr, n_monsters);
     combatHistory->playerCombat = false;
+    combatHistory->playerUsedAbility = false;
 }
 
 void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q) { 
@@ -102,6 +103,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
     bool escPressed = false;
     int ch, next_ch;
     int playerRegen = 0;
+    int manaRegen = 0;
 
     Greeting();
     RefreshGamestate(mptr, n_monsters);
@@ -116,6 +118,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
         PMove = false;
         if(ch != ERR) {
             PlayerRegen(&playerRegen);
+            ManaRegen(&manaRegen);
             PMove = PlayerInput(ch, q, n_monsters);
             if (combatHistory->playerCombat) {
                 PlayerPrepareCombat(n_monsters);
