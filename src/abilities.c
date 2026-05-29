@@ -42,13 +42,16 @@ Ability FireVolley() {
     fireVolley.isMagic = false;
     fireVolley.isRanged = true;
     fireVolley.isSummon = false;
-    fireVolley.duration = 0;
-    fireVolley.minDMG = (player->equippedRanged.minDMG) + 2;
-    fireVolley.maxDMG = (player->equippedRanged.maxDMG) * 2;
+    // fireVolley.duration = 0;
+    fireVolley.minDMG = (player->equippedRanged.minDMG);
+    fireVolley.maxDMG = (player->equippedRanged.maxDMG);
     fireVolley.manaCost = 7;
     fireVolley.range = 5;
     fireVolley.abilitySave = (player->playerStats.ATK) + 3;
-    fireVolley.miscStat = 2; // will be ammo used
+    fireVolley.miscStat = (player->playerStats.LVL); // number of shots fired.
+    fireVolley.miscStat++;
+    fireVolley.minDMG = (fireVolley.minDMG) * (fireVolley.miscStat);
+    fireVolley.maxDMG = (fireVolley.minDMG) * (fireVolley.miscStat);
     strcpy(fireVolley.abilityName, "Fire Volley");
     strcpy(fireVolley.abilityDesc, "none");
     return fireVolley;
@@ -60,8 +63,8 @@ Ability MagicMissile() {
     magicMissile.isMagic = true;
     magicMissile.isRanged = true;
     magicMissile.isSummon = false;
-    magicMissile.minDMG = 4;
-    magicMissile.maxDMG = 12;
+    magicMissile.minDMG = (player->playerStats.LVL) + 2; //3d4 then 4d4 etc
+    magicMissile.maxDMG = (magicMissile.minDMG) * 4;
     magicMissile.manaCost = 4;
     magicMissile.range = 15;
     magicMissile.abilitySave = 40; // hard to miss with MM
@@ -137,7 +140,7 @@ Ability AimedShot() {
     aimedShot.minDMG = (player->equippedRanged.minDMG) + 1;
     aimedShot.maxDMG = (player->equippedRanged.maxDMG) + 4;
     aimedShot.manaCost = 3;
-    aimedShot.range = player->equippedRanged.range;
+    aimedShot.range = (player->equippedRanged.range);
     aimedShot.abilitySave = (player->playerStats.ATK) + 10;
     aimedShot.miscStat = 0; // skeletons HP
     strcpy(aimedShot.abilityName, "Aimed Shot");
@@ -158,7 +161,7 @@ Ability MakeHealthPotion() {
     makeHealthPotion.manaCost = 7;
     makeHealthPotion.range = 0;
     makeHealthPotion.abilitySave = 0;
-    makeHealthPotion.miscStat = (rand() % makeHealthPotion.maxDMG) + makeHealthPotion.minDMG;
+    makeHealthPotion.miscStat = ((rand() % makeHealthPotion.maxDMG) + makeHealthPotion.minDMG);
     strcpy(makeHealthPotion.abilityName, "Make Health Potion");
     strcpy(makeHealthPotion.abilityDesc, "none");
     return makeHealthPotion;
@@ -176,7 +179,7 @@ Ability SelfRepair() {
     selfRepair.manaCost = 5;
     selfRepair.range = 0;
     selfRepair.abilitySave = 0;
-    selfRepair.miscStat = (rand() % selfRepair.maxDMG) + selfRepair.minDMG;
+    selfRepair.miscStat = ((rand() % selfRepair.maxDMG) + selfRepair.minDMG);
     strcpy(selfRepair.abilityName, "Self Repair");
     strcpy(selfRepair.abilityDesc, "none");
     return selfRepair;
