@@ -120,10 +120,23 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
             }
             
             break;
-        case 72: // H key
-        //DEBUG
-        MakePauseMenu();
-            // player->playerStats.HP += 600;
+        case 50: // 2 key
+        combatHistory->playerUsedAbility = true;
+            player->equippedAbility = player->playerClass.abilities[1];
+            if(player->equippedAbility.isRanged && player->equippedAbility.isAttack) {
+                rangedAttack = PlayerRangedAttack(n_monsters);
+                if(rangedAttack) {
+                    player->playerStats.mana -= player->equippedAbility.manaCost;
+                }
+                return rangedAttack;
+            }
+            else if(player->equippedAbility.isAttack) {
+                // Choose an adjacent square to player roll modified ability attack.
+            }
+            else {
+                // UseAbility(player->playerClass, player->equippedAbility) or something
+            }
+            
             break;
         default:
             break;
