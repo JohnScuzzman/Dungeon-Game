@@ -124,7 +124,7 @@ void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) 
 	DrawPlayer(player);
 	DrawStats(player);
 	DrawBorder();
-  DrawDebug(mptr, n_monsters);
+  // DrawDebug(mptr, n_monsters);
 	DrawCombatLog();
 }
 
