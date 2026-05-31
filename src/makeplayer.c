@@ -50,39 +50,40 @@ void ChooseRace() {
         switch(ch) {
             case 'A':
             if (cursorBoundY == 22) {
-                break;
+                RemoveCursor(cursorBoundY, cursorBoundX, 11);
+                cursorBoundY = 26;
             }
             else {
                 RemoveCursor(cursorBoundY, cursorBoundX, 11);
                 cursorBoundY--;
-                Cursor(cursorBoundY, cursorBoundX, 11);
             }
             break;
             //move down
             case 'B':
                 if (cursorBoundY == 26) {
-                    break;
+                    RemoveCursor(cursorBoundY, cursorBoundX, 11);
+                    cursorBoundY = 22;
                 }
                 else {
                     RemoveCursor(cursorBoundY, cursorBoundX, 11);
                     cursorBoundY++;
-                    Cursor(cursorBoundY, cursorBoundX, 11);
                 }
                 break;
             //move left
             case 'D':
                 if (cursorBoundX == 40) {
-                    break;
+                    RemoveCursor(cursorBoundY, cursorBoundX, 11);
+                    cursorBoundX = 60;
                 }
                 else {
                     RemoveCursor(cursorBoundY, cursorBoundX, 11);
                     cursorBoundX = cursorBoundX - 20;
-                    Cursor(cursorBoundY, cursorBoundX, 11);
                 }
                 break;
             case 'C':
                 if (cursorBoundX == 60) {
-                    break;
+                    RemoveCursor(cursorBoundY, cursorBoundX, 11);
+                    cursorBoundX = 40;
                 }
                 else {
                     RemoveCursor(cursorBoundY, cursorBoundX, 11);
@@ -110,7 +111,8 @@ void ChooseClass() {
         //move up
         case 'A':
             if (cursorBoundY == 28) {
-                break;
+                RemoveCursor(cursorBoundY, cursorBoundX, 13);
+                cursorBoundY = 32;
             }
             else {
                 RemoveCursor(cursorBoundY, cursorBoundX, 13);
@@ -120,7 +122,8 @@ void ChooseClass() {
         //move down
         case 'B':
             if (cursorBoundY == 32) {
-                break;
+                RemoveCursor(cursorBoundY, cursorBoundX, 13);
+                cursorBoundY = 28;
             }
             else {
                 RemoveCursor(cursorBoundY, cursorBoundX, 13);
@@ -130,7 +133,8 @@ void ChooseClass() {
         //move left
         case 'D':
             if (cursorBoundX == 40) {
-                break;
+                RemoveCursor(cursorBoundY, cursorBoundX, 13);
+                cursorBoundX = 60;
             }
             else {
                 RemoveCursor(cursorBoundY, cursorBoundX, 13);
@@ -139,7 +143,8 @@ void ChooseClass() {
             break;
         case 'C':
             if (cursorBoundX == 60) {
-                break;
+                RemoveCursor(cursorBoundY, cursorBoundX, 13);
+                cursorBoundX = 40;
             }
             else {
                 RemoveCursor(cursorBoundY, cursorBoundX, 13);
@@ -197,7 +202,7 @@ void PrintClasses() {
     mvprintw(32, 40, "Gunslinger");
     mvprintw(28, 60, "Ranger");
     mvprintw(29, 60, "Dark Knight");
-    mvprintw(30, 60, "Alchemist");
+    mvprintw(30, 60, "Warlock");
     mvprintw(31, 60, "Conjurer");
     mvprintw(32, 60, "Cyborg");
 }

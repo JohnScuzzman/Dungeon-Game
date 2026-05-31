@@ -82,15 +82,16 @@ typedef struct {
 
 typedef struct {
   bool noCollision;
-  bool moveTowardsDoor;
   char ch;
   int color;
+  int abilityTimer;
   Stats playerStats;
   Position pos;
+  Armor equippedArmor;
   Weapon equippedMelee;
   Weapon equippedRanged;
-  Armor equippedArmor;
   Ability equippedAbility;
+  Ability passiveAbility;
   Class playerClass;
   char playerName[MAX_NAME_SIZE];
   char playerRace[MAX_NAME_SIZE];
@@ -151,7 +152,6 @@ typedef struct
 // asciiart.c funcions
 void TitleScreen();
 
-
 // assign.c functions
 void AssignClass(int input);
 void AssignCorpse(Entity* entity);
@@ -164,6 +164,17 @@ Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 void AssignStats(int input);
 
+// assignclass.c functions
+void AssignKnight();
+void AssignSwashbuckler();
+void AssignWizard();
+void AssignNecromancer();
+void AssignGunslinger();
+void AssignRanger();
+void AssignDarkKnight();
+void AssignWarlock();
+void AssignConjurer();
+void AssignCyborg();
 
 //combat.c functions 
 CombatHistory* CreateCombatHistory(Entity monster);
@@ -175,10 +186,6 @@ int CalculateEntityAC(Entity* defender);
 int CalculatePlayerAccuracy();
 int CalculatePlayerDamage();
 int CalculatePlayerAC();
-void PlayerMeleeOrRanged(Player* player);
-void PlayerUsingAbility(Player* player);
-void PlayerPrepareCombat(int n_monsters);
-bool PlayerRangedAttack(int n_monsters);
 void ResetCombatHistory(CombatHistory* combatHistory);
 bool ShootTarget(int x, int y);
 bool ShootTargetWithAbility(int x, int y);
@@ -192,6 +199,7 @@ LogQueue* MakeCombatLogQueue();
 void QueueEvent(LogQueue *q, char* event);
 char* PeekCombatQueue (LogQueue *q);
 void PrintCombatQueue (LogQueue*q, WINDOW *pad);
+void NotEnoughMana();
 void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
 void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC);
 void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
@@ -199,17 +207,6 @@ void RecordMonsterHit(Entity* attacker, CombatHistory* combatHistory, int attack
 void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attackerAccRoll, int playerAC);
 void RecordAbilityUse();
 
-// classes.c functions
-void AssignKnight();
-void AssignSwashbuckler();
-void AssignWizard();
-void AssignNecromancer();
-void AssignGunslinger();
-void AssignRanger();
-void AssignDarkKnight();
-void AssignAlchemist();
-void AssignConjurer();
-void AssignCyborg();
 
 
 // draw.c functions
@@ -303,10 +300,14 @@ void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options
 
 // player.c functions
 bool CheckPlayerAdjacent(Position origin);
+void ManaRegen(int *manaRegen);
 void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool PlayerInput(int input, LogQueue *q, int n_monsters);
+void PlayerMeleeOrRanged(Player* player);
+void PlayerPrepareCombat(int n_monsters);
+bool PlayerRangedAttack(int n_monsters);
 void PlayerRegen(int *playerRegen);
-void ManaRegen(int *manaRegen);
+bool UsePlayerAbility(int n_monsters, int chosenAbility);
 // bool AutoExplore(CombatHistory* combatHistory);
 
 

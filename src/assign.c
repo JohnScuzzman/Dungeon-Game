@@ -254,7 +254,7 @@ void AssignClass(int input) {
             AssignDarkKnight();
             break;
         case 90:
-            AssignAlchemist();
+            AssignWarlock();
             break;
         case 91:
             AssignConjurer();

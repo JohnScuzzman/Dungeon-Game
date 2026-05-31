@@ -127,6 +127,8 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
                 leaveFlag = true;
             }
         }
+        CheckPassiveAbilities();
+        // PostCombatInfo();
         RefreshGamestate(mptr, n_monsters);
         PMove = false;  
     }
