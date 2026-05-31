@@ -1,5 +1,8 @@
 #include <rogue.h>
 
+#define ABILITY_BAR_STARTX 2
+#define ABILITIY_BAR_BUFFERX 12
+#define ABILITY_BAR_Y 49
 /* Draw the Map to the screen. */
 void DrawMap()
 { 
@@ -54,6 +57,8 @@ void DrawStats(Player* player) {
     mvprintw(48, x, "=");
   }
 
+  /* Players equipped items.*/
+
   mvprintw(2, 128, "Name: %s", player->playerName);
   mvprintw(4, 128, "Race: %s", player->playerRace);
   mvprintw(6, 128, "Class: %s", player->playerClass.className);
@@ -69,10 +74,7 @@ void DrawStats(Player* player) {
     mvprintw(18, 128, "Energy: %d", player->playerStats.mana);
   }
   
-  mvprintw(49, 2, "%s", "Abilities: ");
-  mvprintw(49, 13, "1:%s", player->playerClass.abilities[0].abilityName);
-  mvprintw(49, 16 + strlen(player->playerClass.abilities[0].abilityName), 
-  "2:%s", player->playerClass.abilities[1].abilityName);
+   /* Players stats.*/
   mvprintw(2, 157, "LVL: %d", player->playerStats.LVL);
   mvprintw(4, 157, "CHA: %d", player->playerStats.CHA);
   mvprintw(6, 157, "CON: %d", player->playerStats.CON);
@@ -82,7 +84,12 @@ void DrawStats(Player* player) {
   mvprintw(14, 157, "WIS: %d", player->playerStats.WIS);
   mvprintw(16, 157, "EXP: %d", player->playerStats.EXP);
 
-  // mvprintw(5, 126, "HP: %d", player->&playerHP);
+    /* Players abilities.*/
+  mvprintw(ABILITY_BAR_Y, ABILITY_BAR_STARTX, "1: %s - %d |", player->playerClass.abilities[Ability_1].abilityName, 
+  player->playerClass.abilities[Ability_1].manaCost);
+  mvprintw(ABILITY_BAR_Y, ABILITIY_BAR_BUFFERX + strlen(player->playerClass.abilities[Ability_1].abilityName), 
+  "2: %s - %d |", player->playerClass.abilities[Ability_2].abilityName,
+  player->playerClass.abilities[Ability_2].manaCost);
 
 } 
 

@@ -49,6 +49,7 @@ void AssignCorpse(Entity* entity) {
     entity->seen = true;
     entity->visible = false;
     entity->isMonster = false;
+    entity->seenByPlayer = true;
     entity->aggroRange = 0;
     entity->entityID = 0;
     entity->entityStats.ATK = 0;
@@ -85,6 +86,7 @@ void AssignFloor(int x, int y) {
     map[y][x].seen = false;
     map[y][x].visible = false;
     map[y][x].isMonster = false;
+    map[y][x].seenByPlayer = false;
     map[y][x].aggroRange = 0;
     map[y][x].entityID = 0;
     map[y][x].entityStats.ATK = 0;
@@ -215,6 +217,7 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->transparent = false;
     monster->visible = false;
     monster->isMonster = true;
+    monster->seenByPlayer = false;
     monster->entityID = monsterID;
     monster->entityStats.mana = monster->entityStats.maxMana;
     monster->entityStats.HP = monster->entityStats.maxHP;

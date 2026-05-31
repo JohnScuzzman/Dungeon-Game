@@ -53,7 +53,7 @@ typedef enum {
     FIRE_VOLLEY,
     ICE_ARMOR,
     MAGIC_MISSILE,
-    MAKE_HEALTH_POTION,
+    SECOND_WIND,
     SELF_REPAIR,
     SUMMON_SKELETON
 } AbilitiyIDs;
@@ -67,14 +67,14 @@ Ability IceArmor();
 Ability DrainLife();
 Ability SummonSkeleton();
 Ability AimedShot();
-Ability MakeHealthPotion();
+Ability SecondWind();
 Ability SelfRepair();
 Ability Electrify();
 void AbilityEffects(int abilityID);
 void CastCharge();
 void CastDrainLife();
 void CastIceArmor();
-void CastMakeHealthPotion();
+void CastSecondWind();
 void CastSelfRepair();
 void ChargePlacement();
 void CheckPassiveAbilities();

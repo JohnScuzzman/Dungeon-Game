@@ -1,9 +1,9 @@
 
-#include <items.h>
-#include <classes.h>
+
 
 #ifndef ROGUE_H // These prevent compiling rogue_h multiple times.
 #define ROGUE_H
+
 
 #include <ncurses.h>
 #include <stdlib.h>
@@ -13,6 +13,9 @@
 #include <unistd.h> // File reading
 #include <string.h> // String copying
 #include <ctype.h> // toupper functions
+#include <stdbool.h>
+#include <items.h>
+#include <classes.h>
 
 // color pairs
 #define VISIBLE_COLOR 1
@@ -28,6 +31,17 @@
 /* IMPORTANT*/
 /* "typedef" is used instead of "struct cat_t" so that we dont have to */
 /* type "struct" everytime we declare a struct variable.*/
+
+typedef enum {
+  NORTH,
+  WEST,
+  SOUTH,
+  EAST,
+  NORTH_WEST,
+  SOUTH_WEST,
+  SOUTH_EAST,
+  NORTH_EAST
+} Direction;
 
 typedef struct {
   char events[MAX_LOG_SIZE][MAX_EVENT_SIZE];
@@ -105,6 +119,7 @@ typedef struct {
   bool transparent;
   bool visible;
   bool isMonster;
+  bool seenByPlayer;
   char ch;
   char staticCh;
   int aggroRange;
@@ -271,9 +286,11 @@ int FindClosestMonster(Entity* mptr, int n_monsters);
 Entity* FindMonsterInList(int monsterID, int n_monsters);
 void KeepMonsterIntegrity(Entity* mptr);
 void KeepMonsterMapIntegrity(Entity* mptr);
+int MonsterDirection(Entity* monster);
 Entity* MonsterList(int n_monsters);
 void MoveMonster(Entity* monster, Position newPOS);
-void ResetMoveFlags(Entity* monster, int n_monsters);
+void RecordMonsterSeen();
+void ResetMoveFlags(Entity* mptr, int n_monsters);
 void UpdateMonsterMap(Entity* monster, int n_monsters);
 void UpdateMonsters(Entity* monster, int n_monsters);
 void UpdateMonster(Entity* monster, int monsterID, int n_monsters);
@@ -326,6 +343,8 @@ extern const int EVENT_SIZE;
 extern const int LOG_WIDTH;
 extern const int LOG_HEIGHT;
 extern const int LOG_SIZE;
+
+extern const char *DIRECTIONS[8];
 
 
 extern Player* player;
