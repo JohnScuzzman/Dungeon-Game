@@ -58,7 +58,7 @@ void DrawStats(Player* player) {
   mvprintw(4, 128, "Race: %s", player->playerRace);
   mvprintw(6, 128, "Class: %s", player->playerClass.className);
   mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
-  mvprintw(10, 128, "Armor Class: %d", player->playerStats.AC);
+  mvprintw(10, 128, "Armor Class: %d", (player->playerStats.AC) + 10);
   mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
   mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
   mvprintw(16, 128, "HP: %d", player->playerStats.HP);
@@ -111,6 +111,7 @@ void DrawDebug(Entity* mptr, int n_monsters) {
     // mvprintw(23 + i, 128, "ID %c x:%d, y:%d MapID:%d, Mapc:%c", ((mptr + i)->entityID), mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
     // mvprintw(23 + i, 128, "isAggro: %d Range: %d Range: %d", mptr[i].aggroFlag, mptr[i].aggroRange, GetDistance(player->pos, (mptr + i)->pos));
 	  // mvprintw(30, 128, "CH: %c x:%d, y:%d ID:%d", combatHistory->defender.ch, combatHistory->defender.pos.x, combatHistory->defender.pos.y, combatHistory->defender.entityID);
+    mvprintw(47, 2, "CH: %c x:%d, y:%d ID:%d", combatHistory->defender.ch, combatHistory->defender.pos.x, combatHistory->defender.pos.y, combatHistory->defender.entityID);
     }
     // mvprintw(22, 128, "Closest Unexplored: %d, %d", closest.y, closest.x);
   
@@ -123,7 +124,7 @@ void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) 
 	DrawPlayer(player);
 	DrawStats(player);
 	DrawBorder();
-  // DrawDebug(mptr, n_monsters);
+  DrawDebug(mptr, n_monsters);
 	DrawCombatLog();
 }
 

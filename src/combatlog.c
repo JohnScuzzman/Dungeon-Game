@@ -51,6 +51,17 @@ char* PeekCombatQueue (LogQueue *q) {
     return q->events[q->front];
 }
 
+void NotEnoughMana() {
+    if(player->playerClass.isCaster){
+            strcpy(combatHistory->event, "Not enough mana.");
+            QueueEvent(q, combatHistory->event);
+        }
+    else {
+        strcpy(combatHistory->event, "Not enough energy.");
+        QueueEvent(q, combatHistory->event);
+    }
+}
+
 /* Prints the contents of the queue to the small scrollable window called pad.*/
 // void PrintCombatQueue (LogQueue *q, WINDOW *pad) {
 //     if (IsEmpty(q)){
@@ -69,6 +80,7 @@ void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int player
     combatHistory->playerAccRoll = playerAccRoll;
     combatHistory->playerDMG = playerDMG;
     combatHistory->playerResult = true;
+    combatHistory->monsterKilled = true;
     RecordAbilityUse();
     strcpy(combatHistory->event, "You kill the ");
     strcat(combatHistory->event, combatHistory->defender.entityName);
@@ -86,6 +98,7 @@ void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int player
     combatHistory->defender = *attacker;
     combatHistory->playerAccRoll = playerAccRoll;
     combatHistory->defenderAC = defenderAC;
+    combatHistory->playerResult = false;
     combatHistory->entityResult = false;
     combatHistory->monsterKilled = false;
     RecordAbilityUse();
@@ -132,7 +145,7 @@ void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attac
     combatHistory->defender = *defender;
     combatHistory->attackerAccRoll = attackerAccRoll;
     combatHistory->playerAC = playerAC;
-    combatHistory->playerResult = false;
+    combatHistory->entityResult = false;
     combatHistory->monsterKilled = false;
     strcpy(combatHistory->event, "The ");
     strcat(combatHistory->event, combatHistory->defender.entityName);

@@ -20,6 +20,7 @@ void AssignKnight() {
     player->playerStats.ATK = (player->playerStats.STR - 10) / 2;
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
 }
 void AssignSwashbuckler() {
     player->equippedArmor = LeatherArmor();
@@ -35,6 +36,7 @@ void AssignSwashbuckler() {
     player->playerStats.ATK = (player->playerStats.DEX - 10) / 2;
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
 }
 
 void AssignWizard() {
@@ -50,6 +52,7 @@ void AssignWizard() {
     player->playerStats.ATK = (player->playerStats.INT - 10) / 2;
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
 }
 void AssignNecromancer() {
     player->equippedArmor = Robes();
@@ -65,6 +68,7 @@ void AssignNecromancer() {
     player->playerStats.ATK = (player->playerStats.INT - 10) / 2;
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
 }
 void AssignGunslinger() {
     player->equippedArmor = LeatherArmor();
@@ -79,6 +83,7 @@ void AssignGunslinger() {
     player->playerStats.ATK = (player->playerStats.DEX - 10) / 2;
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
 }
 
 void AssignRanger() {
@@ -95,6 +100,7 @@ void AssignRanger() {
     player->playerStats.ATK = (player->playerStats.DEX - 10) / 2;
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
 }
 void AssignDarkKnight() {
     player->equippedArmor = Chainmail();
@@ -109,21 +115,22 @@ void AssignDarkKnight() {
     player->playerStats.ATK = (player->playerStats.STR - 10) / 2;
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
 }
-void AssignAlchemist() {
+void AssignWarlock() {
     player->equippedArmor = Robes();
-    player->equippedMelee = Fists();
-    player->equippedRanged = AcidPotion();
-    player->playerStats.mana = 16;
-    player->playerStats.maxMana = 16;
+    player->equippedMelee = Dagger();
+    player->equippedRanged = LightningWand();
+    player->playerStats.mana = 20;
+    player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;
     player->playerStats.LVL = 1;
-    player->playerClass = Alchemist();
-    player->playerStats.DEX += (player->playerClass.mainStat);
-    player->playerStats.INT += (player->playerClass.secondaryStat);
-    player->playerStats.ATK = (player->playerStats.DEX - 10) / 2;
+    player->playerClass = Warlock();
+    player->playerStats.CHA += (player->playerClass.mainStat);
+    player->playerStats.ATK = (player->playerStats.CHA - 10) / 2;
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
     
 }
 void AssignConjurer() {
@@ -140,6 +147,7 @@ void AssignConjurer() {
     player->playerStats.ATK = (player->playerStats.CHA - 10) / 2;
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
     
 }
 
@@ -157,6 +165,7 @@ void AssignCyborg() {
     player->playerStats.DEX += (player->playerClass.secondaryStat);
     player->playerStats.maxHP += (player->playerClass.hpPerLVL);
     player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
 }
 
 
