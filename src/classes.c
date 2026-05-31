@@ -8,7 +8,7 @@ Class Knight(){
     knight.mainStat = 2;
     knight.secondaryStat = 2;
     knight.abilities[Ability_1] = Charge();
-    knight.abilities[Ability_2] = MakeHealthPotion();
+    knight.abilities[Ability_2] = SecondWind();
     strcpy(knight.className, "Knight");
     strcpy(knight.classDesc, "A brave knight, forever journeying into the periless.");
     return knight;
@@ -78,7 +78,7 @@ Class Ranger(){
     ranger.mainStat = 2;
     ranger.secondaryStat = 2;
     ranger.abilities[Ability_1] = AimedShot();
-    ranger.abilities[Ability_2] = MakeHealthPotion();
+    ranger.abilities[Ability_2] = SecondWind();
     strcpy(ranger.className, "Ranger");
     strcpy(ranger.classDesc, "A cloaked wanderer, skilled with a bow.");
     return ranger;

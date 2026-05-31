@@ -10,6 +10,16 @@ const int EVENT_SIZE = 33;
 const int LOG_HEIGHT = 22;
 const int LOG_SIZE  = 27;
 const int LOG_WIDTH = 128;
+const char *DIRECTIONS[8] = {
+    "North",
+    "West",
+    "South",
+    "East",
+    "North West",
+    "South West",
+    "South East",
+    "North East"
+};
 
 
 

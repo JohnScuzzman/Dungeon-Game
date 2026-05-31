@@ -167,23 +167,23 @@ Ability MagicMissile() {
 
 
 // heals player from minDMG to maxDMG
-Ability MakeHealthPotion() {
-    Ability makeHealthPotion;
-    makeHealthPotion.isAttack = false;
-    makeHealthPotion.isMagic = false;
-    makeHealthPotion.hasEffects = true;
-    makeHealthPotion.postCombat = false;
-    makeHealthPotion.abilityID = MAKE_HEALTH_POTION;
-    makeHealthPotion.duration = 0;
-    makeHealthPotion.minDMG = 2;
-    makeHealthPotion.maxDMG = 8;
-    makeHealthPotion.manaCost = 7;
-    makeHealthPotion.range = 0;
-    makeHealthPotion.abilitySave = 0;
-    makeHealthPotion.miscStat = ((rand() % makeHealthPotion.maxDMG) + makeHealthPotion.minDMG);
-    strcpy(makeHealthPotion.abilityName, "Make Health Potion");
-    strcpy(makeHealthPotion.abilityDesc, "none");
-    return makeHealthPotion;
+Ability SecondWind() {
+    Ability secondWind;
+    secondWind.isAttack = false;
+    secondWind.isMagic = false;
+    secondWind.hasEffects = true;
+    secondWind.postCombat = false;
+    secondWind.abilityID = SECOND_WIND;
+    secondWind.duration = 0;
+    secondWind.minDMG = 2;
+    secondWind.maxDMG = 8;
+    secondWind.manaCost = 7;
+    secondWind.range = 0;
+    secondWind.abilitySave = 0;
+    secondWind.miscStat = ((rand() % secondWind.maxDMG) + secondWind.minDMG);
+    strcpy(secondWind.abilityName, "Second Wind");
+    strcpy(secondWind.abilityDesc, "none");
+    return secondWind;
 }
 
 
@@ -282,49 +282,60 @@ void CastIceArmor(){
     }
 }
 
-void CastMakeHealthPotion(){
-    char eventDMGBuffer[EVENT_SIZE];
-    int healValFull = (player->playerStats.maxHP) - (player->playerStats.HP);
-    int healVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
-    combatHistory->playerUsedAbility = true;
-    combatHistory->playerCombat = false;
-    strcpy(combatHistory->event, "You mend your wounds.");
-    QueueEvent(q, combatHistory->event);
-    
-    if(((player->playerStats.HP) + healVal) >= (player->playerStats.maxHP)) {
-        strcpy(combatHistory->event, "You heal yourself for ");
-        snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", healValFull);
-        strcat(combatHistory->event, eventDMGBuffer);
+void CastSecondWind(){
+    if(player->playerStats.HP != player->playerStats.maxHP){
+        char eventDMGBuffer[EVENT_SIZE];
+        int healValFull = (player->playerStats.maxHP) - (player->playerStats.HP);
+        int healVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
+        combatHistory->playerUsedAbility = true;
+        combatHistory->playerCombat = false;
+        strcpy(combatHistory->event, "You mend your wounds.");
         QueueEvent(q, combatHistory->event);
-        player->playerStats.HP = player->playerStats.maxHP;
-    }   
-    else {
-        (player->playerStats.HP) += healVal;
-        strcpy(combatHistory->event, "You heal yourself for ");
-        snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", healVal);
-        strcat(combatHistory->event, eventDMGBuffer);
+        
+        if(((player->playerStats.HP) + healVal) >= (player->playerStats.maxHP)) {
+            strcpy(combatHistory->event, "You heal yourself for ");
+            snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", healValFull);
+            strcat(combatHistory->event, eventDMGBuffer);
+            QueueEvent(q, combatHistory->event);
+            player->playerStats.HP = player->playerStats.maxHP;
+        }   
+        else {
+            (player->playerStats.HP) += healVal;
+            strcpy(combatHistory->event, "You heal yourself for ");
+            snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", healVal);
+            strcat(combatHistory->event, eventDMGBuffer);
+            QueueEvent(q, combatHistory->event);
+        }
+    }
+    else{
+        strcpy(combatHistory->event, "You are already at full HP.");
         QueueEvent(q, combatHistory->event);
     }
-    
 }
 
 void CastSelfRepair(){
-    char eventDMGBuffer[EVENT_SIZE];
-    combatHistory->playerUsedAbility = true;
-    combatHistory->playerCombat = false;
-    strcpy(combatHistory->event, "You repair your metal frame.");
-    QueueEvent(q, combatHistory->event);
-    int repairVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
-    if(((player->playerStats.HP) + repairVal) >= (player->playerStats.maxHP)) {
-        player->playerStats.HP = (player->playerStats.maxHP);
+    if(player->playerStats.HP != player->playerStats.maxHP) {
+        char eventDMGBuffer[EVENT_SIZE];
+        combatHistory->playerUsedAbility = true;
+        combatHistory->playerCombat = false;
+        strcpy(combatHistory->event, "You repair your metal frame.");
+        QueueEvent(q, combatHistory->event);
+        int repairVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
+        if(((player->playerStats.HP) + repairVal) >= (player->playerStats.maxHP)) {
+            player->playerStats.HP = (player->playerStats.maxHP);
+        }
+        else {
+            (player->playerStats.HP) += repairVal;
+        }
+        strcpy(combatHistory->event, "You heal yourself for ");
+        snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", repairVal);
+        strcat(combatHistory->event, eventDMGBuffer);
+        QueueEvent(q, combatHistory->event);
     }
     else {
-        (player->playerStats.HP) += repairVal;
+        strcpy(combatHistory->event, "You are already at full HP.");
+        QueueEvent(q, combatHistory->event);
     }
-    strcpy(combatHistory->event, "You heal yourself for ");
-    snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", repairVal);
-    strcat(combatHistory->event, eventDMGBuffer);
-    QueueEvent(q, combatHistory->event);
 }
 
 void RemoveIceArmor(){
@@ -347,8 +358,8 @@ void AbilityEffects(int abilityID){
         case ICE_ARMOR:
             CastIceArmor();
         break;
-        case MAKE_HEALTH_POTION:
-            CastMakeHealthPotion();
+        case SECOND_WIND:
+            CastSecondWind();
         break;
         case SELF_REPAIR:
             CastSelfRepair();
@@ -401,14 +412,14 @@ void ChargePlacement(){
         player->pos.y = ((combatHistory->defender.pos.y) - 1);
         return;
     }
-    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)){ 
-        player->pos.x = ((combatHistory->defender.pos.x) + 1);
-        player->pos.y = ((combatHistory->defender.pos.y) - 1);
+    else if ((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){ 
+        player->pos.x = ((combatHistory->defender.pos.x) - 1);
+        player->pos.y = ((combatHistory->defender.pos.y) + 1);
         return;
     }
     else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)){ 
-        player->pos.x = ((combatHistory->defender.pos.x) - 1);
-        player->pos.y = ((combatHistory->defender.pos.y) + 1);
+        player->pos.x = ((combatHistory->defender.pos.x) + 1);
+        player->pos.y = ((combatHistory->defender.pos.y) - 1);
         return;
     }
     else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){ 
