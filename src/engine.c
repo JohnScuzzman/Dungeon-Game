@@ -56,10 +56,12 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
     /* Wander checks if LOS to player and flips aggro is they are in range.*/
     while (!((mptr + i)->hasMoved) && i < n_monsters && PMove == true){
         /* Check if player is in aggro range. */
-        (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
+        if(!((mptr+i)->aggroFlag)){
+            (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
+        }
 
         /* If no adjacent Player, Wander.*/
-        if (!CheckPlayerAdjacent((mptr + i)->pos) && (!(mptr + i)->aggroFlag) && (mptr + i)->isMonster == true){
+        if (!CheckPlayerAdjacent((mptr + i)->pos) && !((mptr + i)->aggroFlag) && (mptr + i)->isMonster == true){
             Wander(mptr + i);
             i++;
         }
@@ -73,10 +75,9 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
             i++;
         }
         /* If player was seen, move towards player.*/
-        else if ((mptr + i)->aggroFlag == true && (mptr + i)->isMonster == true){
+        else if (((mptr + i)->aggroFlag) && ((mptr + i)->isMonster)){
             /* Move towards players last known locations.*/
             AggroMove(mptr + i);
-            UpdateMonsterMap(mptr, n_monsters);
             i++;
         }
         else {
