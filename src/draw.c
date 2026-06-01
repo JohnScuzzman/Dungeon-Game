@@ -71,17 +71,18 @@ void DrawPlayerStats() {
 
 /* Draw the players Abilities in the bottom left of screen. */
 void DrawAbilities() { 
-  mvprintw(ABILITY_BAR_Y, ABILITY_BAR_STARTX, "1: %s - %d |", player->playerClass.abilities[Ability_1].abilityName, 
+  mvprintw(ABILITY_BAR_Y, ABILITY_BAR_STARTX, "1: %s - %d |", 
+  player->playerClass.abilities[Ability_1].abilityName, 
   player->playerClass.abilities[Ability_1].manaCost);
-  mvprintw(ABILITY_BAR_Y, ABILITIY_BAR_BUFFERX + strlen(player->playerClass.abilities[Ability_1].abilityName), 
+
+  mvprintw(ABILITY_BAR_Y, ABILITIY_BAR_BUFFERX +
+  strlen(player->playerClass.abilities[Ability_1].abilityName), 
   "2: %s - %d |", player->playerClass.abilities[Ability_2].abilityName,
   player->playerClass.abilities[Ability_2].manaCost);
-
 } 
 
 /* Draw a pretty border around the map and stats.*/
 void DrawBorder(void) {
-
   for (int y = 0; y < MAP_HEIGHT; y++) {
     mvprintw(y, 0, "|");
     mvprintw(y, MAP_WIDTH, "|");
@@ -142,7 +143,7 @@ void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) 
   DrawPlayerEquipment();
   DrawPlayerStats();
   DrawAbilities();
-  // DrawDebug(mptr, n_monsters);
+  DrawDebug(mptr, n_monsters);
 	DrawCombatLog();
 }
 
