@@ -12,7 +12,6 @@ Player* CreatePlayer(Position start_pos) {
     return player;
 }
 
-
 /* checks if the player is adjacent to the passed coordinates. */
 bool CheckPlayerAdjacent(Position origin) {
     if (origin.y == (player->pos.y) || origin.y == ((player->pos.y) - 1) || origin.y == ((player->pos.y) + 1)) {
@@ -27,7 +26,6 @@ bool CheckPlayerAdjacent(Position origin) {
     }
     return false;
 }
-
 
 /* Combat history passed to record events that happen in combat. */
 /* If player moves into monster, fight, count it as a move.*/
@@ -109,7 +107,6 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
             break;
         default:
             break;
-            
     }
     return false;
 }
@@ -138,7 +135,6 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory) {
 
 }
 
-
 void PlayerRegen(int *playerRegen){
         if (*playerRegen >= 20 && (player->playerStats.HP < player->playerStats.maxHP)) {
             player->playerStats.HP++;
@@ -149,6 +145,7 @@ void PlayerRegen(int *playerRegen){
         }
 
 }
+
 void ManaRegen(int *manaRegen){
         if (*manaRegen >= 15 && (player->playerStats.mana < player->playerStats.maxMana)) {
             player->playerStats.mana++;
@@ -159,6 +156,7 @@ void ManaRegen(int *manaRegen){
         }
 
 }
+
 void PlayerMeleeOrRanged(Player* player){
     if (combatHistory->playerUsedAbility == true && player->equippedAbility.isAttack == true) {
         player->playerStats.maxDMG = player->equippedAbility.maxDMG;
@@ -192,9 +190,6 @@ void PlayerPrepareCombat(int n_monsters) {
         ResetMoveFlags(mptr, n_monsters);
         combatHistory->monsterKilled = false;
     }
-    // if(combatHistory->playerUsedAbility && player->equippedAbility.postCombat) {
-    //     AbilityEffects(player->equippedAbility.abilityID);
-    // }
 }
 
 bool PlayerRangedAttack(int n_monsters){
@@ -271,7 +266,6 @@ bool PlayerRangedAttack(int n_monsters){
     
 }
 
-
 /* We use PlayerRangedAttack since melee abilities technically have a range of one.*/
 /* A normal melee attack is made when a player simply moves into a monster.*/
 /* Thus to differentiate a melee ability, we borrow the RangedAttack function. */
@@ -296,8 +290,6 @@ bool UsePlayerAbility(int n_monsters, int chosenAbility) {
         }
     return false;
 }
-
-
 
 /* Run FindClosestUnexplored, break if it returns a monster. */
 /* return true if monster was found immediately and broke */

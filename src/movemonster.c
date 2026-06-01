@@ -20,7 +20,6 @@ void MoveUp(Entity* mptr){
     }
 }
 
-
 void MoveDown(Entity* mptr){
     mptr->pos.y = mptr->pos.y + 1;
     mptr->hasMoved = true;
@@ -39,9 +38,7 @@ void MoveDown(Entity* mptr){
     if(mptr->mapInfo.newChar == 'X') {
         mptr->mapInfo.newChar = mptr->staticCh;
     }
-
 }
-
 
 void MoveLeft(Entity* mptr){
     mptr->pos.x = mptr->pos.x - 1;
@@ -62,7 +59,6 @@ void MoveLeft(Entity* mptr){
         mptr->mapInfo.newChar = mptr->staticCh;
     }
 }
-
 
 void MoveRight(Entity* mptr){
     mptr->pos.x = mptr->pos.x + 1;

@@ -1,7 +1,6 @@
 #include <rogue.h>
 
 bool NcursesSetup(void) { 
-
     /* Makes escape key press register instantly.*/
     setenv("ESCDELAY", "25", 1);
     /* Starts Ncurses. */
@@ -85,7 +84,6 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
         }
     }
     return false;
-
 }
 
 void RefreshGamestate(Entity* mptr, int n_monsters) {
@@ -166,33 +164,3 @@ void Greeting(){
     strcpy(combatHistory->event, "Use keys 1-5 to use abilities.");
     QueueEvent(q, combatHistory->event);
 }
-
-
-/* Check if player is in aggro range. */
-                // (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
-
-                // /* If no adjacent Player, Wander.*/
-                // if (!CheckPlayerAdjacent((mptr + i)->pos) && (!(mptr + i)->aggroFlag)){
-                //     Wander(mptr + i);
-                //     i++;
-                // }
-
-                // /* If adjacent to player, attack them.*/
-                // else if (CheckPlayerAdjacent((mptr + i)->pos) == true){
-                //     monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
-                //     /* If monsterCombat = false, player died, end the game.*/
-                //     if (monsterCombat == false) {
-                //         leaveFlag = true;
-                //     }
-                //     i++;
-                // }
-                // /* If player was seen, move towards player.*/
-                // else if ((mptr + i)->aggroFlag == true){
-                //     /* Move towards players last known locations.*/
-                //     AggroMove(mptr + i);
-                //     UpdateMonsterMap(mptr, n_monsters);
-                //     i++;
-                // }
-                // else {
-                //     i++;
-                // }

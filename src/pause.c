@@ -98,8 +98,6 @@ bool MakePauseMenu() {
         return quitGame;
     }
 
-
-
 /* Returns true if we want to quit the game */
 bool ProcessPauseSelect(int choice, WINDOW* menu){
     switch(choice){

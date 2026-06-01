@@ -1,6 +1,5 @@
 #include <rogue.h>
 
-
 /* 
 Makes a radius around the player in which they can see.
 To increase the radius, increase the variable RADIUS below.
@@ -34,7 +33,6 @@ void MakeFOV(Player* player)
 	} 
 } 
   
-
 /*
 Clear the player's FOV to create it again after moving.
 */

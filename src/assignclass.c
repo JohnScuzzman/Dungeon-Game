@@ -22,6 +22,7 @@ void AssignKnight() {
     player->playerStats.HP = player->playerStats.maxHP;
     player->passiveAbility = NoAbility();
 }
+
 void AssignSwashbuckler() {
     player->equippedArmor = LeatherArmor();
     player->equippedMelee = Cutlass();
@@ -54,6 +55,7 @@ void AssignWizard() {
     player->playerStats.HP = player->playerStats.maxHP;
     player->passiveAbility = NoAbility();
 }
+
 void AssignNecromancer() {
     player->equippedArmor = Robes();
     player->equippedMelee = Dagger();
@@ -70,6 +72,7 @@ void AssignNecromancer() {
     player->playerStats.HP = player->playerStats.maxHP;
     player->passiveAbility = NoAbility();
 }
+
 void AssignGunslinger() {
     player->equippedArmor = LeatherArmor();
     player->equippedMelee = Fists();
@@ -102,6 +105,7 @@ void AssignRanger() {
     player->playerStats.HP = player->playerStats.maxHP;
     player->passiveAbility = NoAbility();
 }
+
 void AssignDarkKnight() {
     player->equippedArmor = Chainmail();
     player->equippedMelee = Greatsword();
@@ -117,6 +121,7 @@ void AssignDarkKnight() {
     player->playerStats.HP = player->playerStats.maxHP;
     player->passiveAbility = NoAbility();
 }
+
 void AssignWarlock() {
     player->equippedArmor = Robes();
     player->equippedMelee = Dagger();
@@ -133,6 +138,7 @@ void AssignWarlock() {
     player->passiveAbility = NoAbility();
     
 }
+
 void AssignConjurer() {
     player->equippedArmor = Robes();
     player->equippedMelee = Quarterstaff();

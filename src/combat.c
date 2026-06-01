@@ -7,8 +7,6 @@ CombatHistory* CreateCombatHistory(Entity monster) {
     return combatHistory;
 }
 
-
-
 /* Passed entity tries to attack player */
 /* Returning false means they killed the player and the game will end.*/
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player) {
@@ -29,8 +27,6 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
     RecordMonsterMiss(attacker, combatHistory, attackerAccRoll, playerAC);
     return true;
 }
-
-
 
 /* Player tries to attack entity */
 /* Returns true if combat happens at all. */
@@ -54,8 +50,8 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     return true;
 }
 
-
-
+/* Returns true if the selected combat ability detects a monster in its range and LOS of player. */
+/* Melee abilties still use this function, but with a range of 1. */
 bool ShootTargetWithAbility(int x, int y) {
     // Will check if the ranged is not "none".
     if ((player->playerStats.mana) >= (player->equippedAbility.manaCost)) {
@@ -93,6 +89,7 @@ bool ShootTargetWithAbility(int x, int y) {
     
 }
 
+/* Returns true if there is a monster in LOS and range of equipped weapon.*/
 bool ShootTarget(int x, int y) {
     // Will check if the ranged is not "none".
     if (player->equippedRanged.isRanged) {

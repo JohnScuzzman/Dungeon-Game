@@ -24,7 +24,6 @@ Ability NoAbility() {
     return noAbility;
 }
 
-
 Ability AimedShot() {
     Ability aimedShot;
     aimedShot.isAttack = true;
@@ -62,7 +61,6 @@ Ability Charge() {
     strcpy(charge.abilityDesc, "none");
     return charge;
 }
-
 
 Ability DrainLife() {
     Ability drainLife;
@@ -124,7 +122,6 @@ Ability FireVolley() {
     return fireVolley;
 }
 
-
 // Give player a shield based on its min/max DMG
 Ability IceArmor() {
     Ability iceArmor;
@@ -145,7 +142,6 @@ Ability IceArmor() {
     return iceArmor;
 }
 
-
 Ability MagicMissile() {
     Ability magicMissile;
     magicMissile.isAttack = true;
@@ -164,7 +160,6 @@ Ability MagicMissile() {
     strcpy(magicMissile.abilityDesc, "none");
     return magicMissile;
 }
-
 
 // heals player from minDMG to maxDMG
 Ability SecondWind() {
@@ -186,7 +181,6 @@ Ability SecondWind() {
     return secondWind;
 }
 
-
 Ability SelfRepair() {
     Ability selfRepair;
     selfRepair.isAttack = false;
@@ -205,7 +199,6 @@ Ability SelfRepair() {
     strcpy(selfRepair.abilityDesc, "none");
     return selfRepair;
 }
-
 
 Ability SummonSkeleton() {
     Ability summonSkeleton;
@@ -227,9 +220,8 @@ Ability SummonSkeleton() {
 }
 
 
+/* If an ability does extra things, specify those things with Cast(AbilityName) */
 
-
-/* If an ability does extra things, specify those things with Cast____*/
 
 void CastCharge(){
     ChargePlacement();
@@ -238,9 +230,7 @@ void CastCharge(){
     // strcat(combatHistory->event, ".");
     // QueueEvent(q, combatHistory->event);
     // combatHistory->defender.hasMoved = true; // "stun" the enemy.
-
 }
-
 
 void CastDrainLife(){
     if ((combatHistory->playerResult)) {
@@ -338,6 +328,7 @@ void CastSelfRepair(){
     }
 }
 
+/* When Ice Armors duration is up, remove the armor.*/
 void RemoveIceArmor(){
     strcpy(combatHistory->event, "You're icy armor melts.");
     QueueEvent(q, combatHistory->event);
@@ -346,6 +337,10 @@ void RemoveIceArmor(){
     player->passiveAbility = NoAbility();
 }
 
+/* Called if the players input is processed in UsePlayerAbility from player.c, including attacking a monster.*/
+/* Handles both attacks and non attacking abilities.*/
+/* This runs before the monster attacks back, so healing the player will save them from an otherwise killing blow.*/
+/* If an ability is just an attack with no effects, no CastAbility function is needed.*/
 void AbilityEffects(int abilityID){
     if ((player->playerStats.mana) >= (player->equippedAbility.manaCost)) {
         switch (abilityID) {
@@ -376,7 +371,6 @@ void AbilityEffects(int abilityID){
         NotEnoughMana();
     }
 }
-
 
 /* If the player has an active passive ability, deincrement the timer.*/
 /* If the timer reaches 0, undo the effects cooresponding to the ability.*/

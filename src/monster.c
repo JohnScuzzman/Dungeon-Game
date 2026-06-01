@@ -34,7 +34,6 @@ bool CheckAggro(Entity* mptr, Player* player) {
     return false;
 }
 
-
 /* returns i value of closest monster */
 /* use this to find an int to add to mptr to get the monster */
 int FindClosestMonster(Entity* mptr, int n_monsters) {
@@ -131,7 +130,6 @@ bool MoveTowards(Entity* entity, Position pos) {
                 return true;
             }
         }
-        
         //move up, y--
         if (y > pos.y && x == pos.x) {
             if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
@@ -336,7 +334,6 @@ void RecordMonsterSeen(Entity* monster) {
         monster->seenByPlayer = true;
     }
 }
-
 
 int MonsterDirection(Entity* monster) {
     if((player->pos.x) < (monster->pos.x) && (player->pos.y) < (monster->pos.y)) {

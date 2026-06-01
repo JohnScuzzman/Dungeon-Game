@@ -225,17 +225,18 @@ void RecordAbilityUse();
 
 
 // draw.c functions
-void DrawBorder(void);
+void DrawAbilities();
+void DrawBorder();
 void DrawCombatLog();
 void DrawDebug(Entity* mptr, int n_monsters);
-void DrawEntityAttack(Entity attacker, bool combatResult);
 void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory);
-void DrawPlayerAttack(Entity defender, bool combatResult);
+void DrawPlayerEquipment();
+void DrawPlayerStats();
 void DrawMap();
 void DrawMonsters(Entity* mptr, int n_monsters);
 void DrawPlayer(Player* player);
 void DrawPlayerBlink(Player* player);
-void DrawStats(Player* player);
+
 
 
 // engine.c functions
