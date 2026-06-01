@@ -1,11 +1,9 @@
 #ifndef CLASSES_H // These prevent compiling items_h multiple times.
 #define CLASSES_H
 
-
 #define MAX_NAME_SIZE 33
 #define MAX_DESC_SIZE 65
 #define MAX_ABILITIES 5 // change later to 10
-
 
 typedef struct {
     bool isAttack;
@@ -23,7 +21,6 @@ typedef struct {
     char abilityName[MAX_NAME_SIZE];
     char abilityDesc[MAX_DESC_SIZE];
 } Ability;
-
 
 typedef struct {
     bool isCaster;

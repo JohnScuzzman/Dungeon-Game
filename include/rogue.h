@@ -27,7 +27,6 @@
 #define INVENTORY_SIZE 64
 #define MAX_LOG_SIZE 28
 
-
 /* IMPORTANT*/
 /* "typedef" is used instead of "struct cat_t" so that we dont have to */
 /* type "struct" everytime we declare a struct variable.*/
@@ -136,7 +135,6 @@ typedef struct {
   char entityWeapon[MAX_NAME_SIZE];
 } Entity;
 
-
 typedef struct {
     Entity defender;
     bool monsterKilled;
@@ -162,7 +160,6 @@ typedef struct
   Position pos;
   Position center;
 } Room;
-
 
 // asciiart.c funcions
 void TitleScreen();
@@ -205,7 +202,6 @@ void ResetCombatHistory(CombatHistory* combatHistory);
 bool ShootTarget(int x, int y);
 bool ShootTargetWithAbility(int x, int y);
 
-
 // combatlog.c functions
 bool IsEmpty(LogQueue *q);
 bool IsFull(LogQueue *q);
@@ -222,8 +218,6 @@ void RecordMonsterHit(Entity* attacker, CombatHistory* combatHistory, int attack
 void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attackerAccRoll, int playerAC);
 void RecordAbilityUse();
 
-
-
 // draw.c functions
 void DrawAbilities();
 void DrawBorder();
@@ -237,8 +231,6 @@ void DrawMonsters(Entity* mptr, int n_monsters);
 void DrawPlayer(Player* player);
 void DrawPlayerBlink(Player* player);
 
-
-
 // engine.c functions
 bool CheckEscape(int ch);
 void CloseGame(void);
@@ -251,7 +243,6 @@ bool NcursesSetup(void);
 void RefreshGamestate(Entity* mptr, int n_monsters);
 void RemoveCursor(int x, int y, int length);
 
-
 // fov.c functions
 void ClearFOV(Player* player);
 int GetDistance(Position origin, Position target);
@@ -259,7 +250,6 @@ int GetSign(int a);
 bool IsInMap(int y, int x);
 bool LineOfSight(Position origin, Position target);
 void MakeFOV(Player* playerint);
-
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);
@@ -270,7 +260,6 @@ Player* CreatePlayer(Position start_pos);
 void PrintRaces();
 void PrintClasses();
 
-
 // map.c functions
 Entity** CreateEntities(void);
 void FreeMap(void);
@@ -278,7 +267,6 @@ Position SetupMap(Entity* mptr, int n_rooms);
 // Position FindClosestUnexplored(void);
 // Position FindClosestUnexplored();
 // Position FindClosestDoor();
-
 
 // monster.c functions
 void AggroMove(Entity* mptr);
@@ -298,7 +286,6 @@ void UpdateMonster(Entity* monster, int monsterID, int n_monsters);
 void UpdateMonsterVisible(Entity* monster, Player* player);
 void Wander(Entity* mptr);
 
-
 // movemonster.c functions
 bool MoveTowards(Entity* entity, Position pos);
 void MoveUp(Entity* mptr);
@@ -315,7 +302,6 @@ bool MakePauseMenu();
 bool ProcessPauseSelect(int choice, WINDOW* menu);
 void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options);
 
-
 // player.c functions
 bool CheckPlayerAdjacent(Position origin);
 void ManaRegen(int *manaRegen);
@@ -328,12 +314,10 @@ void PlayerRegen(int *playerRegen);
 bool UsePlayerAbility(int n_monsters, int chosenAbility);
 // bool AutoExplore(CombatHistory* combatHistory);
 
-
 // room.c functions
 void AddRoomToMap(Room room);
 Room CreateRoom(int y, int x, int height, int width);
 void ConnectRooms(Position centerOne, Position centerTwo);
-
 
 // Externals 
 // Used in tandem with main to let any functions use these outside of main.
@@ -344,9 +328,7 @@ extern const int EVENT_SIZE;
 extern const int LOG_WIDTH;
 extern const int LOG_HEIGHT;
 extern const int LOG_SIZE;
-
 extern const char *DIRECTIONS[8];
-
 
 extern Player* player;
 // Array of tiles
@@ -357,7 +339,5 @@ extern Entity* mptr;
 extern CombatHistory* combatHistory;
 // Combat Log
 extern LogQueue* q;
-
-
 
 #endif
