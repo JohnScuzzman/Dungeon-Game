@@ -1,34 +1,40 @@
 #include <rogue.h>
 
 void AggroMove(Entity* mptr) {
+
     /* If they are in both LOS and range, move towards them. */
-    mptr->aggroFlag = CheckAggro(mptr, player);
-    if (mptr->aggroFlag) {
+    if (CheckAggro(mptr, player)) {
         mptr->playerLastPos.x = player->pos.x;
         mptr->playerLastPos.y = player->pos.y;
         mptr->hasMoved = MoveTowards(mptr, player->pos);
-        KeepMonsterIntegrity(mptr);
+        mptr->aggroFlag = true;
     }
 
     /* If they are not in LOS/Range but are still aggro, move towards last seen position.*/
     /* lastPos > 0 means a players was last seen at that x/y location. */
-    else {
-        mptr->hasMoved = MoveTowards(mptr, mptr->playerLastPos);
-        KeepMonsterIntegrity(mptr);
-            /* if we get here, mptr has navigated to players last POS*/
-        if (mptr->playerLastPos.x == mptr->pos.x && mptr->playerLastPos.y == mptr->pos.y){
-            /* Check if player is in sight again */ 
-            mptr->aggroFlag = CheckAggro(mptr, player);
+    else if (mptr->aggroFlag && (mptr->playerLastPos.x != mptr->pos.x || mptr->playerLastPos.y != mptr->pos.y)){
+        if(CheckAggro(mptr, player)) {
+            mptr->playerLastPos.x = player->pos.x;
+            mptr->playerLastPos.y = player->pos.y;
+            mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
+            mptr->aggroFlag = true;
         }
+        else {
+            mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
+            mptr->aggroFlag = true;
+        }
+    }
+
+    else {
+        mptr->playerLastPos.x = 0;
+        mptr->playerLastPos.y = 0; 
+        mptr->aggroFlag = false;
     }
 }
 
-/* Check if a monster has LOS of player and is in their aggro range.*/
+/* Check if a monster has LOS of player and is in their aggro range, or if player was seen previously.*/
 bool CheckAggro(Entity* mptr, Player* player) {
-    if (GetDistance(mptr->pos, player->pos) < mptr->aggroRange  && LineOfSight(mptr->pos, player->pos)) {
-        mptr->aggroFlag = true;
-        mptr->playerLastPos.x = player->pos.x;
-        mptr->playerLastPos.y = player->pos.y;
+    if (GetDistance(mptr->pos, player->pos) < mptr->aggroRange && LineOfSight(mptr->pos, player->pos)) {
         return true;
     }
     return false;
@@ -98,7 +104,7 @@ bool MoveTowards(Entity* entity, Position pos) {
             }
         }
         // down & left
-        if (y < pos.y && x > pos.x) {
+        else if (y < pos.y && x > pos.x) {
             if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
                 MoveDownLeft(entity);
                 KeepMonsterIntegrity(entity);
@@ -109,7 +115,7 @@ bool MoveTowards(Entity* entity, Position pos) {
             }
         }
         // down & right
-        if (y < pos.y && x < pos.x) {
+        else if (y < pos.y && x < pos.x) {
             if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
                 MoveDownRight(entity);
                 KeepMonsterIntegrity(entity);
@@ -120,7 +126,7 @@ bool MoveTowards(Entity* entity, Position pos) {
             }
         }
         // move up & right
-        if (y > pos.y && x < pos.x) {
+        else if (y > pos.y && x < pos.x) {
             if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
                 MoveUpRight(entity);
                 KeepMonsterIntegrity(entity);
@@ -131,7 +137,7 @@ bool MoveTowards(Entity* entity, Position pos) {
             }
         }
         //move up, y--
-        if (y > pos.y && x == pos.x) {
+        if (y > pos.y) {
             if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
                 MoveUp(entity);
                 KeepMonsterIntegrity(entity);
@@ -142,7 +148,7 @@ bool MoveTowards(Entity* entity, Position pos) {
             }
         }
         //move left, x--
-        if (x > pos.x && y == pos.y) {
+        else if (x > pos.x) {
             if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
                 MoveLeft(entity);
                 KeepMonsterIntegrity(entity);
@@ -153,7 +159,7 @@ bool MoveTowards(Entity* entity, Position pos) {
             }
         }
         //move down, y++
-        if (y < pos.y && x == pos.x) {
+        else if (y < pos.y) {
             if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
                 MoveDown(entity);
                 KeepMonsterIntegrity(entity);
@@ -164,7 +170,7 @@ bool MoveTowards(Entity* entity, Position pos) {
             }
         }
         //move right, x++
-        if (x < pos.x && y == pos.y) {
+        else if (x < pos.x) {
             if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
                 MoveRight(entity);
                 KeepMonsterIntegrity(entity);
@@ -175,6 +181,7 @@ bool MoveTowards(Entity* entity, Position pos) {
             }
         }
     }
+    UpdateMonsterVisible(entity, player);
     return false;
 }
 
@@ -335,6 +342,7 @@ void RecordMonsterSeen(Entity* monster) {
     }
 }
 
+/* Returns an int representing the monsters direction relative to the player. */
 int MonsterDirection(Entity* monster) {
     if((player->pos.x) < (monster->pos.x) && (player->pos.y) < (monster->pos.y)) {
         return SOUTH_EAST;
