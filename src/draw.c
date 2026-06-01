@@ -41,31 +41,17 @@ void DrawPlayerBlink(Player* player) {
 	// attroff(A_STANDOUT); 
 	}  
 
-/* Draw the players stats and equipment in the top right of screen. */
-void DrawStats(Player* player) { 
-  for (int x = 0; x < 41; x++) {
-    mvprintw(0, 126 + x, "=");
-    mvprintw(20, 126 + x, "=");
-    mvprintw(50, 126 + x, "=");
-  }
-  
-  for (int y = 1; y < 50; y ++) {
-    mvprintw(y, 166, "|");
-  }
-
-  for (int x = 0; x < (MAP_WIDTH); x++) {
-    mvprintw(48, x, "=");
-  }
-
-  /* Players equipped items.*/
-
+void DrawPlayerEquipment(){
   mvprintw(2, 128, "Name: %s", player->playerName);
   mvprintw(4, 128, "Race: %s", player->playerRace);
   mvprintw(6, 128, "Class: %s", player->playerClass.className);
   mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
-  mvprintw(10, 128, "Armor Class: %d", (player->playerStats.AC) + 10);
   mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
   mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
+}
+
+void DrawPlayerStats() {
+  mvprintw(10, 128, "Armor Class: %d", (player->playerStats.AC) + 10);
   mvprintw(16, 128, "HP: %d", player->playerStats.HP);
   if(player->playerClass.isCaster) {
     mvprintw(18, 128, "Mana: %d", player->playerStats.mana);
@@ -73,8 +59,6 @@ void DrawStats(Player* player) {
   else {
     mvprintw(18, 128, "Energy: %d", player->playerStats.mana);
   }
-  
-   /* Players stats.*/
   mvprintw(2, 157, "LVL: %d", player->playerStats.LVL);
   mvprintw(4, 157, "CHA: %d", player->playerStats.CHA);
   mvprintw(6, 157, "CON: %d", player->playerStats.CON);
@@ -83,8 +67,10 @@ void DrawStats(Player* player) {
   mvprintw(12, 157, "STR: %d", player->playerStats.STR);
   mvprintw(14, 157, "WIS: %d", player->playerStats.WIS);
   mvprintw(16, 157, "EXP: %d", player->playerStats.EXP);
+}
 
-    /* Players abilities.*/
+/* Draw the players Abilities in the bottom left of screen. */
+void DrawAbilities() { 
   mvprintw(ABILITY_BAR_Y, ABILITY_BAR_STARTX, "1: %s - %d |", player->playerClass.abilities[Ability_1].abilityName, 
   player->playerClass.abilities[Ability_1].manaCost);
   mvprintw(ABILITY_BAR_Y, ABILITIY_BAR_BUFFERX + strlen(player->playerClass.abilities[Ability_1].abilityName), 
@@ -106,8 +92,22 @@ void DrawBorder(void) {
     mvprintw(MAP_HEIGHT, x, "=");
   }
 
-}
+  /* Internal borders for stats & abilites */
+  for (int x = 0; x < 41; x++) {
+    mvprintw(0, 126 + x, "=");
+    mvprintw(20, 126 + x, "=");
+    mvprintw(50, 126 + x, "=");
+  }
+  
+  for (int y = 1; y < 50; y ++) {
+    mvprintw(y, 166, "|");
+  }
 
+  for (int x = 0; x < (MAP_WIDTH); x++) {
+    mvprintw(48, x, "=");
+  }
+
+}
 
 void DrawDebug(Entity* mptr, int n_monsters) {
   // Position closest = FindClosestUnexplored();
@@ -124,18 +124,6 @@ void DrawDebug(Entity* mptr, int n_monsters) {
   
 }
 
-/*Draw Everything*/ 
-void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
-	clear();
-	DrawMap();
-	DrawPlayer(player);
-	DrawStats(player);
-	DrawBorder();
-  // DrawDebug(mptr, n_monsters);
-	DrawCombatLog();
-}
-
-
 void DrawCombatLog() {
  	if (IsEmpty(q)){
         return;
@@ -145,31 +133,16 @@ void DrawCombatLog() {
   	}
 }
 
-
-void DrawEntityAttack(Entity attacker, bool combatResult) {
-	// if (combatResult) {
-	// 	mvprintw(28, 128, "The %s rolls a %d", attacker.entityName, combatHistory->attackerAccRoll);
-	// 	mvprintw(29, 128, "And hits with a %s.", attacker.entityWeapon);
-	// 	mvprintw(30, 128, "dealing %d damage.", combatHistory->attackerDMG);
-	// }
-	// if (!combatResult){
-	// 	mvprintw(28, 128, "The: %s attacks.", attacker.entityName);
-	// 	mvprintw(29, 128, "The: %s misses with %d.", attacker.entityName, combatHistory->attackerAccRoll);
-	// }
+/*Draw Everything*/ 
+void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
+	clear();
+	DrawMap();
+	DrawPlayer(player);
+	DrawBorder();
+  DrawPlayerEquipment();
+  DrawPlayerStats();
+  DrawAbilities();
+  // DrawDebug(mptr, n_monsters);
+	DrawCombatLog();
 }
 
-void DrawPlayerAttack(Entity defender, bool combatResult) {
-	// if (combatResult) {
-  //   mvprintw(24, 128, "You attack the %s", defender.entityName);
-	// 	mvprintw(23, 128, "You hit with a %d", combatHistory->playerAccRoll);
-	// 	mvprintw(25, 128, "dealing %d damage.", combatHistory->playerDMG);	
-	// }
-	// if (!combatResult) {
-	// 	mvprintw(23, 128, "You attack the %s.", defender.entityName);
-	// 	mvprintw(24, 128, "You miss with a %d.", combatHistory->playerAccRoll);
-	// }
-	// if (defender.entityID == 0) {
-	// 	mvprintw(26, 128, "You kill the %s", defender.entityName);
-	// }
-
-}

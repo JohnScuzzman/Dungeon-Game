@@ -1,13 +1,5 @@
-// void CreateMeleeWeapons() {
-
-// }
-
-// void CreateRangedWeapons() {
-
-// }
-
-
 #include <rogue.h>
+
 Weapon None() {
     Weapon none;
     none.weaponID = 0;

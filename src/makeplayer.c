@@ -160,7 +160,6 @@ void ChooseClass() {
     AssignClass((cursorBoundY + cursorBoundX));   
 }
 
-
 /*
 Lets the player enter their name.
 */
@@ -171,7 +170,6 @@ void ChooseName(char* name) {
     mvgetnstr(20, 44, name, 32);
     strcpy(player->playerName, name);
 }
-
 
 /*
 Prints available races.

@@ -3,7 +3,6 @@
 Entity** CreateEntities(void) {
     Entity** map = calloc(MAP_HEIGHT, sizeof(Entity *));
 
-
     /* Change amount of wall entities created based on map dimensions. */ 
     for (int y = 0; y < MAP_HEIGHT; y++) {
         map[y] = calloc(MAP_WIDTH, sizeof(Entity));
@@ -51,7 +50,6 @@ Position SetupMap(Entity* mptr, int n_rooms) {
     int y, x, height, width, n_monsters;
     Room* rooms = calloc(n_rooms, sizeof(Room));
     Position start_pos;
-    
 
     for (int i = 0; i < n_rooms; i++) {
         // left corner of room.
@@ -61,12 +59,9 @@ Position SetupMap(Entity* mptr, int n_rooms) {
         width = (rand() % 15) + 5;// 5-19
 
         rooms[i] = CreateRoom(y, x, height, width);
-
-        
         
         /* Add the created room to the map */
         AddRoomToMap(rooms[i]);
-
 
         /* If not the first room, run this to create hallways. */ 
         if (i > 0) {
@@ -83,13 +78,11 @@ Position SetupMap(Entity* mptr, int n_rooms) {
             UpdateMonsterMap(mptr, n_rooms - 1);
         }
     }
-
     start_pos.y = rooms[0].center.y;
     start_pos.x = rooms[0].center.x;
     free(rooms);
     return start_pos;
 }
-
 
 void FreeMap(void) {
     for (int y = 0; y < MAP_HEIGHT; y++)
@@ -98,7 +91,6 @@ void FreeMap(void) {
     }
     free(map);
 }
-
 
 // /* return farthest unexplored region in players FOV. */
 // /* return monsters pos if monster found. */

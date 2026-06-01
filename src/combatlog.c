@@ -1,6 +1,5 @@
 #include <rogue.h>
 
-
 /* Create the queue for the combat log */
 /* Run this first to initialize it.*/
 LogQueue* MakeCombatLogQueue() {
@@ -72,7 +71,6 @@ void NotEnoughMana() {
 //     }
 // }
 
-
 void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG) {
     char eventDMGBuffer[EVENT_SIZE];
     combatHistory->defender = *defender;
@@ -91,7 +89,6 @@ void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int player
     strcat(combatHistory->event, eventDMGBuffer);
     strcat(combatHistory->event, " total damage.");
     QueueEvent(q, combatHistory->event);
-    
 }
 
 void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC) {
@@ -153,7 +150,6 @@ void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attac
     QueueEvent(q, combatHistory->event);
 }
 
-
 void RecordAbilityUse(){
     if (combatHistory->playerUsedAbility && player->equippedAbility.isMagic) {
         strcpy(combatHistory->event, "You cast ");
@@ -168,6 +164,8 @@ void RecordAbilityUse(){
         QueueEvent(q, combatHistory->event);
     }
 }
+
+// TODO Make two versions of this below for an inventory system?
 // /* Make a window that displays the combat log and lets the user scroll through it.*/
 // void CreateLogWindow(LogQueue *q) {
 

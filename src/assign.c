@@ -228,7 +228,6 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->playerLastPos.y = 0;
 }
 
-
 /*
 Assigns the class chosen by the player to the Entity struct player.
 Each method is listed in classes.c

@@ -21,9 +21,6 @@ const char *DIRECTIONS[8] = {
     "North East"
 };
 
-
-
-
 /* These are like global pointers.*/ 
 /* We can use these in any function without declaring them over and over.*/
 Player* player;
