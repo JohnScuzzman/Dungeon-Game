@@ -277,7 +277,9 @@ bool UsePlayerAbility(int n_monsters, int chosenAbility) {
         if(PlayerRangedAttack(n_monsters)) {
             if (player->equippedAbility.hasEffects) {
                 AbilityEffects(player->equippedAbility.abilityID);
+                return true;
             }
+            player->playerStats.mana -= player->equippedAbility.manaCost;
             return true;
         }
         else{ 

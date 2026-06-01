@@ -110,7 +110,7 @@ Ability FireVolley() {
     fireVolley.duration = 0;
     fireVolley.minDMG = (player->equippedRanged.minDMG);
     fireVolley.maxDMG = (player->equippedRanged.maxDMG);
-    fireVolley.manaCost = 7;
+    fireVolley.manaCost = 5;
     fireVolley.range = 5;
     fireVolley.abilitySave = (player->playerStats.ATK) + 3;
     fireVolley.miscStat = (player->playerStats.LVL); // number of shots fired.
@@ -253,8 +253,6 @@ void CastDrainLife(){
             QueueEvent(q, combatHistory->event);
         }
     }
-    
-    
 }
 
 void CastIceArmor(){

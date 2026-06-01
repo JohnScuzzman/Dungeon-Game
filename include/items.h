@@ -1,39 +1,6 @@
-// typedef struct {
-//   int amuletID;
-//   int value;
-//   CopperAmulet copperAmulet;
-//   SilverAmulet silverAmulet;
-// } Amulet;
-
-// typedef struct {
-//   int cyberneticID;
-//   int value;
-//   MetallicSkin metallicSkin;
-//   ChromeFists chromeFists;
-// } Cybernetic;
-
-// typedef struct {
-//   int ringID;
-//   int value;
-// } Ring;
-
-// typedef struct {
-//   int backID;
-//   int value;
-// } Back;
-
-// typedef struct {
-//   int foodID;
-//   int value;
-// } Food;
-
-// typedef struct {
-//   int potionID;
-//   int value;
-//   AcidPotion acidPotion;
-// } Potion;
 #ifndef ITEMS_H // These prevent compiling items_h multiple times.
 #define ITEMS_H
+
 #define MAX_NAME_SIZE 33
 
 typedef struct {
@@ -77,5 +44,40 @@ Armor LeatherArmor();
 Armor Chainmail();
 Armor RangersCloak();
 Armor MetallicSkin();
+
+// typedef struct {
+//   int amuletID;
+//   int value;
+//   CopperAmulet copperAmulet;
+//   SilverAmulet silverAmulet;
+// } Amulet;
+
+// typedef struct {
+//   int cyberneticID;
+//   int value;
+//   MetallicSkin metallicSkin;
+//   ChromeFists chromeFists;
+// } Cybernetic;
+
+// typedef struct {
+//   int ringID;
+//   int value;
+// } Ring;
+
+// typedef struct {
+//   int backID;
+//   int value;
+// } Back;
+
+// typedef struct {
+//   int foodID;
+//   int value;
+// } Food;
+
+// typedef struct {
+//   int potionID;
+//   int value;
+//   AcidPotion acidPotion;
+// } Potion;
 
 #endif
