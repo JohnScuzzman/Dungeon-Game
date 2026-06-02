@@ -22,9 +22,11 @@
 #define SEEN_COLOR 2
 #define MONSTER_COLOR 2
 #define HIGHLIGHT_COLOR 3
+#define HEADINGS 8
+#define MAX_LEVEL 10 // change later to 20
 #define MAX_NAME_SIZE 33
 #define MAX_EVENT_SIZE 64
-#define INVENTORY_SIZE 64
+#define PLAYER_INV_SIZE 64
 #define MAX_LOG_SIZE 28
 
 /* IMPORTANT*/
@@ -41,6 +43,19 @@ typedef enum {
   SOUTH_EAST,
   NORTH_EAST
 } Direction;
+
+typedef enum {
+    LEVEL_1 = 0,
+    LEVEL_2 = 100,
+    LEVEL_3 = 220,
+    LEVEL_4 = 480,
+    LEVEL_5 = 1000,
+    LEVEL_6 = 2300,
+    LEVEL_7 = 5150,
+    LEVEL_8 = 11330,
+    LEVEL_9 = 25000,
+    LEVEL_10 = 55000
+} Levels;
 
 typedef struct {
   char events[MAX_LOG_SIZE][MAX_EVENT_SIZE];
@@ -77,6 +92,7 @@ typedef struct {
   int maxMana;
   int LVL;
   int EXP;
+  int nextLVLEXP;
   int maxDMG;
   int minDMG;
 } Stats;
@@ -165,7 +181,7 @@ typedef struct
 void TitleScreen();
 
 // assign.c functions
-void AssignClass(int input);
+
 void AssignCorpse(Entity* entity);
 void AssignFloor(int x, int y);
 void AssignGoblinWarrior(Entity* monster);
@@ -174,9 +190,11 @@ void AssignHobgoblinWarrior(Entity* monster);
 void AssignKoboldWarrior(Entity* monster);
 Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
-void AssignStats(int input);
+
 
 // assignclass.c functions
+void AssignClass(int input);
+void AssignStats(int input);
 void AssignKnight();
 void AssignSwashbuckler();
 void AssignWizard();
@@ -203,14 +221,17 @@ bool ShootTarget(int x, int y);
 bool ShootTargetWithAbility(int x, int y);
 
 // combatlog.c functions
+void DequeueEvent (LogQueue *q);
 bool IsEmpty(LogQueue *q);
 bool IsFull(LogQueue *q);
-void DequeueEvent (LogQueue *q);
 LogQueue* MakeCombatLogQueue();
-void QueueEvent(LogQueue *q, char* event);
-char* PeekCombatQueue (LogQueue *q);
-void PrintCombatQueue (LogQueue*q, WINDOW *pad);
 void NotEnoughMana();
+char* PeekCombatQueue (LogQueue *q);
+void PlayerMeleeOrRanged(Player* player);
+void PlayerPrepareCombat(int n_monsters);
+bool PlayerRangedAttack(int n_monsters);
+void PrintCombatQueue (LogQueue*q, WINDOW *pad);
+void QueueEvent(LogQueue *q, char* event);
 void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
 void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC);
 void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
@@ -242,6 +263,10 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove);
 bool NcursesSetup(void);
 void RefreshGamestate(Entity* mptr, int n_monsters);
 void RemoveCursor(int x, int y, int length);
+int NumberOfDigits(int input);
+
+//item.c functions
+Item* CreateItemTable();
 
 // fov.c functions
 void ClearFOV(Player* player);
@@ -307,11 +332,7 @@ bool CheckPlayerAdjacent(Position origin);
 void ManaRegen(int *manaRegen);
 void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool PlayerInput(int input, LogQueue *q, int n_monsters);
-void PlayerMeleeOrRanged(Player* player);
-void PlayerPrepareCombat(int n_monsters);
-bool PlayerRangedAttack(int n_monsters);
 void PlayerRegen(int *playerRegen);
-bool UsePlayerAbility(int n_monsters, int chosenAbility);
 // bool AutoExplore(CombatHistory* combatHistory);
 
 // room.c functions
@@ -328,7 +349,8 @@ extern const int EVENT_SIZE;
 extern const int LOG_WIDTH;
 extern const int LOG_HEIGHT;
 extern const int LOG_SIZE;
-extern const char *DIRECTIONS[8];
+extern const char *DIRECTIONS[HEADINGS];
+extern const int LVL_EXP_VALUES[MAX_LEVEL];
 
 extern Player* player;
 // Array of tiles
@@ -339,5 +361,7 @@ extern Entity* mptr;
 extern CombatHistory* combatHistory;
 // Combat Log
 extern LogQueue* q;
+// Item Table
+extern Item* itemTable;
 
 #endif

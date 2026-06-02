@@ -121,13 +121,13 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             PMove = PlayerInput(ch, q, n_monsters);
             if (combatHistory->playerCombat) {
                 PlayerPrepareCombat(n_monsters);
+                PostCombatEffects();
             }
             if(MoveMonsterLoop(mptr, n_monsters, PMove)){
                 leaveFlag = true;
             }
         }
         CheckPassiveAbilities();
-        // PostCombatInfo();
         RefreshGamestate(mptr, n_monsters);
         PMove = false;  
     }
@@ -142,6 +142,7 @@ void Gameover() {
 }
 
 void CloseGame(void) { 
+    free(itemTable);
     free(q);
     free(combatHistory);
     free(player);
@@ -164,4 +165,13 @@ void Greeting(){
     QueueEvent(q, combatHistory->event);
     strcpy(combatHistory->event, "Use keys 1-5 to use abilities.");
     QueueEvent(q, combatHistory->event);
+}
+
+/* Used to count number of digits in a number.*/
+int NumberOfDigits(int input) {
+  int count;
+  int temp = abs(input);
+  // condition ? expression_if_true : expression_if_false, this one handles a zero input.
+  count = (temp == 0) ? 0 : (int)log10(temp) + 1;
+  return count;
 }

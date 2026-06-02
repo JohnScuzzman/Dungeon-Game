@@ -1,16 +1,5 @@
 #include <rogue.h>
 
-Player* CreatePlayer(Position start_pos) {
-    Player* player = calloc(1, sizeof(Player));
-    player->noCollision = false;
-    player->abilityTimer = 0;
-    player->pos.y = start_pos.y;
-    player->pos.x = start_pos.x;
-    player->ch = '@';
-    player->color = COLOR_PAIR(VISIBLE_COLOR);
-    AssignFloor(start_pos.x, start_pos.y);
-    return player;
-}
 
 /* checks if the player is adjacent to the passed coordinates. */
 bool CheckPlayerAdjacent(Position origin) {
@@ -96,14 +85,29 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
             return PlayerRangedAttack(n_monsters);
         case 70: // F key
             return PlayerRangedAttack(n_monsters);
-        case KEY_HOME:
-            return true;
+        case KEY_HOME: // debug
+            player->playerStats.EXP += 90;
             break;
         case 49: // 1 key
-            return UsePlayerAbility(n_monsters, Ability_1);
+            return UsePlayerAbility(n_monsters, ABILITY_1);
             break;
         case 50: // 2 key
-            return UsePlayerAbility(n_monsters , Ability_2);
+            return UsePlayerAbility(n_monsters , ABILITY_2);
+            break;
+        case 51: // 3 key
+            if (player->playerClass.abilities[ABILITY_3].abilityID > NO_ABILITY){
+                    return UsePlayerAbility(n_monsters , ABILITY_3);
+            }
+            break;
+        case 52: // 4 key
+            if (player->playerClass.abilities[ABILITY_4].abilityID > NO_ABILITY){
+                    return UsePlayerAbility(n_monsters , ABILITY_4);
+            }
+            break;
+        case 53: // 5 key
+            if (player->playerClass.abilities[ABILITY_5].abilityID > NO_ABILITY){
+                    return UsePlayerAbility(n_monsters , ABILITY_5);
+            }
             break;
         default:
             break;
@@ -157,141 +161,6 @@ void ManaRegen(int *manaRegen){
 
 }
 
-void PlayerMeleeOrRanged(Player* player){
-    if (combatHistory->playerUsedAbility == true && player->equippedAbility.isAttack == true) {
-        player->playerStats.maxDMG = player->equippedAbility.maxDMG;
-        player->playerStats.minDMG = player->equippedAbility.minDMG;
-        return;
-        
-    }
-    if (combatHistory->playerUsedRanged == true) {
-        player->playerStats.maxDMG = player->equippedRanged.maxDMG;
-        player->playerStats.minDMG = player->equippedRanged.minDMG;
-        return;
-    }
-    else {
-        player->playerStats.maxDMG = player->equippedMelee.maxDMG;
-        player->playerStats.minDMG = player->equippedMelee.minDMG;
-        return;
-    }
-}
-
-/* Check if player tried to attack something.*/ 
-/* Then check if they used a ranged or melee weapon.*/ 
-/* Set players current max and min DMG accoridingly and then attack the monster.*/ 
-void PlayerPrepareCombat(int n_monsters) {
-    PlayerMeleeOrRanged(player);
-    Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
-    // needed to make sure monsters still get to move if player kills something.
-    if (target->isMonster) {
-        combatHistory->playerCombat = AttackEntity(target, combatHistory, player);
-    }
-    if(combatHistory->monsterKilled){
-        ResetMoveFlags(mptr, n_monsters);
-        combatHistory->monsterKilled = false;
-    }
-}
-
-bool PlayerRangedAttack(int n_monsters){
-    int ch;
-    int closest = FindClosestMonster(mptr, n_monsters);
-    int x = player->pos.x;
-    int y = player->pos.y;
-
-    /* make sure monster is in range */
-    if (closest >= 0) {
-        x = (mptr + closest)->pos.x;
-        y = (mptr + closest)->pos.y;
-    }
-    if (closest == -2) {
-        x = player->pos.x;
-        y = player->pos.y;
-    }
-
-    Cursor(y, x, 1);
-    while((ch = getch()) != 32 && ch != 102) {
-    Cursor(y, x, 1);
-    switch(ch) {
-        //move up
-        case KEY_UP:
-            if (y == 0) {
-                break;
-            }
-            else {
-                RemoveCursor(y, x, 1);
-                y--;
-            }
-        break;
-        //move down
-        case KEY_DOWN:
-            if (y == 50) {
-                break;
-            }
-            else {
-                RemoveCursor(y, x,13);
-                y++;
-            }
-            break;
-        //move left
-        case KEY_LEFT:
-            if (x == 0) {
-                break;
-            }
-            else {
-                RemoveCursor(y, x, 1);
-                x--;
-            }
-            break;
-        case KEY_RIGHT:
-            if (x == 125) {
-                break;
-            }
-            else {
-                RemoveCursor(y, x, 1);
-                x++;
-            }
-            break;
-        default:
-            Cursor(y, x, 1);
-            break;
-        }
-        Cursor(y, x, 1);
-    }
-    if(combatHistory->playerUsedAbility){
-        return ShootTargetWithAbility(x, y);
-    }
-    else{
-        return ShootTarget(x, y);
-    }
-    
-}
-
-/* We use PlayerRangedAttack since melee abilities technically have a range of one.*/
-/* A normal melee attack is made when a player simply moves into a monster.*/
-/* Thus to differentiate a melee ability, we borrow the RangedAttack function. */
-/* PlayerRanged is in combat.c and AbilityEffects is in abilities.c*/
-bool UsePlayerAbility(int n_monsters, int chosenAbility) {
-    combatHistory->playerUsedAbility = true;
-    player->equippedAbility = player->playerClass.abilities[chosenAbility];
-    if(player->equippedAbility.isAttack) {
-        if(PlayerRangedAttack(n_monsters)) {
-            if (player->equippedAbility.hasEffects) {
-                AbilityEffects(player->equippedAbility.abilityID);
-                return true;
-            }
-            player->playerStats.mana -= player->equippedAbility.manaCost;
-            return true;
-        }
-        else{ 
-            return false;
-        }
-    }
-    else {
-            AbilityEffects(player->equippedAbility.abilityID);
-            return true;
-        }
-    return false;
-}
 
 /* Run FindClosestUnexplored, break if it returns a monster. */
 /* return true if monster was found immediately and broke */

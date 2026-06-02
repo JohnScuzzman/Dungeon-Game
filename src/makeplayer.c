@@ -1,4 +1,18 @@
 #include <rogue.h>
+
+
+Player* CreatePlayer(Position start_pos) {
+    Player* player = calloc(1, sizeof(Player));
+    player->noCollision = false;
+    player->abilityTimer = 0;
+    player->pos.y = start_pos.y;
+    player->pos.x = start_pos.x;
+    player->ch = '@';
+    player->color = COLOR_PAIR(VISIBLE_COLOR);
+    AssignFloor(start_pos.x, start_pos.y);
+    return player;
+}
+
 /*
 Ask the player for info about their character.
 Uses the TitleScreen ASCII art, and prints to certain areas of it.

@@ -51,6 +51,10 @@ void DrawPlayerEquipment(){
 }
 
 void DrawPlayerStats() {
+
+  int EXPLen = NumberOfDigits(player->playerStats.EXP);
+  int nextEXPLen = NumberOfDigits(player->playerStats.nextLVLEXP);
+  int EXPbuffer = (EXPLen + nextEXPLen);
   mvprintw(10, 128, "Armor Class: %d", (player->playerStats.AC) + 10);
   mvprintw(16, 128, "HP: %d", player->playerStats.HP);
   if(player->playerClass.isCaster) {
@@ -66,20 +70,41 @@ void DrawPlayerStats() {
   mvprintw(10, 157, "INT: %d", player->playerStats.INT);
   mvprintw(12, 157, "STR: %d", player->playerStats.STR);
   mvprintw(14, 157, "WIS: %d", player->playerStats.WIS);
-  mvprintw(16, 157, "EXP: %d", player->playerStats.EXP);
+  mvprintw(16, 158 - EXPbuffer, "EXP: %d/%d", player->playerStats.EXP, player->playerStats.nextLVLEXP);
 }
 
 /* Draw the players Abilities in the bottom left of screen. */
+/*1: %s - %d |, 2: %s - %d |, etc, are ABILITY_BAR_BUFFERX*/
 void DrawAbilities() { 
+  int buffer;
   mvprintw(ABILITY_BAR_Y, ABILITY_BAR_STARTX, "1: %s - %d |", 
-  player->playerClass.abilities[Ability_1].abilityName, 
-  player->playerClass.abilities[Ability_1].manaCost);
+  player->playerClass.abilities[ABILITY_1].abilityName, 
+  player->playerClass.abilities[ABILITY_1].manaCost);
 
-  mvprintw(ABILITY_BAR_Y, ABILITIY_BAR_BUFFERX +
-  strlen(player->playerClass.abilities[Ability_1].abilityName), 
-  "2: %s - %d |", player->playerClass.abilities[Ability_2].abilityName,
-  player->playerClass.abilities[Ability_2].manaCost);
-} 
+  buffer = strlen(player->playerClass.abilities[ABILITY_1].abilityName) + ABILITIY_BAR_BUFFERX;
+  mvprintw(ABILITY_BAR_Y, buffer, "2: %s - %d |", player->playerClass.abilities[ABILITY_2].abilityName,
+  player->playerClass.abilities[ABILITY_2].manaCost);
+  buffer -= ABILITY_BAR_STARTX;
+  if (player->playerClass.abilities[ABILITY_3].abilityID > NO_ABILITY) {
+    buffer += (strlen(player->playerClass.abilities[ABILITY_2].abilityName) + ABILITIY_BAR_BUFFERX);
+    mvprintw(ABILITY_BAR_Y, buffer, 
+    "3: %s - %d |", player->playerClass.abilities[ABILITY_3].abilityName,
+    player->playerClass.abilities[ABILITY_3].manaCost);
+  }
+  if (player->playerClass.abilities[ABILITY_4].abilityID > NO_ABILITY){
+    buffer += (strlen(player->playerClass.abilities[ABILITY_3].abilityName) + ABILITIY_BAR_BUFFERX);
+    mvprintw(ABILITY_BAR_Y, buffer,
+    "4: %s - %d |", player->playerClass.abilities[ABILITY_4].abilityName,
+    player->playerClass.abilities[ABILITY_4].manaCost);
+  } 
+  if (player->playerClass.abilities[ABILITY_5].abilityID > NO_ABILITY) {
+    buffer += (strlen(player->playerClass.abilities[ABILITY_4].abilityName) + ABILITIY_BAR_BUFFERX);
+    mvprintw(ABILITY_BAR_Y, buffer,
+    "5: %s - %d |", player->playerClass.abilities[ABILITY_5].abilityName,
+    player->playerClass.abilities[ABILITY_5].manaCost);
+  }
+}
+
 
 /* Draw a pretty border around the map and stats.*/
 void DrawBorder(void) {
