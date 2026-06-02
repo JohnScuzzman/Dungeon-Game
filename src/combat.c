@@ -41,6 +41,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
         if (defender->entityStats.HP <= 0) {
             RecordPlayerKill(defender, combatHistory, playerAccRoll, playerDMG);
             AssignCorpse(defender);
+            CheckForLevelUp();
             return true;
         }
         RecordPlayerHit(defender, combatHistory, playerAccRoll, playerDMG);
@@ -50,6 +51,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     return true;
 }
 
+/* Called from PlayerInput in player.c*/
 /* Returns true if the selected combat ability detects a monster in its range and LOS of player. */
 /* Melee abilties still use this function, but with a range of 1. */
 bool ShootTargetWithAbility(int x, int y) {
@@ -128,6 +130,113 @@ bool ShootTarget(int x, int y) {
     
 }
 
+void PlayerMeleeOrRanged(Player* player){
+    if (combatHistory->playerUsedAbility == true && player->equippedAbility.isAttack == true) {
+        player->playerStats.maxDMG = player->equippedAbility.maxDMG;
+        player->playerStats.minDMG = player->equippedAbility.minDMG;
+        return;
+        
+    }
+    if (combatHistory->playerUsedRanged == true) {
+        player->playerStats.maxDMG = player->equippedRanged.maxDMG;
+        player->playerStats.minDMG = player->equippedRanged.minDMG;
+        return;
+    }
+    else {
+        player->playerStats.maxDMG = player->equippedMelee.maxDMG;
+        player->playerStats.minDMG = player->equippedMelee.minDMG;
+        return;
+    }
+}
+
+/* Check if player tried to attack something.*/ 
+/* Then check if they used a ranged or melee weapon.*/ 
+/* Set players current max and min DMG accoridingly and then attack the monster.*/ 
+void PlayerPrepareCombat(int n_monsters) {
+    PlayerMeleeOrRanged(player);
+    Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
+    // needed to make sure monsters still get to move if player kills something.
+    if (target->isMonster) {
+        combatHistory->playerCombat = AttackEntity(target, combatHistory, player);
+    }
+    if(combatHistory->monsterKilled){
+        ResetMoveFlags(mptr, n_monsters);
+        combatHistory->monsterKilled = false;
+    }
+}
+
+bool PlayerRangedAttack(int n_monsters){
+    int ch;
+    int closest = FindClosestMonster(mptr, n_monsters);
+    int x = player->pos.x;
+    int y = player->pos.y;
+
+    /* make sure monster is in range */
+    if (closest >= 0) {
+        x = (mptr + closest)->pos.x;
+        y = (mptr + closest)->pos.y;
+    }
+    if (closest == -2) {
+        x = player->pos.x;
+        y = player->pos.y;
+    }
+
+    Cursor(y, x, 1);
+    while((ch = getch()) != 32 && ch != 102) {
+    Cursor(y, x, 1);
+    switch(ch) {
+        //move up
+        case KEY_UP:
+            if (y == 0) {
+                break;
+            }
+            else {
+                RemoveCursor(y, x, 1);
+                y--;
+            }
+        break;
+        //move down
+        case KEY_DOWN:
+            if (y == 50) {
+                break;
+            }
+            else {
+                RemoveCursor(y, x,13);
+                y++;
+            }
+            break;
+        //move left
+        case KEY_LEFT:
+            if (x == 0) {
+                break;
+            }
+            else {
+                RemoveCursor(y, x, 1);
+                x--;
+            }
+            break;
+        case KEY_RIGHT:
+            if (x == 125) {
+                break;
+            }
+            else {
+                RemoveCursor(y, x, 1);
+                x++;
+            }
+            break;
+        default:
+            Cursor(y, x, 1);
+            break;
+        }
+        Cursor(y, x, 1);
+    }
+    if(combatHistory->playerUsedAbility){
+        return ShootTargetWithAbility(x, y);
+    }
+    else{
+        return ShootTarget(x, y);
+    }
+}
 
 int CalculateEntityAccuracy(Entity* attacker) {
     int attackerATKMod = attacker->entityStats.ATK;
@@ -151,6 +260,7 @@ int CalculateEntityAC(Entity* defender) {
     return defenderAC;
 }
 
+/* playerATK Mod is already incorporated into the abilitySave if applicable in abilities.c*/
 int CalculatePlayerAccuracy() {
     int playerATKMod;
     if (combatHistory->playerUsedAbility == true && player->equippedAbility.isAttack == true){

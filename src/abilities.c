@@ -10,7 +10,6 @@ Ability NoAbility() {
     noAbility.isAttack = false;
     noAbility.isMagic = false;
     noAbility.hasEffects = false;
-    noAbility.postCombat = false;
     noAbility.abilityID = NO_ABILITY;
     noAbility.duration = 0;
     noAbility.minDMG = 0;
@@ -19,8 +18,8 @@ Ability NoAbility() {
     noAbility.range = 0;
     noAbility.abilitySave = 0;
     noAbility.miscStat = 0;
-    strcpy(noAbility.abilityName, " ");
-    strcpy(noAbility.abilityDesc, " ");
+    strcpy(noAbility.abilityName, "None");
+    strcpy(noAbility.abilityDesc, "none");
     return noAbility;
 }
 
@@ -29,11 +28,10 @@ Ability AimedShot() {
     aimedShot.isAttack = true;
     aimedShot.isMagic = false;
     aimedShot.hasEffects = false;
-    aimedShot.postCombat = false;
     aimedShot.abilityID = AIMED_SHOT;
     aimedShot.duration = 0;
     aimedShot.minDMG = (player->equippedRanged.minDMG) + 1;
-    aimedShot.maxDMG = (player->equippedRanged.maxDMG) + 4;
+    aimedShot.maxDMG = (player->equippedRanged.maxDMG) + 1;
     aimedShot.manaCost = 3;
     aimedShot.range = (player->equippedRanged.range);
     aimedShot.abilitySave = (player->playerStats.ATK) + 10;
@@ -48,11 +46,10 @@ Ability Charge() {
     charge.isAttack = true;
     charge.isMagic = false;
     charge.hasEffects = true;
-    charge.postCombat = false;
     charge.abilityID = CHARGE;
     charge.duration = 0;
-    charge.minDMG = (player->equippedMelee.minDMG) + 4;
-    charge.maxDMG = (player->equippedMelee.maxDMG) + 6;
+    charge.minDMG = (player->equippedMelee.minDMG) + 3;
+    charge.maxDMG = (player->equippedMelee.maxDMG) + 3;
     charge.manaCost = 4;
     charge.range = 5;
     charge.abilitySave = (player->playerStats.ATK) + 5;
@@ -67,15 +64,14 @@ Ability DrainLife() {
     drainLife.isAttack = true;
     drainLife.isMagic = true;
     drainLife.hasEffects = true;
-    drainLife.postCombat = true;
     drainLife.abilityID = DRAIN_LIFE;
     drainLife.duration = 0;
     drainLife.minDMG = 4;
     drainLife.maxDMG = 10;
     drainLife.manaCost = 4;
-    drainLife.range = 3;
-    drainLife.abilitySave = (player->playerStats.ATK) + 4;
-    drainLife.miscStat = 0; // HP gained
+    drainLife.range = 1;
+    drainLife.abilitySave = (player->playerStats.ATK) + 6;
+    drainLife.miscStat = 0; 
     strcpy(drainLife.abilityName, "Drain Life");
     strcpy(drainLife.abilityDesc, "none");
     return drainLife;
@@ -86,12 +82,11 @@ Ability Electrify() {
     electrify.isAttack = true;
     electrify.isMagic = false;
     electrify.hasEffects = false;
-    electrify.postCombat = false;
     electrify.abilityID = ELECTRIFY;
     electrify.duration = 0;
     electrify.minDMG = 1;
-    electrify.maxDMG = 10;
-    electrify.manaCost = 4;
+    electrify.maxDMG = 6;
+    electrify.manaCost = 2;
     electrify.range = 3;
     electrify.abilitySave = (player->playerStats.ATK) + 3;
     electrify.miscStat = 0;
@@ -105,7 +100,6 @@ Ability FireVolley() {
     fireVolley.isAttack = true;
     fireVolley.isMagic = false;
     fireVolley.hasEffects = false;
-    fireVolley.postCombat = false;
     fireVolley.abilityID = FIRE_VOLLEY;
     fireVolley.duration = 0;
     fireVolley.minDMG = (player->equippedRanged.minDMG);
@@ -128,7 +122,6 @@ Ability IceArmor() {
     iceArmor.isAttack = false;
     iceArmor.isMagic = true;
     iceArmor.hasEffects = true;
-    iceArmor.postCombat = false;
     iceArmor.abilityID = ICE_ARMOR;
     iceArmor.duration = 240;
     iceArmor.minDMG = 0;
@@ -147,11 +140,10 @@ Ability MagicMissile() {
     magicMissile.isAttack = true;
     magicMissile.isMagic = true;
     magicMissile.hasEffects = false;
-    magicMissile.postCombat = false;
     magicMissile.abilityID = MAGIC_MISSILE;
     magicMissile.duration = 0;
-    magicMissile.minDMG = (player->playerStats.LVL) + 2; //3d4 then 4d4 etc
-    magicMissile.maxDMG = (magicMissile.minDMG) * 4;
+    magicMissile.minDMG = (player->playerStats.LVL) + 1; //3d4 then 4d4 etc
+    magicMissile.maxDMG = ((player->playerStats.LVL) * 4) + 1;
     magicMissile.manaCost = 4;
     magicMissile.range = 15;
     magicMissile.abilitySave = 40; // hard to miss with MM
@@ -167,7 +159,6 @@ Ability SecondWind() {
     secondWind.isAttack = false;
     secondWind.isMagic = false;
     secondWind.hasEffects = true;
-    secondWind.postCombat = false;
     secondWind.abilityID = SECOND_WIND;
     secondWind.duration = 0;
     secondWind.minDMG = 2;
@@ -186,7 +177,6 @@ Ability SelfRepair() {
     selfRepair.isAttack = false;
     selfRepair.isMagic = false;
     selfRepair.hasEffects = true;
-    selfRepair.postCombat = false;
     selfRepair.abilityID = SELF_REPAIR;
     selfRepair.duration = 0;
     selfRepair.minDMG = 1;
@@ -205,7 +195,6 @@ Ability SummonSkeleton() {
     summonSkeleton.isAttack = false;
     summonSkeleton.isMagic = true;
     summonSkeleton.hasEffects = true;
-    summonSkeleton.postCombat = false;
     summonSkeleton.abilityID = SUMMON_SKELETON;
     summonSkeleton.duration = 0; // skeleton lives until it dies
     summonSkeleton.minDMG = 1; // skeletons dmg
@@ -219,17 +208,135 @@ Ability SummonSkeleton() {
     return summonSkeleton;
 }
 
+Ability ShadowBolt() {
+    Ability shadowBolt;
+    shadowBolt.isAttack = true;
+    shadowBolt.isMagic = true;
+    shadowBolt.hasEffects = false;
+    shadowBolt.abilityID = SHADOW_BOLT;
+    shadowBolt.duration = 0; 
+    shadowBolt.minDMG = 4; 
+    shadowBolt.maxDMG = 12;
+    shadowBolt.manaCost = 5;
+    shadowBolt.range = 15;
+    shadowBolt.abilitySave = (player->playerStats.ATK) + 6;
+    shadowBolt.miscStat = 0;
+    strcpy(shadowBolt.abilityName, "ShadowBolt");
+    strcpy(shadowBolt.abilityDesc, "none");
+    return shadowBolt;
+}
+
+Ability Vengeance() {
+    Ability vengeance;
+    vengeance.isAttack = false;
+    vengeance.isMagic = false;
+    vengeance.hasEffects = true;
+    vengeance.abilityID = VENGEANCE;
+    vengeance.duration = 240;
+    vengeance.minDMG = (player->equippedMelee.minDMG) + 1;
+    vengeance.maxDMG = (player->equippedMelee.maxDMG) + 1;
+    vengeance.manaCost = 5;
+    vengeance.range = 0;
+    vengeance.abilitySave = (player->playerStats.ATK) + 6;
+    vengeance.miscStat = 0;
+    strcpy(vengeance.abilityName, "Vengeance");
+    strcpy(vengeance.abilityDesc, "none");
+    return vengeance;
+}
+
+Ability Dash() {
+    Ability dash;
+    dash.isAttack = false;
+    dash.isMagic = false;
+    dash.hasEffects = true;
+    dash.abilityID = DASH;
+    dash.duration = 0;
+    dash.minDMG = 0;
+    dash.maxDMG = 0;
+    dash.manaCost = 3;
+    dash.range = 5;
+    dash.abilitySave = 0;
+    dash.miscStat = 0;
+    strcpy(dash.abilityName, "Dash");
+    strcpy(dash.abilityDesc, "none");
+    return dash;
+}
+
 
 /* If an ability does extra things, specify those things with Cast(AbilityName) */
 
 
 void CastCharge(){
     ChargePlacement();
-    // strcpy(combatHistory->event, "You charge at the ");
-    // strcat(combatHistory->event, combatHistory->defender.entityName);
-    // strcat(combatHistory->event, ".");
-    // QueueEvent(q, combatHistory->event);
     // combatHistory->defender.hasMoved = true; // "stun" the enemy.
+}
+
+void CastDash() {
+    int ch;
+    int x = player->pos.x;
+    int y = player->pos.y;
+    Ability dash = Dash();
+    Position dashPOS;
+    dashPOS.x = x;
+    dashPOS.y = y;
+
+    while((ch = getch()) != 10 && ch != 32) {
+    Cursor(y, x, 1);
+        switch(ch) {
+            //move up
+            case KEY_UP:
+                if (y == 0) {
+                    break;
+                }
+                else {
+                    RemoveCursor(y, x, 1);
+                    y--;
+                }
+            break;
+            //move down
+            case KEY_DOWN:
+                if (y == 50) {
+                    break;
+                }
+                else {
+                    RemoveCursor(y, x,13);
+                    y++;
+                }
+                break;
+            //move left
+            case KEY_LEFT:
+                if (x == 0) {
+                    break;
+                }
+                else {
+                    RemoveCursor(y, x, 1);
+                    x--;
+                }
+                break;
+            case KEY_RIGHT:
+                if (x == 125) {
+                    break;
+                }
+                else {
+                    RemoveCursor(y, x, 1);
+                    x++;
+                }
+                break;
+            default:
+                Cursor(y, x, 1);
+                break;
+            }
+        Cursor(y, x, 1);
+    }
+    
+    if (map[y][x].noCollision && (GetDistance(player->pos, dashPOS) <= dash.range)){
+        player->pos = dashPOS;
+    }
+    else{
+        strcpy(combatHistory->event, "Not a valid position to dash.");
+        QueueEvent(q, combatHistory->event);
+    }
+    
 }
 
 void CastDrainLife(){
@@ -237,7 +344,7 @@ void CastDrainLife(){
         char eventDMGBuffer[EVENT_SIZE];
         strcpy(combatHistory->event, "You drain your enemy of life force,");
         QueueEvent(q, combatHistory->event);
-        int healVal = (combatHistory->playerDMG);
+        int healVal = (combatHistory->playerDMG) / 2; // Divide Damage by 2 for HP gained.
         if(((player->playerStats.HP) + healVal) >= (player->playerStats.maxHP)) {
             strcpy(combatHistory->event, "healing to full for ");
             snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", ((player->playerStats.maxHP) - (player->playerStats.HP)));
@@ -270,12 +377,24 @@ void CastIceArmor(){
     }
 }
 
+void CastVengeance() {
+    if (player->passiveAbility.abilityID == NO_ABILITY){
+        strcpy(combatHistory->event, "");
+        QueueEvent(q, combatHistory->event);
+        player->abilityTimer = player->equippedAbility.duration;
+        player->passiveAbility = Vengeance();
+    }
+    else {
+        strcpy(combatHistory->event, "That spell is still active.");
+        QueueEvent(q, combatHistory->event);
+    }
+}
+
 void CastSecondWind(){
     if(player->playerStats.HP != player->playerStats.maxHP){
         char eventDMGBuffer[EVENT_SIZE];
         int healValFull = (player->playerStats.maxHP) - (player->playerStats.HP);
         int healVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
-        combatHistory->playerUsedAbility = true;
         combatHistory->playerCombat = false;
         strcpy(combatHistory->event, "You mend your wounds.");
         QueueEvent(q, combatHistory->event);
@@ -304,7 +423,6 @@ void CastSecondWind(){
 void CastSelfRepair(){
     if(player->playerStats.HP != player->playerStats.maxHP) {
         char eventDMGBuffer[EVENT_SIZE];
-        combatHistory->playerUsedAbility = true;
         combatHistory->playerCombat = false;
         strcpy(combatHistory->event, "You repair your metal frame.");
         QueueEvent(q, combatHistory->event);
@@ -333,6 +451,20 @@ void RemoveIceArmor(){
     int shieldVal = player->equippedAbility.miscStat;
     player->playerStats.AC -= shieldVal;
     player->passiveAbility = NoAbility();
+}
+
+void RemoveVengeance(){
+    strcpy(combatHistory->event, "You're thirst for revenge fades.");
+    QueueEvent(q, combatHistory->event);
+    player->passiveAbility = NoAbility();
+}
+
+/* Only applies to abilities that are also attacks.*/
+void PostCombatEffects() {
+    if (player->equippedAbility.hasEffects) {
+        AbilityEffects(player->equippedAbility.abilityID);
+    }
+    player->equippedAbility = NoAbility();
 }
 
 /* Called if the players input is processed in UsePlayerAbility from player.c, including attacking a monster.*/
@@ -376,7 +508,25 @@ void CheckPassiveAbilities() {
     if(!DeincrementAbilityTimer()) {
         ResetPassiveAbility(player->passiveAbility.abilityID);
     }
+    else{
+        switch(player->passiveAbility.abilityID) {
+            case VENGEANCE:
+                Entity* defenderptr = &combatHistory->defender;
+                if(combatHistory->entityResult && combatHistory->defender.isMonster) {
+                    strcpy(combatHistory->event, "You take vengeance on your enemy.");
+                    QueueEvent(q, combatHistory->event);
+                    player->playerStats.minDMG = player->passiveAbility.minDMG;
+                    player->playerStats.maxDMG = player->passiveAbility.maxDMG;;
+                    player->playerStats.ATK = player->passiveAbility.abilitySave;
+                    combatHistory->playerCombat = AttackEntity(defenderptr, combatHistory, player);
+                }
+            break;
+            default:
+            break;
+        }
+    }
 }
+
 
 /* Returns true if the abilityTimer was deincremented.*/
 bool DeincrementAbilityTimer() {
@@ -393,6 +543,12 @@ void ResetPassiveAbility(int abilityID) {
             RemoveIceArmor();
         break;
         case SUMMON_SKELETON:
+        break;
+        case VENGEANCE:
+            RemoveVengeance();
+        break;
+        default:
+            player->passiveAbility = NoAbility();
         break;
     }
     
@@ -435,4 +591,29 @@ void ChargePlacement(){
         player->pos.y = ((combatHistory->defender.pos.y) - 1);
         return;
     }
+}
+
+/* Called from PlayerRangedAttack in player.c*/
+/* We use PlayerRangedAttack since melee abilities technically have a range of 1.*/
+/* A normal melee attack is made when a player simply moves into a monster, range of 0.*/
+/* Thus to differentiate a melee ability, we borrow the RangedAttack function. */
+/* PlayerRanged is in combat.c and AbilityEffects is in abilities.c*/
+/* If False, dont charge the player for mana yet, look for it later in PostCombatEffects in engine.c*/
+bool UsePlayerAbility(int n_monsters, int chosenAbility) {
+    combatHistory->playerUsedAbility = true;
+    player->equippedAbility = player->playerClass.abilities[chosenAbility];
+    if(player->equippedAbility.isAttack) {
+        if(PlayerRangedAttack(n_monsters) && !(player->equippedAbility.hasEffects)) {
+            player->playerStats.mana -= player->equippedAbility.manaCost;
+            return true;
+        }
+        else{ 
+            return false;
+        }
+    }
+    else {
+            AbilityEffects(player->equippedAbility.abilityID);
+            return true;
+        }
+    return false;
 }

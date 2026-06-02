@@ -89,6 +89,11 @@ void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int player
     strcat(combatHistory->event, eventDMGBuffer);
     strcat(combatHistory->event, " total damage.");
     QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, "You Gained ");
+    snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d", defender->entityStats.EXP);
+    strcat(combatHistory->event, eventDMGBuffer);
+    strcat(combatHistory->event, " EXP!");
+    QueueEvent(q, combatHistory->event);
 }
 
 void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC) {

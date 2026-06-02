@@ -10,7 +10,7 @@ const int EVENT_SIZE = 33;
 const int LOG_HEIGHT = 22;
 const int LOG_SIZE  = 27;
 const int LOG_WIDTH = 128;
-const char *DIRECTIONS[8] = {
+const char *DIRECTIONS[HEADINGS] = {
     "North",
     "West",
     "South",
@@ -21,6 +21,11 @@ const char *DIRECTIONS[8] = {
     "North East"
 };
 
+const int LVL_EXP_VALUES[MAX_LEVEL] = {
+      LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, 
+      LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
+};
+
 /* These are like global pointers.*/ 
 /* We can use these in any function without declaring them over and over.*/
 Player* player;
@@ -28,6 +33,7 @@ Entity** map;
 Entity* mptr;
 CombatHistory* combatHistory;
 LogQueue* q;
+Item* itemTable;
 
 int main(void)
 {
@@ -58,13 +64,16 @@ int main(void)
     /* Pass the monsterList to populate it.*/
     start_pos = SetupMap(mptr, n_rooms);
 
-    /* Place player using method in player.c*/
+    /* Place player using method in makeplayer.c*/
     player = CreatePlayer(start_pos);
 
     /* Create Combat History */
     combatHistory = CreateCombatHistory(mptr[0]);
 
     q = MakeCombatLogQueue();
+
+    /* Item table */
+    itemTable = CreateItemTable();
 
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
