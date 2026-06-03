@@ -1,6 +1,6 @@
 #include <rogue.h>
 
-Weapon None() {
+Weapon NoWeapon() {
     Weapon none;
     none.item.equippable = true;
     none.item.type = NULL_ITEM;
@@ -118,6 +118,21 @@ Weapon Cutlass() {
     cutlass.range = 0;
     strcpy(cutlass.weaponName, "Cutlass");
     return cutlass;
+}
+
+Weapon Scimitar() {
+    Weapon scimitar;
+    scimitar.item.equippable = true;
+    scimitar.item.type = WEAPON;
+    scimitar.item.itemID = SCIMITAR;
+    scimitar.isMagic = false;
+    scimitar.isRanged = false;
+    scimitar.value = 30;
+    scimitar.minDMG = 2;
+    scimitar.maxDMG = 8;
+    scimitar.range = 0;
+    strcpy(scimitar.weaponName, "Scimitar");
+    return scimitar;
 }
 
 Weapon Quarterstaff() {

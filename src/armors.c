@@ -15,6 +15,18 @@ Armor NoArmor() {
     return none;
 }
 
+Armor Rags() {
+    Armor rags;
+    rags.item.equippable = true;
+    rags.item.type = ARMOR;
+    rags.item.itemID = RAGS;
+    rags.value = 2;
+    rags.AC = 0;
+    rags.type = 1; // 1 = light, 2 = med, 3 = heavy
+    strcpy(rags.armorName, "Rags");
+    return rags;
+}
+
 Armor Robes() {
     Armor robes;
     robes.item.equippable = true;
@@ -31,7 +43,7 @@ Armor LeatherArmor() {
     Armor leatherArmor;
     leatherArmor.item.equippable = true;
     leatherArmor.item.type = ARMOR;
-    leatherArmor.item.itemID = ROBES;
+    leatherArmor.item.itemID = LEATHER_ARMOR;
     leatherArmor.value = 30;
     leatherArmor.AC = 2;
     leatherArmor.type = 2;
@@ -43,7 +55,7 @@ Armor Chainmail() {
     Armor chainmail;
     chainmail.item.equippable = true;
     chainmail.item.type = ARMOR;
-    chainmail.item.itemID = ROBES;
+    chainmail.item.itemID = CHAINMAIL;
     chainmail.value = 50;
     chainmail.AC = 3;
     chainmail.type = 3;
@@ -55,7 +67,7 @@ Armor RangersCloak() {
     Armor rangersCloak;
     rangersCloak.item.equippable = true;
     rangersCloak.item.type = ARMOR;
-    rangersCloak.item.itemID = ROBES;
+    rangersCloak.item.itemID = RANGERS_CLOAK;
     rangersCloak.value = 75;
     rangersCloak.AC = 2;
     rangersCloak.type = 1;
@@ -66,7 +78,7 @@ Armor MetallicSkin() {
     Armor metallicSkin;
     metallicSkin.item.equippable = true;
     metallicSkin.item.type = ARMOR;
-    metallicSkin.item.itemID = ROBES;
+    metallicSkin.item.itemID = METALLIC_SKIN;
     metallicSkin.value = 200;
     metallicSkin.AC = 4;
     metallicSkin.type = 3;

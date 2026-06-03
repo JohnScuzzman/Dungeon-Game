@@ -3,13 +3,7 @@
 You need to also modify the parameters we are using to create our rooms,
 so that they are within the dimensions of the map.
 Otherwise, the game will crash when it tries to allocate a room outside of the map. */
-const int MAX_MONSTER_NAME = 33;
-const int MAP_HEIGHT = 50;
-const int MAP_WIDTH = 125;
-const int EVENT_SIZE = 33;
-const int LOG_HEIGHT = 22;
-const int LOG_SIZE  = 27;
-const int LOG_WIDTH = 128;
+const int ALL_ITEMS = 256;
 const char *DIRECTIONS[HEADINGS] = {
     "North",
     "West",
@@ -20,11 +14,19 @@ const char *DIRECTIONS[HEADINGS] = {
     "South East",
     "North East"
 };
-
+const int EVENT_SIZE = 33;
 const int LVL_EXP_VALUES[MAX_LEVEL] = {
       LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, 
       LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
 };
+const int MAX_MONSTER_NAME = 33;
+const int MAP_HEIGHT = 50;
+const int MAP_WIDTH = 125;
+const int LOG_HEIGHT = 22;
+const int LOG_SIZE  = 27;
+const int LOG_WIDTH = 128;
+
+
 
 /* These are like global pointers.*/ 
 /* We can use these in any function without declaring them over and over.*/
@@ -33,7 +35,8 @@ Entity** map;
 Entity* mptr;
 CombatHistory* combatHistory;
 LogQueue* q;
-Item* itemTable;
+Item* inv;
+Item* items;
 
 int main(void)
 {
@@ -53,6 +56,10 @@ int main(void)
     int n_rooms =  (rand() % 11) + 10;
     int n_monsters = n_rooms - 1;
 
+
+    /* Item table */
+    items = CreateItemTable();
+    
     /* Create our map using function in map.c*/
     map = CreateEntities();
 
@@ -67,13 +74,13 @@ int main(void)
     /* Place player using method in makeplayer.c*/
     player = CreatePlayer(start_pos);
 
-    /* Create Combat History */
+    /* Create Combat History && Log*/
     combatHistory = CreateCombatHistory(mptr[0]);
-
     q = MakeCombatLogQueue();
 
-    /* Item table */
-    itemTable = CreateItemTable();
+    /* Player's Inv*/
+    inv = CreatePlayerInv();
+
 
     /* Call Title Screen from asciiart.c*/
     TitleScreen();

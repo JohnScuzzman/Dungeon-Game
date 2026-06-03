@@ -26,7 +26,7 @@
 #define MAX_LEVEL 10 // change later to 20
 #define MAX_NAME_SIZE 33
 #define MAX_EVENT_SIZE 64
-#define PLAYER_INV_SIZE 64
+#define INVENTORY_SIZE 64
 #define MAX_LOG_SIZE 28
 
 /* IMPORTANT*/
@@ -114,6 +114,7 @@ typedef struct {
   char ch;
   int color;
   int abilityTimer;
+  int inventoryPOS;
   Stats playerStats;
   Position pos;
   Armor equippedArmor;
@@ -140,15 +141,17 @@ typedef struct {
   int aggroRange;
   int color;
   int entityID;
+  int inventoryPOS;
   Stats entityStats;
   Position pos;
   Position playerLastPos;
   MapInfo mapInfo;
+  Armor entityArmor;
+  Weapon entityWeapon;
+  Item inventory[INVENTORY_SIZE];
   char entityName[MAX_NAME_SIZE];
   char entityRace[MAX_NAME_SIZE];
   char entityClass[MAX_NAME_SIZE];
-  char entityArmor[MAX_NAME_SIZE];
-  char entityWeapon[MAX_NAME_SIZE];
 } Entity;
 
 typedef struct {
@@ -265,9 +268,6 @@ void RefreshGamestate(Entity* mptr, int n_monsters);
 void RemoveCursor(int x, int y, int length);
 int NumberOfDigits(int input);
 
-//item.c functions
-Item* CreateItemTable();
-
 // fov.c functions
 void ClearFOV(Player* player);
 int GetDistance(Position origin, Position target);
@@ -275,6 +275,12 @@ int GetSign(int a);
 bool IsInMap(int y, int x);
 bool LineOfSight(Position origin, Position target);
 void MakeFOV(Player* playerint);
+
+//item.c functions
+Item* CreatePlayerInv();
+void CreateMonsterInv(Entity* monster);
+Item* CreateItemTable();
+void AddToNPCInventory(Entity* npc, Item newItem);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);
@@ -349,8 +355,10 @@ extern const int EVENT_SIZE;
 extern const int LOG_WIDTH;
 extern const int LOG_HEIGHT;
 extern const int LOG_SIZE;
-extern const char *DIRECTIONS[HEADINGS];
 extern const int LVL_EXP_VALUES[MAX_LEVEL];
+extern const int ALL_ITEMS;
+extern const char *DIRECTIONS[HEADINGS];
+
 
 extern Player* player;
 // Array of tiles
@@ -362,6 +370,8 @@ extern CombatHistory* combatHistory;
 // Combat Log
 extern LogQueue* q;
 // Item Table
-extern Item* itemTable;
+extern Item* items;
+// Player inv
+extern Item* inv;
 
 #endif
