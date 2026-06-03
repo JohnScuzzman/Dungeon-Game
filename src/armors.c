@@ -7,7 +7,7 @@ Armor NoArmor() {
     Armor none;
     none.item.equippable = true;
     none.item.type = NULL_ITEM;
-    none.item.itemID = NO_ARMOR;
+    none.item.itemID = NULL_ITEM_ID;
     none.value = 10;
     none.AC = 0;
     none.type = 1; // 1 = light, 2 = med, 3 = heavy

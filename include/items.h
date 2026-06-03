@@ -5,7 +5,7 @@
 
 
 typedef enum {
-    NO_WEAPON,
+    NULL_ITEM_ID,
     FISTS,
     CLAWS,
     DAGGER,
@@ -22,7 +22,6 @@ typedef enum {
     FLINTLOCK_PISTOL,
     LIGHTNING_WAND,
     DUAL_FLINTLOCKS,
-    NO_ARMOR,
     RAGS,
     ROBES,
     LEATHER_ARMOR,

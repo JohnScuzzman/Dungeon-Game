@@ -73,3 +73,26 @@ void AddToNPCInventory(Entity* npc, Item newItem) {
     npc->inventory[npc->inventoryPOS] = newItem;
     npc->inventoryPOS++;
 }
+
+void RemoveFromNPCInventory(Entity* npc) {
+    npc->inventory[npc->inventoryPOS] = items[NULL_ITEM_ID];
+    npc->inventoryPOS--;
+}
+
+void AddToPlayerInventory(Item* newItem) {
+    inv[player->inventoryPOS] = *newItem;
+    player->inventoryPOS++;
+}
+
+void RemoveFromPlayerInventory() {
+    inv[player->inventoryPOS] = items[NULL_ITEM_ID];
+    player->inventoryPOS--;
+}
+
+void NullItem(Item* item) {
+    item->equippable = true;
+    item->lootable = false;
+    item->unequippable = true;
+    item->itemID = NULL_ITEM_ID;
+    item->type = NULL_ITEM;
+}
