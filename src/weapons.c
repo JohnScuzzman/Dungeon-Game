@@ -4,7 +4,7 @@ Weapon NoWeapon() {
     Weapon none;
     none.item.equippable = true;
     none.item.type = NULL_ITEM;
-    none.item.itemID = NO_WEAPON;
+    none.item.itemID = NULL_ITEM_ID;
     none.isMagic = false;
     none.isRanged = false;
     none.value = 0;

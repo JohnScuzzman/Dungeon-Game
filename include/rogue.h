@@ -281,6 +281,10 @@ Item* CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
 void AddToNPCInventory(Entity* npc, Item newItem);
+void AddToPlayerInventory(Item* newItem);
+void RemoveFromNPCInventory(Entity* npc);
+void RemoveFromPlayerInventory();
+void NullItem(Item* item);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);

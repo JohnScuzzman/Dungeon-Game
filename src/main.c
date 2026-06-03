@@ -59,7 +59,7 @@ int main(void)
 
     /* Item table */
     items = CreateItemTable();
-    
+
     /* Create our map using function in map.c*/
     map = CreateEntities();
 
@@ -79,7 +79,7 @@ int main(void)
     q = MakeCombatLogQueue();
 
     /* Player's Inv*/
-    inv = CreatePlayerInv();
+    CreatePlayerInv();
 
 
     /* Call Title Screen from asciiart.c*/
