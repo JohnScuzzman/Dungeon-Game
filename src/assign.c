@@ -4,30 +4,30 @@
 Populates a monster struct with a char and their position.
 monsterID is a random int 0-3 passed from map.c
 */ 
+
 Entity AssignMonster(Position pos, int RNG, int monsterID)
 {   
     if (map[pos.y][pos.x].noCollision) {
-         Entity monster;
-    switch (RNG) {
-        /* Call functions from assign.c */
-        case 0:
-        AssignGoblinWarrior(&monster);
-        break;
-        case 1:
-        AssignKoboldWarrior(&monster);
-        break;
-        case 2:
-        AssignHobgoblinWarrior(&monster);
-        break;
-        case 3:
-        AssignGoblinRanger(&monster);
-        break;
-        default:
-        AssignGoblinWarrior(&monster);
-        break; 
-    }
-
+        Entity monster;
         AssignMonsterDefaults(&monster, pos, monsterID);
+        switch (RNG) {
+            /* Call functions from assign.c */
+            case 0:
+            AssignGoblinWarrior(&monster);
+            break;
+            case 1:
+            AssignKoboldWarrior(&monster);
+            break;
+            case 2:
+            AssignHobgoblinWarrior(&monster);
+            break;
+            case 3:
+            AssignGoblinRanger(&monster);
+            break;
+            default:
+            AssignGoblinWarrior(&monster);
+            break; 
+        }
         return monster;
     }
     else{ 
@@ -68,11 +68,6 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.EXP = 0;
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
-    // strcpy(entity->entityName, "Corpse");
-    // map[entity->pos.y][entity->pos.x].ch = entity->ch;
-    // map[entity->pos.y][entity->pos.x].transparent = true;
-    // map[entity->pos.y][entity->pos.x].entityID = entity->entityID;
-    // map[entity->pos.y][entity->pos.x].isMonster = false;
     map[entity->pos.y][entity->pos.x] = *entity;
 }
 
@@ -105,11 +100,12 @@ void AssignFloor(int x, int y) {
     map[y][x].entityStats.EXP = 0;
     map[y][x].entityStats.maxDMG = 0;
     map[y][x].entityStats.minDMG = 0;
-    strcpy(map[y][x].entityArmor, "None");
+    map[y][x].entityWeapon = NoWeapon();
+    map[y][x].entityArmor = NoArmor();
     strcpy(map[y][x].entityClass, "None");
     strcpy(map[y][x].entityName, "Floor");
     strcpy(map[y][x].entityRace, "None");
-    strcpy(map[y][x].entityWeapon, "None");
+
 }
 
 void AssignGoblinWarrior(Entity* monster) {
@@ -121,19 +117,23 @@ void AssignGoblinWarrior(Entity* monster) {
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 12;
     monster->entityStats.WIS = 8;
+    monster->entityArmor = Rags();
+    monster->entityWeapon = Shortsword();
+    AddToNPCInventory(monster, items[RAGS]);
+    AddToNPCInventory(monster, items[SHORTSWORD]);
     monster->aggroRange = 15;
-    monster->entityStats.AC = 1;
+    monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
+    monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 2; // Their swords suck.
+    monster->entityStats.minDMG = monster->entityWeapon.minDMG;
     monster->entityStats.maxHP = 4;
     monster->entityStats.maxMana = 0;
     monster->entityStats.LVL = 1;
     monster->entityStats.EXP = 10;
     monster->entityStats.maxDMG = 4;
     monster->entityStats.minDMG = 1;
-    strcpy(monster->entityArmor, "Leather Armor");
     strcpy(monster->entityClass, "Warrior");
     strcpy(monster->entityName, "Goblin Warrior");
     strcpy(monster->entityRace, "Goblin");
-    strcpy(monster->entityWeapon, "Short Sword");
 }
 
 void AssignKoboldWarrior(Entity* monster) {
@@ -145,19 +145,21 @@ void AssignKoboldWarrior(Entity* monster) {
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 10;
     monster->entityStats.WIS = 8;
+    monster->entityArmor = LeatherArmor();
+    monster->entityWeapon = Dagger();
+    AddToNPCInventory(monster, items[LEATHER_ARMOR]);
+    AddToNPCInventory(monster, items[DAGGER]);
     monster->aggroRange = 20;
-    monster->entityStats.AC = 1;
+    monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
+    monster->entityStats.maxDMG = monster->entityWeapon.maxDMG;
+    monster->entityStats.minDMG = monster->entityWeapon.minDMG;
     monster->entityStats.maxHP = 4;
     monster->entityStats.maxMana = 0;
     monster->entityStats.LVL = 1;
     monster->entityStats.EXP = 10;
-    monster->entityStats.maxDMG = 4;
-    monster->entityStats.minDMG = 1;
-    strcpy(monster->entityArmor, "Leather Armor");
     strcpy(monster->entityClass, "Warrior");
     strcpy(monster->entityName, "Kobold Warrior");
     strcpy(monster->entityRace, "Kobold");
-    strcpy(monster->entityWeapon, "Dagger");
 }
 
 void AssignGoblinRanger(Entity* monster) {
@@ -169,20 +171,24 @@ void AssignGoblinRanger(Entity* monster) {
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 8;
     monster->entityStats.WIS = 8;
+    monster->entityArmor = Rags();
+    monster->entityWeapon = Shortbow();
+    AddToNPCInventory(monster, items[RAGS]);
+    AddToNPCInventory(monster, items[SHORTBOW]);
     monster->aggroRange = 15;
-    monster->entityStats.AC = 0;
+    monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
+    monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 3; // Their shortbows should suck more than normal.
+    monster->entityStats.minDMG = monster->entityWeapon.minDMG;
     monster->entityStats.maxHP = 4;
     monster->entityStats.maxMana = 0;
     monster->entityStats.LVL = 1;
     monster->entityStats.EXP = 10;
-    monster->entityStats.maxDMG = 3;
-    monster->entityStats.minDMG = 1;
-    strcpy(monster->entityArmor, "Leather Armor");
     strcpy(monster->entityClass, "Ranger");
     strcpy(monster->entityName, "Goblin Ranger");
     strcpy(monster->entityRace, "Goblin");
-    strcpy(monster->entityWeapon, "Shortbow");
 }
+
+
 
 void AssignHobgoblinWarrior(Entity* monster) {
     monster->ch = 'H'; 
@@ -193,23 +199,28 @@ void AssignHobgoblinWarrior(Entity* monster) {
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 12;
     monster->entityStats.WIS = 8;
+    monster->entityArmor = LeatherArmor();
+    monster->entityWeapon = Scimitar();
+    AddToNPCInventory(monster, items[LEATHER_ARMOR]);
+    AddToNPCInventory(monster, items[SCIMITAR]);
     monster->aggroRange = 12;
-    monster->entityStats.AC = 1;
+    monster->entityStats.AC = ((monster->entityStats.STR - 10) / 2) + (monster->entityArmor.AC);
+    monster->entityStats.maxDMG = monster->entityWeapon.maxDMG;
+    monster->entityStats.minDMG = monster->entityWeapon.minDMG;
     monster->entityStats.maxHP = 6;
     monster->entityStats.maxMana = 0;
     monster->entityStats.LVL = 1;
     monster->entityStats.EXP = 20;
-    monster->entityStats.maxDMG = 6;
-    monster->entityStats.minDMG = 1;
     strcpy(monster->entityName, "Hoboblin Warrior");
     strcpy(monster->entityRace, "Hobgoblin");
     strcpy(monster->entityClass, "Warrior");
-    strcpy(monster->entityArmor, "Leather Armor");
-    strcpy(monster->entityWeapon, "Scimitar");
 }
+    
 
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
+    CreateMonsterInv(monster);
     monster->entityStats.ATK = 0;
+    monster->inventoryPOS = 0;
     monster->aggroFlag = false;
     monster->hasMoved = false;
     monster->noCollision = false;

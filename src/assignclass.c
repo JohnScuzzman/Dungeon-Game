@@ -109,7 +109,7 @@ void AssignRanger() {
 void AssignDarkKnight() {
     player->equippedArmor = Chainmail();
     player->equippedMelee = Greatsword();
-    player->equippedRanged = None();
+    player->equippedRanged = NoWeapon();
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -142,7 +142,7 @@ void AssignWarlock() {
 void AssignConjurer() {
     player->equippedArmor = Robes();
     player->equippedMelee = Quarterstaff();
-    player->equippedRanged = None();
+    player->equippedRanged = NoWeapon();
     player->playerStats.mana = 20;
     player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -160,7 +160,7 @@ void AssignConjurer() {
 void AssignCyborg() {
     player->equippedArmor = MetallicSkin();
     player->equippedMelee = ChromeFists();
-    player->equippedRanged = None();
+    player->equippedRanged = NoWeapon();
     player->playerStats.mana = 20;
     player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;

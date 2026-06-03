@@ -1,7 +1,6 @@
 #ifndef ITEMS_H // These prevent compiling items_h multiple times.
 #define ITEMS_H
 
-#define ALL_ITEMS 1000
 #define MAX_NAME_SIZE 33
 
 
@@ -14,6 +13,7 @@ typedef enum {
     LONGSWORD,
     GREATSWORD,
     CUTLASS,
+    SCIMITAR,
     QUARTERSTAFF,
     CHROME_FISTS,
     ACID_POTION,
@@ -23,6 +23,7 @@ typedef enum {
     LIGHTNING_WAND,
     DUAL_FLINTLOCKS,
     NO_ARMOR,
+    RAGS,
     ROBES,
     LEATHER_ARMOR,
     CHAINMAIL,
@@ -31,9 +32,19 @@ typedef enum {
 } ItemIDs;
 
 typedef enum {
+    LIGHT,
+    MEDIUM,
+    HEAVY,
+    EXOSUIT,
+    POWER_ARMOR,
+    MAGIC_ARMOR
+} ArmorTypes;
+
+typedef enum {
     NULL_ITEM,
     WEAPON,
     ARMOR,
+    CYBERNETICS,
     HELMET,
     SHOES,
     GLOVES,
@@ -42,13 +53,14 @@ typedef enum {
     AMULET,
     FOOD,
     POTIONS,
-    CYBERNETICS
 } ItemTypes;
 
 typedef struct {
   bool equippable;
-  int type;
+  bool lootable;
+  bool unequippable;
   int itemID;
+  int type;
 } Item;
 
 typedef struct {
@@ -73,7 +85,7 @@ typedef struct {
 
 
 // weapon.c functions
-Weapon None();
+Weapon NoWeapon();
 Weapon Fists();
 Weapon Claws();
 Weapon Dagger();
@@ -81,6 +93,7 @@ Weapon Shortsword();
 Weapon Longsword();
 Weapon Greatsword();
 Weapon Cutlass();
+Weapon Scimitar();
 Weapon Quarterstaff();
 Weapon ChromeFists();
 Weapon AcidPotion();
@@ -91,11 +104,14 @@ Weapon LightningWand();
 Weapon DualFlintlocks();
 
 //armor.c functions
+Armor NoArmor();
 Armor Robes();
+Armor Rags();
 Armor LeatherArmor();
 Armor Chainmail();
 Armor RangersCloak();
 Armor MetallicSkin();
+
 
 
 // typedef struct {

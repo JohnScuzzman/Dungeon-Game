@@ -9,32 +9,14 @@ Entity** CreateEntities(void) {
         for (int x = 0 ; x < MAP_WIDTH; x++) {
             map[y][x].ch = '#';
             map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
-            map[y][x].aggroFlag = false;
-            map[y][x].hasMoved = false;
-            map[y][x].noCollision = false;
-            map[y][x].transparent = false;
-            map[y][x].seen = false;
-            map[y][x].visible = false;
-            map[y][x].isMonster = false;
-            map[y][x].aggroRange = 0;
             map[y][x].entityID = 1;
-            map[y][x].entityStats.CHA = 0;
-            map[y][x].entityStats.CON = 0;
-            map[y][x].entityStats.DEX = 0;
-            map[y][x].entityStats.INT = 0;
-            map[y][x].entityStats.STR = 0;
-            map[y][x].entityStats.WIS = 0;
             map[y][x].entityStats.AC = 30;
             map[y][x].entityStats.HP = 1000;
-            map[y][x].entityStats.EXP = 0;
-            map[y][x].entityStats.LVL = 0;
-            map[y][x].entityStats.maxDMG = 0;
-            map[y][x].entityStats.minDMG = 0;
-            strcpy(map[y][x].entityArmor, "None");
             strcpy(map[y][x].entityClass, "None");
             strcpy(map[y][x].entityName, "Stone Wall");
             strcpy(map[y][x].entityRace, "None");
-            strcpy(map[y][x].entityWeapon, "None");
+            map[y][x].entityArmor = NoArmor();
+            map[y][x].entityWeapon = NoWeapon();
         }
     }
     /* Return a 2D arr thats a pointer that points at pointers that point to our wall entities. */ 

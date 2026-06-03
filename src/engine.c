@@ -141,14 +141,16 @@ void Gameover() {
     getch();
 }
 
+/* Free memory allocated by pointer. */
 void CloseGame(void) { 
-    free(itemTable);
+    free(inv);
+    free(items);
     free(q);
     free(combatHistory);
     free(player);
     free(mptr);
     endwin();
-    /* Free memory allocated by pointer. */
+
 } 
 
 void Greeting(){
