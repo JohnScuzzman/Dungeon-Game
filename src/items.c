@@ -17,6 +17,7 @@ Item* CreatePlayerInv() {
         playerInv[i].unequippable = true;
         playerInv[i].itemID = 0;
         playerInv[i].type = NULL_ITEM;
+        strcpy(playerInv[i].itemName, " ");
     }
     return playerInv;
 }
@@ -28,6 +29,8 @@ void CreateMonsterInv(Entity* monster) {
         monster->inventory[i].unequippable = true;
         monster->inventory[i].itemID = NULL_ITEM_ID;
         monster->inventory[i].type = NULL_ITEM;
+        strcpy(monster->inventory[i].itemName, " ");
+
     }
 }
 
@@ -41,6 +44,7 @@ Item* CreateItemTable() {
         items[i].unequippable = true;
         items[i].itemID = i;
         items[i].type = WEAPON;
+        strcpy(items[i].itemName, " ");
     }
     // Weapons
     for (int i = DAGGER; i < ROBES; i++){
@@ -49,6 +53,7 @@ Item* CreateItemTable() {
         items[i].unequippable = true;
         items[i].itemID = i;
         items[i].type = WEAPON;
+        strcpy(items[i].itemName, " ");
     }
     // Armor
     for  (int i = ROBES; i < METALLIC_SKIN; i++){
@@ -57,6 +62,7 @@ Item* CreateItemTable() {
         items[i].unequippable = true;
         items[i].itemID = i;
         items[i].type = ARMOR;
+        strcpy(items[i].itemName, " ");
     }
     // Cybernetics
     for  (int i = METALLIC_SKIN; i <= METALLIC_SKIN; i++){
@@ -65,6 +71,7 @@ Item* CreateItemTable() {
         items[i].unequippable = true;
         items[i].itemID = i;
         items[i].type = ARMOR;
+        strcpy(items[i].itemName, " ");
         // TODO items[i].subtype = CYBERNETICS;
     }
     return items;
@@ -108,4 +115,5 @@ void NullItem(Item* item) {
     item->unequippable = true;
     item->itemID = NULL_ITEM_ID;
     item->type = NULL_ITEM;
+    strcpy(item->itemName, " ");
 }

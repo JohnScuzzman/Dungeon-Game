@@ -313,7 +313,7 @@ void KeepMonsterMapIntegrity(Entity* mptr);
 int MonsterDirection(Entity* monster);
 Entity* MonsterList(int n_monsters);
 void MoveMonster(Entity* monster, Position newPOS);
-void RecordMonsterSeen();
+void RecordMonsterSeen(Entity* monster);
 void ResetMoveFlags(Entity* mptr, int n_monsters);
 void UpdateMonsterMap(Entity* monster, int n_monsters);
 void UpdateMonsters(Entity* monster, int n_monsters);

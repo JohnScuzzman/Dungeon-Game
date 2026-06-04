@@ -60,6 +60,7 @@ typedef struct {
   bool unequippable;
   int itemID;
   int type;
+  char itemName[MAX_NAME_SIZE];
 } Item;
 
 typedef struct {
@@ -70,7 +71,6 @@ typedef struct {
   int maxDMG;
   int range;
   int value;
-  char weaponName[MAX_NAME_SIZE];
 } Weapon;
 
 typedef struct {
@@ -78,7 +78,6 @@ typedef struct {
   int AC;
   int type; // 1 = light, 2 = medium, 3 = heavy.
   int value;
-  char armorName[MAX_NAME_SIZE];
 } Armor;
 
 

@@ -8,10 +8,11 @@ Armor NoArmor() {
     none.item.equippable = true;
     none.item.type = NULL_ITEM;
     none.item.itemID = NULL_ITEM_ID;
+    none.item.unequippable = false;
+    strcpy(none.item.itemName, "None");
     none.value = 10;
     none.AC = 0;
     none.type = 1; // 1 = light, 2 = med, 3 = heavy
-    strcpy(none.armorName, "None");
     return none;
 }
 
@@ -20,10 +21,10 @@ Armor Rags() {
     rags.item.equippable = true;
     rags.item.type = ARMOR;
     rags.item.itemID = RAGS;
-    rags.value = 2;
+    rags.item.unequippable = false;
+    strcpy(rags.item.itemName, "Rags");
     rags.AC = 0;
     rags.type = 1; // 1 = light, 2 = med, 3 = heavy
-    strcpy(rags.armorName, "Rags");
     return rags;
 }
 
@@ -32,10 +33,11 @@ Armor Robes() {
     robes.item.equippable = true;
     robes.item.type = ARMOR;
     robes.item.itemID = ROBES;
+    robes.item.unequippable = false;
+    strcpy(robes.item.itemName, "Robes");
     robes.value = 10;
     robes.AC = 1;
     robes.type = 1; // 1 = light, 2 = med, 3 = heavy
-    strcpy(robes.armorName, "Robes");
     return robes;
 }
 
@@ -44,10 +46,11 @@ Armor LeatherArmor() {
     leatherArmor.item.equippable = true;
     leatherArmor.item.type = ARMOR;
     leatherArmor.item.itemID = LEATHER_ARMOR;
+    leatherArmor.item.unequippable = false;
+    strcpy(leatherArmor.item.itemName, "Leather Armor");
     leatherArmor.value = 30;
     leatherArmor.AC = 2;
     leatherArmor.type = 2;
-    strcpy(leatherArmor.armorName, "Leather Armor");
     return leatherArmor;
 }
 
@@ -56,10 +59,11 @@ Armor Chainmail() {
     chainmail.item.equippable = true;
     chainmail.item.type = ARMOR;
     chainmail.item.itemID = CHAINMAIL;
+    chainmail.item.unequippable = false;
+    strcpy(chainmail.item.itemName, "Chainmail");
     chainmail.value = 50;
     chainmail.AC = 3;
     chainmail.type = 3;
-    strcpy(chainmail.armorName, "Chainmail");
     return chainmail;
 }
 
@@ -68,10 +72,11 @@ Armor RangersCloak() {
     rangersCloak.item.equippable = true;
     rangersCloak.item.type = ARMOR;
     rangersCloak.item.itemID = RANGERS_CLOAK;
+    rangersCloak.item.unequippable = false;
+    strcpy(rangersCloak.item.itemName, "Ranger's Cloak");
     rangersCloak.value = 75;
     rangersCloak.AC = 2;
     rangersCloak.type = 1;
-    strcpy(rangersCloak.armorName, "Ranger's Cloak");
     return rangersCloak;
 }
 Armor MetallicSkin() {
@@ -79,9 +84,10 @@ Armor MetallicSkin() {
     metallicSkin.item.equippable = true;
     metallicSkin.item.type = ARMOR;
     metallicSkin.item.itemID = METALLIC_SKIN;
+    metallicSkin.item.unequippable = true;
+    strcpy(metallicSkin.item.itemName, "Metallic Skin");
     metallicSkin.value = 200;
     metallicSkin.AC = 4;
     metallicSkin.type = 3;
-    strcpy(metallicSkin.armorName, "Metallic Skin");
     return metallicSkin;
 }
