@@ -90,7 +90,7 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
 void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     MakeFOV(player);
-    DrawEverything(n_monsters);
+    DrawEverything(mptr, n_monsters, combatHistory);
     ResetMoveFlags(mptr, n_monsters);
     combatHistory->playerCombat = false;
     combatHistory->playerUsedAbility = false;
@@ -121,7 +121,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             PMove = PlayerInput(ch, q, n_monsters);
             if (combatHistory->playerCombat) {
                 PlayerPrepareCombat(n_monsters);
-                PostCombatEffects(n_monsters);
+                PostCombatEffects();
             }
             if(MoveMonsterLoop(mptr, n_monsters, PMove)){
                 leaveFlag = true;

@@ -45,9 +45,9 @@ void DrawPlayerEquipment(){
   mvprintw(2, 128, "Name: %s", player->playerName);
   mvprintw(4, 128, "Race: %s", player->playerRace);
   mvprintw(6, 128, "Class: %s", player->playerClass.className);
-  mvprintw(8, 128, "Armor: %s", player->equippedArmor.item.itemName);
-  mvprintw(12, 128, "Melee: %s", player->equippedMelee.item.itemName);
-  mvprintw(14, 128, "Ranged: %s", player->equippedRanged.item.itemName);
+  mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
+  mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
+  mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
 }
 
 void DrawPlayerStats() {
@@ -161,7 +161,7 @@ void DrawCombatLog() {
 }
 
 /*Draw Everything*/ 
-void DrawEverything(int n_monsters) {
+void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
 	clear();
 	DrawMap();
 	DrawPlayer(player);

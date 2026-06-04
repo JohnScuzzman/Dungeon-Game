@@ -127,8 +127,8 @@ void AssignGoblinWarrior(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->entityArmor = Rags();
     monster->entityWeapon = Shortsword();
-    AddToNPCInventory(monster, RAGS);
-    AddToNPCInventory(monster, SHORTSWORD);
+    AddToNPCInventory(monster, items[RAGS]);
+    AddToNPCInventory(monster, items[SHORTSWORD]);
     monster->aggroRange = 15;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 2; // Their swords suck.
@@ -155,8 +155,8 @@ void AssignKoboldWarrior(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->entityArmor = LeatherArmor();
     monster->entityWeapon = Dagger();
-    AddToNPCInventory(monster, LEATHER_ARMOR);
-    AddToNPCInventory(monster, DAGGER);
+    AddToNPCInventory(monster, items[LEATHER_ARMOR]);
+    AddToNPCInventory(monster, items[DAGGER]);
     monster->aggroRange = 20;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = monster->entityWeapon.maxDMG;
@@ -181,8 +181,8 @@ void AssignGoblinRanger(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->entityArmor = Rags();
     monster->entityWeapon = Shortbow();
-    AddToNPCInventory(monster, RAGS);
-    AddToNPCInventory(monster, SHORTBOW);
+    AddToNPCInventory(monster, items[RAGS]);
+    AddToNPCInventory(monster, items[SHORTBOW]);
     monster->aggroRange = 15;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 3; // Their shortbows should suck more than normal.
@@ -209,8 +209,8 @@ void AssignHobgoblinWarrior(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->entityArmor = LeatherArmor();
     monster->entityWeapon = Scimitar();
-    AddToNPCInventory(monster, LEATHER_ARMOR);
-    AddToNPCInventory(monster, SCIMITAR);
+    AddToNPCInventory(monster, items[LEATHER_ARMOR]);
+    AddToNPCInventory(monster, items[SCIMITAR]);
     monster->aggroRange = 12;
     monster->entityStats.AC = ((monster->entityStats.STR - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = monster->entityWeapon.maxDMG;
