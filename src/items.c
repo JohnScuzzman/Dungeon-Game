@@ -15,7 +15,7 @@ Item* CreatePlayerInv() {
         playerInv[i].equippable = false;
         playerInv[i].lootable = false;
         playerInv[i].unequippable = true;
-        playerInv[i].itemID = NULL_ITEM_ID;
+        playerInv[i].itemID = 0;
         playerInv[i].type = NULL_ITEM;
     }
     return playerInv;
@@ -70,11 +70,11 @@ Item* CreateItemTable() {
     return items;
 }
 
-void AddToNPCInventory(Entity* npc, int itemID) {
+void AddToNPCInventory(Entity* npc, Item newItem) {
     if(npc->invTail == (INVENTORY_SIZE - 1)) {
         return;
     }
-    npc->inventory[npc->invTail] = items[itemID];
+    npc->inventory[npc->invTail] = newItem;
     npc->invTail++;
 }
 
@@ -86,11 +86,11 @@ void RemoveFromNPCInventory(Entity* npc) {
     npc->invTail--;
 }
 
-void AddToPlayerInventory(int itemID) {
+void AddToPlayerInventory(Item* newItem) {
     if(player->invTail == (INVENTORY_SIZE - 1)) {
         return;
     }
-    playerInv[player->invTail] = items[itemID];
+    playerInv[player->invTail] = *newItem;
     player->invTail++;
 }
 
@@ -102,10 +102,10 @@ void RemoveFromPlayerInventory() {
     player->invTail--;
 }
 
-// void NullItem(Item* item) {
-//     item->equippable = true;
-//     item->lootable = false;
-//     item->unequippable = true;
-//     item->itemID = NULL_ITEM_ID;
-//     item->type = NULL_ITEM;
-// }
+void NullItem(Item* item) {
+    item->equippable = true;
+    item->lootable = false;
+    item->unequippable = true;
+    item->itemID = NULL_ITEM_ID;
+    item->type = NULL_ITEM;
+}

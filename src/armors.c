@@ -11,7 +11,7 @@ Armor NoArmor() {
     none.value = 10;
     none.AC = 0;
     none.type = 1; // 1 = light, 2 = med, 3 = heavy
-    strcpy(none.item.itemName, "None");
+    strcpy(none.armorName, "None");
     return none;
 }
 
@@ -23,7 +23,7 @@ Armor Rags() {
     rags.value = 2;
     rags.AC = 0;
     rags.type = 1; // 1 = light, 2 = med, 3 = heavy
-    strcpy(rags.item.itemName, "Rags");
+    strcpy(rags.armorName, "Rags");
     return rags;
 }
 
@@ -35,7 +35,7 @@ Armor Robes() {
     robes.value = 10;
     robes.AC = 1;
     robes.type = 1; // 1 = light, 2 = med, 3 = heavy
-    strcpy(robes.item.itemName, "Robes");
+    strcpy(robes.armorName, "Robes");
     return robes;
 }
 
@@ -47,7 +47,7 @@ Armor LeatherArmor() {
     leatherArmor.value = 30;
     leatherArmor.AC = 2;
     leatherArmor.type = 2;
-    strcpy(leatherArmor.item.itemName, "Leather Armor");
+    strcpy(leatherArmor.armorName, "Leather Armor");
     return leatherArmor;
 }
 
@@ -59,7 +59,7 @@ Armor Chainmail() {
     chainmail.value = 50;
     chainmail.AC = 3;
     chainmail.type = 3;
-    strcpy(chainmail.item.itemName, "Chainmail");
+    strcpy(chainmail.armorName, "Chainmail");
     return chainmail;
 }
 
@@ -71,7 +71,7 @@ Armor RangersCloak() {
     rangersCloak.value = 75;
     rangersCloak.AC = 2;
     rangersCloak.type = 1;
-    strcpy(rangersCloak.item.itemName, "Ranger's Cloak");
+    strcpy(rangersCloak.armorName, "Ranger's Cloak");
     return rangersCloak;
 }
 Armor MetallicSkin() {
@@ -82,6 +82,6 @@ Armor MetallicSkin() {
     metallicSkin.value = 200;
     metallicSkin.AC = 4;
     metallicSkin.type = 3;
-    strcpy(metallicSkin.item.itemName, "Metallic Skin");
+    strcpy(metallicSkin.armorName, "Metallic Skin");
     return metallicSkin;
 }

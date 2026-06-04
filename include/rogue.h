@@ -247,7 +247,7 @@ void DrawAbilities();
 void DrawBorder();
 void DrawCombatLog();
 void DrawDebug(Entity* mptr, int n_monsters);
-void DrawEverything(int n_monsters);
+void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory);
 void DrawPlayerEquipment();
 void DrawPlayerStats();
 void DrawMap();
@@ -280,17 +280,11 @@ void MakeFOV(Player* playerint);
 Item* CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
-void AddToNPCInventory(Entity* npc, int itemID);
-void AddToPlayerInventory(int itemID);
+void AddToNPCInventory(Entity* npc, Item newItem);
+void AddToPlayerInventory(Item* newItem);
 void RemoveFromNPCInventory(Entity* npc);
 void RemoveFromPlayerInventory();
-// void NullItem(Item* item);
-
-
-//inventory_menu.c functions
-void RenderInventoryMenu(WINDOW *invMenu, int cursor, int n_options, char** options);
-bool MakeInventoryMenu();
-bool ProcessItemSelect(int choice, WINDOW* invMenu);
+void NullItem(Item* item);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);
