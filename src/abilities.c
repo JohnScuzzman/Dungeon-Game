@@ -282,6 +282,9 @@ void CastDash() {
     // char event[] = "Choose a direction to Dash.";
     // DrawCombatEvent(event);
     while((ch = getch()) != 10 && ch != 32 && !(CheckEscape(ch))) {
+    RemoveCursor(y, x, 1);
+    x = player->pos.x;
+    y = player->pos.y;
     Cursor(y, x, 1);
         switch(ch) {
             //move up
