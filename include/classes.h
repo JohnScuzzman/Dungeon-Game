@@ -73,7 +73,7 @@ typedef struct {
 
 
 
-// abilities.c functions
+// init_abilities.c functions
 Ability NoAbility();
 Ability Charge();
 Ability FireVolley();
@@ -88,18 +88,21 @@ Ability Electrify();
 Ability ShadowBolt();
 Ability Vengeance();
 Ability Dash();
-void AbilityEffects(int abilityID);
+
+// abilities.c functions
+bool AbilityEffects(int abilityID, int n_monsters);
 void CastCharge();
-void CastDash();
+bool CastDash(int n_monsters);
+bool DashPOSHelper(int x, int y);
 void CastDrainLife();
 void CastIceArmor();
 void CastSecondWind();
 void CastSelfRepair();
 void CastVengeance();
 void ChargePlacement();
-void CheckPassiveAbilities();
+void CheckPassiveAbilities(int n_monsters);
 bool DeincrementAbilityTimer();
-void PostCombatEffects();
+void PostCombatEffects(int n_monsters);
 void PostChargeInfo();
 void RemoveIceArmor();
 void RemoveVengeance();

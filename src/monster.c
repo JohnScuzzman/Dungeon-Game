@@ -82,7 +82,7 @@ Entity* MonsterList(int n_monsters) {
     /* Create an Array to hold our Monster Structs. */
     /* Can be accessed anywhere with mptr declared below. */
     Entity* mptr;
-    mptr = (Entity *)malloc(n_monsters * sizeof(Entity));
+    mptr = (Entity *)calloc(n_monsters, sizeof(Entity));
     return mptr; // return pointer to the array.
 }
 

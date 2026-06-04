@@ -3,7 +3,6 @@
 You need to also modify the parameters we are using to create our rooms,
 so that they are within the dimensions of the map.
 Otherwise, the game will crash when it tries to allocate a room outside of the map. */
-const int ALL_ITEMS = 256;
 const char *DIRECTIONS[HEADINGS] = {
     "North",
     "West",
@@ -35,7 +34,7 @@ Entity** map;
 Entity* mptr;
 CombatHistory* combatHistory;
 LogQueue* q;
-Item* inv;
+Item* playerInv;
 Item* items;
 
 int main(void)
@@ -80,7 +79,6 @@ int main(void)
 
     /* Player's Inv*/
     CreatePlayerInv();
-
 
     /* Call Title Screen from asciiart.c*/
     TitleScreen();

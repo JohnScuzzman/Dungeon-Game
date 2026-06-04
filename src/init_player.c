@@ -10,6 +10,9 @@ void AssignKnight() {
     player->equippedArmor = Chainmail();
     player->equippedMelee = Greatsword();
     player->equippedRanged = Shortbow();
+    AddToPlayerInventory(CHAINMAIL);
+    AddToPlayerInventory(GREATSWORD);
+    AddToPlayerInventory(SHORTBOW);
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
