@@ -90,7 +90,7 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
 void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     MakeFOV(player);
-    DrawEverything(mptr, n_monsters, combatHistory);
+    DrawEverything(n_monsters);
     ResetMoveFlags(mptr, n_monsters);
     combatHistory->playerCombat = false;
     combatHistory->playerUsedAbility = false;
@@ -121,13 +121,13 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             PMove = PlayerInput(ch, q, n_monsters);
             if (combatHistory->playerCombat) {
                 PlayerPrepareCombat(n_monsters);
-                PostCombatEffects();
+                PostCombatEffects(n_monsters);
             }
             if(MoveMonsterLoop(mptr, n_monsters, PMove)){
                 leaveFlag = true;
             }
         }
-        CheckPassiveAbilities();
+        CheckPassiveAbilities(n_monsters);
         RefreshGamestate(mptr, n_monsters);
         PMove = false;  
     }
@@ -143,7 +143,7 @@ void Gameover() {
 
 /* Free memory allocated by pointer. */
 void CloseGame(void) { 
-    free(inv);
+    free(playerInv);
     free(items);
     free(q);
     free(combatHistory);

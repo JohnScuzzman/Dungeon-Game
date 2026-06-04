@@ -155,10 +155,10 @@ void PlayerMeleeOrRanged(Player* player){
 void PlayerPrepareCombat(int n_monsters) {
     PlayerMeleeOrRanged(player);
     Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
-    // needed to make sure monsters still get to move if player kills something.
     if (target->isMonster) {
         combatHistory->playerCombat = AttackEntity(target, combatHistory, player);
     }
+    // If a monster died, let other monsters still move.
     if(combatHistory->monsterKilled){
         ResetMoveFlags(mptr, n_monsters);
         combatHistory->monsterKilled = false;
@@ -182,53 +182,56 @@ bool PlayerRangedAttack(int n_monsters){
     }
 
     Cursor(y, x, 1);
-    while((ch = getch()) != 32 && ch != 102) {
-    Cursor(y, x, 1);
-    switch(ch) {
-        //move up
-        case KEY_UP:
-            if (y == 0) {
-                break;
-            }
-            else {
-                RemoveCursor(y, x, 1);
-                y--;
-            }
-        break;
-        //move down
-        case KEY_DOWN:
-            if (y == 50) {
-                break;
-            }
-            else {
-                RemoveCursor(y, x,13);
-                y++;
-            }
-            break;
-        //move left
-        case KEY_LEFT:
-            if (x == 0) {
-                break;
-            }
-            else {
-                RemoveCursor(y, x, 1);
-                x--;
-            }
-            break;
-        case KEY_RIGHT:
-            if (x == 125) {
-                break;
-            }
-            else {
-                RemoveCursor(y, x, 1);
-                x++;
-            }
-            break;
-        default:
-            Cursor(y, x, 1);
-            break;
-        }
+    while((ch = getch()) != 32 && ch != 102 && !(CheckEscape(ch))) {
         Cursor(y, x, 1);
+        switch(ch) {
+            //move up
+            case KEY_UP:
+                if (y == 0) {
+                    break;
+                }
+                else {
+                    RemoveCursor(y, x, 1);
+                    y--;
+                }
+            break;
+            //move down
+            case KEY_DOWN:
+                if (y == 50) {
+                    break;
+                }
+                else {
+                    RemoveCursor(y, x,13);
+                    y++;
+                }
+                break;
+            //move left
+            case KEY_LEFT:
+                if (x == 0) {
+                    break;
+                }
+                else {
+                    RemoveCursor(y, x, 1);
+                    x--;
+                }
+                break;
+            case KEY_RIGHT:
+                if (x == 125) {
+                    break;
+                }
+                else {
+                    RemoveCursor(y, x, 1);
+                    x++;
+                }
+                break;
+            default:
+                Cursor(y, x, 1);
+                break;
+            }
+            Cursor(y, x, 1);
+        }
+    if (CheckEscape(ch)) {
+        return false;
     }
     if(combatHistory->playerUsedAbility){
         return ShootTargetWithAbility(x, y);
@@ -236,6 +239,21 @@ bool PlayerRangedAttack(int n_monsters){
     else{
         return ShootTarget(x, y);
     }
+}
+
+void ResetCombatHistory(){
+    combatHistory->monsterKilled = false;
+    combatHistory->playerResult = false; // 0 = miss, 1 = hit
+    combatHistory->entityResult = false;
+    combatHistory->playerCombat = false; // true if player combat occurred
+    combatHistory->playerUsedRanged = false;
+    combatHistory->playerUsedAbility = false;
+    combatHistory->attackerAccRoll = 0;
+    combatHistory->attackerDMG = 0;
+    combatHistory->defenderAC = 0;
+    combatHistory->playerAccRoll = 0;
+    combatHistory->playerDMG = 0;
+    combatHistory->playerAC = 0;
 }
 
 int CalculateEntityAccuracy(Entity* attacker) {

@@ -59,6 +59,7 @@ void LevelKnight() {
         player->playerClass.abilities[ABILITY_3] = Vengeance();
         break;
         case 3:
+        player->playerClass.abilities[ABILITY_4] = Dash();
         break;
         case 4:
         break;

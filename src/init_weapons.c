@@ -11,7 +11,7 @@ Weapon NoWeapon() {
     none.minDMG = 0;
     none.maxDMG = 0;
     none.range = 0;
-    strcpy(none.weaponName, "None");
+    strcpy(none.item.itemName, "None");
     return none;
 }
 
@@ -26,7 +26,7 @@ Weapon Fists() {
     fists.minDMG = 1;
     fists.maxDMG = 3;
     fists.range = 0;
-    strcpy(fists.weaponName, "Fists");
+    strcpy(fists.item.itemName, "Fists");
     return fists;
 }
 
@@ -41,7 +41,7 @@ Weapon Claws() {
     claws.minDMG = 1;
     claws.maxDMG = 4;
     claws.range = 0;
-    strcpy(claws.weaponName, "Claws");
+    strcpy(claws.item.itemName, "Claws");
     return claws;
 }
 
@@ -56,7 +56,7 @@ Weapon Dagger() {
     dagger.minDMG = 1;
     dagger.maxDMG = 4;
     dagger.range = 0;
-    strcpy(dagger.weaponName, "Dagger");
+    strcpy(dagger.item.itemName, "Dagger");
     return dagger;
 }
 
@@ -71,7 +71,7 @@ Weapon Shortsword() {
     shortSword.minDMG = 1;
     shortSword.maxDMG = 6;
     shortSword.range = 0;
-    strcpy(shortSword.weaponName, "Shortsword");
+    strcpy(shortSword.item.itemName, "Shortsword");
     return shortSword;
 }
 
@@ -86,7 +86,7 @@ Weapon Longsword() {
     longSword.minDMG = 1;
     longSword.maxDMG = 8;
     longSword.range = 0;
-    strcpy(longSword.weaponName, "Longsword");
+    strcpy(longSword.item.itemName, "Longsword");
     return longSword;
 }
 
@@ -101,7 +101,7 @@ Weapon Greatsword() {
     greatSword.minDMG = 1;
     greatSword.maxDMG = 10;
     greatSword.range = 0;
-    strcpy(greatSword.weaponName, "Greatsword");
+    strcpy(greatSword.item.itemName, "Greatsword");
     return greatSword;
 }
 
@@ -116,7 +116,7 @@ Weapon Cutlass() {
     cutlass.minDMG = 2;
     cutlass.maxDMG = 7;
     cutlass.range = 0;
-    strcpy(cutlass.weaponName, "Cutlass");
+    strcpy(cutlass.item.itemName, "Cutlass");
     return cutlass;
 }
 
@@ -131,7 +131,7 @@ Weapon Scimitar() {
     scimitar.minDMG = 2;
     scimitar.maxDMG = 8;
     scimitar.range = 0;
-    strcpy(scimitar.weaponName, "Scimitar");
+    strcpy(scimitar.item.itemName, "Scimitar");
     return scimitar;
 }
 
@@ -146,7 +146,7 @@ Weapon Quarterstaff() {
     quarterstaff.minDMG = 1;
     quarterstaff.maxDMG = 4;
     quarterstaff.range = 0;
-    strcpy(quarterstaff.weaponName, "Quarterstaff");
+    strcpy(quarterstaff.item.itemName, "Quarterstaff");
     return quarterstaff;
 }
 
@@ -161,7 +161,7 @@ Weapon ChromeFists() {
     chromeFists.minDMG = 1;
     chromeFists.maxDMG = 6;
     chromeFists.range = 0;
-    strcpy(chromeFists.weaponName, "Chrome Fists");
+    strcpy(chromeFists.item.itemName, "Chrome Fists");
     return chromeFists;
 }
 
@@ -176,7 +176,7 @@ Weapon AcidPotion() {
     acidPotion.minDMG = 2;
     acidPotion.maxDMG = 8;
     acidPotion.range = 6;
-    strcpy(acidPotion.weaponName, "Acid Potion");
+    strcpy(acidPotion.item.itemName, "Acid Potion");
     return acidPotion;
 }
 
@@ -191,7 +191,7 @@ Weapon Shortbow() {
     shortbow.minDMG = 1;
     shortbow.maxDMG = 6;
     shortbow.range = 8;
-    strcpy(shortbow.weaponName, "Short Bow");
+    strcpy(shortbow.item.itemName, "Short Bow");
     return shortbow;
 }
 
@@ -206,7 +206,7 @@ Weapon Longbow() {
     longbow.minDMG = 1;
     longbow.maxDMG = 8;
     longbow.range = 10;
-    strcpy(longbow.weaponName, "Long Bow");
+    strcpy(longbow.item.itemName, "Long Bow");
     return longbow;
 }
 
@@ -221,7 +221,7 @@ Weapon FlintlockPistol() {
     flintlockPistol.minDMG = 1;
     flintlockPistol.maxDMG = 8;
     flintlockPistol.range = 5;
-    strcpy(flintlockPistol.weaponName, "Flintlock Pistol");
+    strcpy(flintlockPistol.item.itemName, "Flintlock Pistol");
     return flintlockPistol;
 }
 
@@ -237,7 +237,7 @@ Weapon LightningWand() {
     lightningWand.maxDMG = 3;
     lightningWand.range = 10;
     lightningWand.isRanged = true;
-    strcpy(lightningWand.weaponName, "Wand of Sparks");
+    strcpy(lightningWand.item.itemName, "Wand of Sparks");
     return lightningWand;
 }
 
@@ -252,7 +252,7 @@ Weapon DualFlintlocks() {
     dualFlintlocks.minDMG = 2;
     dualFlintlocks.maxDMG = 12;
     dualFlintlocks.range = 5;
-    strcpy(dualFlintlocks.weaponName, "Dual Flintlocks");
+    strcpy(dualFlintlocks.item.itemName, "Dual Flintlocks");
     return dualFlintlocks;
 }
 

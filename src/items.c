@@ -1,34 +1,35 @@
 #include <rogue.h>
 
+const int ALL_ITEMS = 256;
+const int INVENTORY_SIZE = 64;
 
 // Parent Class Item goes at the top of Armor, Weapon, etc structs to make it a child struct.
 // Weapon newItem = ShortSword();
 // reference the items variables with Item* itemPtr = (Item *)&newItem
 // Even though newItem is a weapon, we can still look at its item info using pointer upcasting.
-#define INVENTORY_SIZE 64
-#define ALL_ITEMS 256
 /* Refer to the enum Items in items.h */
 /* WIP */
 Item* CreatePlayerInv() {
-    Item* inv = calloc(INVENTORY_SIZE, sizeof(Item));
+    Item* playerInv = calloc(INVENTORY_SIZE, sizeof(Item));
     for (int i = 0; i < INVENTORY_SIZE; i++){
-        items[i].equippable = false;
-        items[i].lootable = false;
-        items[i].itemID = 0;
-        items[i].type = NULL_ITEM;
+        playerInv[i].equippable = false;
+        playerInv[i].lootable = false;
+        playerInv[i].unequippable = true;
+        playerInv[i].itemID = NULL_ITEM_ID;
+        playerInv[i].type = NULL_ITEM;
     }
-    return inv;
+    return playerInv;
 }
 
 void CreateMonsterInv(Entity* monster) {
     for (int i = 0; i < INVENTORY_SIZE; i++){
         monster->inventory[i].equippable = false;
         monster->inventory[i].lootable = false;
-        monster->inventory[i].itemID = 0;
+        monster->inventory[i].unequippable = true;
+        monster->inventory[i].itemID = NULL_ITEM_ID;
         monster->inventory[i].type = NULL_ITEM;
     }
 }
-
 
 /* Weapons begin at 'FIST', Armor Begins at 'ROBES'*/
 Item* CreateItemTable() {
@@ -69,30 +70,42 @@ Item* CreateItemTable() {
     return items;
 }
 
-void AddToNPCInventory(Entity* npc, Item newItem) {
-    npc->inventory[npc->inventoryPOS] = newItem;
-    npc->inventoryPOS++;
+void AddToNPCInventory(Entity* npc, int itemID) {
+    if(npc->invTail == (INVENTORY_SIZE - 1)) {
+        return;
+    }
+    npc->inventory[npc->invTail] = items[itemID];
+    npc->invTail++;
 }
 
 void RemoveFromNPCInventory(Entity* npc) {
-    npc->inventory[npc->inventoryPOS] = items[NULL_ITEM_ID];
-    npc->inventoryPOS--;
+    if(npc->invTail == 0) {
+        return;
+    }
+    npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
+    npc->invTail--;
 }
 
-void AddToPlayerInventory(Item* newItem) {
-    inv[player->inventoryPOS] = *newItem;
-    player->inventoryPOS++;
+void AddToPlayerInventory(int itemID) {
+    if(player->invTail == (INVENTORY_SIZE - 1)) {
+        return;
+    }
+    playerInv[player->invTail] = items[itemID];
+    player->invTail++;
 }
 
 void RemoveFromPlayerInventory() {
-    inv[player->inventoryPOS] = items[NULL_ITEM_ID];
-    player->inventoryPOS--;
+    if(player->invTail == 0) {
+        return;
+    }
+    playerInv[player->invTail] = items[NULL_ITEM_ID];
+    player->invTail--;
 }
 
-void NullItem(Item* item) {
-    item->equippable = true;
-    item->lootable = false;
-    item->unequippable = true;
-    item->itemID = NULL_ITEM_ID;
-    item->type = NULL_ITEM;
-}
+// void NullItem(Item* item) {
+//     item->equippable = true;
+//     item->lootable = false;
+//     item->unequippable = true;
+//     item->itemID = NULL_ITEM_ID;
+//     item->type = NULL_ITEM;
+// }

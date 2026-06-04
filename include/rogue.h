@@ -26,7 +26,7 @@
 #define MAX_LEVEL 10 // change later to 20
 #define MAX_NAME_SIZE 33
 #define MAX_EVENT_SIZE 64
-#define INVENTORY_SIZE 64
+#define MAX_INVENTORY_SIZE 64
 #define MAX_LOG_SIZE 28
 
 /* IMPORTANT*/
@@ -114,7 +114,8 @@ typedef struct {
   char ch;
   int color;
   int abilityTimer;
-  int inventoryPOS;
+  int invTail;
+  int invHead;
   Stats playerStats;
   Position pos;
   Armor equippedArmor;
@@ -141,14 +142,14 @@ typedef struct {
   int aggroRange;
   int color;
   int entityID;
-  int inventoryPOS;
+  int invTail;
   Stats entityStats;
   Position pos;
   Position playerLastPos;
   MapInfo mapInfo;
   Armor entityArmor;
   Weapon entityWeapon;
-  Item inventory[INVENTORY_SIZE];
+  Item inventory[MAX_INVENTORY_SIZE];
   char entityName[MAX_NAME_SIZE];
   char entityRace[MAX_NAME_SIZE];
   char entityClass[MAX_NAME_SIZE];
@@ -183,8 +184,7 @@ typedef struct
 // asciiart.c funcions
 void TitleScreen();
 
-// assign.c functions
-
+// assign_npc.c functions
 void AssignCorpse(Entity* entity);
 void AssignFloor(int x, int y);
 void AssignGoblinWarrior(Entity* monster);
@@ -195,7 +195,7 @@ Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 
 
-// assignclass.c functions
+// assign_player.c functions
 void AssignClass(int input);
 void AssignStats(int input);
 void AssignKnight();
@@ -219,7 +219,7 @@ int CalculateEntityAC(Entity* defender);
 int CalculatePlayerAccuracy();
 int CalculatePlayerDamage();
 int CalculatePlayerAC();
-void ResetCombatHistory(CombatHistory* combatHistory);
+void ResetCombatHistory();
 bool ShootTarget(int x, int y);
 bool ShootTargetWithAbility(int x, int y);
 
@@ -247,7 +247,7 @@ void DrawAbilities();
 void DrawBorder();
 void DrawCombatLog();
 void DrawDebug(Entity* mptr, int n_monsters);
-void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory);
+void DrawEverything(int n_monsters);
 void DrawPlayerEquipment();
 void DrawPlayerStats();
 void DrawMap();
@@ -280,11 +280,17 @@ void MakeFOV(Player* playerint);
 Item* CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
-void AddToNPCInventory(Entity* npc, Item newItem);
-void AddToPlayerInventory(Item* newItem);
+void AddToNPCInventory(Entity* npc, int itemID);
+void AddToPlayerInventory(int itemID);
 void RemoveFromNPCInventory(Entity* npc);
 void RemoveFromPlayerInventory();
-void NullItem(Item* item);
+// void NullItem(Item* item);
+
+
+//inventory_menu.c functions
+void RenderInventoryMenu(WINDOW *invMenu, int cursor, int n_options, char** options);
+bool MakeInventoryMenu();
+bool ProcessItemSelect(int choice, WINDOW* invMenu);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);
@@ -356,6 +362,7 @@ extern const int MAP_HEIGHT;
 extern const int MAP_WIDTH;
 extern const int MAX_MONSTER_NAME;
 extern const int EVENT_SIZE;
+extern const int INVENTORY_SIZE;
 extern const int LOG_WIDTH;
 extern const int LOG_HEIGHT;
 extern const int LOG_SIZE;
@@ -373,9 +380,10 @@ extern Entity* mptr;
 extern CombatHistory* combatHistory;
 // Combat Log
 extern LogQueue* q;
+// Player playerInv
+extern Item* playerInv;
 // Item Table
 extern Item* items;
-// Player inv
-extern Item* inv;
+
 
 #endif

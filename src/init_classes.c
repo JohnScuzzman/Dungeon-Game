@@ -99,7 +99,7 @@ Class Ranger(){
     ranger.mainStat = 2;
     ranger.secondaryStat = 2;
     ranger.abilities[ABILITY_1] = AimedShot();
-    ranger.abilities[ABILITY_2] = SecondWind();
+    ranger.abilities[ABILITY_2] = Dash();
     ranger.abilities[ABILITY_3] = NoAbility();
     ranger.abilities[ABILITY_4] = NoAbility();
     ranger.abilities[ABILITY_5] = NoAbility();
