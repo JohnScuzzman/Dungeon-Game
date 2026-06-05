@@ -12,31 +12,36 @@ const int INVENTORY_SIZE = 64;
 Item* CreatePlayerInv() {
     Item* playerInv = calloc(INVENTORY_SIZE, sizeof(Item));
     for (int i = 0; i < INVENTORY_SIZE; i++){
-        playerInv[i].equippable = false;
+        playerInv[i].equippable = true;
         playerInv[i].lootable = false;
         playerInv[i].unequippable = true;
-        playerInv[i].itemID = 0;
+        playerInv[i].itemID = NULL_ITEM_ID;
         playerInv[i].type = NULL_ITEM;
         strcpy(playerInv[i].itemName, " ");
     }
-    return playerInv;
+    return playerInv; 
 }
 
 void CreateMonsterInv(Entity* monster) {
     for (int i = 0; i < INVENTORY_SIZE; i++){
-        monster->inventory[i].equippable = false;
+        monster->inventory[i].equippable = true;
         monster->inventory[i].lootable = false;
         monster->inventory[i].unequippable = true;
         monster->inventory[i].itemID = NULL_ITEM_ID;
         monster->inventory[i].type = NULL_ITEM;
         strcpy(monster->inventory[i].itemName, " ");
-
     }
 }
 
 /* Weapons begin at 'FIST', Armor Begins at 'ROBES'*/
 Item* CreateItemTable() {
     Item* items = calloc(ALL_ITEMS, sizeof(Item));
+        items[NULL_ITEM_ID].equippable = true;
+        items[NULL_ITEM_ID].lootable = false;
+        items[NULL_ITEM_ID].unequippable = true;
+        items[NULL_ITEM_ID].itemID = NULL_ITEM_ID;
+        items[NULL_ITEM_ID].type = NULL_ITEM;
+        strcpy(items[NULL_ITEM_ID].itemName, " ");
     // Innate biological weapons
     for (int i = FISTS; i < DAGGER; i++){
         items[i].equippable = true;
@@ -93,11 +98,11 @@ void RemoveFromNPCInventory(Entity* npc) {
     npc->invTail--;
 }
 
-void AddToPlayerInventory(Item* newItem) {
+void AddToPlayerInventory(Item newItem) {
     if(player->invTail == (INVENTORY_SIZE - 1)) {
         return;
     }
-    playerInv[player->invTail] = *newItem;
+    playerInv[player->invTail] = newItem;
     player->invTail++;
 }
 
@@ -109,11 +114,11 @@ void RemoveFromPlayerInventory() {
     player->invTail--;
 }
 
-void NullItem(Item* item) {
-    item->equippable = true;
-    item->lootable = false;
-    item->unequippable = true;
-    item->itemID = NULL_ITEM_ID;
-    item->type = NULL_ITEM;
-    strcpy(item->itemName, " ");
-}
+// void NullItem(Item* item) {
+//     item->equippable = true;
+//     item->lootable = false;
+//     item->unequippable = true;
+//     item->itemID = NULL_ITEM_ID;
+//     item->type = NULL_ITEM;
+//     strcpy(item->itemName, " ");
+// }

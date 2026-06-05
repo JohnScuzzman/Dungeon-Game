@@ -80,8 +80,6 @@ typedef struct {
   int value;
 } Armor;
 
-
-
 // weapon.c functions
 Weapon NoWeapon();
 Weapon Fists();

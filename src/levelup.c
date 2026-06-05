@@ -56,9 +56,14 @@ void LevelKnight() {
     player->playerStats.ATK = ((player->playerStats.STR) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
+        player->playerClass.abilities[ABILITY_1] = Charge();
+        player->playerClass.abilities[ABILITY_2] = SecondWind();
         player->playerClass.abilities[ABILITY_3] = Vengeance();
         break;
         case 3:
+        player->playerClass.abilities[ABILITY_1] = Charge();
+        player->playerClass.abilities[ABILITY_2] = SecondWind();
+        player->playerClass.abilities[ABILITY_3] = Vengeance();
         player->playerClass.abilities[ABILITY_4] = Dash();
         break;
         case 4:
@@ -78,9 +83,14 @@ void LevelSwashbuckler() {
     player->playerStats.ATK = ((player->playerStats.DEX) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
+        player->playerClass.abilities[ABILITY_1] = FireVolley();
+        player->playerClass.abilities[ABILITY_2] = Dash();
         player->playerClass.abilities[ABILITY_3] = SecondWind();
         break;
         case 3:
+        player->playerClass.abilities[ABILITY_1] = FireVolley();
+        player->playerClass.abilities[ABILITY_2] = Dash();
+        player->playerClass.abilities[ABILITY_3] = SecondWind();
         player->playerClass.abilities[ABILITY_4] = Charge();
         break;
         case 4:
@@ -99,9 +109,15 @@ void LevelWizard() {
     player->playerStats.ATK = ((player->playerStats.INT) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
+        player->playerClass.abilities[ABILITY_1] = MagicMissile();
+        player->playerClass.abilities[ABILITY_2] = IceArmor();
         player->playerClass.abilities[ABILITY_3] = ShadowBolt();
         break;
         case 3:
+        player->playerClass.abilities[ABILITY_1] = MagicMissile();
+        player->playerClass.abilities[ABILITY_2] = IceArmor();
+        player->playerClass.abilities[ABILITY_3] = ShadowBolt();
+        player->playerClass.abilities[ABILITY_4] = Dash();
         break;
         case 4:
         break;
@@ -120,9 +136,15 @@ void LevelNecromancer() {
     player->playerStats.ATK = ((player->playerStats.INT) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
+        player->playerClass.abilities[ABILITY_1] = DrainLife();
+        player->playerClass.abilities[ABILITY_2] = SummonSkeleton();
         player->playerClass.abilities[ABILITY_3] = ShadowBolt();
         break;
         case 3:
+        player->playerClass.abilities[ABILITY_1] = DrainLife();
+        player->playerClass.abilities[ABILITY_2] = SummonSkeleton();
+        player->playerClass.abilities[ABILITY_3] = ShadowBolt();
+        player->playerClass.abilities[ABILITY_4] = Dash();
         break;
         case 4:
         break;
@@ -140,9 +162,40 @@ void LevelGunslinger() {
     player->playerStats.ATK = ((player->playerStats.DEX) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
+        player->playerClass.abilities[ABILITY_1] = FireVolley();
+        player->playerClass.abilities[ABILITY_2] = Dash();
         player->playerClass.abilities[ABILITY_3] = AimedShot();
         break;
         case 3:
+        player->playerClass.abilities[ABILITY_1] = FireVolley();
+        player->playerClass.abilities[ABILITY_2] = Dash();
+        player->playerClass.abilities[ABILITY_3] = AimedShot();
+        player->playerClass.abilities[ABILITY_4] = SecondWind();
+        break;
+        case 4:
+        break;
+        case 5:
+        break;
+        case 6:
+        break;
+        case 7:
+        break;
+    }
+}
+
+void LevelDruid() {
+    player->playerStats.WIS += (player->playerClass.mainStat);
+    player->playerStats.ATK = ((player->playerStats.WIS) - 10) / 2;
+    switch((player->playerStats.LVL)) {
+        case 2:
+        player->playerClass.abilities[ABILITY_1] = IceArmor();
+        player->playerClass.abilities[ABILITY_2] = Electrify();
+        player->playerClass.abilities[ABILITY_3] = Dash();
+        break;
+        case 3:
+        player->playerClass.abilities[ABILITY_1] = IceArmor();
+        player->playerClass.abilities[ABILITY_2] = Electrify();
+        player->playerClass.abilities[ABILITY_3] = Dash();
         player->playerClass.abilities[ABILITY_4] = SecondWind();
         break;
         case 4:
@@ -162,10 +215,15 @@ void LevelRanger() {
     player->playerStats.ATK = ((player->playerStats.DEX) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
-        player->playerClass.abilities[ABILITY_3] = Dash();
+        player->playerClass.abilities[ABILITY_1] = AimedShot();
+        player->playerClass.abilities[ABILITY_2] = Dash();
+        player->playerClass.abilities[ABILITY_3] = FireVolley();
         break;
         case 3:
-        player->playerClass.abilities[ABILITY_4] = FireVolley();
+        player->playerClass.abilities[ABILITY_1] = AimedShot();
+        player->playerClass.abilities[ABILITY_2] = Dash();
+        player->playerClass.abilities[ABILITY_3] = FireVolley();
+        player->playerClass.abilities[ABILITY_4] = ThornBolt();
         break;
         case 4:
         break;
@@ -183,6 +241,8 @@ void LevelDarkKnight() {
     player->playerStats.ATK = ((player->playerStats.STR) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
+        player->playerClass.abilities[ABILITY_1] = Charge();
+        player->playerClass.abilities[ABILITY_2] = DrainLife();
         player->playerClass.abilities[ABILITY_3] = Vengeance();
         break;
         case 3:
@@ -204,9 +264,15 @@ void LevelWarlock() {
     player->playerStats.ATK = ((player->playerStats.CHA) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
+        player->playerClass.abilities[ABILITY_1] = DrainLife();
+        player->playerClass.abilities[ABILITY_2] = MagicMissile();
         player->playerClass.abilities[ABILITY_3] = ShadowBolt();
         break;
         case 3:
+        player->playerClass.abilities[ABILITY_1] = DrainLife();
+        player->playerClass.abilities[ABILITY_2] = MagicMissile();
+        player->playerClass.abilities[ABILITY_3] = ShadowBolt();
+        player->playerClass.abilities[ABILITY_4] = SummonSkeleton();
         break;
         case 4:
         break;
@@ -225,9 +291,15 @@ void LevelConjurer() {
     player->playerStats.ATK = ((player->playerStats.CHA) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
+        player->playerClass.abilities[ABILITY_1] = IceArmor();
+        player->playerClass.abilities[ABILITY_2] = SummonSkeleton();
         player->playerClass.abilities[ABILITY_3] = MagicMissile();
         break;
         case 3:
+        player->playerClass.abilities[ABILITY_1] = IceArmor();
+        player->playerClass.abilities[ABILITY_2] = SummonSkeleton();
+        player->playerClass.abilities[ABILITY_3] = MagicMissile();
+        player->playerClass.abilities[ABILITY_4] = ShadowBolt();
         break;
         case 4:
         break;
@@ -246,10 +318,41 @@ void LevelCyborg() {
     player->playerStats.ATK = ((player->playerStats.STR) - 10) / 2;
     switch((player->playerStats.LVL)) {
         case 2:
+        player->playerClass.abilities[ABILITY_1] = Electrify();
+        player->playerClass.abilities[ABILITY_2] = SelfRepair();
         player->playerClass.abilities[ABILITY_3] = Charge();
         break;
         case 3:
+        player->playerClass.abilities[ABILITY_1] = Electrify();
+        player->playerClass.abilities[ABILITY_2] = SelfRepair();
+        player->playerClass.abilities[ABILITY_3] = Charge();
         player->playerClass.abilities[ABILITY_4] = Dash();
+        break;
+        case 4:
+        break;
+        case 5:
+        break;
+        case 6:
+        break;
+        case 7:
+        break;
+    }
+}
+
+void LevelBard() {
+    player->playerStats.CHA += (player->playerClass.mainStat);
+    player->playerStats.ATK = ((player->playerStats.CHA) - 10) / 2;
+    switch((player->playerStats.LVL)) {
+        case 2:
+        player->playerClass.abilities[ABILITY_1] = DevastatingInsult();
+        player->playerClass.abilities[ABILITY_2] = Dash();
+        player->playerClass.abilities[ABILITY_3] = AimedShot();
+        break;
+        case 3:
+        player->playerClass.abilities[ABILITY_1] = DevastatingInsult();
+        player->playerClass.abilities[ABILITY_2] = Dash();
+        player->playerClass.abilities[ABILITY_3] = AimedShot();
+        player->playerClass.abilities[ABILITY_4] = MagicMissile();
         break;
         case 4:
         break;

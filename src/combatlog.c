@@ -101,7 +101,6 @@ void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int player
     combatHistory->playerAccRoll = playerAccRoll;
     combatHistory->defenderAC = defenderAC;
     combatHistory->playerResult = false;
-    combatHistory->entityResult = false;
     combatHistory->monsterKilled = false;
     RecordAbilityUse();
     strcpy(combatHistory->event, "You miss the ");
