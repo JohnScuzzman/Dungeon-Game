@@ -2,6 +2,7 @@
 #define ITEMS_H
 
 #define MAX_NAME_SIZE 33
+#define ITEM_DESC_SIZE 65
 
 
 typedef enum {
@@ -61,7 +62,8 @@ typedef struct {
   int itemID;
   int type;
   char itemName[MAX_NAME_SIZE];
-} Item;
+  char itemDesc[ITEM_DESC_SIZE];
+}Item;
 
 typedef struct {
   Item item;

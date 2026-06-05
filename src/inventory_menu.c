@@ -1,18 +1,21 @@
 #include <rogue.h>
-#define WINDOW_WIDTH 50
-#define WINDOW_HEIGHT 25
+#define WINDOW_WIDTH 61
+#define WINDOW_HEIGHT 47
 #define OFFSET 11
 #define INVENTORY_SIZE 64
 
-void RenderInventoryMenu(WINDOW *menu, int cursor, int n_options, char** options) {
+void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, Item** playerInv) {
     int y = 3;
-    int bottom = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
+    int titleRight = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
     int center = ((WINDOW_WIDTH - OFFSET) / 2) + 3;
-    int numLines = WINDOW_WIDTH - 2 - bottom;
+    int numLines = WINDOW_WIDTH - 2 - titleRight;
     int top = 1;
 
-    box(menu, 0, 0);
+    /* Diabolical Pointer Upcasting */
+    // Item* itemptr = (Item*)&player->equippedWeapon;
 
+
+    box(menu, 0, 0);
     // mvwhline(WINDOW *win, int y, int x, chtype ch, int n)
     // win - pointer to the window where the line is drawn.
     // y, x - The coordinates relative to the window's starting POS (0,0).
@@ -20,19 +23,32 @@ void RenderInventoryMenu(WINDOW *menu, int cursor, int n_options, char** options
     // passing 0 uses the default horizontal character ACS_HLINE.
     mvwprintw(menu, top, center - 3, " INVENTORY ");
     mvwhline(menu, top, top, ACS_HLINE, numLines );
-    mvwhline(menu, top, bottom, ACS_HLINE, numLines +1);
+    mvwhline(menu, top, titleRight, ACS_HLINE, numLines + 1);
 
-    for (int i = 0; i < n_options; i++) {
+    box(desc, 0, 0);
+    mvwprintw(desc, top, center - 3, " DESCRIPTION ");
+    mvwhline(desc, top, top, ACS_HLINE, numLines);
+    mvwhline(desc, top, titleRight + 2, ACS_HLINE, numLines - 1);
+
+    for (int i = 0; i < player->invTail; i++) {
         if (cursor == i) {
             wattron(menu, A_REVERSE);
-            mvwprintw(menu, y, center, "%s", options[i]);
+            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
+            mvwprintw(desc, y, 2, "%s\n", playerInv[i]->itemDesc);
             wattroff(menu, A_REVERSE);
+
         }
         else {
-            mvwprintw(menu, y, center, "%s", options[i]);
+            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
+            mvwprintw(desc, y, 2, "%s\n", playerInv[i]->itemDesc);
         }
         y++;
     }
+    box(desc, 0, 0);
+    mvwprintw(desc, top, center - 3, " DESCRIPTION ");
+    mvwhline(desc, top, top, ACS_HLINE, numLines);
+    mvwhline(desc, top, titleRight + 2, ACS_HLINE, numLines - 1);
+    wrefresh(desc);
     wrefresh(menu);
 }
 
@@ -40,86 +56,89 @@ void RenderInventoryMenu(WINDOW *menu, int cursor, int n_options, char** options
 /* Processes a new window and does a task if false. */
 bool MakeInventoryMenu(Item* items) {
     
-    char* options[INVENTORY_SIZE] = {
-        player->inventory[0].itemName,
-        player->inventory[1].itemName,
-        player->inventory[2].itemName,
-        player->inventory[3].itemName,
-        player->inventory[4].itemName,
-        player->inventory[5].itemName,
-        player->inventory[6].itemName,
-        player->inventory[7].itemName,
-        player->inventory[8].itemName,
-        player->inventory[9].itemName,
-        player->inventory[10].itemName,
-        player->inventory[11].itemName,
-        player->inventory[12].itemName,
-        player->inventory[13].itemName,
-        player->inventory[14].itemName,
-        player->inventory[15].itemName,
-        player->inventory[16].itemName,
-        player->inventory[17].itemName,
-        player->inventory[18].itemName,
-        player->inventory[19].itemName,
-        player->inventory[20].itemName,
-        player->inventory[21].itemName,
-        player->inventory[22].itemName,
-        player->inventory[23].itemName,
-        player->inventory[24].itemName,
-        player->inventory[25].itemName,
-        player->inventory[26].itemName,
-        player->inventory[27].itemName,
-        player->inventory[28].itemName,
-        player->inventory[29].itemName,
-        player->inventory[30].itemName,
-        player->inventory[31].itemName,
-        player->inventory[32].itemName,
-        player->inventory[33].itemName,
-        player->inventory[34].itemName,
-        player->inventory[35].itemName,
-        player->inventory[36].itemName,
-        player->inventory[37].itemName,
-        player->inventory[38].itemName,
-        player->inventory[39].itemName,
-        player->inventory[40].itemName,
-        player->inventory[41].itemName,
-        player->inventory[42].itemName,
-        player->inventory[43].itemName,
-        player->inventory[44].itemName,
-        player->inventory[45].itemName,
-        player->inventory[46].itemName,
-        player->inventory[47].itemName,
-        player->inventory[48].itemName,
-        player->inventory[49].itemName,
-        player->inventory[50].itemName,
-        player->inventory[51].itemName,
-        player->inventory[52].itemName,
-        player->inventory[53].itemName,
-        player->inventory[54].itemName,
-        player->inventory[55].itemName,
-        player->inventory[56].itemName,
-        player->inventory[57].itemName,
-        player->inventory[58].itemName,
-        player->inventory[59].itemName,
-        player->inventory[60].itemName,
-        player->inventory[61].itemName,
-        player->inventory[62].itemName,
-        player->inventory[63].itemName,
+    Item* playerInv[INVENTORY_SIZE] = {
+        &player->inventory[0],
+        &player->inventory[1],
+        &player->inventory[2],
+        &player->inventory[3],
+        &player->inventory[4],
+        &player->inventory[5],
+        &player->inventory[6],
+        &player->inventory[7],
+        &player->inventory[8],
+        &player->inventory[9],
+        &player->inventory[10],
+        &player->inventory[11],
+        &player->inventory[12],
+        &player->inventory[13],
+        &player->inventory[14],
+        &player->inventory[15],
+        &player->inventory[16],
+        &player->inventory[17],
+        &player->inventory[18],
+        &player->inventory[19],
+        &player->inventory[20],
+        &player->inventory[21],
+        &player->inventory[22],
+        &player->inventory[23],
+        &player->inventory[24],
+        &player->inventory[25],
+        &player->inventory[26],
+        &player->inventory[27],
+        &player->inventory[28],
+        &player->inventory[29],
+        &player->inventory[30],
+        &player->inventory[31],
+        &player->inventory[32],
+        &player->inventory[33],
+        &player->inventory[34],
+        &player->inventory[35],
+        &player->inventory[36],
+        &player->inventory[37],
+        &player->inventory[38],
+        &player->inventory[39],
+        &player->inventory[40],
+        &player->inventory[41],
+        &player->inventory[42],
+        &player->inventory[43],
+        &player->inventory[44],
+        &player->inventory[45],
+        &player->inventory[46],
+        &player->inventory[47],
+        &player->inventory[48],
+        &player->inventory[49],
+        &player->inventory[50],
+        &player->inventory[51],
+        &player->inventory[52],
+        &player->inventory[53],
+        &player->inventory[54],
+        &player->inventory[55],
+        &player->inventory[56],
+        &player->inventory[57],
+        &player->inventory[58],
+        &player->inventory[59],
+        &player->inventory[60],
+        &player->inventory[61],
+        &player->inventory[62],
+        &player->inventory[63],
     };
-    int n_options = sizeof(options) / sizeof(char*);
-    int pauseX = (COLS - WINDOW_WIDTH) / 2;
-    int pauseY = (LINES - WINDOW_HEIGHT) / 2;
+    int n_options = sizeof(playerInv) / sizeof(Item*);
+    int invX1 = 2;
+    int invX2 = 64;
+    int invY = 1;
     bool escFlag = false;
     bool quitGame = false;
     int cursor = 0;
     int choice = -1;
     int ch;
 
-    WINDOW *menu = newwin(WINDOW_HEIGHT, WINDOW_WIDTH, pauseY, pauseX);
+    WINDOW *menu = newwin(WINDOW_HEIGHT, WINDOW_WIDTH, invY, invX1);
+    WINDOW *desc = newwin((WINDOW_HEIGHT / 2), WINDOW_WIDTH, invY, invX2);
     keypad(menu, TRUE);
+    keypad(desc, FALSE);
    
     /* First Render of Menu*/
-    RenderInventoryMenu(menu, cursor, n_options, options);
+    RenderInventoryMenu(menu, desc, cursor, n_options, playerInv);
 
     while(!escFlag) {
         ch = wgetch(menu);
@@ -152,7 +171,7 @@ bool MakeInventoryMenu(Item* items) {
             default:
                 break;
             }
-        RenderInventoryMenu(menu, cursor, n_options, options);
+        RenderInventoryMenu(menu, desc, cursor, n_options, playerInv);
         }
         quitGame = ProcessInventorySelect(choice, menu);
         return quitGame;

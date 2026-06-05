@@ -285,7 +285,7 @@ bool IsInMap(int y, int x);
 bool LineOfSight(Position origin, Position target);
 void MakeFOV(Player* playerint);
 
-//item.c functions
+//items.c functions
 void CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
@@ -297,10 +297,12 @@ void MakeWeaponItems(Item* items);
 void MakeArmorItems(Item* items);
 void NameWeaponItems(Item* items);
 void NameArmorItems(Item* items);
+void WeaponItemDescriptions(Item* items);
+void ArmorItemDescriptions(Item* items);
 // void NullItem(Item item);
 
 //inventory__menu.c functions
-void RenderInventoryMenu(WINDOW *menu, int cursor, int n_options, char** options);
+void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, Item** playerInv);
 bool MakeInventoryMenu(Item* items);
 bool ProcessInventorySelect(int choice, WINDOW* menu);
 
