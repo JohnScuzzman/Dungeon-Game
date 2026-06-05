@@ -78,7 +78,7 @@ int main(void)
     q = MakeCombatLogQueue();
 
     /* Player's Inv*/
-    CreatePlayerInv();
+    playerInv = CreatePlayerInv();
 
     /* Call Title Screen from asciiart.c*/
     TitleScreen();

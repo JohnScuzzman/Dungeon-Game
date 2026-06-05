@@ -88,6 +88,21 @@ void AssignGunslinger() {
     player->playerStats.HP = player->playerStats.maxHP;
     player->passiveAbility = NoAbility();
 }
+void AssignDruid() {
+    player->equippedArmor = RangersCloak();
+    player->equippedMelee = Claws();
+    player->equippedRanged = LightningWand();
+    player->playerStats.mana = 20;
+    player->playerStats.maxMana = 20;
+    player->playerStats.AC = player->equippedArmor.AC;
+    player->playerStats.LVL = 1;
+    player->playerClass = Druid();
+    player->playerStats.WIS += (player->playerClass.mainStat);
+    player->playerStats.ATK = ((player->playerStats.WIS) - 10) / 2;
+    player->playerStats.maxHP += (player->playerClass.hpPerLVL);
+    player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
+}
 
 void AssignRanger() {
     player->equippedArmor = RangersCloak();
@@ -174,42 +189,63 @@ void AssignCyborg() {
     player->passiveAbility = NoAbility();
 }
 
-
+void AssignBard() {
+    player->equippedArmor = RangersCloak();
+    player->equippedMelee = Dagger();
+    player->equippedRanged = Shortbow();
+    player->playerStats.mana = 20;
+    player->playerStats.maxMana = 20;
+    player->playerStats.AC = player->equippedArmor.AC;
+    player->playerStats.LVL = 1;
+    player->playerClass = Bard();
+    player->playerStats.CHA += (player->playerClass.mainStat);
+    player->playerStats.DEX += (player->playerClass.secondaryStat);
+    player->playerStats.ATK = ((player->playerStats.CHA) - 10) / 2;
+    player->playerStats.maxHP += (player->playerClass.hpPerLVL);
+    player->playerStats.HP = player->playerStats.maxHP;
+    player->passiveAbility = NoAbility();
+}
 /*
 Assigns the class chosen by the player to the Entity struct player.
 Each method is listed in classes.c
 */
 void AssignClass(int input) {
     switch(input){
-        case 68:
+        case 69:
             AssignKnight();
             break;
-        case 69:
+        case 70:
             AssignSwashbuckler();
             break;
-        case 70:
+        case 71:
             AssignWizard();
             break;
-        case 71:
+        case 72:
             AssignNecromancer();
             break;
-        case 72:
+        case 73:
             AssignGunslinger();
             break;
-        case 88:
-            AssignRanger();
+        case 74:
+            AssignDruid();
             break;
         case 89:
-            AssignDarkKnight();
+            AssignRanger();
             break;
         case 90:
-            AssignWarlock();
+            AssignDarkKnight();
             break;
         case 91:
-            AssignConjurer();
+            AssignWarlock();
             break;
         case 92:
+            AssignConjurer();
+            break;
+        case 93:
             AssignCyborg();
+            break;
+        case 94:
+            AssignBard();
             break;
         default:
             AssignKnight();
@@ -274,6 +310,16 @@ void AssignStats(int input) {
             player->playerStats.STR = 16;
             player->playerStats.WIS = 10;
         break;
+        case 67:
+            strcpy(player->playerRace, "Canidae");
+            player->playerStats.maxHP = 12;
+            player->playerStats.CHA = 12;
+            player->playerStats.CON = 16;
+            player->playerStats.DEX = 10;
+            player->playerStats.INT = 8;
+            player->playerStats.STR = 14;
+            player->playerStats.WIS = 10;
+        break;
         case 82:
             strcpy(player->playerRace, "Skeleton");
             player->playerStats.maxHP = 8;
@@ -295,7 +341,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 10;
         break;
         case 84:
-            strcpy(player->playerRace, "Robot");
+            strcpy(player->playerRace, "Automaton");
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 10;
             player->playerStats.CON = 16;
@@ -323,6 +369,16 @@ void AssignStats(int input) {
             player->playerStats.INT = 14;
             player->playerStats.STR = 10;
             player->playerStats.WIS = 10;
+        break;
+        case 87:
+            strcpy(player->playerRace, "Succubus");
+            player->playerStats.maxHP = 8;
+            player->playerStats.CHA = 16;
+            player->playerStats.CON = 10;
+            player->playerStats.DEX = 12;
+            player->playerStats.INT = 14;
+            player->playerStats.STR = 8;
+            player->playerStats.WIS = 12;
         break;
         default:
             strcpy(player->playerRace, "Human");

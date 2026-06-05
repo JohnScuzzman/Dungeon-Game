@@ -65,7 +65,7 @@ void ChooseRace() {
             case 'A':
             if (cursorBoundY == 22) {
                 RemoveCursor(cursorBoundY, cursorBoundX, 11);
-                cursorBoundY = 26;
+                cursorBoundY = 27;
             }
             else {
                 RemoveCursor(cursorBoundY, cursorBoundX, 11);
@@ -74,7 +74,7 @@ void ChooseRace() {
             break;
             //move down
             case 'B':
-                if (cursorBoundY == 26) {
+                if (cursorBoundY == 27) {
                     RemoveCursor(cursorBoundY, cursorBoundX, 11);
                     cursorBoundY = 22;
                 }
@@ -115,7 +115,7 @@ void ChooseRace() {
 
 void ChooseClass() {
     int ch;
-    int cursorBoundY = 28;
+    int cursorBoundY = 29;
     int cursorBoundX = 40;
     PrintClasses();
     Cursor(cursorBoundY, cursorBoundX, 13);
@@ -124,9 +124,9 @@ void ChooseClass() {
     switch(ch) {
         //move up
         case 'A':
-            if (cursorBoundY == 28) {
+            if (cursorBoundY == 29) {
                 RemoveCursor(cursorBoundY, cursorBoundX, 13);
-                cursorBoundY = 32;
+                cursorBoundY = 34;
             }
             else {
                 RemoveCursor(cursorBoundY, cursorBoundX, 13);
@@ -135,9 +135,9 @@ void ChooseClass() {
         break;
         //move down
         case 'B':
-            if (cursorBoundY == 32) {
+            if (cursorBoundY == 34) {
                 RemoveCursor(cursorBoundY, cursorBoundX, 13);
-                cursorBoundY = 28;
+                cursorBoundY = 29;
             }
             else {
                 RemoveCursor(cursorBoundY, cursorBoundX, 13);
@@ -195,26 +195,30 @@ void PrintRaces() {
     mvprintw(24, 40, "Dwarf");
     mvprintw(25, 40, "Dragonborn");
     mvprintw(26, 40, "Gnoll");
+    mvprintw(27, 40, "Canidae");
     mvprintw(22, 60, "Skeleton");
     mvprintw(23, 60, "Mantis");
-    mvprintw(24, 60, "Robot");
+    mvprintw(24, 60, "Automaton");
     mvprintw(25, 60, "Werewolf");
     mvprintw(26, 60, "Vampire");
+    mvprintw(27, 60, "Succubus");
 }
 
 /*
 Prints available classes.
 */
 void PrintClasses() {
-    mvprintw(28, 10, "Please Choose a Class: ");
-    mvprintw(28, 40, "Knight");
-    mvprintw(29, 40, "Swashbuckler");
-    mvprintw(30, 40, "Wizard");
-    mvprintw(31, 40, "Necromancer");
-    mvprintw(32, 40, "Gunslinger");
-    mvprintw(28, 60, "Ranger");
-    mvprintw(29, 60, "Dark Knight");
-    mvprintw(30, 60, "Warlock");
-    mvprintw(31, 60, "Conjurer");
-    mvprintw(32, 60, "Cyborg");
+    mvprintw(29, 10, "Please Choose a Class: ");
+    mvprintw(29, 40, "Knight");
+    mvprintw(30, 40, "Swashbuckler");
+    mvprintw(31, 40, "Wizard");
+    mvprintw(32, 40, "Necromancer");
+    mvprintw(33, 40, "Gunslinger");
+    mvprintw(34, 40, "Druid");
+    mvprintw(29, 60, "Ranger");
+    mvprintw(30, 60, "Dark Knight");
+    mvprintw(31, 60, "Warlock");
+    mvprintw(32, 60, "Conjurer");
+    mvprintw(33, 60, "Cyborg");
+    mvprintw(34, 60, "Bard");
 }

@@ -26,8 +26,10 @@ typedef enum {
     SELF_REPAIR,
     SUMMON_SKELETON,
     SHADOW_BOLT,
+    THORN_BOLT,
     VENGEANCE,
-    DASH
+    DASH,
+    DEVASTATING_INSULT
 } AbilitiyIDs;
 
 typedef enum {
@@ -36,11 +38,13 @@ typedef enum {
     WIZARD,
     NECROMANCER,
     GUNSLINGER,
+    DRUID,
     RANGER,
     DARK_KNIGHT,
     WARLOCK,
     CONJURER,
-    CYBORG
+    CYBORG,
+    BARD
 } ClassIDs;
 
 typedef struct {
@@ -88,6 +92,7 @@ Ability Electrify();
 Ability ShadowBolt();
 Ability Vengeance();
 Ability Dash();
+Ability DevastatingInsult();
 void AbilityEffects(int abilityID);
 void CastCharge();
 void CastDash();
@@ -113,11 +118,15 @@ Class Swashbuckler();
 Class Wizard();
 Class Necromancer();
 Class Gunslinger();
+Class Druid();
 Class Ranger();
 Class DarkKnight();
 Class Warlock();
 Class Conjurer();
 Class Cyborg();
+Class Bard();
+// Class Technomancer
+// Class Sniper
 
 //levelup.c functions
 bool CheckForLevelUp();
@@ -127,11 +136,13 @@ void LevelSwashbuckler();
 void LevelWizard();
 void LevelNecromancer();
 void LevelGunslinger(); 
+void LevelDruid();
 void LevelRanger();
 void LevelDarkKnight();
 void LevelWarlock();
 void LevelConjurer();
 void LevelCyborg();
+void LevelBard();
 
 
 #endif

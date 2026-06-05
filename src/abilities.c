@@ -262,6 +262,24 @@ Ability Dash() {
     return dash;
 }
 
+Ability DevastatingInsult() {
+    Ability devastatingInsult;
+    devastatingInsult.isAttack = true;
+    devastatingInsult.isMagic = true;
+    devastatingInsult.hasEffects = false;
+    devastatingInsult.abilityID = DEVASTATING_INSULT;
+    devastatingInsult.duration = 0;
+    devastatingInsult.minDMG = 1;
+    devastatingInsult.maxDMG = 4;
+    devastatingInsult.manaCost = 2;
+    devastatingInsult.range = 4;
+    devastatingInsult.abilitySave = (player->playerStats.ATK);
+    devastatingInsult.miscStat = 0;
+    strcpy(devastatingInsult.abilityName, "Devastating Insult");
+    strcpy(devastatingInsult.abilityDesc, "Do you know who else missed their attack?");
+    return devastatingInsult;
+}
+
 
 /* If an ability does extra things, specify those things with Cast(AbilityName) */
 
@@ -405,7 +423,7 @@ void CastIceArmor(){
         int shieldVal = player->equippedAbility.miscStat;
         player->playerStats.AC += shieldVal;
         player->abilityTimer = player->equippedAbility.duration;
-        player->passiveAbility = IceArmor();
+        player->passiveAbility = player->equippedAbility;
         player->playerStats.mana -= (player->equippedAbility.manaCost);
     }
     else {
@@ -419,7 +437,7 @@ void CastVengeance() {
         strcpy(combatHistory->event, "You prepare to retaliate.");
         QueueEvent(q, combatHistory->event);
         player->abilityTimer = player->equippedAbility.duration;
-        player->passiveAbility = Vengeance();
+        player->passiveAbility = player->equippedAbility;
         player->playerStats.mana -= (player->equippedAbility.manaCost);
     }
     else {
@@ -535,6 +553,7 @@ void AbilityEffects(int abilityID){
         case SUMMON_SKELETON:
         break;
         case VENGEANCE:
+            ResetCombatHistory();
             CastVengeance();
         break;
         default:
@@ -556,7 +575,7 @@ void CheckPassiveAbilities(int n_monsters) {
     }
     switch(player->passiveAbility.abilityID) {
         case VENGEANCE:
-        if(combatHistory->entityResult  && (combatHistory->defender.isMonster)) {
+        if((combatHistory->attackerDMG > 0) && (combatHistory->defender.isMonster)) {
             strcpy(combatHistory->event, "You take vengeance on your enemy.");
             QueueEvent(q, combatHistory->event);
             Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
@@ -565,9 +584,9 @@ void CheckPassiveAbilities(int n_monsters) {
                 ResetCombatHistory();
             }
         }
-    break;
-    default:
-    break;
+        break;
+        default:
+        break;
     }
 }
 

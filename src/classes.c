@@ -3,7 +3,7 @@
 Class Knight(){
     Class knight;
     knight.isCaster = false;
-    knight.classID = 0;
+    knight.classID = KNIGHT;
     knight.hpPerLVL = 6;
     knight.manaPerLVL = 5;
     knight.mainStat = 2;
@@ -21,7 +21,7 @@ Class Knight(){
 Class Swashbuckler(){
     Class swashbuckler;
     swashbuckler.isCaster = false;
-    swashbuckler.classID = 1;
+    swashbuckler.classID = SWASHBUCKLER;
     swashbuckler.hpPerLVL = 4;
     swashbuckler.manaPerLVL = 5;
     swashbuckler.mainStat = 2;
@@ -39,7 +39,7 @@ Class Swashbuckler(){
 Class Wizard(){
     Class wizard;
     wizard.isCaster = true;
-    wizard.classID = 2;
+    wizard.classID = WIZARD;
     wizard.hpPerLVL = 2;
     wizard.manaPerLVL = 7;
     wizard.mainStat = 4;
@@ -57,7 +57,7 @@ Class Wizard(){
 Class Necromancer(){
     Class necromancer;
     necromancer.isCaster = true;
-    necromancer.classID = 3;
+    necromancer.classID = NECROMANCER;
     necromancer.hpPerLVL = 2;
     necromancer.manaPerLVL = 7;
     necromancer.mainStat = 2;
@@ -75,7 +75,7 @@ Class Necromancer(){
 Class Gunslinger(){
     Class gunslinger;
     gunslinger.isCaster = false;
-    gunslinger.classID = 4;
+    gunslinger.classID = GUNSLINGER;
     gunslinger.hpPerLVL = 4;
     gunslinger.manaPerLVL = 5;
     gunslinger.mainStat = 4;
@@ -90,10 +90,28 @@ Class Gunslinger(){
     return gunslinger;
 }
 
+Class Druid(){
+    Class druid;
+    druid.isCaster = true;
+    druid.classID = DRUID;
+    druid.hpPerLVL = 4;
+    druid.manaPerLVL = 5;
+    druid.mainStat = 4;
+    druid.secondaryStat = 0;
+    druid.abilities[ABILITY_1] = IceArmor();
+    druid.abilities[ABILITY_2] = Electrify();
+    druid.abilities[ABILITY_3] = NoAbility();
+    druid.abilities[ABILITY_4] = NoAbility();
+    druid.abilities[ABILITY_5] = NoAbility();
+    strcpy(druid.className, "Druid");
+    strcpy(druid.classDesc, "A mystic, and protector of all natural things.");
+    return druid;
+}
+
 Class Ranger(){
     Class ranger;
     ranger.isCaster = false;
-    ranger.classID = 5;
+    ranger.classID = RANGER;
     ranger.hpPerLVL = 5;
     ranger.manaPerLVL = 5;
     ranger.mainStat = 2;
@@ -111,7 +129,7 @@ Class Ranger(){
 Class DarkKnight(){
     Class darkKnight;
     darkKnight.isCaster = true;
-    darkKnight.classID = 6;
+    darkKnight.classID = DARK_KNIGHT;
     darkKnight.hpPerLVL = 6;
     darkKnight.manaPerLVL = 5;
     darkKnight.mainStat = 4;
@@ -129,7 +147,7 @@ Class DarkKnight(){
 Class Warlock(){
     Class warlock;
     warlock.isCaster = true;
-    warlock.classID = 7;
+    warlock.classID = WARLOCK;
     warlock.hpPerLVL = 2;
     warlock.manaPerLVL = 5;
     warlock.mainStat = 4;
@@ -147,7 +165,7 @@ Class Warlock(){
 Class Conjurer(){
     Class conjurer;
     conjurer.isCaster = true;
-    conjurer.classID = 8;
+    conjurer.classID = CONJURER;
     conjurer.hpPerLVL = 2;
     conjurer.manaPerLVL = 7;
     conjurer.mainStat = 2;
@@ -165,7 +183,7 @@ Class Conjurer(){
 Class Cyborg(){
     Class cyborg;
     cyborg.isCaster = false;
-    cyborg.classID = 9;
+    cyborg.classID = CYBORG;
     cyborg.hpPerLVL = 6;
     cyborg.manaPerLVL = 5;
     cyborg.mainStat = 2;
@@ -178,4 +196,22 @@ Class Cyborg(){
     strcpy(cyborg.className, "Cyborg");
     strcpy(cyborg.classDesc, "A Cyborg, out of time.");
     return cyborg;
+}
+
+Class Bard(){
+    Class bard;
+    bard.isCaster = false;
+    bard.classID = CYBORG;
+    bard.hpPerLVL = 6;
+    bard.manaPerLVL = 5;
+    bard.mainStat = 2;
+    bard.secondaryStat = 2;
+    bard.abilities[ABILITY_1] = DevastatingInsult();
+    bard.abilities[ABILITY_2] = Dash();
+    bard.abilities[ABILITY_3] = NoAbility();
+    bard.abilities[ABILITY_4] = NoAbility();
+    bard.abilities[ABILITY_5] = NoAbility();
+    strcpy(bard.className, "Bard");
+    strcpy(bard.classDesc, "A master of song and dance.");
+    return bard;
 }

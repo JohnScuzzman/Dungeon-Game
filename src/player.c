@@ -88,6 +88,9 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
         case KEY_HOME: // debug
             player->playerStats.EXP += 90;
             break;
+        case 92: // debug
+            player->playerStats.EXP += 90;
+            break;
         case 49: // 1 key
             return UsePlayerAbility(n_monsters, ABILITY_1);
             break;
@@ -108,6 +111,9 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
             if (player->playerClass.abilities[ABILITY_5].abilityID > NO_ABILITY){
                     return UsePlayerAbility(n_monsters , ABILITY_5);
             }
+            break;
+        case 65:
+            //Player menu function here
             break;
         default:
             break;

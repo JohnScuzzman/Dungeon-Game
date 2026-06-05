@@ -181,6 +181,10 @@ typedef struct
   Position center;
 } Room;
 
+
+//1harpers_doghouse.c functions
+Ability ThornBolt();
+
 // asciiart.c funcions
 void TitleScreen();
 
@@ -203,11 +207,13 @@ void AssignSwashbuckler();
 void AssignWizard();
 void AssignNecromancer();
 void AssignGunslinger();
+void AssignDruid();
 void AssignRanger();
 void AssignDarkKnight();
 void AssignWarlock();
 void AssignConjurer();
 void AssignCyborg();
+void AssignBard();
 
 //combat.c functions 
 CombatHistory* CreateCombatHistory(Entity monster);
@@ -281,10 +287,10 @@ Item* CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
 void AddToNPCInventory(Entity* npc, Item newItem);
-void AddToPlayerInventory(Item* newItem);
+void AddToPlayerInventory(Item newItem);
 void RemoveFromNPCInventory(Entity* npc);
 void RemoveFromPlayerInventory();
-void NullItem(Item* item);
+// void NullItem(Item item);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);
