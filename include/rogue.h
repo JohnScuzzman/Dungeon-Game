@@ -124,6 +124,7 @@ typedef struct {
   Ability equippedAbility;
   Ability passiveAbility;
   Class playerClass;
+  Item inventory[MAX_INVENTORY_SIZE];
   char playerName[MAX_NAME_SIZE];
   char playerRace[MAX_NAME_SIZE];
 } Player;
@@ -143,6 +144,7 @@ typedef struct {
   int color;
   int entityID;
   int invTail;
+  int invHead;
   Stats entityStats;
   Position pos;
   Position playerLastPos;
@@ -255,6 +257,7 @@ void DrawCombatLog();
 void DrawDebug(Entity* mptr, int n_monsters);
 void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory);
 void DrawPlayerEquipment();
+void DrawPlayerInventory();
 void DrawPlayerStats();
 void DrawMap();
 void DrawMonsters(Entity* mptr, int n_monsters);
@@ -265,7 +268,7 @@ void DrawPlayerBlink(Player* player);
 bool CheckEscape(int ch);
 void CloseGame(void);
 void Cursor(int x, int y, int length);
-void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q);
+void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items);
 void Gameover();
 void Greeting();
 bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove);
@@ -283,14 +286,23 @@ bool LineOfSight(Position origin, Position target);
 void MakeFOV(Player* playerint);
 
 //item.c functions
-Item* CreatePlayerInv();
+void CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
 void AddToNPCInventory(Entity* npc, Item newItem);
 void AddToPlayerInventory(Item newItem);
 void RemoveFromNPCInventory(Entity* npc);
 void RemoveFromPlayerInventory();
+void MakeWeaponItems(Item* items);
+void MakeArmorItems(Item* items);
+void NameWeaponItems(Item* items);
+void NameArmorItems(Item* items);
 // void NullItem(Item item);
+
+//inventory__menu.c functions
+void RenderInventoryMenu(WINDOW *menu, int cursor, int n_options, char** options);
+bool MakeInventoryMenu(Item* items);
+bool ProcessInventorySelect(int choice, WINDOW* menu);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);

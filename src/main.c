@@ -77,9 +77,6 @@ int main(void)
     combatHistory = CreateCombatHistory(mptr[0]);
     q = MakeCombatLogQueue();
 
-    /* Player's Inv*/
-    playerInv = CreatePlayerInv();
-
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
 
@@ -91,7 +88,7 @@ int main(void)
     /* Start main game loop located in engine.c */
     /* Pass the pointer to monsterList[0]. */
     /* Pass the number of monsters and rooms made. */
-    GameLoop(mptr, combatHistory, n_monsters, q);
+    GameLoop(mptr, combatHistory, n_monsters, q, items);
     CloseGame();
   }
   else

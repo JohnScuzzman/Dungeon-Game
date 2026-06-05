@@ -96,7 +96,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     combatHistory->playerUsedAbility = false;
 }
 
-void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q) { 
+void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items) { 
     bool leaveFlag = false;
     bool PMove = false;
     bool escPressed = false;
@@ -115,6 +115,9 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             leaveFlag = MakePauseMenu();
         }
         PMove = false;
+        if (ch == 105 || ch == 73) {
+            leaveFlag = MakeInventoryMenu(items);
+        }
         if(ch != ERR) {
             PlayerRegen(&playerRegen);
             ManaRegen(&manaRegen);
@@ -143,7 +146,6 @@ void Gameover() {
 
 /* Free memory allocated by pointer. */
 void CloseGame(void) { 
-    free(playerInv);
     free(items);
     free(q);
     free(combatHistory);

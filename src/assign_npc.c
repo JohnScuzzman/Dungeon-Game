@@ -37,10 +37,6 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
 }
 
 void AssignCorpse(Entity* entity) {
-    // Preserve inventory
-    Item *temp = calloc(INVENTORY_SIZE, sizeof(Item));
-    memcpy(temp, entity->inventory, INVENTORY_SIZE);
-
     int x = entity->pos.x;
     int y = entity->pos.y;
     AssignFloor(x,y);
@@ -72,11 +68,9 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.EXP = 0;
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
-    map[entity->pos.y][entity->pos.x] = *entity;
 
-    // Put inventory back.
-    memcpy(map[y][x].inventory, temp, INVENTORY_SIZE);
-    free(temp);
+    //In theory this should also copy inventory?
+    map[entity->pos.y][entity->pos.x] = *entity;
 }
 
 void AssignFloor(int x, int y) {
@@ -92,6 +86,8 @@ void AssignFloor(int x, int y) {
     map[y][x].seenByPlayer = false;
     map[y][x].aggroRange = 0;
     map[y][x].entityID = 0;
+    map[y][x].invHead = 0;
+    map[y][x].invTail = 0;
     map[y][x].entityStats.ATK = 0;
     map[y][x].entityStats.CHA = 0;
     map[y][x].entityStats.CON = 0;
@@ -229,6 +225,7 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     CreateMonsterInv(monster);
     monster->entityStats.ATK = 0;
     monster->invTail = 0;
+    monster->invHead = 0;
     monster->aggroFlag = false;
     monster->hasMoved = false;
     monster->noCollision = false;
