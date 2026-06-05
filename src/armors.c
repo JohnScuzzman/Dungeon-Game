@@ -6,7 +6,7 @@ void CreateArmors() {
 Armor NoArmor() {
     Armor none;
     none.item.equippable = true;
-    none.item.type = NULL_ITEM;
+    none.item.type = NULL_ITEM_TYPE;
     none.item.itemID = NULL_ITEM_ID;
     none.item.unequippable = false;
     strcpy(none.item.itemName, "None");

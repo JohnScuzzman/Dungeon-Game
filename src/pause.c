@@ -7,7 +7,7 @@ void RenderPauseMenu(WINDOW *menu, int cursor, int n_options, char** options) {
     int y = 3;
     int bottom = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
     int center = ((WINDOW_WIDTH - OFFSET) / 2) + 3;
-    int numLines = WINDOW_WIDTH - 2 - bottom;
+    int numLines = WINDOW_WIDTH - bottom;
     int top = 1;
 
     box(menu, 0, 0);
@@ -19,7 +19,7 @@ void RenderPauseMenu(WINDOW *menu, int cursor, int n_options, char** options) {
     // passing 0 uses the default horizontal character ACS_HLINE.
     mvwprintw(menu, top, center, " MENU ");
     mvwhline(menu, top, top, ACS_HLINE, numLines);
-    mvwhline(menu, top, bottom, ACS_HLINE, numLines);
+    mvwhline(menu, top, bottom - 1, ACS_HLINE, numLines );
 
     for (int i = 0; i < n_options; i++) {
         if (cursor == i) {

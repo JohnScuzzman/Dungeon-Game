@@ -40,7 +40,7 @@ typedef enum {
 } ArmorTypes;
 
 typedef enum {
-    NULL_ITEM,
+    NULL_ITEM_TYPE,
     WEAPON,
     ARMOR,
     CYBERNETICS,

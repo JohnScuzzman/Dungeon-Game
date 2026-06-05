@@ -112,8 +112,11 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
                     return UsePlayerAbility(n_monsters , ABILITY_5);
             }
             break;
-        case 65:
+        case 65: // c key
             //Player menu function here
+            break;
+        case 105: // i key
+            
             break;
         default:
             break;
