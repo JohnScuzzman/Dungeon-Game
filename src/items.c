@@ -40,10 +40,13 @@ Item* CreateItemTable() {
         items[NULL_ITEM_ID].itemID = NULL_ITEM_ID;
         items[NULL_ITEM_ID].type = NULL_ITEM_TYPE;
         strcpy(items[NULL_ITEM_ID].itemName, " ");
+        strcpy(items[NULL_ITEM_ID].itemDesc, " ");
     MakeWeaponItems(items);
     MakeArmorItems(items);
     NameWeaponItems(items);
     NameArmorItems(items);
+    WeaponItemDescriptions(items);
+    ArmorItemDescriptions(items);
     return items;
 }
 
@@ -117,6 +120,36 @@ void MakeArmorItems(Item* items) {
         // TODO items[i].subtype = CYBERNETICS;
     }
 }
+
+
+void WeaponItemDescriptions(Item* items){
+    strcpy(items[FISTS].itemDesc, "Punch something if you must.");
+    strcpy(items[CLAWS].itemDesc, "Sharp claws, ready to scratch.");
+    strcpy(items[DAGGER].itemDesc, "A small, sharpened dagger.");
+    strcpy(items[SHORTSWORD].itemDesc, "A shortsword, only about arm's length.");
+    strcpy(items[LONGSWORD].itemDesc, "A mighty blade.");
+    strcpy(items[GREATSWORD].itemDesc, "A large sword, demanding two hands of it's wielder.");
+    strcpy(items[CUTLASS].itemDesc, "A favored sidearm of every brigand.");
+    strcpy(items[SCIMITAR].itemDesc, "A curved sword, honed for slashing");
+    strcpy(items[QUARTERSTAFF].itemDesc, "A large wooden staff, gnarled and tough.");
+    strcpy(items[CHROME_FISTS].itemDesc, "Fists of chrome, glinting in the dark.");
+    strcpy(items[ACID_POTION].itemDesc, "A potion of volatile acid.");
+    strcpy(items[SHORTBOW].itemDesc, "A small bow.");
+    strcpy(items[LONGBOW].itemDesc, "A large bow, capable of achieving great range.");
+    strcpy(items[FLINTLOCK_PISTOL].itemDesc, "A black powder pistol, devastating at close range.");
+    strcpy(items[LIGHTNING_WAND].itemDesc, "A small wand of sparks, weak but efficient.");
+    strcpy(items[DUAL_FLINTLOCKS].itemDesc, "A pair of black powder hand cannons.");
+}
+
+void ArmorItemDescriptions(Item* items){
+    strcpy(items[RAGS].itemDesc, "Filthy Rags, long overworn.");
+    strcpy(items[ROBES].itemDesc, "Long silken robes.");
+    strcpy(items[LEATHER_ARMOR].itemDesc, "Tough and rigid, made of animal hide.");
+    strcpy(items[CHAINMAIL].itemDesc, "Heavy, but provides formidable defense.");
+    strcpy(items[RANGERS_CLOAK].itemDesc, "Provides concealment in dark and dense forests.");
+    strcpy(items[METALLIC_SKIN].itemDesc, "Servos and steel are your bastion.");
+}
+
 
 void NameWeaponItems(Item* items){
     strcpy(items[FISTS].itemName, "Fists");
