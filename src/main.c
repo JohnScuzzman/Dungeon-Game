@@ -14,16 +14,15 @@ const char *DIRECTIONS[HEADINGS] = {
     "North East"
 };
 const int LVL_EXP_VALUES[MAX_LEVEL] = {
-      LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, 
-      LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
+  LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, 
+  LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
 };
-const int EVENT_SIZE = 33;
-const int MAX_MONSTER_NAME = 33;
-const int MAP_HEIGHT = 50;
-const int MAP_WIDTH = 125;
-const int LOG_HEIGHT = 22;
-const int LOG_SIZE  = 27;
-const int LOG_WIDTH = 128;
+int MAX_MONSTER_NAME = 33;
+int MAP_HEIGHT = 50;
+int MAP_WIDTH = 125;
+int LOG_HEIGHT = 22;
+int LOG_SIZE  = 27;
+int LOG_WIDTH = 128;
 
 
 
@@ -45,6 +44,18 @@ int main(void)
   if (compatibleTerminal)
   {
     mousemask(BUTTON1_CLICKED, NULL);
+    /* Adjust layout to terminal size so the view scales */
+    int term_rows, term_cols;
+    getmaxyx(stdscr, term_rows, term_cols);
+    int sidebar_width = 40;
+    if (term_cols < 100) sidebar_width = term_cols / 3;
+    if (sidebar_width < 20) sidebar_width = 20;
+    MAP_WIDTH = term_cols - sidebar_width - 3;
+    if (MAP_WIDTH < 20) MAP_WIDTH = 20;
+    MAP_HEIGHT = term_rows - 3;
+    if (MAP_HEIGHT < 10) MAP_HEIGHT = 10;
+    LOG_WIDTH = MAP_WIDTH + 2;
+    LOG_HEIGHT = 2;
     Position start_pos;
     /* Generate seeds */
     srand(time(NULL));

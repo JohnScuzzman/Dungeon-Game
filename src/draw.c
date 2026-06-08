@@ -2,7 +2,13 @@
 
 #define ABILITY_BAR_STARTX 2
 #define ABILITIY_BAR_BUFFERX 12
-#define ABILITY_BAR_Y 49
+#define ABILITY_BAR_Y (MAP_HEIGHT - 1)
+
+/* Sidebar/layout helpers */
+#define SIDEBAR_X (MAP_WIDTH + 2)
+#define STATS_COL2 (SIDEBAR_X + 29)
+#define STATS_WIDTH 40
+#define RIGHT_BORDER (SIDEBAR_X + STATS_WIDTH)
 /* Draw the Map to the screen. */
 void DrawMap()
 { 
@@ -42,12 +48,12 @@ void DrawPlayerBlink(Player* player) {
 	}  
 
 void DrawPlayerEquipment(){
-  mvprintw(2, 128, "Name: %s", player->playerName);
-  mvprintw(4, 128, "Race: %s", player->playerRace);
-  mvprintw(6, 128, "Class: %s", player->playerClass.className);
-  mvprintw(8, 128, "Armor: %s", player->equippedArmor.item.itemName);
-  mvprintw(12, 128, "Melee: %s", player->equippedMelee.item.itemName);
-  mvprintw(14, 128, "Ranged: %s", player->equippedRanged.item.itemName);
+  mvprintw(2, SIDEBAR_X, "Name: %s", player->playerName);
+  mvprintw(4, SIDEBAR_X, "Race: %s", player->playerRace);
+  mvprintw(6, SIDEBAR_X, "Class: %s", player->playerClass.className);
+  mvprintw(8, SIDEBAR_X, "Armor: %s", player->equippedArmor.item.itemName);
+  mvprintw(12, SIDEBAR_X, "Melee: %s", player->equippedMelee.item.itemName);
+  mvprintw(14, SIDEBAR_X, "Ranged: %s", player->equippedRanged.item.itemName);
   // mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
   // mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
   // mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
@@ -58,22 +64,22 @@ void DrawPlayerStats() {
   int EXPLen = NumberOfDigits(player->playerStats.EXP);
   int nextEXPLen = NumberOfDigits(player->playerStats.nextLVLEXP);
   int EXPbuffer = (EXPLen + nextEXPLen);
-  mvprintw(10, 128, "Armor Class: %d", (player->playerStats.AC) + 10);
-  mvprintw(16, 128, "HP: %d", player->playerStats.HP);
+  mvprintw(10, SIDEBAR_X, "Armor Class: %d", (player->playerStats.AC) + 10);
+  mvprintw(16, SIDEBAR_X, "HP: %d", player->playerStats.HP);
   if(player->playerClass.isCaster) {
-    mvprintw(18, 128, "Mana: %d", player->playerStats.mana);
+    mvprintw(18, SIDEBAR_X, "Mana: %d", player->playerStats.mana);
   }
   else {
-    mvprintw(18, 128, "Energy: %d", player->playerStats.mana);
+    mvprintw(18, SIDEBAR_X, "Energy: %d", player->playerStats.mana);
   }
-  mvprintw(2, 157, "LVL: %d", player->playerStats.LVL);
-  mvprintw(4, 157, "CHA: %d", player->playerStats.CHA);
-  mvprintw(6, 157, "CON: %d", player->playerStats.CON);
-  mvprintw(8, 157, "DEX: %d", player->playerStats.DEX);
-  mvprintw(10, 157, "INT: %d", player->playerStats.INT);
-  mvprintw(12, 157, "STR: %d", player->playerStats.STR);
-  mvprintw(14, 157, "WIS: %d", player->playerStats.WIS);
-  mvprintw(16, 158 - EXPbuffer, "EXP: %d/%d", player->playerStats.EXP, player->playerStats.nextLVLEXP);
+  mvprintw(2, STATS_COL2, "LVL: %d", player->playerStats.LVL);
+  mvprintw(4, STATS_COL2, "CHA: %d", player->playerStats.CHA);
+  mvprintw(6, STATS_COL2, "CON: %d", player->playerStats.CON);
+  mvprintw(8, STATS_COL2, "DEX: %d", player->playerStats.DEX);
+  mvprintw(10, STATS_COL2, "INT: %d", player->playerStats.INT);
+  mvprintw(12, STATS_COL2, "STR: %d", player->playerStats.STR);
+  mvprintw(14, STATS_COL2, "WIS: %d", player->playerStats.WIS);
+  mvprintw(16, STATS_COL2 + 1 - EXPbuffer, "EXP: %d/%d", player->playerStats.EXP, player->playerStats.nextLVLEXP);
 }
 
 /* Draw the players Abilities in the bottom left of screen. */
@@ -122,18 +128,18 @@ void DrawBorder(void) {
   }
 
   /* Internal borders for stats & abilites */
-  for (int x = 0; x < 41; x++) {
-    mvprintw(0, 126 + x, "=");
-    mvprintw(20, 126 + x, "=");
-    mvprintw(50, 126 + x, "=");
+  for (int x = 0; x < STATS_WIDTH + 1; x++) {
+    mvprintw(0, SIDEBAR_X + x, "=");
+    mvprintw(20, SIDEBAR_X + x, "=");
+    mvprintw(MAP_HEIGHT, SIDEBAR_X + x, "=");
   }
-  
-  for (int y = 1; y < 50; y ++) {
-    mvprintw(y, 166, "|");
+
+  for (int y = 1; y < MAP_HEIGHT; y ++) {
+    mvprintw(y, RIGHT_BORDER, "|");
   }
 
   for (int x = 0; x < (MAP_WIDTH); x++) {
-    mvprintw(48, x, "=");
+    mvprintw(ABILITY_BAR_Y - 1, x, "=");
   }
 
 }
@@ -158,8 +164,8 @@ void DrawCombatLog() {
  	if (IsEmpty(q)){
         return;
     }
-	for (int i = 0; i <= q->rear; i++) {
-   		mvprintw(LOG_HEIGHT + i, LOG_WIDTH, "%s", q->events[i]);
+    for (int i = 0; i <= q->rear; i++) {
+    	mvprintw(LOG_HEIGHT + i, SIDEBAR_X, "%s", q->events[i]);
   	}
 }
 
