@@ -1,5 +1,5 @@
 #include <rogue.h>
-
+#define DMG_BUFFER 8
 /* Create the queue for the combat log */
 /* Run this first to initialize it.*/
 LogQueue* MakeCombatLogQueue() {
@@ -72,7 +72,7 @@ void NotEnoughMana() {
 // }
 
 void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG) {
-    char eventDMGBuffer[EVENT_SIZE];
+    char eventDMGBuffer[DMG_BUFFER];
     combatHistory->defender = *defender;
     player->playerStats.EXP += (defender->entityStats.EXP);
     combatHistory->playerAccRoll = playerAccRoll;
@@ -110,7 +110,7 @@ void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int player
 }
 
 void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG) {
-    char eventDMGBuffer[EVENT_SIZE];
+    char eventDMGBuffer[DMG_BUFFER];
     combatHistory->defender = *defender;
     combatHistory->playerAccRoll = playerAccRoll;
     combatHistory->playerDMG = playerDMG;
@@ -127,7 +127,7 @@ void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerA
 }
 
 void RecordMonsterHit(Entity* attacker, CombatHistory* combatHistory, int attackerAccRoll, int attackerDMG) {
-    char eventDMGBuffer[EVENT_SIZE];
+    char eventDMGBuffer[DMG_BUFFER];
     combatHistory->defender = *attacker;
     combatHistory->attackerAccRoll = attackerAccRoll;
     combatHistory->attackerDMG = attackerDMG;
@@ -174,7 +174,7 @@ void RecordAbilityUse(){
 // void CreateLogWindow(LogQueue *q) {
 
 //     /* Create a pad for the log to use.*/
-//     WINDOW *pad = newpad(LOG_SIZE, EVENT_SIZE);
+//     WINDOW *pad = newpad(LOG_SIZE, DMG_BUFFER);
 //     scrollok(pad, TRUE); // Allow the pad to scroll internally
     
 

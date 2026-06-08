@@ -1,5 +1,14 @@
 #include <rogue.h>
 
+/* Create a dynamic list of monsters.*/
+Entity* MonsterList(int n_monsters) {
+    /* Create an Array to hold our Monster Structs. */
+    /* Can be accessed anywhere with mptr declared below. */
+    Entity* mptr;
+    mptr = (Entity *)calloc(n_monsters, sizeof(Entity));
+    return mptr; // return pointer to the array.
+}
+
 void AggroMove(Entity* mptr) {
 
     /* If they are in both LOS and range, move towards them. */
@@ -77,14 +86,6 @@ Entity* FindMonsterInList(int monsterID, int n_monsters) {
     }
 }
 
-/* Create a dynamic list of monsters.*/
-Entity* MonsterList(int n_monsters) {
-    /* Create an Array to hold our Monster Structs. */
-    /* Can be accessed anywhere with mptr declared below. */
-    Entity* mptr;
-    mptr = (Entity *)calloc(n_monsters, sizeof(Entity));
-    return mptr; // return pointer to the array.
-}
 
 /* returns true if entity moved towards given coords.*/
 bool MoveTowards(Entity* entity, Position pos) {
