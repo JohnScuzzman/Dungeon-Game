@@ -55,7 +55,7 @@ int main(void)
     MAP_HEIGHT = term_rows - 3;
     if (MAP_HEIGHT < 10) MAP_HEIGHT = 10;
     LOG_WIDTH = MAP_WIDTH + 2;
-    LOG_HEIGHT = 2;
+    LOG_HEIGHT = 22;
     Position start_pos;
     /* Generate seeds */
     srand(time(NULL));

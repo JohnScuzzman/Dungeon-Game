@@ -122,7 +122,7 @@ void DrawBorder(void) {
     mvprintw(y, MAP_WIDTH, "|");
   }
 
-  for (int x = 0; x <= MAP_WIDTH; x++) {
+  for (int x = 0; x <= MAP_WIDTH + 1; x++) {
     mvprintw(0, x, "=");
     mvprintw(MAP_HEIGHT, x, "=");
   }
@@ -138,7 +138,7 @@ void DrawBorder(void) {
     mvprintw(y, RIGHT_BORDER, "|");
   }
 
-  for (int x = 0; x < (MAP_WIDTH); x++) {
+  for (int x = 0; x < MAP_WIDTH; x++) {
     mvprintw(ABILITY_BAR_Y - 1, x, "=");
   }
 
