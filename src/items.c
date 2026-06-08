@@ -34,13 +34,13 @@ void CreateMonsterInv(Entity* monster) {
 /* Weapons begin at 'FIST', Armor Begins at 'ROBES'*/
 Item* CreateItemTable() {
     Item* items = calloc(ALL_ITEMS, sizeof(Item));
-        items[NULL_ITEM_ID].equippable = false;
-        items[NULL_ITEM_ID].lootable = false;
-        items[NULL_ITEM_ID].unequippable = true;
-        items[NULL_ITEM_ID].itemID = NULL_ITEM_ID;
-        items[NULL_ITEM_ID].type = NULL_ITEM_TYPE;
-        strcpy(items[NULL_ITEM_ID].itemName, " ");
-        strcpy(items[NULL_ITEM_ID].itemDesc, " ");
+    items[NULL_ITEM_ID].equippable = false;
+    items[NULL_ITEM_ID].lootable = false;
+    items[NULL_ITEM_ID].unequippable = true;
+    items[NULL_ITEM_ID].itemID = NULL_ITEM_ID;
+    items[NULL_ITEM_ID].type = NULL_ITEM_TYPE;
+    strcpy(items[NULL_ITEM_ID].itemName, " ");
+    strcpy(items[NULL_ITEM_ID].itemDesc, " ");
     MakeWeaponItems(items);
     MakeArmorItems(items);
     NameWeaponItems(items);
@@ -74,12 +74,19 @@ void AddToPlayerInventory(Item newItem) {
     player->invTail++;
 }
 
-void RemoveFromPlayerInventory() {
+/* Search player inventory for item, if found, set the item to the last item in the players inventory.*/
+/* Set the last item in players inventory to NULL, then move tail backward once.*/
+void RemoveFromPlayerInventory(Item target) {
     if(player->invTail == 0) {
         return;
     }
-    player->inventory[player->invTail] = items[NULL_ITEM_ID];
-    player->invTail--;
+    for (int i = 0; i < player->invTail; i++) {
+        if(player->inventory[i].itemID == target.itemID) {
+            player->inventory[i] = player->inventory[(player->invTail) - 1];
+            player->inventory[player->invTail - 1] = items[NULL_ITEM_ID];
+            player->invTail--;
+        }
+    }
 }
 
 void MakeWeaponItems(Item* items) {
@@ -103,7 +110,7 @@ void MakeWeaponItems(Item* items) {
 
 void MakeArmorItems(Item* items) {
         // Armor
-    for  (int i = ROBES; i <= METALLIC_SKIN; i++){
+    for  (int i = RAGS; i <= METALLIC_SKIN; i++){
         items[i].equippable = true;
         items[i].lootable = true;
         items[i].unequippable = true;

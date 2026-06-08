@@ -63,6 +63,7 @@ typedef struct {
   int type;
   char itemName[MAX_NAME_SIZE];
   char itemDesc[ITEM_DESC_SIZE];
+  int value;
 }Item;
 
 typedef struct {
@@ -72,14 +73,12 @@ typedef struct {
   int minDMG;
   int maxDMG;
   int range;
-  int value;
 } Weapon;
 
 typedef struct {
   Item item;
   int AC;
   int type; // 1 = light, 2 = medium, 3 = heavy.
-  int value;
 } Armor;
 
 // weapon.c functions

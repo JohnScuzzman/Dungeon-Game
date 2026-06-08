@@ -92,8 +92,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     MakeFOV(player);
     DrawEverything(mptr, n_monsters, combatHistory);
     ResetMoveFlags(mptr, n_monsters);
-    combatHistory->playerCombat = false;
-    combatHistory->playerUsedAbility = false;
+    ResetCombatHistory();
 }
 
 void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items) { 

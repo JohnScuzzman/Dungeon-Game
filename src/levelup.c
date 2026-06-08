@@ -32,6 +32,9 @@ void LevelUp(int classID){
         case GUNSLINGER:
             LevelGunslinger();
         break;
+        case DRUID:
+            LevelDruid();
+        break;
         case RANGER:
             LevelRanger();
         break;
@@ -46,6 +49,9 @@ void LevelUp(int classID){
         break;
         case CYBORG:
             LevelCyborg();
+        break;
+        case BARD:
+            LevelBard();
         break;
     }
 }
@@ -190,12 +196,12 @@ void LevelDruid() {
         case 2:
         player->playerClass.abilities[ABILITY_1] = IceArmor();
         player->playerClass.abilities[ABILITY_2] = Electrify();
-        player->playerClass.abilities[ABILITY_3] = Dash();
+        player->playerClass.abilities[ABILITY_3] = ThornBolt();
         break;
         case 3:
         player->playerClass.abilities[ABILITY_1] = IceArmor();
         player->playerClass.abilities[ABILITY_2] = Electrify();
-        player->playerClass.abilities[ABILITY_3] = Dash();
+        player->playerClass.abilities[ABILITY_3] = ThornBolt();
         player->playerClass.abilities[ABILITY_4] = SecondWind();
         break;
         case 4:

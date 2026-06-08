@@ -36,7 +36,6 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
             mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
             mvwprintw(desc, y, 2, "%s\n", playerInv[i]->itemDesc);
             wattroff(menu, A_REVERSE);
-
         }
         else {
             mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
