@@ -1,5 +1,5 @@
 #include <rogue.h>
-
+#define BUFFER_SIZE 10
 
 /* These initialize the abilities and are equipped to the player.*/
 /* If no special effects, treat like a normal ranged attack.*/
@@ -394,7 +394,7 @@ bool DashPOSHelper(int x, int y) {
 
 void CastDrainLife(){
     if ((combatHistory->playerResult)) {
-        char eventDMGBuffer[EVENT_SIZE];
+        char eventDMGBuffer[BUFFER_SIZE];
         strcpy(combatHistory->event, "You drain your enemy of life force,");
         QueueEvent(q, combatHistory->event);
         int healVal = (combatHistory->playerDMG) / 2; // Divide Damage by 2 for HP gained.
@@ -449,7 +449,7 @@ void CastVengeance() {
 
 void CastSecondWind(){
     if(player->playerStats.HP != player->playerStats.maxHP) {
-        char eventDMGBuffer[EVENT_SIZE];
+        char eventDMGBuffer[BUFFER_SIZE];
         int healValFull = (player->playerStats.maxHP) - (player->playerStats.HP);
         int healVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
         combatHistory->playerCombat = false;
@@ -481,7 +481,7 @@ void CastSecondWind(){
 
 void CastSelfRepair(){
     if(player->playerStats.HP != player->playerStats.maxHP) {
-        char eventDMGBuffer[EVENT_SIZE];
+        char eventDMGBuffer[BUFFER_SIZE];
         combatHistory->playerCombat = false;
         strcpy(combatHistory->event, "You repair your metal frame.");
         QueueEvent(q, combatHistory->event);

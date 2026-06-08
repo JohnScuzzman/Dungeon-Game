@@ -372,14 +372,14 @@ void ConnectRooms(Position centerOne, Position centerTwo);
 
 // Externals 
 // Used in tandem with main to let any functions use these outside of main.
-extern int MAP_HEIGHT;
-extern int MAP_WIDTH;
-extern int MAX_MONSTER_NAME;
+extern const int MAP_HEIGHT;
+extern const int MAP_WIDTH;
+extern const int MAX_MONSTER_NAME;
 extern const int EVENT_SIZE;
 extern const int INVENTORY_SIZE;
-extern int LOG_WIDTH;
-extern int LOG_HEIGHT;
-extern int LOG_SIZE;
+extern const int LOG_WIDTH;
+extern const int LOG_HEIGHT;
+extern const int LOG_SIZE;
 extern const int LVL_EXP_VALUES[MAX_LEVEL];
 extern const int ALL_ITEMS;
 extern const char *DIRECTIONS[HEADINGS];
