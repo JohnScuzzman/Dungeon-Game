@@ -179,7 +179,7 @@ void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) 
   DrawPlayerEquipment();
   DrawPlayerStats();
   DrawAbilities();
-  DrawPlayerInventory();
+  // DrawPlayerInventory();
   // DrawDebug(mptr, n_monsters);
 	DrawCombatLog();
 }

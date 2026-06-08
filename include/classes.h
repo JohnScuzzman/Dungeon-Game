@@ -93,6 +93,7 @@ Ability ShadowBolt();
 Ability Vengeance();
 Ability Dash();
 Ability DevastatingInsult();
+Ability ThornBolt();
 void AbilityEffects(int abilityID);
 void CastCharge();
 void CastDash();
