@@ -35,7 +35,7 @@ Ability AimedShot() {
     aimedShot.manaCost = 3;
     aimedShot.range = (player->equippedRanged.range);
     aimedShot.abilitySave = (player->playerStats.ATK) + 10;
-    aimedShot.miscStat = 0; // skeletons HP
+    aimedShot.miscStat = 0; 
     strcpy(aimedShot.abilityName, "Aimed Shot");
     strcpy(aimedShot.abilityDesc, "none");
     return aimedShot;
@@ -404,7 +404,6 @@ void CastDrainLife(){
             strcat(combatHistory->event, eventDMGBuffer);
             QueueEvent(q, combatHistory->event);
             player->playerStats.HP = player->playerStats.maxHP;
-            player->playerStats.mana -= (player->equippedAbility.manaCost);
         }
         else {
             (player->playerStats.HP) += healVal;
@@ -412,12 +411,14 @@ void CastDrainLife(){
             snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", healVal);
             strcat(combatHistory->event, eventDMGBuffer);
             QueueEvent(q, combatHistory->event);
+            
         }
+        player->playerStats.mana -= (player->equippedAbility.manaCost);
     }
 }
 
 void CastIceArmor(){
-    if (player->passiveAbility.abilityID == NO_ABILITY){
+    if (player->passiveAbility.abilityID == NO_ABILITY) {
         strcpy(combatHistory->event, "You're covered in an icy embrace.");
         QueueEvent(q, combatHistory->event);
         int shieldVal = player->equippedAbility.miscStat;
@@ -433,7 +434,7 @@ void CastIceArmor(){
 }
 
 void CastVengeance() {
-    if (player->passiveAbility.abilityID == NO_ABILITY){
+    if (player->passiveAbility.abilityID == NO_ABILITY) {
         strcpy(combatHistory->event, "You prepare to retaliate.");
         QueueEvent(q, combatHistory->event);
         player->abilityTimer = player->equippedAbility.duration;
@@ -447,7 +448,7 @@ void CastVengeance() {
 }
 
 void CastSecondWind(){
-    if(player->playerStats.HP != player->playerStats.maxHP){
+    if(player->playerStats.HP != player->playerStats.maxHP) {
         char eventDMGBuffer[EVENT_SIZE];
         int healValFull = (player->playerStats.maxHP) - (player->playerStats.HP);
         int healVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
@@ -469,6 +470,7 @@ void CastSecondWind(){
             snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", healVal);
             strcat(combatHistory->event, eventDMGBuffer);
             QueueEvent(q, combatHistory->event);
+            player->playerStats.mana -= (player->equippedAbility.manaCost);
         }
     }
     else{
@@ -486,11 +488,11 @@ void CastSelfRepair(){
         int repairVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
         if(((player->playerStats.HP) + repairVal) >= (player->playerStats.maxHP)) {
             player->playerStats.HP = player->playerStats.maxHP;
-            player->playerStats.mana -= (player->equippedAbility.manaCost);
         }
         else {
             (player->playerStats.HP) += repairVal;
         }
+        player->playerStats.mana -= (player->equippedAbility.manaCost);
         strcpy(combatHistory->event, "You heal yourself for ");
         snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", repairVal);
         strcat(combatHistory->event, eventDMGBuffer);

@@ -13,11 +13,11 @@ const char *DIRECTIONS[HEADINGS] = {
     "South East",
     "North East"
 };
-const int EVENT_SIZE = 33;
 const int LVL_EXP_VALUES[MAX_LEVEL] = {
       LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, 
       LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
 };
+const int EVENT_SIZE = 33;
 const int MAX_MONSTER_NAME = 33;
 const int MAP_HEIGHT = 50;
 const int MAP_WIDTH = 125;
@@ -29,12 +29,11 @@ const int LOG_WIDTH = 128;
 
 /* These are like global pointers.*/ 
 /* We can use these in any function without declaring them over and over.*/
-Player* player;
+Player* player; //player->equippedWeapon.DMG
 Entity** map;
-Entity* mptr;
+Entity* mptr; 
 CombatHistory* combatHistory;
 LogQueue* q;
-Item* playerInv;
 Item* items;
 
 int main(void)
@@ -76,6 +75,9 @@ int main(void)
     /* Create Combat History && Log*/
     combatHistory = CreateCombatHistory(mptr[0]);
     q = MakeCombatLogQueue();
+
+    /* Player's Inv*/
+    CreatePlayerInv();
 
     /* Call Title Screen from asciiart.c*/
     TitleScreen();

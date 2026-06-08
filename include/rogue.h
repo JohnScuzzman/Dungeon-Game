@@ -161,7 +161,7 @@ typedef struct {
     Entity defender;
     bool monsterKilled;
     bool playerResult; // 0 = miss, 1 = hit
-    bool entityResult;
+    bool entityResult; // 0 = miss, 1 = hit
     bool playerCombat; // true if player combat occurred
     bool playerUsedRanged;
     bool playerUsedAbility;
@@ -184,8 +184,8 @@ typedef struct
 } Room;
 
 
-//1harpers_doghouse.c functions
-Ability ThornBolt();
+//1_harpers_doghouse.c functions
+
 
 // asciiart.c funcions
 void TitleScreen();
@@ -292,7 +292,7 @@ Item* CreateItemTable();
 void AddToNPCInventory(Entity* npc, Item newItem);
 void AddToPlayerInventory(Item newItem);
 void RemoveFromNPCInventory(Entity* npc);
-void RemoveFromPlayerInventory();
+void RemoveFromPlayerInventory(Item target);
 void MakeWeaponItems(Item* items);
 void MakeArmorItems(Item* items);
 void NameWeaponItems(Item* items);
@@ -394,8 +394,6 @@ extern Entity* mptr;
 extern CombatHistory* combatHistory;
 // Combat Log
 extern LogQueue* q;
-// Player playerInv
-extern Item* playerInv;
 // Item Table
 extern Item* items;
 
