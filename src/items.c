@@ -86,17 +86,30 @@ void AddToPlayerInventory(Item newItem) {
 
 /* Search player inventory for item, if found, set the item to the last item in the players inventory.*/
 /* Set the last item in players inventory to NULL, then move tail backward once.*/
+/* If equipped, unequip the item.*/
 void RemoveFromPlayerInventory(Item target) {
     if(player->invTail == 0) {
         return;
     }
     for (int i = 0; i < player->invTail; i++) {
         if(player->inventory[i].itemID == target.itemID) {
+            Unequip(target);
             AddToNPCInventory(&map[player->pos.y][player->pos.x], player->inventory[i]);
             player->invTail--;
             player->inventory[i] = player->inventory[player->invTail];
             player->inventory[player->invTail] = items[NULL_ITEM_ID];
         }
+    }
+}
+
+void Unequip(Item target) {
+    // If player is a humanoid class they get fists, otherwise they get claws.
+    if (target.itemID == player->equippedMelee.item.itemID && player->raceID < DRAGONBORN) player->equippedMelee = Fists();
+    else player->equippedMelee = Claws();
+    if (target.itemID == player->equippedRanged.item.itemID) player->equippedRanged = NoWeapon();
+    if (target.itemID == player->equippedArmor.item.itemID) {
+        player->equippedArmor = NoArmor();
+        player->playerStats.AC = player->equippedArmor.AC;
     }
 }
 

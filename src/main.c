@@ -73,10 +73,9 @@ int main(void)
     /* Place player using method in makeplayer.c*/
     player = CreatePlayer(start_pos);
 
-
     /* Player's Inv*/
     CreatePlayerInv();
-    
+
     /* Create Combat History && Log*/
     combatHistory = CreateCombatHistory(mptr[0]);
     q = MakeCombatLogQueue();

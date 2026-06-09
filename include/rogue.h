@@ -15,6 +15,7 @@
 #include <ctype.h> // toupper functions
 #include <stdbool.h>
 #include <items.h>
+#include <races.h>
 #include <classes.h>
 
 // color pairs
@@ -112,6 +113,7 @@ typedef struct {
 typedef struct {
   bool noCollision;
   char ch;
+  int raceID;
   int color;
   int abilityTimer;
   int invTail;
@@ -302,6 +304,7 @@ void ArmorItemDescriptions(Item* items);
 Weapon GetWeaponFromItem(int itemID);
 Armor GetArmorFromItem(int itemID);
 char* GetArmorType(int ArmorType);
+void Unequip(Item target);
 // void NullItem(Item item);
 
 //inventory__menu.c functions
