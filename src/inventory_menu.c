@@ -38,7 +38,7 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
                     mvwprintw(desc, 3, 2, "DMG: %d - %d\n", weapon.minDMG, weapon.maxDMG);
                     mvwprintw(desc, 4, 2, "Range: %d\n", weapon.range);
                     mvwprintw(desc, 5, 2, "Value: %d\n", weapon.item.value);
-                break;
+                    break;
                 case ARMOR:
                     Armor armor;
                     armor = GetArmorFromItem(playerInv[cursor]->itemID);
@@ -46,8 +46,9 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
                     char* armorType = GetArmorType(armor.type);
                     mvwprintw(desc, 4, 2, "Type: %s\n", armorType);
                     mvwprintw(desc, 5, 2, "Value: %d\n", armor.item.value);
+                    break;
                 default:
-                break;
+                    break;
             }
             wattroff(menu, A_REVERSE);
         }
@@ -77,7 +78,7 @@ bool MakeInventoryMenu(Item* items) {
     int invX2 = 64;
     int invY = 1;
     bool escFlag = false;
-    bool quitGame = false;
+    bool quitMenu = false;
     int cursor = 0;
     int choice = -1;
     int ch;
@@ -112,23 +113,23 @@ bool MakeInventoryMenu(Item* items) {
                 break;
             case 32: // SPB
                 choice = cursor;
-                escFlag = true;
+                escFlag = MakeItemOptionsWindow(playerInv, choice);
                 break;
             case 10: // ENTER
                 choice = cursor;
-                escFlag = true;
+                escFlag = MakeItemOptionsWindow(playerInv, choice);
                 break;
             default:
                 break;
             }
         RenderInventoryMenu(menu, desc, cursor, n_options, playerInv);
         }
-        quitGame = ProcessInventorySelect(choice, menu);
-        return quitGame;
+        quitMenu = InventorySelect(choice, menu);
+        return quitMenu;
     }
 
-/* Returns true if we want to quit the game */
-bool ProcessInventorySelect(int choice, WINDOW* menu){
+/* Returns true if we want to exit the inventory choice*/
+bool InventorySelect(int choice, WINDOW* menu){
     switch(choice){
         case 0: // Resume
             refresh();
@@ -151,6 +152,141 @@ bool ProcessInventorySelect(int choice, WINDOW* menu){
             break;
 
         case 3: // Load
+            // Do the load window here
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+
+        default:
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+
+    }
+}
+
+bool MakeItemOptionsWindow(Item** playerInv, int choice) {
+    bool equipMenu = true;
+        char *options[] = {
+        "Equip",
+        "Transfer",
+        "Drop",
+        "Examine",
+        "Exit",
+        };
+
+    //Sorry about the magic numbers
+    int n_options = sizeof(options) / sizeof(char*);
+    int invX = WINDOW_WIDTH / 2;
+    int invY = choice + 3;
+    bool escFlag = false;
+    bool quitMenu = false;
+    int cursor = 0;
+    int newChoice = -1;
+    int ch;
+
+    WINDOW *invOp = newwin(((WINDOW_HEIGHT / 4) - 4), (WINDOW_WIDTH / 4), invY, invX);
+    keypad(invOp, TRUE);
+   
+    /* First Render of Menu*/
+    RenderInvOptionMenu(invOp, cursor, n_options, options);
+
+    while(!escFlag) {
+        ch = wgetch(invOp);
+        escFlag = CheckEscape(ch);
+        switch(ch) {
+            case KEY_UP:
+                if (cursor == 0) {
+                    cursor = n_options - 1;
+                }
+                else {
+                    cursor--;
+                }
+                break;
+            case KEY_DOWN: 
+                if (cursor == n_options - 1) {
+                    cursor = 0;
+                }
+                else {
+                    cursor++;
+                }
+                break;
+            case 32: // SPB
+                newChoice = cursor;
+                escFlag = true;
+                break;
+            case 10: // ENTER
+                newChoice = cursor;
+                escFlag = true;
+                break;
+            default:
+                break;
+            }
+        RenderInvOptionMenu(invOp, cursor, n_options, options);
+    }
+    quitMenu = InvOptionSelect(playerInv, choice, newChoice, invOp);
+    return quitMenu;
+}
+
+void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** options) {
+    int y = 1;
+    int titleRight = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
+    int center = (WINDOW_WIDTH / 2) - (OFFSET * 3) + 5;
+    int numLines = WINDOW_WIDTH - 2 - titleRight;
+    int top = 1;
+    int centerY, centerX;
+    getmaxyx(invOp, centerY, centerX);
+    box(invOp, 0, 0);
+
+    for (int i = 0; i < n_options; i++) {
+        center = (centerX - strlen(options[i])) / 2;
+        if (cursor == i) {
+            wattron(invOp, A_REVERSE);
+            mvwprintw(invOp, y, center, "%s", options[i]);
+            wattroff(invOp, A_REVERSE);
+        }
+        else {
+            mvwprintw(invOp, y, center, "%s", options[i]);
+        }
+        y++;
+    }
+    wrefresh(invOp);
+}
+
+
+
+bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu) {
+    switch(newChoice){
+        case 0: // Equip / Unequip
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+
+        case 1: // Transfer
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+
+        case 2: // Drop
+            // Do the save window here
+            RemoveFromPlayerInventory(*playerInv[prevChoice]);
+            AddToNPCInventory(&map[player->pos.y][player->pos.x], *playerInv[prevChoice]);
+            refresh();
+            delwin(menu);
+            return true;
+            break;
+
+        case 3: // Examine
+            // Do the load window here
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+        case 4: // Exit
             // Do the load window here
             refresh();
             delwin(menu);

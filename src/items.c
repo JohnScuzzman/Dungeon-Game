@@ -204,99 +204,99 @@ void NameArmorItems(Item* items){
 Weapon GetWeaponFromItem(int itemID) {
     switch(itemID) {
         case FISTS:
-        return Fists();
-        break;
+            return Fists();
+            break;
         case CLAWS:
-        return Claws();
-        break;
+            return Claws();
+            break;
         case DAGGER:
-        return Dagger();
-        break;
+            return Dagger();
+            break;
         case SHORTSWORD:
-        return Shortsword();
-        break;
+            return Shortsword();
+            break;
         case LONGSWORD:
-        return Longsword();
-        break;
+            return Longsword();
+            break;
         case GREATSWORD:
-        return Greatsword();
-        break;
+            return Greatsword();
+            break;
         case CUTLASS:
-        return Cutlass();
-        break;
+            return Cutlass();
+            break;
         case SCIMITAR:
-        return Scimitar();
-        break;
+            return Scimitar();
+            break;
         case QUARTERSTAFF:
-        return Quarterstaff();
-        break;
+            return Quarterstaff();
+            break;
         case CHROME_FISTS:
-        return ChromeFists();
-        break;
+            return ChromeFists();
+            break;
         case ACID_POTION:
-        return AcidPotion();
-        break;
+            return AcidPotion();
+            break;
         case SHORTBOW:
-        return Shortbow();
-        break;
+            return Shortbow();
+            break;
         case LONGBOW:
-        return Longbow();
-        break;
+            return Longbow();
+            break;
         case FLINTLOCK_PISTOL:
-        return FlintlockPistol();
-        break;
+            return FlintlockPistol();
+            break;
         case LIGHTNING_WAND:
-        return LightningWand();
-        break;
+            return LightningWand();
+            break;
         case DUAL_FLINTLOCKS:
-        return DualFlintlocks();
-        break;
+            return DualFlintlocks();
+            break;
     }
 }
 
 Armor GetArmorFromItem(int itemID) {
     switch(itemID) {
         case RAGS:
-        return Rags();
-        break;
+            return Rags();
+            break;
         case ROBES:
-        return Robes();
-        break;
+            return Robes();
+            break;
         case LEATHER_ARMOR:
-        return LeatherArmor();
-        break;
+            return LeatherArmor();
+            break;
         case CHAINMAIL:
-        return Chainmail();
-        break;
+            return Chainmail();
+            break;
         case RANGERS_CLOAK:
-        return RangersCloak();
-        break;
+            return RangersCloak();
+            break;
         case METALLIC_SKIN:
-        return MetallicSkin();
-        break;
+            return MetallicSkin();
+            break;
     }
 }
 
 char* GetArmorType(int ArmorType) {
     switch(ArmorType) {
         case LIGHT:
-        return "Light";
-        break;
+            return "Light";
+            break;
         case MEDIUM:
-        return "Medium";
-        break;
+            return "Medium";
+            break;
         case HEAVY:
-        return "Heavy";
-        break;
+            return "Heavy";
+            break;
         case EXOSUIT:
-        return "Exosuit";
-        break;
+            return "Exosuit";
+            break;
         case POWER_ARMOR:
-        return "Power Armor";
-        break;
+            return "Power Armor";
+            break;
         case MAGIC_ARMOR:
-        return "Magic Armor";
-        break;
+            return "Magic Armor";
+            break;
     }
 }
 
