@@ -307,7 +307,10 @@ char* GetArmorType(int ArmorType);
 //inventory__menu.c functions
 void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, Item** playerInv);
 bool MakeInventoryMenu(Item* items);
-bool ProcessInventorySelect(int choice, WINDOW* menu);
+bool InventorySelect(int choice, WINDOW* menu);
+bool MakeItemOptionsWindow(Item** playerInv, int choice);
+void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** options);
+bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);
