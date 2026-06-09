@@ -58,12 +58,22 @@ void AddToNPCInventory(Entity* npc, Item newItem) {
     npc->invTail++;
 }
 
-void RemoveFromNPCInventory(Entity* npc) {
+/* finds the item if its exists in the npc's inventory.*/
+/* If it does, add it to the map tile, deincrement tail from null item to last real item.*/
+/* Make the found item the tail item, copying it over, */
+/* Now that the tail has been copied, make tail*/
+void RemoveFromNPCInventory(Entity* npc, Item target) {
     if(npc->invTail == 0) {
         return;
     }
-    npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
-    npc->invTail--;
+    for(int i = npc->invHead; i < npc->invTail; i++) {
+        if(npc->inventory[i].itemID == target.itemID){
+            AddToNPCInventory(&map[npc->pos.y][npc->pos.x], npc->inventory[i]);
+            npc->invTail--;
+            npc->inventory[i] = npc->inventory[npc->invTail];
+            npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
+        }
+    }
 }
 
 void AddToPlayerInventory(Item newItem) {
@@ -82,9 +92,10 @@ void RemoveFromPlayerInventory(Item target) {
     }
     for (int i = 0; i < player->invTail; i++) {
         if(player->inventory[i].itemID == target.itemID) {
-            player->inventory[i] = player->inventory[(player->invTail) - 1];
-            player->inventory[player->invTail - 1] = items[NULL_ITEM_ID];
+            AddToNPCInventory(&map[player->pos.y][player->pos.x], player->inventory[i]);
             player->invTail--;
+            player->inventory[i] = player->inventory[player->invTail];
+            player->inventory[player->invTail] = items[NULL_ITEM_ID];
         }
     }
 }
@@ -118,7 +129,7 @@ void MakeArmorItems(Item* items) {
         items[i].type = ARMOR;
     }
     // Cybernetics
-    for  (int i = METALLIC_SKIN; i < ALL_ITEMS; i++){
+    for  (int i = METALLIC_SKIN + 1; i < ALL_ITEMS; i++){
         items[i].equippable = false;
         items[i].lootable = false;
         items[i].unequippable = true;
@@ -128,7 +139,8 @@ void MakeArmorItems(Item* items) {
     }
 }
 
-
+/* After the items are added to the list "items" */
+/* These methods add more specific names and descriptions based on the enum value.*/
 void WeaponItemDescriptions(Item* items){
     strcpy(items[FISTS].itemDesc, "Punch something if you must.");
     strcpy(items[CLAWS].itemDesc, "Sharp claws, ready to scratch.");
@@ -156,7 +168,6 @@ void ArmorItemDescriptions(Item* items){
     strcpy(items[RANGERS_CLOAK].itemDesc, "Provides concealment in dark and dense forests.");
     strcpy(items[METALLIC_SKIN].itemDesc, "Servos and steel are your bastion.");
 }
-
 
 void NameWeaponItems(Item* items){
     strcpy(items[FISTS].itemName, "Fists");
@@ -186,7 +197,10 @@ void NameArmorItems(Item* items){
     strcpy(items[METALLIC_SKIN].itemName, "Metallic Skin");
 }
 
-// TODO make a weapon list similar to item list so these dont make 1000 weapon objects
+/* This is effectively how we can translate an item into weapon.*/
+/* Returns a copy of a struct depending on the given itemID */
+/* The local copy should be recycled and deleted by the called method.*/
+/* This copy will get passed up to whatever method uses it, and then get recycled once the method is done.*/
 Weapon GetWeaponFromItem(int itemID) {
     switch(itemID) {
         case FISTS:
@@ -239,7 +253,7 @@ Weapon GetWeaponFromItem(int itemID) {
         break;
     }
 }
-// TODO make an armor list similar to item list so these dont make 1000 weapon objects
+
 Armor GetArmorFromItem(int itemID) {
     switch(itemID) {
         case RAGS:
