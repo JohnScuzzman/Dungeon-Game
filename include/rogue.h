@@ -291,7 +291,7 @@ void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
 void AddToNPCInventory(Entity* npc, Item newItem);
 void AddToPlayerInventory(Item newItem);
-void RemoveFromNPCInventory(Entity* npc);
+void RemoveFromNPCInventory(Entity* npc, Item target);
 void RemoveFromPlayerInventory(Item target);
 void MakeWeaponItems(Item* items);
 void MakeArmorItems(Item* items);

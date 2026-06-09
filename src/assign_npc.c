@@ -194,8 +194,6 @@ void AssignGoblinRanger(Entity* monster) {
     strcpy(monster->entityRace, "Goblin");
 }
 
-
-
 void AssignHobgoblinWarrior(Entity* monster) {
     monster->ch = 'H'; 
     monster->staticCh = 'H'; 
@@ -222,7 +220,6 @@ void AssignHobgoblinWarrior(Entity* monster) {
     strcpy(monster->entityClass, "Warrior");
 }
     
-
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     CreateMonsterInv(monster);
     monster->entityStats.ATK = 0;

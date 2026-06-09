@@ -11,9 +11,6 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
     int numLines = WINDOW_WIDTH - 2 - titleRight;
     int top = 1;
 
-    
-
-
     box(menu, 0, 0);
     // mvwhline(WINDOW *win, int y, int x, chtype ch, int n)
     // win - pointer to the window where the line is drawn.
@@ -38,17 +35,17 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
                 case WEAPON:
                     Weapon weapon;
                     weapon = GetWeaponFromItem(playerInv[cursor]->itemID);
-                    mvwprintw(desc, 3, 2, "Value: %d\n", weapon.item.value);
-                    mvwprintw(desc, 4, 2, "DMG: %d - %d\n", weapon.minDMG, weapon.maxDMG);
-                    mvwprintw(desc, 5, 2, "Range: %d\n", weapon.range);
+                    mvwprintw(desc, 3, 2, "DMG: %d - %d\n", weapon.minDMG, weapon.maxDMG);
+                    mvwprintw(desc, 4, 2, "Range: %d\n", weapon.range);
+                    mvwprintw(desc, 5, 2, "Value: %d\n", weapon.item.value);
                 break;
                 case ARMOR:
                     Armor armor;
                     armor = GetArmorFromItem(playerInv[cursor]->itemID);
-                    mvwprintw(desc, 3, 2, "Value: %d\n", armor.item.value);
-                    mvwprintw(desc, 4, 2, "AC: %d\n", armor.AC);
+                    mvwprintw(desc, 3, 2, "AC: %d\n", armor.AC);
                     char* armorType = GetArmorType(armor.type);
-                    mvwprintw(desc, 5, 2, "Type: %s\n", armorType);
+                    mvwprintw(desc, 4, 2, "Type: %s\n", armorType);
+                    mvwprintw(desc, 5, 2, "Value: %d\n", armor.item.value);
                 default:
                 break;
             }
@@ -71,72 +68,10 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
 /* Processes a new window and does a task if false. */
 bool MakeInventoryMenu(Item* items) {
     
-    Item* playerInv[INVENTORY_SIZE] = {
-        &player->inventory[0],
-        &player->inventory[1],
-        &player->inventory[2],
-        &player->inventory[3],
-        &player->inventory[4],
-        &player->inventory[5],
-        &player->inventory[6],
-        &player->inventory[7],
-        &player->inventory[8],
-        &player->inventory[9],
-        &player->inventory[10],
-        &player->inventory[11],
-        &player->inventory[12],
-        &player->inventory[13],
-        &player->inventory[14],
-        &player->inventory[15],
-        &player->inventory[16],
-        &player->inventory[17],
-        &player->inventory[18],
-        &player->inventory[19],
-        &player->inventory[20],
-        &player->inventory[21],
-        &player->inventory[22],
-        &player->inventory[23],
-        &player->inventory[24],
-        &player->inventory[25],
-        &player->inventory[26],
-        &player->inventory[27],
-        &player->inventory[28],
-        &player->inventory[29],
-        &player->inventory[30],
-        &player->inventory[31],
-        &player->inventory[32],
-        &player->inventory[33],
-        &player->inventory[34],
-        &player->inventory[35],
-        &player->inventory[36],
-        &player->inventory[37],
-        &player->inventory[38],
-        &player->inventory[39],
-        &player->inventory[40],
-        &player->inventory[41],
-        &player->inventory[42],
-        &player->inventory[43],
-        &player->inventory[44],
-        &player->inventory[45],
-        &player->inventory[46],
-        &player->inventory[47],
-        &player->inventory[48],
-        &player->inventory[49],
-        &player->inventory[50],
-        &player->inventory[51],
-        &player->inventory[52],
-        &player->inventory[53],
-        &player->inventory[54],
-        &player->inventory[55],
-        &player->inventory[56],
-        &player->inventory[57],
-        &player->inventory[58],
-        &player->inventory[59],
-        &player->inventory[60],
-        &player->inventory[61],
-        &player->inventory[62],
-        &player->inventory[63],
-    };
+    Item* playerInv[INVENTORY_SIZE];
+    for(int i = 0; i < INVENTORY_SIZE; i++) {
+        playerInv[i] = &player->inventory[i];
+    }
     int n_options = player->invTail;
     int invX1 = 2;
     int invX2 = 64;
