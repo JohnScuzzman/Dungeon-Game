@@ -84,6 +84,8 @@ Entity* FindMonsterInList(int monsterID, int n_monsters) {
             return (mptr + i);
         }
     }
+
+    return NULL;
 }
 
 
@@ -367,6 +369,9 @@ int MonsterDirection(Entity* monster) {
         return SOUTH;
     }
     else if ((player->pos.x) == (monster->pos.x) && (player->pos.y) > (monster->pos.y)) {
+        return NORTH;
+    } else {
+        // Should never occur
         return NORTH;
     }
 }
