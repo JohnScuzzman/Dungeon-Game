@@ -11,8 +11,7 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
     int numLines = WINDOW_WIDTH - 2 - titleRight;
     int top = 1;
 
-    /* Diabolical Pointer Upcasting */
-    // Item* itemptr = (Item*)&player->equippedWeapon;
+    
 
 
     box(menu, 0, 0);
@@ -34,23 +33,40 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
         if (cursor == i) {
             wattron(menu, A_REVERSE);
             mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
-            mvwprintw(desc, y, 2, "%s\n", playerInv[i]->itemDesc);
+            mvwprintw(desc, 2, 2, "%s\n", playerInv[cursor]->itemDesc);
+            switch (playerInv[cursor]->type) {
+                case WEAPON:
+                    Weapon weapon;
+                    weapon = GetWeaponFromItem(playerInv[cursor]->itemID);
+                    mvwprintw(desc, 3, 2, "Value: %d\n", weapon.item.value);
+                    mvwprintw(desc, 4, 2, "DMG: %d - %d\n", weapon.minDMG, weapon.maxDMG);
+                    mvwprintw(desc, 5, 2, "Range: %d\n", weapon.range);
+                break;
+                case ARMOR:
+                    Armor armor;
+                    armor = GetArmorFromItem(playerInv[cursor]->itemID);
+                    mvwprintw(desc, 3, 2, "Value: %d\n", armor.item.value);
+                    mvwprintw(desc, 4, 2, "AC: %d\n", armor.AC);
+                    char* armorType = GetArmorType(armor.type);
+                    mvwprintw(desc, 5, 2, "Type: %s\n", armorType);
+                default:
+                break;
+            }
             wattroff(menu, A_REVERSE);
         }
         else {
             mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
-            mvwprintw(desc, y, 2, "%s\n", playerInv[i]->itemDesc);
+            // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc);
         }
         y++;
-    }
     box(desc, 0, 0);
     mvwprintw(desc, top, center - 3, " DESCRIPTION ");
     mvwhline(desc, top, top, ACS_HLINE, numLines);
     mvwhline(desc, top, titleRight + 2, ACS_HLINE, numLines - 1);
     wrefresh(desc);
     wrefresh(menu);
+    }
 }
-
 /* Creates a pause window and returns true if player quits */
 /* Processes a new window and does a task if false. */
 bool MakeInventoryMenu(Item* items) {
@@ -121,7 +137,7 @@ bool MakeInventoryMenu(Item* items) {
         &player->inventory[62],
         &player->inventory[63],
     };
-    int n_options = sizeof(playerInv) / sizeof(Item*);
+    int n_options = player->invTail;
     int invX1 = 2;
     int invX2 = 64;
     int invY = 1;

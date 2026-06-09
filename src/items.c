@@ -99,7 +99,7 @@ void MakeWeaponItems(Item* items) {
         items[i].type = WEAPON;
     }
     // Weapons
-    for (int i = DAGGER; i < ROBES; i++){
+    for (int i = DAGGER; i < RAGS; i++){
         items[i].equippable = true;
         items[i].lootable = true;
         items[i].unequippable = true;
@@ -184,6 +184,106 @@ void NameArmorItems(Item* items){
     strcpy(items[CHAINMAIL].itemName, "Chainmail");
     strcpy(items[RANGERS_CLOAK].itemName, "Ranger's Cloak");
     strcpy(items[METALLIC_SKIN].itemName, "Metallic Skin");
+}
+
+// TODO make a weapon list similar to item list so these dont make 1000 weapon objects
+Weapon GetWeaponFromItem(int itemID) {
+    switch(itemID) {
+        case FISTS:
+        return Fists();
+        break;
+        case CLAWS:
+        return Claws();
+        break;
+        case DAGGER:
+        return Dagger();
+        break;
+        case SHORTSWORD:
+        return Shortsword();
+        break;
+        case LONGSWORD:
+        return Longsword();
+        break;
+        case GREATSWORD:
+        return Greatsword();
+        break;
+        case CUTLASS:
+        return Cutlass();
+        break;
+        case SCIMITAR:
+        return Scimitar();
+        break;
+        case QUARTERSTAFF:
+        return Quarterstaff();
+        break;
+        case CHROME_FISTS:
+        return ChromeFists();
+        break;
+        case ACID_POTION:
+        return AcidPotion();
+        break;
+        case SHORTBOW:
+        return Shortbow();
+        break;
+        case LONGBOW:
+        return Longbow();
+        break;
+        case FLINTLOCK_PISTOL:
+        return FlintlockPistol();
+        break;
+        case LIGHTNING_WAND:
+        return LightningWand();
+        break;
+        case DUAL_FLINTLOCKS:
+        return DualFlintlocks();
+        break;
+    }
+}
+// TODO make an armor list similar to item list so these dont make 1000 weapon objects
+Armor GetArmorFromItem(int itemID) {
+    switch(itemID) {
+        case RAGS:
+        return Rags();
+        break;
+        case ROBES:
+        return Robes();
+        break;
+        case LEATHER_ARMOR:
+        return LeatherArmor();
+        break;
+        case CHAINMAIL:
+        return Chainmail();
+        break;
+        case RANGERS_CLOAK:
+        return RangersCloak();
+        break;
+        case METALLIC_SKIN:
+        return MetallicSkin();
+        break;
+    }
+}
+
+char* GetArmorType(int ArmorType) {
+    switch(ArmorType) {
+        case LIGHT:
+        return "Light";
+        break;
+        case MEDIUM:
+        return "Medium";
+        break;
+        case HEAVY:
+        return "Heavy";
+        break;
+        case EXOSUIT:
+        return "Exosuit";
+        break;
+        case POWER_ARMOR:
+        return "Power Armor";
+        break;
+        case MAGIC_ARMOR:
+        return "Magic Armor";
+        break;
+    }
 }
 
 // void NullItem(Item* item) {

@@ -61,9 +61,9 @@ typedef struct {
   bool unequippable;
   int itemID;
   int type;
+  int value;
   char itemName[MAX_NAME_SIZE];
   char itemDesc[ITEM_DESC_SIZE];
-  int value;
 }Item;
 
 typedef struct {

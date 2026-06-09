@@ -299,6 +299,9 @@ void NameWeaponItems(Item* items);
 void NameArmorItems(Item* items);
 void WeaponItemDescriptions(Item* items);
 void ArmorItemDescriptions(Item* items);
+Weapon GetWeaponFromItem(int itemID);
+Armor GetArmorFromItem(int itemID);
+char* GetArmorType(int ArmorType);
 // void NullItem(Item item);
 
 //inventory__menu.c functions
