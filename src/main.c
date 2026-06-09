@@ -44,18 +44,6 @@ int main(void)
   if (compatibleTerminal)
   {
     mousemask(BUTTON1_CLICKED, NULL);
-    /* Adjust layout to terminal size so the view scales */
-    int term_rows, term_cols;
-    getmaxyx(stdscr, term_rows, term_cols);
-    int sidebar_width = 40;
-    if (term_cols < 100) sidebar_width = term_cols / 3;
-    if (sidebar_width < 20) sidebar_width = 20;
-    MAP_WIDTH = term_cols - sidebar_width - 3;
-    if (MAP_WIDTH < 20) MAP_WIDTH = 20;
-    MAP_HEIGHT = term_rows - 3;
-    if (MAP_HEIGHT < 10) MAP_HEIGHT = 10;
-    LOG_WIDTH = MAP_WIDTH + 2;
-    LOG_HEIGHT = 22;
     Position start_pos;
     /* Generate seeds */
     srand(time(NULL));
