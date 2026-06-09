@@ -27,6 +27,11 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
     mvwhline(desc, top, titleRight + 2, ACS_HLINE, numLines - 1);
 
     for (int i = 0; i < player->invTail; i++) {
+        if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID) {
+                wattron(menu, A_DIM);
+                mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 2), " (Equipped)");
+                wattroff(menu, A_DIM);
+            }
         if (cursor == i) {
             wattron(menu, A_REVERSE);
             mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
@@ -57,10 +62,6 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
             // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc);
         }
         y++;
-    box(desc, 0, 0);
-    mvwprintw(desc, top, center - 3, " DESCRIPTION ");
-    mvwhline(desc, top, top, ACS_HLINE, numLines);
-    mvwhline(desc, top, titleRight + 2, ACS_HLINE, numLines - 1);
     wrefresh(desc);
     wrefresh(menu);
     }
@@ -272,9 +273,7 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* me
             break;
 
         case 2: // Drop
-            // Do the save window here
             RemoveFromPlayerInventory(*playerInv[prevChoice]);
-            AddToNPCInventory(&map[player->pos.y][player->pos.x], *playerInv[prevChoice]);
             refresh();
             delwin(menu);
             return true;
