@@ -68,8 +68,8 @@ typedef struct {
     bool newSeen;
     bool oldVisible;
     bool newVisible;
-    bool oldChar;
-    bool newChar;
+    char oldChar;
+    char newChar;
 } MapInfo;
 
 typedef struct {

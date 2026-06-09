@@ -180,27 +180,37 @@ bool MakeInventoryMenu(Item* items) {
 bool ProcessInventorySelect(int choice, WINDOW* menu){
     switch(choice){
         case 0: // Resume
-        refresh();
-        delwin(menu);
-        return false;
-        break;
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+
         case 1: // Options
-        // Do the options window here
-        refresh();
-        delwin(menu);
-        return false;
-        break;
+            // Do the options window here
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+
         case 2: // Save
-        // Do the save window here
-        refresh();
-        delwin(menu);
-        return false;
-        break;
+            // Do the save window here
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+
         case 3: // Load
-        // Do the load window here
-        refresh();
-        delwin(menu);
-        return false;
-        break;
+            // Do the load window here
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+
+        default:
+            refresh();
+            delwin(menu);
+            return false;
+            break;
+
     }
 }
