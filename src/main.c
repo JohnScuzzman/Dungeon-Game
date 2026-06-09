@@ -34,6 +34,8 @@ Entity* mptr;
 CombatHistory* combatHistory;
 LogQueue* q;
 Item* items;
+Weapon* weapons;
+Armor* armors;
 
 int main(void)
 {
@@ -71,12 +73,13 @@ int main(void)
     /* Place player using method in makeplayer.c*/
     player = CreatePlayer(start_pos);
 
-    /* Create Combat History && Log*/
-    combatHistory = CreateCombatHistory(mptr[0]);
-    q = MakeCombatLogQueue();
 
     /* Player's Inv*/
     CreatePlayerInv();
+    
+    /* Create Combat History && Log*/
+    combatHistory = CreateCombatHistory(mptr[0]);
+    q = MakeCombatLogQueue();
 
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
