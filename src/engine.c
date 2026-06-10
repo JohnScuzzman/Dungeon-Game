@@ -90,7 +90,7 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
 void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     MakeFOV(player);
-    DrawEverything(mptr, n_monsters, combatHistory);
+    DrawEverything();
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
 }

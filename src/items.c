@@ -93,7 +93,6 @@ void RemoveFromPlayerInventory(Item target) {
     }
     for (int i = 0; i < player->invTail; i++) {
         if(player->inventory[i].itemID == target.itemID) {
-            Unequip(target);
             AddToNPCInventory(&map[player->pos.y][player->pos.x], player->inventory[i]);
             player->invTail--;
             player->inventory[i] = player->inventory[player->invTail];
@@ -102,15 +101,66 @@ void RemoveFromPlayerInventory(Item target) {
     }
 }
 
+void Equip(Item target) {
+    if (IsMeleeWeaponItem(target)) {
+        EquipMelee(target);
+    }
+    if (IsRangedWeaponItem(target)) {
+        EquipRanged(target);
+    }
+    if (IsArmorItem(target)) {
+        EquipArmor(target);
+    }
+}
+
+void EquipMelee(Item target) {
+    if (player->equippedMelee.item.itemID == FISTS || player->equippedMelee.item.itemID == CLAWS) {
+        player->equippedMelee = GetWeaponFromItem(target.itemID);
+    }
+    else {
+        Unequip(player->equippedMelee.item);
+        player->equippedMelee = GetWeaponFromItem(target.itemID);
+    }
+}
+
+void EquipRanged(Item target) {
+    if (player->equippedRanged.item.itemID == NULL_ITEM_ID) {
+        player->equippedRanged = GetWeaponFromItem(target.itemID);
+    }
+    else {
+        Unequip(player->equippedRanged.item);
+        player->equippedRanged = GetWeaponFromItem(target.itemID);
+    };
+}
+
+void EquipArmor(Item target) {
+    if (player->equippedArmor.item.itemID == NULL_ITEM_ID) {
+        player->equippedArmor = GetArmorFromItem(target.itemID);
+        player->playerStats.AC = player->equippedArmor.AC;
+    }
+    else {
+        Unequip(player->equippedArmor.item);
+        player->equippedArmor = GetArmorFromItem(target.itemID);
+    };
+}
+
+
 void Unequip(Item target) {
     // If player is a humanoid class they get fists, otherwise they get claws.
-    if (target.itemID == player->equippedMelee.item.itemID && player->raceID < DRAGONBORN) player->equippedMelee = Fists();
-    else player->equippedMelee = Claws();
-    if (target.itemID == player->equippedRanged.item.itemID) player->equippedRanged = NoWeapon();
+    if (target.itemID == player->equippedMelee.item.itemID && player->raceID < DRAGONBORN) {
+        player->equippedMelee = Fists();
+    }
+    else if (target.itemID == player->equippedMelee.item.itemID) {
+        player->equippedMelee = Claws();
+    }
+    if (target.itemID == player->equippedRanged.item.itemID) {
+        player->equippedRanged = NoWeapon();
+    }
     if (target.itemID == player->equippedArmor.item.itemID) {
         player->equippedArmor = NoArmor();
         player->playerStats.AC = player->equippedArmor.AC;
     }
+    
 }
 
 void MakeWeaponItems(Item* items) {
@@ -313,6 +363,22 @@ char* GetArmorType(int ArmorType) {
     }
 }
 
+/* This suite of functions just checks if an item is a certain type and returns true if it is*/
+
+bool IsMeleeWeaponItem(Item target) {
+    if (target.itemID > CLAWS && target.itemID < ACID_POTION) return true;
+    return false;
+}
+
+bool IsRangedWeaponItem(Item target) {
+    if (target.itemID > CHROME_FISTS && target.itemID < RAGS) return true;
+    return false;
+}
+
+bool IsArmorItem(Item target) {
+    if (target.itemID > DUAL_FLINTLOCKS && target.itemID <= METALLIC_SKIN) return true;
+    return false;
+}
 // void NullItem(Item* item) {
 //     item->equippable = true;
 //     item->lootable = false;

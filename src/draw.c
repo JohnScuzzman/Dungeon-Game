@@ -177,7 +177,8 @@ void DrawPlayerInventory() {
 }
 
 /*Draw Everything*/ 
-void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
+//void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
+void DrawEverything() {
 	clear();
 	DrawMap();
 	DrawPlayer(player);
