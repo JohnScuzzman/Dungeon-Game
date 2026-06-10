@@ -101,6 +101,7 @@ void RemoveFromPlayerInventory(Item target) {
     }
 }
 
+/* Equips an item if it is valid to do so.*/
 void Equip(Item target) {
     if (IsMeleeWeaponItem(target)) {
         EquipMelee(target);
@@ -112,6 +113,8 @@ void Equip(Item target) {
         EquipArmor(target);
     }
 }
+
+/* Helper methods for Equip */
 
 void EquipMelee(Item target) {
     if (player->equippedMelee.item.itemID == FISTS || player->equippedMelee.item.itemID == CLAWS) {
@@ -144,7 +147,7 @@ void EquipArmor(Item target) {
     };
 }
 
-
+/* Unequips target item but does NOT add it back to player inventory. */
 void Unequip(Item target) {
     // If player is a humanoid class they get fists, otherwise they get claws.
     if (target.itemID == player->equippedMelee.item.itemID && player->raceID < DRAGONBORN) {
@@ -160,7 +163,6 @@ void Unequip(Item target) {
         player->equippedArmor = NoArmor();
         player->playerStats.AC = player->equippedArmor.AC;
     }
-    
 }
 
 void MakeWeaponItems(Item* items) {
