@@ -10,13 +10,11 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
     int center = ((WINDOW_WIDTH - OFFSET) / 2) + 3;
     int numLines = WINDOW_WIDTH - 2 - titleRight;
     int top = 1;
+    bool equippedItem = false;
+    /* Update players info in real time. */
+    wclear(menu);
 
     box(menu, 0, 0);
-    // mvwhline(WINDOW *win, int y, int x, chtype ch, int n)
-    // win - pointer to the window where the line is drawn.
-    // y, x - The coordinates relative to the window's starting POS (0,0).
-    // ch - The character and attributes to use for the line.
-    // passing 0 uses the default horizontal character ACS_HLINE.
     mvwprintw(menu, top, center - 3, " INVENTORY ");
     mvwhline(menu, top, top, ACS_HLINE, numLines );
     mvwhline(menu, top, titleRight, ACS_HLINE, numLines + 1);
@@ -25,13 +23,13 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, 
     mvwprintw(desc, top, center - 3, " DESCRIPTION ");
     mvwhline(desc, top, top, ACS_HLINE, numLines);
     mvwhline(desc, top, titleRight + 2, ACS_HLINE, numLines - 1);
-
+    
     for (int i = 0; i < player->invTail; i++) {
         if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID) {
-                wattron(menu, A_DIM);
-                mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 2), " (Equipped)");
-                wattroff(menu, A_DIM);
-            }
+            wattron(menu, A_DIM);
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 2), " (Equipped)");
+            wattroff(menu, A_DIM);
+        }
         if (cursor == i) {
             wattron(menu, A_REVERSE);
             mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
@@ -132,27 +130,27 @@ bool MakeInventoryMenu(Item* items) {
 /* Returns true if we want to exit the inventory choice*/
 bool InventorySelect(int choice, WINDOW* menu){
     switch(choice){
-        case 0: // Resume
+        case 0: // Item 1
             refresh();
             delwin(menu);
             return false;
             break;
 
-        case 1: // Options
+        case 1: // Item 2
             // Do the options window here
             refresh();
             delwin(menu);
             return false;
             break;
 
-        case 2: // Save
+        case 2: // Item 3
             // Do the save window here
             refresh();
             delwin(menu);
             return false;
             break;
 
-        case 3: // Load
+        case 3: // Item 4
             // Do the load window here
             refresh();
             delwin(menu);
@@ -169,30 +167,44 @@ bool InventorySelect(int choice, WINDOW* menu){
 }
 
 bool MakeItemOptionsWindow(Item** playerInv, int choice) {
-    bool equipMenu = true;
-        char *options[] = {
-        "Equip",
-        "Transfer",
-        "Drop",
-        "Examine",
-        "Exit",
-        };
+    bool unEquipMenu = false;
+    if (playerInv[choice]->itemID == player->equippedMelee.item.itemID || playerInv[choice]->itemID == player->equippedRanged.item.itemID || playerInv[choice]->itemID == player->equippedArmor.item.itemID) {
+        unEquipMenu = true;
+    }
+    char *options1[] = {
+    "Equip",
+    "Transfer",
+    "Drop",
+    "Examine",
+    "Exit",
+    };
+    char *options2[] = {
+    "Unequip",
+    "Transfer",
+    "Drop",
+    "Examine",
+    "Exit",
+    };
 
     //Sorry about the magic numbers
-    int n_options = sizeof(options) / sizeof(char*);
+    int n_options = sizeof(options1) / sizeof(char*);
     int invX = WINDOW_WIDTH / 2;
     int invY = choice + 3;
     bool escFlag = false;
-    bool quitMenu = false;
     int cursor = 0;
     int newChoice = -1;
     int ch;
-
+    
+    // Make a tiny window with 5 options for player to choose from.
     WINDOW *invOp = newwin(((WINDOW_HEIGHT / 4) - 4), (WINDOW_WIDTH / 4), invY, invX);
     keypad(invOp, TRUE);
-   
-    /* First Render of Menu*/
-    RenderInvOptionMenu(invOp, cursor, n_options, options);
+
+    if (unEquipMenu) {
+        RenderInvOptionMenu(invOp, cursor, n_options, options2);
+    }
+    else {
+        RenderInvOptionMenu(invOp, cursor, n_options, options1);
+    }
 
     while(!escFlag) {
         ch = wgetch(invOp);
@@ -225,10 +237,14 @@ bool MakeItemOptionsWindow(Item** playerInv, int choice) {
             default:
                 break;
             }
-        RenderInvOptionMenu(invOp, cursor, n_options, options);
+        if (unEquipMenu) {
+            RenderInvOptionMenu(invOp, cursor, n_options, options2);
+        }
+        else {
+            RenderInvOptionMenu(invOp, cursor, n_options, options1);
+        }
     }
-    quitMenu = InvOptionSelect(playerInv, choice, newChoice, invOp);
-    return quitMenu;
+    return InvOptionSelect(playerInv, choice, newChoice, invOp, unEquipMenu);
 }
 
 void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** options) {
@@ -258,9 +274,16 @@ void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** option
 
 
 
-bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu) {
+bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu, bool unEquipMenu) {
     switch(newChoice){
         case 0: // Equip / Unequip
+            if(unEquipMenu){
+                Unequip(*playerInv[prevChoice]);
+            } 
+            else {
+                Equip(*playerInv[prevChoice]);
+            }
+            DrawEverything();
             refresh();
             delwin(menu);
             return false;
@@ -273,10 +296,12 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* me
             break;
 
         case 2: // Drop
+            Unequip(*playerInv[prevChoice]);
             RemoveFromPlayerInventory(*playerInv[prevChoice]);
+            DrawEverything();
             refresh();
             delwin(menu);
-            return true;
+            return false;
             break;
 
         case 3: // Examine
@@ -297,6 +322,5 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* me
             delwin(menu);
             return false;
             break;
-
     }
 }

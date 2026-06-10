@@ -257,7 +257,7 @@ void DrawAbilities();
 void DrawBorder();
 void DrawCombatLog();
 void DrawDebug(Entity* mptr, int n_monsters);
-void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory);
+void DrawEverything();
 void DrawPlayerEquipment();
 void DrawPlayerInventory();
 void DrawPlayerStats();
@@ -295,16 +295,23 @@ void AddToNPCInventory(Entity* npc, Item newItem);
 void AddToPlayerInventory(Item newItem);
 void RemoveFromNPCInventory(Entity* npc, Item target);
 void RemoveFromPlayerInventory(Item target);
+Weapon GetWeaponFromItem(int itemID);
+Armor GetArmorFromItem(int itemID);
+char* GetArmorType(int ArmorType);
+void Equip(Item target);
+void EquipMelee(Item target);
+void EquipRanged(Item target);
+void EquipArmor(Item target);
+void Unequip(Item target);
+bool IsMeleeWeaponItem(Item target);
+bool IsRangedWeaponItem(Item target);
+bool IsArmorItem(Item target);
 void MakeWeaponItems(Item* items);
 void MakeArmorItems(Item* items);
 void NameWeaponItems(Item* items);
 void NameArmorItems(Item* items);
 void WeaponItemDescriptions(Item* items);
 void ArmorItemDescriptions(Item* items);
-Weapon GetWeaponFromItem(int itemID);
-Armor GetArmorFromItem(int itemID);
-char* GetArmorType(int ArmorType);
-void Unequip(Item target);
 // void NullItem(Item item);
 
 //inventory__menu.c functions
@@ -313,7 +320,7 @@ bool MakeInventoryMenu(Item* items);
 bool InventorySelect(int choice, WINDOW* menu);
 bool MakeItemOptionsWindow(Item** playerInv, int choice);
 void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** options);
-bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu);
+bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu, bool unEquipMenu);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);
