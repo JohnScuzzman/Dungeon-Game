@@ -315,12 +315,15 @@ void ArmorItemDescriptions(Item* items);
 // void NullItem(Item item);
 
 //inventory__menu.c functions
-void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, Item** playerInv);
+void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** playerInv);
 bool MakeInventoryMenu(Item* items);
 bool InventorySelect(int choice, WINDOW* menu);
-bool MakeItemOptionsWindow(Item** playerInv, int choice);
-void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** options);
-bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu, bool unEquipMenu);
+bool MakeItemOptionsWindow(Item** playerInv, int choice,WINDOW *menu, WINDOW *loot);
+void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** entityInv);
+bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot, bool unEquipMenu);
+// void RenderLootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
+// bool LootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
+// bool LootChoice(WINDOW* loot, int lootChoice);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);
