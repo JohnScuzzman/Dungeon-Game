@@ -4,7 +4,7 @@
 /* Run this first to initialize it.*/
 LogQueue* MakeCombatLogQueue() {
     LogQueue* q;
-    q = calloc(1, sizeof(LogQueue));
+    q = (LogQueue*)calloc(1, sizeof(LogQueue));
     q->front = 0;
     q->rear = 0;
     return q;
@@ -19,16 +19,16 @@ bool IsFull(LogQueue *q) {
 }
 
 /* Queues a combat event as a string, if full, dequeues the front by incrementing it by one.*/
-void QueueEvent(LogQueue *q, char* event) {
+void QueueEvent(LogQueue *q, std::string event) {
     if (IsFull(q)) {
-        strcpy(q->events[q->rear], event);
+        q->events[q->rear] = event;
         DequeueEvent(q);
-        strcpy(q->events[q->rear], " ");
+        q->events[q->rear] = " ";
         
         return;
     }
     else{
-        strcpy(q->events[q->rear], event);
+        q->events[q->rear] = event;
         q->rear++;
     }
 }
@@ -38,12 +38,12 @@ void DequeueEvent (LogQueue *q) {
         return;
     }
     for (int i = 1; i  <= LOG_SIZE; i++){
-        strcpy(q->events[i - 1], q->events[i]);
+        q->events[i - 1] = q->events[i];
     }
         // q->front++;
 }
 
-char* PeekCombatQueue (LogQueue *q) {
+std::string PeekCombatQueue (LogQueue *q) {
     if (IsEmpty(q)){
         return "Log is Empty, Cannot peek.";
     }
@@ -52,11 +52,11 @@ char* PeekCombatQueue (LogQueue *q) {
 
 void NotEnoughMana() {
     if(player->playerClass.isCaster){
-            strcpy(combatHistory->event, "Not enough mana.");
+            combatHistory->event = "Not enough mana.";
             QueueEvent(q, combatHistory->event);
         }
     else {
-        strcpy(combatHistory->event, "Not enough energy.");
+        combatHistory->event = "Not enough energy.";
         QueueEvent(q, combatHistory->event);
     }
 }
@@ -67,7 +67,7 @@ void NotEnoughMana() {
 //         return;
 //     }
 //     for (int i = 0; i <= q->rear; i++) {
-//         mvwprintw(pad, i, 0, "%s", q->events[i]);
+//         mvwprintw(pad, i, 0, "%s", q->events[i].c_str());
 //     }
 // }
 
@@ -80,19 +80,19 @@ void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int player
     combatHistory->playerResult = true;
     combatHistory->monsterKilled = true;
     RecordAbilityUse();
-    strcpy(combatHistory->event, "You kill the ");
-    strcat(combatHistory->event, combatHistory->defender.entityName);
-    strcat(combatHistory->event, ".");
+    combatHistory->event = "You kill the ";
+    combatHistory->event += combatHistory->defender.entityName;
+    combatHistory->event += ".";
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, "Dealing ");
+    combatHistory->event = "Dealing ";
     snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d", playerDMG);
-    strcat(combatHistory->event, eventDMGBuffer);
-    strcat(combatHistory->event, " total damage.");
+    combatHistory->event += eventDMGBuffer;
+    combatHistory->event += " total damage.";
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, "You Gained ");
+    combatHistory->event = "You Gained ";
     snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d", defender->entityStats.EXP);
-    strcat(combatHistory->event, eventDMGBuffer);
-    strcat(combatHistory->event, " EXP!");
+    combatHistory->event += eventDMGBuffer;
+    combatHistory->event += " EXP!";
     QueueEvent(q, combatHistory->event);
 }
 
@@ -103,9 +103,9 @@ void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int player
     combatHistory->playerResult = false;
     combatHistory->monsterKilled = false;
     RecordAbilityUse();
-    strcpy(combatHistory->event, "You miss the ");
-    strcat(combatHistory->event, combatHistory->defender.entityName);
-    strcat(combatHistory->event, ".");
+    combatHistory->event = "You miss the ";
+    combatHistory->event += combatHistory->defender.entityName;
+    combatHistory->event += ".";
     QueueEvent(q, combatHistory->event);
 }
 
@@ -117,12 +117,12 @@ void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerA
     combatHistory->monsterKilled = false;
     combatHistory->playerResult = true;
     RecordAbilityUse();
-    strcpy(combatHistory->event, "You hit the ");
-    strcat(combatHistory->event, combatHistory->defender.entityName);
-    strcat(combatHistory->event, " for ");
+    combatHistory->event = "You hit the ";
+    combatHistory->event += combatHistory->defender.entityName;
+    combatHistory->event += " for ";
     snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", playerDMG);
-    strcat(combatHistory->event, eventDMGBuffer);
-    // strcat(combatHistory->event, " .\n");
+    combatHistory->event += eventDMGBuffer;
+    // combatHistory->event += " .\n";
     QueueEvent(q, combatHistory->event);
 }
 
@@ -133,12 +133,12 @@ void RecordMonsterHit(Entity* attacker, CombatHistory* combatHistory, int attack
     combatHistory->attackerDMG = attackerDMG;
     combatHistory->entityResult = true;
     combatHistory->monsterKilled = false;
-    strcpy(combatHistory->event, "The ");
-    strcat(combatHistory->event, combatHistory->defender.entityName);
-    strcat(combatHistory->event, " hits you for ");
+    combatHistory->event = "The ";
+    combatHistory->event += combatHistory->defender.entityName;
+    combatHistory->event += " hits you for ";
     snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", attackerDMG);
-    strcat(combatHistory->event, eventDMGBuffer);
-    // strcat(combatHistory->event, " .\n");
+    combatHistory->event += eventDMGBuffer;
+    // combatHistory->event += " .\n";
     QueueEvent(q, combatHistory->event);
 }
 
@@ -148,23 +148,23 @@ void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attac
     combatHistory->playerAC = playerAC;
     combatHistory->entityResult = false;
     combatHistory->monsterKilled = false;
-    strcpy(combatHistory->event, "The ");
-    strcat(combatHistory->event, combatHistory->defender.entityName);
-    strcat(combatHistory->event, " misses.");
+    combatHistory->event = "The ";
+    combatHistory->event += combatHistory->defender.entityName;
+    combatHistory->event += " misses.";
     QueueEvent(q, combatHistory->event);
 }
 
 void RecordAbilityUse(){
     if (combatHistory->playerUsedAbility && player->equippedAbility.isMagic) {
-        strcpy(combatHistory->event, "You cast ");
-        strcat(combatHistory->event, player->equippedAbility.abilityName);
-        strcat(combatHistory->event, ".");
+        combatHistory->event = "You cast ";
+        combatHistory->event += player->equippedAbility.abilityName;
+        combatHistory->event += ".";
         QueueEvent(q, combatHistory->event);
     }
     else if (combatHistory->playerUsedAbility) {
-        strcpy(combatHistory->event, "You use ");
-        strcat(combatHistory->event, player->equippedAbility.abilityName);
-        strcat(combatHistory->event, ".");
+        combatHistory->event = "You use ";
+        combatHistory->event += player->equippedAbility.abilityName;
+        combatHistory->event += ".";
         QueueEvent(q, combatHistory->event);
     }
 }

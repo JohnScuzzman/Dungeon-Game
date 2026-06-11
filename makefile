@@ -1,11 +1,11 @@
-CC = gcc
-CFLAGS = -lncurses -lm -I./include/ -g
-SOURCES = ./src/*.c
+CXX = g++
+CXXFLAGS = -std=c++17 -lncurses -lm -I./include/ -g
+SOURCES = ./src/*.cpp
 
 all: rogue run clean
 
 rogue:
-	$(CC) $(SOURCES) $(CFLAGS) -o rogue
+	$(CXX) $(SOURCES) $(CXXFLAGS) -o rogue
 
 run:
 	./rogue

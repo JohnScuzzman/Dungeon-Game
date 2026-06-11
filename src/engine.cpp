@@ -155,18 +155,18 @@ void CloseGame(void) {
 } 
 
 void Greeting(){
-    strcpy(combatHistory->event, "Welcome to the dungeon,");
+    combatHistory->event = "Welcome to the dungeon,";
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, player->playerName);
-    strcat(combatHistory->event, "!");
+    combatHistory->event = player->playerName;
+    combatHistory->event += "!";
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, "Use arrow keys to move & fight.");
+    combatHistory->event = "Use arrow keys to move & fight.";
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, "Press 'F' to use ranged attacks.");
+    combatHistory->event = "Press 'F' to use ranged attacks.";
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, "Press ESC to exit at anytime.");
+    combatHistory->event = "Press ESC to exit at anytime.";
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, "Use keys 1-5 to use abilities.");
+    combatHistory->event = "Use keys 1-5 to use abilities.";
     QueueEvent(q, combatHistory->event);
 }
 

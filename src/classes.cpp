@@ -13,8 +13,8 @@ Class Knight(){
     knight.abilities[ABILITY_3] = NoAbility();
     knight.abilities[ABILITY_4] = NoAbility();
     knight.abilities[ABILITY_5] = NoAbility();
-    strcpy(knight.className, "Knight");
-    strcpy(knight.classDesc, "A brave knight, forever journeying into the periless.");
+    knight.className = "Knight";
+    knight.classDesc = "A brave knight, forever journeying into the periless.";
     return knight;
 }
 
@@ -31,8 +31,8 @@ Class Swashbuckler(){
     swashbuckler.abilities[ABILITY_3] = NoAbility();
     swashbuckler.abilities[ABILITY_4] = NoAbility();
     swashbuckler.abilities[ABILITY_5] = NoAbility();
-    strcpy(swashbuckler.className, "Swashbuckler");
-    strcpy(swashbuckler.classDesc, "A black-hearted pirate, as strong as his rum.");
+    swashbuckler.className = "Swashbuckler";
+    swashbuckler.classDesc = "A black-hearted pirate, as strong as his rum.";
     return swashbuckler;
 }
 
@@ -49,8 +49,8 @@ Class Wizard(){
     wizard.abilities[ABILITY_3] = NoAbility();
     wizard.abilities[ABILITY_4] = NoAbility();
     wizard.abilities[ABILITY_5] = NoAbility();
-    strcpy(wizard.className, "Wizard");
-    strcpy(wizard.classDesc, "A lifelong academic, and master of the arcane.");
+    wizard.className = "Wizard";
+    wizard.classDesc = "A lifelong academic, and master of the arcane.";
     return wizard;
 }
 
@@ -67,8 +67,8 @@ Class Necromancer(){
     necromancer.abilities[ABILITY_3] = NoAbility();
     necromancer.abilities[ABILITY_4] = NoAbility();
     necromancer.abilities[ABILITY_5] = NoAbility();
-    strcpy(necromancer.className, "Necromancer");
-    strcpy(necromancer.classDesc, "Raises foul ghouls to do their bidding.");
+    necromancer.className = "Necromancer";
+    necromancer.classDesc = "Raises foul ghouls to do their bidding.";
     return necromancer;
 }
 
@@ -85,8 +85,8 @@ Class Gunslinger(){
     gunslinger.abilities[ABILITY_3] = NoAbility();
     gunslinger.abilities[ABILITY_4] = NoAbility();
     gunslinger.abilities[ABILITY_5] = NoAbility();
-    strcpy(gunslinger.className, "Gunslinger");
-    strcpy(gunslinger.classDesc, "A crack shot, master of flash of gunpowder.");
+    gunslinger.className = "Gunslinger";
+    gunslinger.classDesc = "A crack shot, master of flash of gunpowder.";
     return gunslinger;
 }
 
@@ -103,8 +103,8 @@ Class Druid(){
     druid.abilities[ABILITY_3] = NoAbility();
     druid.abilities[ABILITY_4] = NoAbility();
     druid.abilities[ABILITY_5] = NoAbility();
-    strcpy(druid.className, "Druid");
-    strcpy(druid.classDesc, "A mystic, and protector of all natural things.");
+    druid.className = "Druid";
+    druid.classDesc = "A mystic, and protector of all natural things.";
     return druid;
 }
 
@@ -121,8 +121,8 @@ Class Ranger(){
     ranger.abilities[ABILITY_3] = NoAbility();
     ranger.abilities[ABILITY_4] = NoAbility();
     ranger.abilities[ABILITY_5] = NoAbility();
-    strcpy(ranger.className, "Ranger");
-    strcpy(ranger.classDesc, "A cloaked wanderer, skilled with a bow.");
+    ranger.className = "Ranger";
+    ranger.classDesc = "A cloaked wanderer, skilled with a bow.";
     return ranger;
 }
 
@@ -139,8 +139,8 @@ Class DarkKnight(){
     darkKnight.abilities[ABILITY_3] = NoAbility();
     darkKnight.abilities[ABILITY_4] = NoAbility();
     darkKnight.abilities[ABILITY_5] = NoAbility();
-    strcpy(darkKnight.className, "Dark Knight");
-    strcpy(darkKnight.classDesc, "A fallen hero.");
+    darkKnight.className = "Dark Knight";
+    darkKnight.classDesc = "A fallen hero.";
     return darkKnight;
 }
 
@@ -157,8 +157,8 @@ Class Warlock(){
     warlock.abilities[ABILITY_3] = NoAbility();
     warlock.abilities[ABILITY_4] = NoAbility();
     warlock.abilities[ABILITY_5] = NoAbility();
-    strcpy(warlock.className, "Warlock");
-    strcpy(warlock.classDesc, "A master of the dark arts.");
+    warlock.className = "Warlock";
+    warlock.classDesc = "A master of the dark arts.";
     return warlock;
 }
 
@@ -175,8 +175,8 @@ Class Conjurer(){
     conjurer.abilities[ABILITY_3] = NoAbility();
     conjurer.abilities[ABILITY_4] = NoAbility();
     conjurer.abilities[ABILITY_5] = NoAbility();
-    strcpy(conjurer.className, "Conjurer");
-    strcpy(conjurer.classDesc, "A Conjurer who pulls servants from the aether.");
+    conjurer.className = "Conjurer";
+    conjurer.classDesc = "A Conjurer who pulls servants from the aether.";
     return conjurer;
 }
 
@@ -193,8 +193,8 @@ Class Cyborg(){
     cyborg.abilities[ABILITY_3] = NoAbility();
     cyborg.abilities[ABILITY_4] = NoAbility();
     cyborg.abilities[ABILITY_5] = NoAbility();
-    strcpy(cyborg.className, "Cyborg");
-    strcpy(cyborg.classDesc, "A Cyborg, out of time.");
+    cyborg.className = "Cyborg";
+    cyborg.classDesc = "A Cyborg, out of time.";
     return cyborg;
 }
 
@@ -211,7 +211,7 @@ Class Bard(){
     bard.abilities[ABILITY_3] = NoAbility();
     bard.abilities[ABILITY_4] = NoAbility();
     bard.abilities[ABILITY_5] = NoAbility();
-    strcpy(bard.className, "Bard");
-    strcpy(bard.classDesc, "A master of song and dance.");
+    bard.className = "Bard";
+    bard.classDesc = "A master of song and dance.";
     return bard;
 }

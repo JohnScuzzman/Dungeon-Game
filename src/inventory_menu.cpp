@@ -93,46 +93,50 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
     mvwhline(desc, top, titleRight + 2, ACS_HLINE, numLines - 1);
 
     box(loot, 0, 0);
-    mvwprintw(loot, top, center - 3, map[player->pos.y][player->pos.x].entityName);
+    mvwprintw(loot, top, center - 3, "%s", map[player->pos.y][player->pos.x].entityName.c_str());
     mvwhline(loot, top + 1, top, ACS_HLINE, (WINDOW_WIDTH) - 2);
     
     for (int i = 0; i < player->invTail; i++) {
 
         if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID) {
             wattron(menu, A_DIM);
-            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 2), " (Equipped)");
+            mvwprintw(menu, y, (playerInv[i]->itemName.length() + 2), " (Equipped)");
             wattroff(menu, A_DIM);
         }
-        mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName);
+        mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName.c_str());
         if (cursor == i) {
             wattron(menu, A_REVERSE);
-            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
-            mvwprintw(desc, 2, 2, "%s", playerInv[cursor]->itemDesc);
-            mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName);
+            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName.c_str());
+            mvwprintw(desc, 2, 2, "%s", playerInv[cursor]->itemDesc.c_str());
+            mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName.c_str());
             switch (playerInv[cursor]->type) {
                 case WEAPON:
+                {
                     Weapon weapon;
                     weapon = GetWeaponFromItem(playerInv[cursor]->itemID);
                     mvwprintw(desc, 3, 2, "DMG: %d - %d", weapon.minDMG, weapon.maxDMG);
                     mvwprintw(desc, 4, 2, "Range: %d", weapon.range);
                     mvwprintw(desc, 5, 2, "Value: %d", weapon.item.value);
                     break;
+                }
                 case ARMOR:
+                {
                     Armor armor;
                     armor = GetArmorFromItem(playerInv[cursor]->itemID);
                     mvwprintw(desc, 3, 2, "AC: %d", armor.AC);
-                    char* armorType = GetArmorType(armor.type);
+                    const char* armorType = GetArmorType(armor.type);
                     mvwprintw(desc, 4, 2, "Type: %s", armorType);
                     mvwprintw(desc, 5, 2, "Value: %d", armor.item.value);
                     break;
+                }
                 default:
                     break;
             }
             wattroff(menu, A_REVERSE);
         }
         else {
-            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
-            // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc);
+            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName.c_str());
+            // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc.c_str());
         }
     y++;
     wrefresh(loot);
@@ -182,14 +186,14 @@ bool MakeItemOptionsWindow(Item** playerInv, int choice, WINDOW *menu, WINDOW *l
     if (playerInv[choice]->itemID == player->equippedMelee.item.itemID || playerInv[choice]->itemID == player->equippedRanged.item.itemID || playerInv[choice]->itemID == player->equippedArmor.item.itemID) {
         unEquipMenu = true;
     }
-    char *options1[] = {
+    const char *options1[] = {
     "Equip",
     "Transfer",
     "Drop",
     "Examine",
     "Exit",
     };
-    char *options2[] = {
+    const char *options2[] = {
     "Unequip",
     "Transfer",
     "Drop",
@@ -259,7 +263,7 @@ bool MakeItemOptionsWindow(Item** playerInv, int choice, WINDOW *menu, WINDOW *l
 }
 
 /* Tiny window for selecting Equip, Drop, transfer, etc. */
-void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** options) {
+void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, const char** options) {
     int y = 1;
     int titleRight = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
     int center = (WINDOW_WIDTH / 2) - (OFFSET * 3) + 5;

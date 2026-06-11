@@ -108,9 +108,9 @@ void AssignFloor(int x, int y) {
     map[y][x].entityStats.minDMG = 0;
     map[y][x].entityWeapon = NoWeapon();
     map[y][x].entityArmor = NoArmor();
-    strcpy(map[y][x].entityClass, "None");
-    strcpy(map[y][x].entityName, "Floor");
-    strcpy(map[y][x].entityRace, "None");
+    map[y][x].entityClass = "None";
+    map[y][x].entityName = "Floor";
+    map[y][x].entityRace = "None";
 
 }
 
@@ -137,9 +137,9 @@ void AssignGoblinWarrior(Entity* monster) {
     monster->entityStats.EXP = 10;
     monster->entityStats.maxDMG = 4;
     monster->entityStats.minDMG = 1;
-    strcpy(monster->entityClass, "Warrior");
-    strcpy(monster->entityName, "Goblin Warrior");
-    strcpy(monster->entityRace, "Goblin");
+    monster->entityClass = "Warrior";
+    monster->entityName = "Goblin Warrior";
+    monster->entityRace = "Goblin";
 }
 
 void AssignKoboldWarrior(Entity* monster) {
@@ -163,9 +163,9 @@ void AssignKoboldWarrior(Entity* monster) {
     monster->entityStats.maxMana = 0;
     monster->entityStats.LVL = 1;
     monster->entityStats.EXP = 10;
-    strcpy(monster->entityClass, "Warrior");
-    strcpy(monster->entityName, "Kobold Warrior");
-    strcpy(monster->entityRace, "Kobold");
+    monster->entityClass = "Warrior";
+    monster->entityName = "Kobold Warrior";
+    monster->entityRace = "Kobold";
 }
 
 void AssignGoblinRanger(Entity* monster) {
@@ -189,9 +189,9 @@ void AssignGoblinRanger(Entity* monster) {
     monster->entityStats.maxMana = 0;
     monster->entityStats.LVL = 1;
     monster->entityStats.EXP = 10;
-    strcpy(monster->entityClass, "Ranger");
-    strcpy(monster->entityName, "Goblin Ranger");
-    strcpy(monster->entityRace, "Goblin");
+    monster->entityClass = "Ranger";
+    monster->entityName = "Goblin Ranger";
+    monster->entityRace = "Goblin";
 }
 
 void AssignHobgoblinWarrior(Entity* monster) {
@@ -215,9 +215,9 @@ void AssignHobgoblinWarrior(Entity* monster) {
     monster->entityStats.maxMana = 0;
     monster->entityStats.LVL = 1;
     monster->entityStats.EXP = 20;
-    strcpy(monster->entityName, "Hoboblin Warrior");
-    strcpy(monster->entityRace, "Hobgoblin");
-    strcpy(monster->entityClass, "Warrior");
+    monster->entityName = "Hoboblin Warrior";
+    monster->entityRace = "Hobgoblin";
+    monster->entityClass = "Warrior";
 }
     
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {

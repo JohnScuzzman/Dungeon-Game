@@ -1,6 +1,8 @@
 #ifndef ITEMS_H // These prevent compiling items_h multiple times.
 #define ITEMS_H
 
+#include <string>
+
 #define MAX_NAME_SIZE 33
 #define ITEM_DESC_SIZE 65
 
@@ -62,8 +64,8 @@ typedef struct {
   int itemID;
   int type;
   int value;
-  char itemName[MAX_NAME_SIZE];
-  char itemDesc[ITEM_DESC_SIZE];
+  std::string itemName;
+  std::string itemDesc;
 }Item;
 
 typedef struct {

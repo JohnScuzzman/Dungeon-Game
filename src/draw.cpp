@@ -48,15 +48,15 @@ void DrawPlayerBlink(Player* player) {
 	}  
 
 void DrawPlayerEquipment(){
-  mvprintw(2, SIDEBAR_X, "Name: %s", player->playerName);
-  mvprintw(4, SIDEBAR_X, "Race: %s", player->playerRace);
-  mvprintw(6, SIDEBAR_X, "Class: %s", player->playerClass.className);
-  mvprintw(8, SIDEBAR_X, "Armor: %s", player->equippedArmor.item.itemName);
-  mvprintw(12, SIDEBAR_X, "Melee: %s", player->equippedMelee.item.itemName);
-  mvprintw(14, SIDEBAR_X, "Ranged: %s", player->equippedRanged.item.itemName);
-  // mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
-  // mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
-  // mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
+  mvprintw(2, SIDEBAR_X, "Name: %s", player->playerName.c_str());
+  mvprintw(4, SIDEBAR_X, "Race: %s", player->playerRace.c_str());
+  mvprintw(6, SIDEBAR_X, "Class: %s", player->playerClass.className.c_str());
+  mvprintw(8, SIDEBAR_X, "Armor: %s", player->equippedArmor.item.itemName.c_str());
+  mvprintw(12, SIDEBAR_X, "Melee: %s", player->equippedMelee.item.itemName.c_str());
+  mvprintw(14, SIDEBAR_X, "Ranged: %s", player->equippedRanged.item.itemName.c_str());
+  // mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName.c_str());
+  // mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName.c_str());
+  // mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName.c_str());
 }
 
 void DrawPlayerStats() {
@@ -87,29 +87,29 @@ void DrawPlayerStats() {
 void DrawAbilities() { 
   int buffer;
   mvprintw(ABILITY_BAR_Y, ABILITY_BAR_STARTX, "1: %s - %d |", 
-  player->playerClass.abilities[ABILITY_1].abilityName, 
+  player->playerClass.abilities[ABILITY_1].abilityName.c_str(), 
   player->playerClass.abilities[ABILITY_1].manaCost);
 
-  buffer = strlen(player->playerClass.abilities[ABILITY_1].abilityName) + ABILITIY_BAR_BUFFERX;
-  mvprintw(ABILITY_BAR_Y, buffer, "2: %s - %d |", player->playerClass.abilities[ABILITY_2].abilityName,
+  buffer = player->playerClass.abilities[ABILITY_1].abilityName.length() + ABILITIY_BAR_BUFFERX;
+  mvprintw(ABILITY_BAR_Y, buffer, "2: %s - %d |", player->playerClass.abilities[ABILITY_2].abilityName.c_str(),
   player->playerClass.abilities[ABILITY_2].manaCost);
   buffer -= ABILITY_BAR_STARTX;
   if (player->playerClass.abilities[ABILITY_3].abilityID > NO_ABILITY) {
-    buffer += (strlen(player->playerClass.abilities[ABILITY_2].abilityName) + ABILITIY_BAR_BUFFERX);
+    buffer += (player->playerClass.abilities[ABILITY_2].abilityName.length() + ABILITIY_BAR_BUFFERX);
     mvprintw(ABILITY_BAR_Y, buffer, 
-    "3: %s - %d |", player->playerClass.abilities[ABILITY_3].abilityName,
+    "3: %s - %d |", player->playerClass.abilities[ABILITY_3].abilityName.c_str(),
     player->playerClass.abilities[ABILITY_3].manaCost);
   }
   if (player->playerClass.abilities[ABILITY_4].abilityID > NO_ABILITY){
-    buffer += (strlen(player->playerClass.abilities[ABILITY_3].abilityName) + ABILITIY_BAR_BUFFERX);
+    buffer += (player->playerClass.abilities[ABILITY_3].abilityName.length() + ABILITIY_BAR_BUFFERX);
     mvprintw(ABILITY_BAR_Y, buffer,
-    "4: %s - %d |", player->playerClass.abilities[ABILITY_4].abilityName,
+    "4: %s - %d |", player->playerClass.abilities[ABILITY_4].abilityName.c_str(),
     player->playerClass.abilities[ABILITY_4].manaCost);
   } 
   if (player->playerClass.abilities[ABILITY_5].abilityID > NO_ABILITY) {
-    buffer += (strlen(player->playerClass.abilities[ABILITY_4].abilityName) + ABILITIY_BAR_BUFFERX);
+    buffer += (player->playerClass.abilities[ABILITY_4].abilityName.length() + ABILITIY_BAR_BUFFERX);
     mvprintw(ABILITY_BAR_Y, buffer,
-    "5: %s - %d |", player->playerClass.abilities[ABILITY_5].abilityName,
+    "5: %s - %d |", player->playerClass.abilities[ABILITY_5].abilityName.c_str(),
     player->playerClass.abilities[ABILITY_5].manaCost);
   }
 }
@@ -165,14 +165,14 @@ void DrawCombatLog() {
         return;
     }
     for (int i = 0; i <= q->rear; i++) {
-    	mvprintw(LOG_HEIGHT + i, SIDEBAR_X, "%s", q->events[i]);
+    	mvprintw(LOG_HEIGHT + i, SIDEBAR_X, "%s", q->events[i].c_str());
   	}
 }
 
 
 void DrawPlayerInventory() {
     for(int i = player->invHead; i < player->invTail; i++) {
-        mvprintw(26 + i, 2, "ItemID:%d, Item:%s", player->inventory[i].itemID, player->inventory[i].itemName);
+        mvprintw(26 + i, 2, "ItemID:%d, Item:%s", player->inventory[i].itemID, player->inventory[i].itemName.c_str());
     }
 }
 
