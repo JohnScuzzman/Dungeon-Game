@@ -8,7 +8,7 @@ monsterID is a random int 0-3 passed from map.c
 Entity AssignMonster(Position pos, int RNG, int monsterID)
 {   
     if (map[pos.y][pos.x].noCollision) {
-        Entity monster;
+        Entity monster = {0};
         switch (RNG) {
             /* Call functions from assign.c */
             case 0:
@@ -30,8 +30,10 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
         AssignMonsterDefaults(&monster, pos, monsterID);
         return monster;
     }
-    else{ 
+    else { 
         AssignFloor(pos.x, pos.y);
+        Entity emptyMonster = {0};
+        return emptyMonster;
     }
 
 }
@@ -192,8 +194,6 @@ void AssignGoblinRanger(Entity* monster) {
     strcpy(monster->entityRace, "Goblin");
 }
 
-
-
 void AssignHobgoblinWarrior(Entity* monster) {
     monster->ch = 'H'; 
     monster->staticCh = 'H'; 
@@ -220,7 +220,6 @@ void AssignHobgoblinWarrior(Entity* monster) {
     strcpy(monster->entityClass, "Warrior");
 }
     
-
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     CreateMonsterInv(monster);
     monster->entityStats.ATK = 0;

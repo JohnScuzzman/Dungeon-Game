@@ -14,16 +14,15 @@ const char *DIRECTIONS[HEADINGS] = {
     "North East"
 };
 const int LVL_EXP_VALUES[MAX_LEVEL] = {
-      LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, 
-      LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
+  LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, 
+  LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
 };
-const int EVENT_SIZE = 33;
-const int MAX_MONSTER_NAME = 33;
-const int MAP_HEIGHT = 50;
-const int MAP_WIDTH = 125;
-const int LOG_HEIGHT = 22;
-const int LOG_SIZE  = 27;
-const int LOG_WIDTH = 128;
+int MAX_MONSTER_NAME = 33;
+int MAP_HEIGHT = 50;
+int MAP_WIDTH = 125;
+int LOG_HEIGHT = 22;
+int LOG_SIZE  = 27;
+int LOG_WIDTH = 128;
 
 
 
@@ -35,6 +34,8 @@ Entity* mptr;
 CombatHistory* combatHistory;
 LogQueue* q;
 Item* items;
+Weapon* weapons;
+Armor* armors;
 
 int main(void)
 {
@@ -72,12 +73,12 @@ int main(void)
     /* Place player using method in makeplayer.c*/
     player = CreatePlayer(start_pos);
 
+    /* Player's Inv*/
+    CreatePlayerInv();
+
     /* Create Combat History && Log*/
     combatHistory = CreateCombatHistory(mptr[0]);
     q = MakeCombatLogQueue();
-
-    /* Player's Inv*/
-    CreatePlayerInv();
 
     /* Call Title Screen from asciiart.c*/
     TitleScreen();

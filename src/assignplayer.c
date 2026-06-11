@@ -90,7 +90,6 @@ void AssignGunslinger() {
     player->equippedMelee = Fists();
     player->equippedRanged = DualFlintlocks();
     AddToPlayerInventory(items[LEATHER_ARMOR]);
-    AddToPlayerInventory(items[FISTS]);
     AddToPlayerInventory(items[DUAL_FLINTLOCKS]);
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
@@ -108,7 +107,6 @@ void AssignDruid() {
     player->equippedMelee = Claws();
     player->equippedRanged = LightningWand();
     AddToPlayerInventory(items[ROBES]);
-    AddToPlayerInventory(items[CLAWS]);
     AddToPlayerInventory(items[LIGHTNING_WAND]);
     player->playerStats.mana = 20;
     player->playerStats.maxMana = 20;
@@ -148,7 +146,6 @@ void AssignDarkKnight() {
     player->equippedRanged = NoWeapon();
     AddToPlayerInventory(items[CHAINMAIL]);
     AddToPlayerInventory(items[GREATSWORD]);
-    AddToPlayerInventory(items[NULL_ITEM_ID]);
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -187,7 +184,6 @@ void AssignConjurer() {
     player->equippedRanged = NoWeapon();
     AddToPlayerInventory(items[ROBES]);
     AddToPlayerInventory(items[QUARTERSTAFF]);
-    AddToPlayerInventory(items[NULL_ITEM_ID]);
     player->playerStats.mana = 20;
     player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -208,7 +204,6 @@ void AssignCyborg() {
     player->equippedRanged = NoWeapon();
     AddToPlayerInventory(items[METALLIC_SKIN]);
     AddToPlayerInventory(items[CHROME_FISTS]);
-    AddToPlayerInventory(items[NULL_ITEM_ID]);
     player->playerStats.mana = 20;
     player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -297,6 +292,7 @@ void AssignStats(int input) {
     player->playerStats.nextLVLEXP = LEVEL_2;
     switch(input){
         case 62:
+            player->raceID = HUMAN;
             strcpy(player->playerRace, "Human");
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 12;
@@ -307,6 +303,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 12;
         break;
         case 63:
+            player->raceID = ELF;
             strcpy(player->playerRace, "Elf");
             player->playerStats.maxHP = 8;
             player->playerStats.CHA = 12;
@@ -317,6 +314,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 12;
         break;
         case 64:
+            player->raceID = DWARF;
             strcpy(player->playerRace, "Dwarf");
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 10;
@@ -327,6 +325,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 16;
         break;
         case 65:
+            player->raceID = DRAGONBORN;
             strcpy(player->playerRace, "Dragonborn");
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 10;
@@ -337,6 +336,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 10;
         break;
         case 66:
+            player->raceID = GNOLL;
             strcpy(player->playerRace, "Gnoll");
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 10;
@@ -347,6 +347,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 10;
         break;
         case 67:
+            player->raceID = CANIDAE;
             strcpy(player->playerRace, "Canidae");
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 12;
@@ -357,6 +358,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 10;
         break;
         case 82:
+            player->raceID = SKELETON;
             strcpy(player->playerRace, "Skeleton");
             player->playerStats.maxHP = 8;
             player->playerStats.CHA = 10;
@@ -367,6 +369,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 14;
         break;
         case 83:
+            player->raceID = MANTIS;
             strcpy(player->playerRace, "Mantis");
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 8;
@@ -377,6 +380,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 10;
         break;
         case 84:
+            player->raceID = AUTOMATON;
             strcpy(player->playerRace, "Automaton");
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 10;
@@ -387,6 +391,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 10;
         break;
         case 85:
+            player->raceID = WEREWOLF;
             strcpy(player->playerRace, "Werewolf");
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 10;
@@ -397,6 +402,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 8;
         break;
         case 86:
+            player->raceID = VAMPIRE;
             strcpy(player->playerRace, "Vampire");
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 16;
@@ -407,6 +413,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 10;
         break;
         case 87:
+            player->raceID = SUCCUBUS;
             strcpy(player->playerRace, "Succubus");
             player->playerStats.maxHP = 8;
             player->playerStats.CHA = 16;
@@ -417,6 +424,7 @@ void AssignStats(int input) {
             player->playerStats.WIS = 12;
         break;
         default:
+            player->raceID = HUMAN;
             strcpy(player->playerRace, "Human");
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 12;

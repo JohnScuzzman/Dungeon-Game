@@ -15,6 +15,7 @@
 #include <ctype.h> // toupper functions
 #include <stdbool.h>
 #include <items.h>
+#include <races.h>
 #include <classes.h>
 
 // color pairs
@@ -68,8 +69,8 @@ typedef struct {
     bool newSeen;
     bool oldVisible;
     bool newVisible;
-    bool oldChar;
-    bool newChar;
+    char oldChar;
+    char newChar;
 } MapInfo;
 
 typedef struct {
@@ -112,6 +113,7 @@ typedef struct {
 typedef struct {
   bool noCollision;
   char ch;
+  int raceID;
   int color;
   int abilityTimer;
   int invTail;
@@ -255,7 +257,7 @@ void DrawAbilities();
 void DrawBorder();
 void DrawCombatLog();
 void DrawDebug(Entity* mptr, int n_monsters);
-void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory);
+void DrawEverything();
 void DrawPlayerEquipment();
 void DrawPlayerInventory();
 void DrawPlayerStats();
@@ -291,8 +293,19 @@ void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
 void AddToNPCInventory(Entity* npc, Item newItem);
 void AddToPlayerInventory(Item newItem);
-void RemoveFromNPCInventory(Entity* npc);
+void RemoveFromNPCInventory(Entity* npc, Item target);
 void RemoveFromPlayerInventory(Item target);
+Weapon GetWeaponFromItem(int itemID);
+Armor GetArmorFromItem(int itemID);
+char* GetArmorType(int ArmorType);
+void Equip(Item target);
+void EquipMelee(Item target);
+void EquipRanged(Item target);
+void EquipArmor(Item target);
+void Unequip(Item target);
+bool IsMeleeWeaponItem(Item target);
+bool IsRangedWeaponItem(Item target);
+bool IsArmorItem(Item target);
 void MakeWeaponItems(Item* items);
 void MakeArmorItems(Item* items);
 void NameWeaponItems(Item* items);
@@ -302,9 +315,15 @@ void ArmorItemDescriptions(Item* items);
 // void NullItem(Item item);
 
 //inventory__menu.c functions
-void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, int cursor, int n_options, Item** playerInv);
+void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** playerInv);
 bool MakeInventoryMenu(Item* items);
-bool ProcessInventorySelect(int choice, WINDOW* menu);
+bool InventorySelect(int choice, WINDOW* menu);
+bool MakeItemOptionsWindow(Item** playerInv, int choice,WINDOW *menu, WINDOW *loot);
+void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** entityInv);
+bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot, bool unEquipMenu);
+// void RenderLootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
+// bool LootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
+// bool LootChoice(WINDOW* loot, int lootChoice);
 
 // makeplayer.c functions
 void AskPlayerInfo(Player* player);
@@ -372,14 +391,14 @@ void ConnectRooms(Position centerOne, Position centerTwo);
 
 // Externals 
 // Used in tandem with main to let any functions use these outside of main.
-extern const int MAP_HEIGHT;
-extern const int MAP_WIDTH;
-extern const int MAX_MONSTER_NAME;
+extern int MAP_HEIGHT;
+extern int MAP_WIDTH;
+extern int MAX_MONSTER_NAME;
 extern const int EVENT_SIZE;
 extern const int INVENTORY_SIZE;
-extern const int LOG_WIDTH;
-extern const int LOG_HEIGHT;
-extern const int LOG_SIZE;
+extern int LOG_WIDTH;
+extern int LOG_HEIGHT;
+extern int LOG_SIZE;
 extern const int LVL_EXP_VALUES[MAX_LEVEL];
 extern const int ALL_ITEMS;
 extern const char *DIRECTIONS[HEADINGS];

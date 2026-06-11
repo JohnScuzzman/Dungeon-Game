@@ -1,7 +1,5 @@
 #include <rogue.h>
-void CreateArmors() {
 
-}
 
 Armor NoArmor() {
     Armor none;

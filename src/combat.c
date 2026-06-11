@@ -56,6 +56,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
 /* Melee abilties still use this function, but with a range of 1. */
 bool ShootTargetWithAbility(int x, int y) {
     // Will check if the ranged is not "none".
+    bool targetHit = false;
     if ((player->playerStats.mana) >= (player->equippedAbility.manaCost)) {
         // Player selected a monster.
         if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && 
@@ -63,7 +64,7 @@ bool ShootTargetWithAbility(int x, int y) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedAbility = true;
             combatHistory->defender = map[y][x];
-            return true;
+            targetHit = true;
         }
         else if (map[y][x].isMonster && !(LineOfSight(player->pos, map[y][x].pos)) && 
         GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
@@ -71,7 +72,6 @@ bool ShootTargetWithAbility(int x, int y) {
             combatHistory->playerCombat = false;
             strcpy(combatHistory->event, "Target not in line of sight.");
             QueueEvent(q, combatHistory->event);
-            return false;
         }
         else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
         GetDistance(player->pos, map[y][x].pos) > player->equippedAbility.range){
@@ -79,21 +79,20 @@ bool ShootTargetWithAbility(int x, int y) {
             combatHistory->playerCombat = false;
             strcpy(combatHistory->event, "Target not in range.");
             QueueEvent(q, combatHistory->event);
-            return false;
         }
     }
     else {
         combatHistory->playerUsedAbility = false;
         combatHistory->playerCombat = false;
         NotEnoughMana();
-        return false;
     }
-    
+    return targetHit;
 }
 
 /* Returns true if there is a monster in LOS and range of equipped weapon.*/
 bool ShootTarget(int x, int y) {
     // Will check if the ranged is not "none".
+    bool targetHit = false;
     if (player->equippedRanged.isRanged) {
             // Player selected a monster.
         if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && 
@@ -101,7 +100,7 @@ bool ShootTarget(int x, int y) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedRanged = true;
             combatHistory->defender = map[y][x];
-            return true;
+            targetHit = true;
         }
         else if (map[y][x].isMonster && !(LineOfSight(player->pos, map[y][x].pos)) && 
         GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
@@ -109,7 +108,6 @@ bool ShootTarget(int x, int y) {
             combatHistory->playerCombat = false;
             strcpy(combatHistory->event, "Target not in line of sight.");
             QueueEvent(q, combatHistory->event);
-            return false;
         }
         else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
         GetDistance(player->pos, map[y][x].pos) > player->equippedRanged.range){
@@ -117,7 +115,6 @@ bool ShootTarget(int x, int y) {
             combatHistory->playerCombat = false;
             strcpy(combatHistory->event, "Target not in range.");
             QueueEvent(q, combatHistory->event);
-            return false;
         }
     }
     else {
@@ -125,9 +122,8 @@ bool ShootTarget(int x, int y) {
         combatHistory->playerCombat = false;
         strcpy(combatHistory->event, "No ranged weapons equipped.");
         QueueEvent(q, combatHistory->event);
-        return false;
     }
-    
+    return targetHit;
 }
 
 void PlayerMeleeOrRanged(Player* player){

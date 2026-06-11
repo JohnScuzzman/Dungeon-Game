@@ -58,12 +58,22 @@ void AddToNPCInventory(Entity* npc, Item newItem) {
     npc->invTail++;
 }
 
-void RemoveFromNPCInventory(Entity* npc) {
+/* finds the item if its exists in the npc's inventory.*/
+/* If it does, add it to the map tile, deincrement tail from null item to last real item.*/
+/* Make the found item the tail item, copying it over, */
+/* Now that the tail has been copied, make tail*/
+void RemoveFromNPCInventory(Entity* npc, Item target) {
     if(npc->invTail == 0) {
         return;
     }
-    npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
-    npc->invTail--;
+    for(int i = npc->invHead; i < npc->invTail; i++) {
+        if(npc->inventory[i].itemID == target.itemID){
+            AddToNPCInventory(&map[npc->pos.y][npc->pos.x], npc->inventory[i]);
+            npc->invTail--;
+            npc->inventory[i] = npc->inventory[npc->invTail];
+            npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
+        }
+    }
 }
 
 void AddToPlayerInventory(Item newItem) {
@@ -76,16 +86,82 @@ void AddToPlayerInventory(Item newItem) {
 
 /* Search player inventory for item, if found, set the item to the last item in the players inventory.*/
 /* Set the last item in players inventory to NULL, then move tail backward once.*/
+/* If equipped, unequip the item.*/
 void RemoveFromPlayerInventory(Item target) {
     if(player->invTail == 0) {
         return;
     }
     for (int i = 0; i < player->invTail; i++) {
         if(player->inventory[i].itemID == target.itemID) {
-            player->inventory[i] = player->inventory[(player->invTail) - 1];
-            player->inventory[player->invTail - 1] = items[NULL_ITEM_ID];
+            AddToNPCInventory(&map[player->pos.y][player->pos.x], player->inventory[i]);
             player->invTail--;
+            player->inventory[i] = player->inventory[player->invTail];
+            player->inventory[player->invTail] = items[NULL_ITEM_ID];
         }
+    }
+}
+
+/* Equips an item if it is valid to do so.*/
+void Equip(Item target) {
+    if (IsMeleeWeaponItem(target)) {
+        EquipMelee(target);
+    }
+    if (IsRangedWeaponItem(target)) {
+        EquipRanged(target);
+    }
+    if (IsArmorItem(target)) {
+        EquipArmor(target);
+    }
+}
+
+/* Helper methods for Equip */
+
+void EquipMelee(Item target) {
+    if (player->equippedMelee.item.itemID == FISTS || player->equippedMelee.item.itemID == CLAWS) {
+        player->equippedMelee = GetWeaponFromItem(target.itemID);
+    }
+    else {
+        Unequip(player->equippedMelee.item);
+        player->equippedMelee = GetWeaponFromItem(target.itemID);
+    }
+}
+
+void EquipRanged(Item target) {
+    if (player->equippedRanged.item.itemID == NULL_ITEM_ID) {
+        player->equippedRanged = GetWeaponFromItem(target.itemID);
+    }
+    else {
+        Unequip(player->equippedRanged.item);
+        player->equippedRanged = GetWeaponFromItem(target.itemID);
+    };
+}
+
+void EquipArmor(Item target) {
+    if (player->equippedArmor.item.itemID == NULL_ITEM_ID) {
+        player->equippedArmor = GetArmorFromItem(target.itemID);
+        player->playerStats.AC = player->equippedArmor.AC;
+    }
+    else {
+        Unequip(player->equippedArmor.item);
+        player->equippedArmor = GetArmorFromItem(target.itemID);
+    };
+}
+
+/* Unequips target item but does NOT add it back to player inventory. */
+void Unequip(Item target) {
+    // If player is a humanoid class they get fists, otherwise they get claws.
+    if (target.itemID == player->equippedMelee.item.itemID && player->raceID < DRAGONBORN) {
+        player->equippedMelee = Fists();
+    }
+    else if (target.itemID == player->equippedMelee.item.itemID) {
+        player->equippedMelee = Claws();
+    }
+    if (target.itemID == player->equippedRanged.item.itemID) {
+        player->equippedRanged = NoWeapon();
+    }
+    if (target.itemID == player->equippedArmor.item.itemID) {
+        player->equippedArmor = NoArmor();
+        player->playerStats.AC = player->equippedArmor.AC;
     }
 }
 
@@ -99,7 +175,7 @@ void MakeWeaponItems(Item* items) {
         items[i].type = WEAPON;
     }
     // Weapons
-    for (int i = DAGGER; i < ROBES; i++){
+    for (int i = DAGGER; i < RAGS; i++){
         items[i].equippable = true;
         items[i].lootable = true;
         items[i].unequippable = true;
@@ -118,7 +194,7 @@ void MakeArmorItems(Item* items) {
         items[i].type = ARMOR;
     }
     // Cybernetics
-    for  (int i = METALLIC_SKIN; i < ALL_ITEMS; i++){
+    for  (int i = METALLIC_SKIN + 1; i < ALL_ITEMS; i++){
         items[i].equippable = false;
         items[i].lootable = false;
         items[i].unequippable = true;
@@ -128,7 +204,8 @@ void MakeArmorItems(Item* items) {
     }
 }
 
-
+/* After the items are added to the list "items" */
+/* These methods add more specific names and descriptions based on the enum value.*/
 void WeaponItemDescriptions(Item* items){
     strcpy(items[FISTS].itemDesc, "Punch something if you must.");
     strcpy(items[CLAWS].itemDesc, "Sharp claws, ready to scratch.");
@@ -156,7 +233,6 @@ void ArmorItemDescriptions(Item* items){
     strcpy(items[RANGERS_CLOAK].itemDesc, "Provides concealment in dark and dense forests.");
     strcpy(items[METALLIC_SKIN].itemDesc, "Servos and steel are your bastion.");
 }
-
 
 void NameWeaponItems(Item* items){
     strcpy(items[FISTS].itemName, "Fists");
@@ -186,6 +262,125 @@ void NameArmorItems(Item* items){
     strcpy(items[METALLIC_SKIN].itemName, "Metallic Skin");
 }
 
+/* This is effectively how we can translate an item into weapon.*/
+/* Returns a copy of a struct depending on the given itemID */
+/* The local copy should be recycled and deleted by the called method.*/
+/* This copy will get passed up to whatever method uses it, and then get recycled once the method is done.*/
+Weapon GetWeaponFromItem(int itemID) {
+    switch(itemID) {
+        case FISTS:
+            return Fists();
+            break;
+        case CLAWS:
+            return Claws();
+            break;
+        case DAGGER:
+            return Dagger();
+            break;
+        case SHORTSWORD:
+            return Shortsword();
+            break;
+        case LONGSWORD:
+            return Longsword();
+            break;
+        case GREATSWORD:
+            return Greatsword();
+            break;
+        case CUTLASS:
+            return Cutlass();
+            break;
+        case SCIMITAR:
+            return Scimitar();
+            break;
+        case QUARTERSTAFF:
+            return Quarterstaff();
+            break;
+        case CHROME_FISTS:
+            return ChromeFists();
+            break;
+        case ACID_POTION:
+            return AcidPotion();
+            break;
+        case SHORTBOW:
+            return Shortbow();
+            break;
+        case LONGBOW:
+            return Longbow();
+            break;
+        case FLINTLOCK_PISTOL:
+            return FlintlockPistol();
+            break;
+        case LIGHTNING_WAND:
+            return LightningWand();
+            break;
+        case DUAL_FLINTLOCKS:
+            return DualFlintlocks();
+            break;
+    }
+}
+
+Armor GetArmorFromItem(int itemID) {
+    switch(itemID) {
+        case RAGS:
+            return Rags();
+            break;
+        case ROBES:
+            return Robes();
+            break;
+        case LEATHER_ARMOR:
+            return LeatherArmor();
+            break;
+        case CHAINMAIL:
+            return Chainmail();
+            break;
+        case RANGERS_CLOAK:
+            return RangersCloak();
+            break;
+        case METALLIC_SKIN:
+            return MetallicSkin();
+            break;
+    }
+}
+
+char* GetArmorType(int ArmorType) {
+    switch(ArmorType) {
+        case LIGHT:
+            return "Light";
+            break;
+        case MEDIUM:
+            return "Medium";
+            break;
+        case HEAVY:
+            return "Heavy";
+            break;
+        case EXOSUIT:
+            return "Exosuit";
+            break;
+        case POWER_ARMOR:
+            return "Power Armor";
+            break;
+        case MAGIC_ARMOR:
+            return "Magic Armor";
+            break;
+    }
+}
+
+/* This suite of functions just checks if an item is a certain type and returns true if it is*/
+
+bool IsMeleeWeaponItem(Item target) {
+    if (target.itemID > CLAWS && target.itemID < ACID_POTION) return true;
+    return false;
+}
+
+bool IsRangedWeaponItem(Item target) {
+    if (target.itemID > CHROME_FISTS && target.itemID < RAGS) return true;
+    return false;
+}
+
+bool IsArmorItem(Item target) {
+    if (target.itemID > DUAL_FLINTLOCKS && target.itemID <= METALLIC_SKIN) return true;
+    return false;
+}
 // void NullItem(Item* item) {
 //     item->equippable = true;
 //     item->lootable = false;
