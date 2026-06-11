@@ -236,9 +236,11 @@ void AssignBard() {
     player->playerStats.HP = player->playerStats.maxHP;
     player->passiveAbility = NoAbility();
 }
+
 /*
 Assigns the class chosen by the player to the Entity struct player.
-Each method is listed in classes.c
+Each method is listed in classes.c.
+The numbers are the combination of x + y coordinates in MakePlayer
 */
 void AssignClass(int input) {
     switch(input){

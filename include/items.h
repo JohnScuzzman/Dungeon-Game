@@ -81,7 +81,19 @@ typedef struct {
   int type; // 1 = light, 2 = medium, 3 = heavy.
 } Armor;
 
-// weapon.c functions
+// typedef struct {
+//   Amulets amulets;
+//   Armors armors;
+//   Back back;
+//   Foods foods;
+//   MeleeWeapons meleeWeapons;
+//   Potions potions;
+//   RangedWeapons rangedWeapons;
+//   Rings rings;
+//   Cybernetics cybernetics;
+// } Inventory;
+
+// make_weapons.c functions
 Weapon NoWeapon();
 Weapon Fists();
 Weapon Claws();
@@ -100,7 +112,7 @@ Weapon FlintlockPistol();
 Weapon LightningWand();
 Weapon DualFlintlocks();
 
-//armor.c functions
+//make_armors.c functions
 Armor NoArmor();
 Armor Robes();
 Armor Rags();

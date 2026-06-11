@@ -4,7 +4,6 @@
 Populates a monster struct with a char and their position.
 monsterID is a random int 0-3 passed from map.c
 */ 
-
 Entity AssignMonster(Position pos, int RNG, int monsterID)
 {   
     if (map[pos.y][pos.x].noCollision) {
@@ -38,6 +37,9 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
 
 }
 
+/* 
+Attempts to turn the monster into a corpse, changing both map entity and monster list entity into a "corpse".
+*/
 void AssignCorpse(Entity* entity) {
     int x = entity->pos.x;
     int y = entity->pos.y;
@@ -75,6 +77,9 @@ void AssignCorpse(Entity* entity) {
     map[entity->pos.y][entity->pos.x] = *entity;
 }
 
+/* 
+Assigns the entity at the given coordinates to a floor, and zeroes out all the information.
+*/
 void AssignFloor(int x, int y) {
     map[y][x].ch = '.';
     map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
@@ -114,6 +119,7 @@ void AssignFloor(int x, int y) {
 
 }
 
+
 void AssignGoblinWarrior(Entity* monster) {
     monster->ch = 'G';
     monster->staticCh = 'G'; 
@@ -141,6 +147,8 @@ void AssignGoblinWarrior(Entity* monster) {
     strcpy(monster->entityName, "Goblin Warrior");
     strcpy(monster->entityRace, "Goblin");
 }
+
+/* The following functions are used to create monster entities based on a passed Entity pointer.*/
 
 void AssignKoboldWarrior(Entity* monster) {
     monster->ch = 'K';

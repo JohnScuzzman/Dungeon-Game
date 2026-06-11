@@ -75,9 +75,7 @@ typedef struct {
     char classDesc[MAX_DESC_SIZE];
 } Class;
 
-
-
-// abilities.c functions
+// make_abilities.c functions
 Ability NoAbility();
 Ability Charge();
 Ability FireVolley();
@@ -94,6 +92,8 @@ Ability Vengeance();
 Ability Dash();
 Ability DevastatingInsult();
 Ability ThornBolt();
+
+// abilities.c functions
 void AbilityEffects(int abilityID);
 void CastCharge();
 void CastDash();
@@ -113,7 +113,7 @@ void RemoveVengeance();
 void ResetPassiveAbility(int abilityID);
 bool UsePlayerAbility(int n_monsters, int chosenAbility);
 
-// classes.c functions
+// make_classes.c functions
 Class Knight();
 Class Swashbuckler();
 Class Wizard();

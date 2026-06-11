@@ -98,18 +98,6 @@ typedef struct {
   int minDMG;
 } Stats;
 
-// typedef struct {
-//   Amulets amulets;
-//   Armors armors;
-//   Back back;
-//   Foods foods;
-//   MeleeWeapons meleeWeapons;
-//   Potions potions;
-//   RangedWeapons rangedWeapons;
-//   Rings rings;
-//   Cybernetics cybernetics;
-// } Inventory;
-
 typedef struct {
   bool noCollision;
   char ch;
@@ -185,9 +173,7 @@ typedef struct
   Position center;
 } Room;
 
-
-//1_harpers_doghouse.c functions
-
+//experimental.c functions
 
 // asciiart.c funcions
 void TitleScreen();
@@ -203,7 +189,7 @@ Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 
 
-// assign_player.c functions
+// assign_class.c functions
 void AssignClass(int input);
 void AssignStats(int input);
 void AssignKnight();
@@ -314,18 +300,7 @@ void WeaponItemDescriptions(Item* items);
 void ArmorItemDescriptions(Item* items);
 // void NullItem(Item item);
 
-//inventory__menu.c functions
-void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** playerInv);
-bool MakeInventoryMenu(Item* items);
-bool InventorySelect(int choice, WINDOW* menu);
-bool MakeItemOptionsWindow(Item** playerInv, int choice,WINDOW *menu, WINDOW *loot);
-void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** entityInv);
-bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot, bool unEquipMenu);
-// void RenderLootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
-// bool LootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
-// bool LootChoice(WINDOW* loot, int lootChoice);
-
-// makeplayer.c functions
+// make_player.c functions
 void AskPlayerInfo(Player* player);
 void ChooseClass();
 void ChooseName(char* name);
@@ -341,6 +316,37 @@ Position SetupMap(Entity* mptr, int n_rooms);
 // Position FindClosestUnexplored(void);
 // Position FindClosestUnexplored();
 // Position FindClosestDoor();
+
+// map_rooms.c functions
+void AddRoomToMap(Room room);
+Room CreateRoom(int y, int x, int height, int width);
+void ConnectRooms(Position centerOne, Position centerTwo);
+
+//menu_inventory.c functions
+bool MakeInventoryMenu();
+bool MakeItemOptionsWindow(Item** playerInv, int choice, int n_options, WINDOW *menu, WINDOW *loot);
+bool MoveInventoryCursor(WINDOW* menu, WINDOW* desc, WINDOW* loot);
+void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** playerInv);
+bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot, bool unEquipMenu);
+void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** entityInv);
+void RenderItemInfo(WINDOW* desc, Item* item);
+void EquipOrUnequip(Item** playerInv, bool unEquipMenu, int prevChoice);
+void PrintInventoryHeaders(WINDOW* menu, WINDOW* desc, WINDOW* loot);
+void PrintAllItems (WINDOW* menu, WINDOW* desc, WINDOW* loot, int cursor, int* y, Item** playerInv);
+// void RenderLootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
+// bool LootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
+// bool LootChoice(WINDOW* loot, int lootChoice);
+
+//menu_loot.c functions
+void MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv);
+void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** entityInv, Item** playerInv);
+bool MakeLootOptionsWindow(Item** playerInv, Item** entityInv, int choice, int n_options, WINDOW *menu, WINDOW *loot);
+bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot);
+
+//menu_pause.c functions
+bool MakePauseMenu();
+bool ProcessPauseSelect(int choice, WINDOW* menu);
+void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options);
 
 // monster.c functions
 void AggroMove(Entity* mptr);
@@ -371,11 +377,6 @@ void MoveDownLeft(Entity* mptr);
 void MoveUpRight(Entity* mptr);
 void MoveUpLeft(Entity* mptr);
 
-//pause.c functions
-bool MakePauseMenu();
-bool ProcessPauseSelect(int choice, WINDOW* menu);
-void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options);
-
 // player.c functions
 bool CheckPlayerAdjacent(Position origin);
 void ManaRegen(int *manaRegen);
@@ -383,11 +384,6 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory);
 bool PlayerInput(int input, LogQueue *q, int n_monsters);
 void PlayerRegen(int *playerRegen);
 // bool AutoExplore(CombatHistory* combatHistory);
-
-// room.c functions
-void AddRoomToMap(Room room);
-Room CreateRoom(int y, int x, int height, int width);
-void ConnectRooms(Position centerOne, Position centerTwo);
 
 // Externals 
 // Used in tandem with main to let any functions use these outside of main.

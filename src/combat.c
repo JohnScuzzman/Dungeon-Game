@@ -1,14 +1,9 @@
 #include <rogue.h>
 
-CombatHistory* CreateCombatHistory(Entity monster) {
-    CombatHistory* combatHistory;
-    combatHistory = calloc(1, sizeof(CombatHistory));
-    combatHistory->defender = monster;
-    return combatHistory;
-}
-
-/* Passed entity tries to attack player */
-/* Returning false means they killed the player and the game will end.*/
+/* 
+Passed entity tries to attack player 
+Returning false means they killed the player and the game will end.
+*/
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player) {
     int playerAC = CalculatePlayerAC();
     int attackerAccRoll = CalculateEntityAccuracy(attacker);
@@ -28,8 +23,10 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
     return true;
 }
 
-/* Player tries to attack entity */
-/* Returns true if combat happens at all. */
+/* 
+Player tries to attack entity
+Returns true if combat happens at all. 
+*/
 bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player) {
     int defenderAC = CalculateEntityAC(defender);
     int playerAccRoll = CalculatePlayerAccuracy();
@@ -51,9 +48,10 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     return true;
 }
 
-/* Called from PlayerInput in player.c*/
-/* Returns true if the selected combat ability detects a monster in its range and LOS of player. */
-/* Melee abilties still use this function, but with a range of 1. */
+/* Called from PlayerInput in player.c
+Returns true if the selected combat ability detects a monster in its range and LOS of player.
+Melee abilties still use this function, but with a range of 1.
+*/
 bool ShootTargetWithAbility(int x, int y) {
     // Will check if the ranged is not "none".
     bool targetHit = false;
@@ -126,6 +124,8 @@ bool ShootTarget(int x, int y) {
     return targetHit;
 }
 
+
+/* Determines if a player used a ranged attack/ability or melee attack/ability. */
 void PlayerMeleeOrRanged(Player* player){
     if (combatHistory->playerUsedAbility == true && player->equippedAbility.isAttack == true) {
         player->playerStats.maxDMG = player->equippedAbility.maxDMG;
@@ -161,6 +161,11 @@ void PlayerPrepareCombat(int n_monsters) {
     }
 }
 
+/*
+Uses the players ranged weapon or ability for damage and ATK stat from
+players stats or abilitySave from the used ability for accuracy.
+Tries to lock on to the nearest monster.
+*/
 bool PlayerRangedAttack(int n_monsters){
     int ch;
     int closest = FindClosestMonster(mptr, n_monsters);

@@ -268,100 +268,44 @@ void NameArmorItems(Item* items){
 /* This copy will get passed up to whatever method uses it, and then get recycled once the method is done.*/
 Weapon GetWeaponFromItem(int itemID) {
     switch(itemID) {
-        case FISTS:
-            return Fists();
-            break;
-        case CLAWS:
-            return Claws();
-            break;
-        case DAGGER:
-            return Dagger();
-            break;
-        case SHORTSWORD:
-            return Shortsword();
-            break;
-        case LONGSWORD:
-            return Longsword();
-            break;
-        case GREATSWORD:
-            return Greatsword();
-            break;
-        case CUTLASS:
-            return Cutlass();
-            break;
-        case SCIMITAR:
-            return Scimitar();
-            break;
-        case QUARTERSTAFF:
-            return Quarterstaff();
-            break;
-        case CHROME_FISTS:
-            return ChromeFists();
-            break;
-        case ACID_POTION:
-            return AcidPotion();
-            break;
-        case SHORTBOW:
-            return Shortbow();
-            break;
-        case LONGBOW:
-            return Longbow();
-            break;
-        case FLINTLOCK_PISTOL:
-            return FlintlockPistol();
-            break;
-        case LIGHTNING_WAND:
-            return LightningWand();
-            break;
-        case DUAL_FLINTLOCKS:
-            return DualFlintlocks();
-            break;
+        case FISTS: return Fists();
+        case CLAWS: return Claws();
+        case DAGGER: return Dagger();
+        case SHORTSWORD: return Shortsword();
+        case LONGSWORD: return Longsword();
+        case GREATSWORD: return Greatsword();
+        case CUTLASS: return Cutlass();
+        case SCIMITAR: return Scimitar();
+        case QUARTERSTAFF: return Quarterstaff();
+        case CHROME_FISTS: return ChromeFists();
+        case ACID_POTION: return AcidPotion();
+        case SHORTBOW: return Shortbow();
+        case LONGBOW: return Longbow();
+        case FLINTLOCK_PISTOL: return FlintlockPistol();
+        case LIGHTNING_WAND: return LightningWand();
+        case DUAL_FLINTLOCKS: return DualFlintlocks();
     }
 }
 
 Armor GetArmorFromItem(int itemID) {
     switch(itemID) {
-        case RAGS:
-            return Rags();
-            break;
-        case ROBES:
-            return Robes();
-            break;
-        case LEATHER_ARMOR:
-            return LeatherArmor();
-            break;
-        case CHAINMAIL:
-            return Chainmail();
-            break;
-        case RANGERS_CLOAK:
-            return RangersCloak();
-            break;
-        case METALLIC_SKIN:
-            return MetallicSkin();
-            break;
+        case RAGS: return Rags();
+        case ROBES: return Robes();
+        case LEATHER_ARMOR: return LeatherArmor(); 
+        case CHAINMAIL: return Chainmail();
+        case RANGERS_CLOAK: return RangersCloak();
+        case METALLIC_SKIN: return MetallicSkin();
     }
 }
 
 char* GetArmorType(int ArmorType) {
     switch(ArmorType) {
-        case LIGHT:
-            return "Light";
-            break;
-        case MEDIUM:
-            return "Medium";
-            break;
-        case HEAVY:
-            return "Heavy";
-            break;
-        case EXOSUIT:
-            return "Exosuit";
-            break;
-        case POWER_ARMOR:
-            return "Power Armor";
-            break;
-        case MAGIC_ARMOR:
-            return "Magic Armor";
-            break;
+        case LIGHT: return "Light";
+        case MEDIUM: return "Medium";
+        case HEAVY: return "Heavy";
+        case EXOSUIT: return "Exosuit";
+        case POWER_ARMOR: return "Power Armor";
+        case MAGIC_ARMOR: return "Magic Armor";
     }
 }
 
