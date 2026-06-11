@@ -1,5 +1,16 @@
 #include <rogue.h>
 #define DMG_BUFFER 8
+
+/* 
+Initialize the combat history, used to track the combat events of the turn before being reset.
+*/
+CombatHistory* CreateCombatHistory(Entity monster) {
+    CombatHistory* combatHistory;
+    combatHistory = calloc(1, sizeof(CombatHistory));
+    combatHistory->defender = monster;
+    return combatHistory;
+}
+
 /* Create the queue for the combat log */
 /* Run this first to initialize it.*/
 LogQueue* MakeCombatLogQueue() {
@@ -33,6 +44,9 @@ void QueueEvent(LogQueue *q, char* event) {
     }
 }
 
+/* 
+Currently not used, but may be used in the future.
+*/
 void DequeueEvent (LogQueue *q) {
     if (IsEmpty(q)){
         return;
@@ -43,6 +57,9 @@ void DequeueEvent (LogQueue *q) {
         // q->front++;
 }
 
+/* 
+Currently not used, but may be used in the future.
+*/
 char* PeekCombatQueue (LogQueue *q) {
     if (IsEmpty(q)){
         return "Log is Empty, Cannot peek.";
@@ -79,7 +96,7 @@ void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int player
     combatHistory->playerDMG = playerDMG;
     combatHistory->playerResult = true;
     combatHistory->monsterKilled = true;
-    RecordAbilityUse();
+    RecordAbilityUse(); // Checks if player used ability & records it.
     strcpy(combatHistory->event, "You kill the ");
     strcat(combatHistory->event, combatHistory->defender.entityName);
     strcat(combatHistory->event, ".");

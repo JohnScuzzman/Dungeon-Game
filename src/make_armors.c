@@ -1,5 +1,8 @@
 #include <rogue.h>
 
+/* 
+These initialize the armors that will equipped to the player and npcs.
+*/
 
 Armor NoArmor() {
     Armor none;
@@ -23,7 +26,7 @@ Armor Rags() {
     rags.item.value = 2;
     strcpy(rags.item.itemName, "Rags");
     rags.AC = 0;
-    rags.type = LIGHT; // 1 = light, 2 = med, 3 = heavy
+    rags.type = LIGHT; 
     return rags;
 }
 
@@ -36,7 +39,7 @@ Armor Robes() {
     strcpy(robes.item.itemName, "Robes");
     robes.item.value = 10;
     robes.AC = 1;
-    robes.type = LIGHT; // 1 = light, 2 = med, 3 = heavy
+    robes.type = LIGHT; 
     return robes;
 }
 
@@ -49,7 +52,7 @@ Armor LeatherArmor() {
     leatherArmor.item.value = 30;
     strcpy(leatherArmor.item.itemName, "Leather Armor");
     leatherArmor.AC = 2;
-    leatherArmor.type = MEDIUM;
+    leatherArmor.type = MEDIUM; // 1 = light, 2 = med, 3 = heavy
     return leatherArmor;
 }
 
@@ -62,7 +65,7 @@ Armor Chainmail() {
     chainmail.item.value = 50;
     strcpy(chainmail.item.itemName, "Chainmail");
     chainmail.AC = 3;
-    chainmail.type = HEAVY;
+    chainmail.type = HEAVY; // 1 = light, 2 = med, 3 = heavy
     return chainmail;
 }
 

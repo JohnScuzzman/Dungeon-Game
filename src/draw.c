@@ -9,6 +9,7 @@
 #define STATS_COL2 (SIDEBAR_X + 29)
 #define STATS_WIDTH 40
 #define RIGHT_BORDER (SIDEBAR_X + STATS_WIDTH)
+
 /* Draw the Map to the screen. */
 void DrawMap()
 { 
@@ -41,12 +42,14 @@ void DrawPlayer(Player* player) {
   	refresh();
 	} 
 
+/* Makes the players avatar blink when called.*/
 void DrawPlayerBlink(Player* player) { 
 	// attron(A_STANDOUT);
 	mvaddch(player->pos.y, player->pos.x, player->ch | player->color | A_BOLD | A_DIM | A_BLINK);
 	// attroff(A_STANDOUT); 
 	}  
 
+/* Draws equipped items.*/
 void DrawPlayerEquipment(){
   mvprintw(2, SIDEBAR_X, "Name: %s", player->playerName);
   mvprintw(4, SIDEBAR_X, "Race: %s", player->playerRace);
@@ -59,6 +62,7 @@ void DrawPlayerEquipment(){
   // mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
 }
 
+/* Draw the players stats like INT, HP, EXP, LVL, etc.*/
 void DrawPlayerStats() {
 
   int EXPLen = NumberOfDigits(player->playerStats.EXP);
@@ -160,6 +164,9 @@ void DrawDebug(Entity* mptr, int n_monsters) {
   
 }
 
+/* 
+Draws the combatlog Queue to the rightmost display area under player's stats.
+*/
 void DrawCombatLog() {
  	if (IsEmpty(q)){
         return;

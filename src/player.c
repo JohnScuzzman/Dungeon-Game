@@ -28,59 +28,49 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
     switch(input) {
         case 32: // space bar
             return true;
-            break;
-        //move up
         case KEY_UP:
             newPos.y--;
             MovePlayer(newPos, combatHistory);
             return true;
-            break;
         //move down
         case KEY_DOWN:
             newPos.y++;
             MovePlayer(newPos, combatHistory);
             return true;
-            break;
         //move left
         case KEY_LEFT:
             newPos.x--;
             MovePlayer(newPos, combatHistory);
             return true;
-            break;
         //move right
         case KEY_RIGHT:
             newPos.x++;
             MovePlayer(newPos, combatHistory);
             return true;
-            break;
         //move up and left with insert
         case KEY_IC:
             newPos.y--;
             newPos.x--;
             MovePlayer(newPos, combatHistory);
             return true;
-            break;
         //move down and left with End
         case KEY_DC:
             newPos.y++;
             newPos.x--;
             MovePlayer(newPos, combatHistory);
             return true;
-            break;
         //move down and right with pagedown
         case KEY_NPAGE:
             newPos.y++;
             newPos.x++;
             MovePlayer(newPos, combatHistory);
             return true;
-            break;
         //move up and right with pageup
         case KEY_PPAGE:
             newPos.y--;
             newPos.x++;
             MovePlayer(newPos, combatHistory);
             return true;
-            break;
         case 102: // f key
             return PlayerRangedAttack(n_monsters);
         case 70: // F key
@@ -93,10 +83,8 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
             break;
         case 49: // 1 key
             return UsePlayerAbility(n_monsters, ABILITY_1);
-            break;
         case 50: // 2 key
             return UsePlayerAbility(n_monsters , ABILITY_2);
-            break;
         case 51: // 3 key
             if (player->playerClass.abilities[ABILITY_3].abilityID > NO_ABILITY){
                     return UsePlayerAbility(n_monsters , ABILITY_3);
@@ -116,7 +104,6 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
             //Player menu function here
             break;
         case 105: // i key
-            
             break;
         default:
             break;

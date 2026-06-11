@@ -54,6 +54,10 @@ void AskPlayerInfo(Player* player) {
     
 }   
 
+/* 
+Lets player choose a race based on X + Y coordinates, then sends those chosen coordinates to
+AssignRace in assignplayer.c
+*/
 void ChooseRace() {
     int ch;
     int cursorBoundY = 22;
@@ -115,6 +119,10 @@ void ChooseRace() {
     AssignStats((cursorBoundY + cursorBoundX));
 }
 
+/* 
+Lets player choose a class based on X + Y coordinates, then sends those chosen coordinates to
+AssignClass in assignplayer.c.
+*/
 void ChooseClass() {
     int ch;
     int cursorBoundY = 29;

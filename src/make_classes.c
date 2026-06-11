@@ -1,5 +1,7 @@
 #include<rogue.h>
 
+/* Creates and returns the named class.*/
+
 Class Knight(){
     Class knight;
     knight.isCaster = false;

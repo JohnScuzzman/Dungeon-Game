@@ -87,6 +87,10 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
     return false;
 }
 
+/* 
+Updates the monsters info, playersFOV, draws the updated info of both.
+It then resets the monsters moveflags and games combatHistory.
+*/
 void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     MakeFOV(player);
@@ -115,7 +119,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
         }
         PMove = false;
         if (ch == 105 || ch == 73) {
-            leaveFlag = MakeInventoryMenu(items);
+            MakeInventoryMenu();
         }
         if(ch != ERR) {
             PlayerRegen(&playerRegen);
