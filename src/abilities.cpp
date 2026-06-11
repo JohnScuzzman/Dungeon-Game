@@ -17,8 +17,8 @@ Ability NoAbility() {
     noAbility.range = 0;
     noAbility.abilitySave = 0;
     noAbility.miscStat = 0;
-    strcpy(noAbility.abilityName, "None");
-    strcpy(noAbility.abilityDesc, "none");
+    noAbility.abilityName = "None";
+    noAbility.abilityDesc = "none";
     return noAbility;
 }
 
@@ -35,8 +35,8 @@ Ability AimedShot() {
     aimedShot.range = (player->equippedRanged.range);
     aimedShot.abilitySave = (player->playerStats.ATK) + 10;
     aimedShot.miscStat = 0; 
-    strcpy(aimedShot.abilityName, "Aimed Shot");
-    strcpy(aimedShot.abilityDesc, "none");
+    aimedShot.abilityName = "Aimed Shot";
+    aimedShot.abilityDesc = "none";
     return aimedShot;
 }
 
@@ -53,8 +53,8 @@ Ability Charge() {
     charge.range = 5;
     charge.abilitySave = (player->playerStats.ATK) + 5;
     charge.miscStat = 0;
-    strcpy(charge.abilityName, "Charge");
-    strcpy(charge.abilityDesc, "none");
+    charge.abilityName = "Charge";
+    charge.abilityDesc = "none";
     return charge;
 }
 
@@ -71,8 +71,8 @@ Ability DrainLife() {
     drainLife.range = 1;
     drainLife.abilitySave = (player->playerStats.ATK) + 6;
     drainLife.miscStat = 0;
-    strcpy(drainLife.abilityName, "Drain Life");
-    strcpy(drainLife.abilityDesc, "none");
+    drainLife.abilityName = "Drain Life";
+    drainLife.abilityDesc = "none";
     return drainLife;
 }
 
@@ -89,8 +89,8 @@ Ability Electrify() {
     electrify.range = 3;
     electrify.abilitySave = (player->playerStats.ATK) + 3;
     electrify.miscStat = 0;
-    strcpy(electrify.abilityName, "Electrify");
-    strcpy(electrify.abilityDesc, "none");
+    electrify.abilityName = "Electrify";
+    electrify.abilityDesc = "none";
     return electrify;
 }
 
@@ -110,8 +110,8 @@ Ability FireVolley() {
     fireVolley.miscStat++;
     fireVolley.minDMG = (fireVolley.minDMG) * (fireVolley.miscStat);
     fireVolley.maxDMG = (fireVolley.minDMG) * (fireVolley.miscStat);
-    strcpy(fireVolley.abilityName, "Fire Volley");
-    strcpy(fireVolley.abilityDesc, "none");
+    fireVolley.abilityName = "Fire Volley";
+    fireVolley.abilityDesc = "none";
     return fireVolley;
 }
 
@@ -129,8 +129,8 @@ Ability IceArmor() {
     iceArmor.range = 0;
     iceArmor.abilitySave = 0;
     iceArmor.miscStat = 5; // AC gained
-    strcpy(iceArmor.abilityName, "Ice Armor");
-    strcpy(iceArmor.abilityDesc, "none");
+    iceArmor.abilityName = "Ice Armor";
+    iceArmor.abilityDesc = "none";
     return iceArmor;
 }
 
@@ -147,8 +147,8 @@ Ability MagicMissile() {
     magicMissile.range = 15;
     magicMissile.abilitySave = 40; // hard to miss with MM
     magicMissile.miscStat = 3; // number of missiles shot
-    strcpy(magicMissile.abilityName, "Magic Missile");
-    strcpy(magicMissile.abilityDesc, "none");
+    magicMissile.abilityName = "Magic Missile";
+    magicMissile.abilityDesc = "none";
     return magicMissile;
 }
 
@@ -166,8 +166,8 @@ Ability SecondWind() {
     secondWind.range = 0;
     secondWind.abilitySave = 0;
     secondWind.miscStat = ((rand() % secondWind.maxDMG) + secondWind.minDMG);
-    strcpy(secondWind.abilityName, "Second Wind");
-    strcpy(secondWind.abilityDesc, "none");
+    secondWind.abilityName = "Second Wind";
+    secondWind.abilityDesc = "none";
     return secondWind;
 }
 
@@ -184,8 +184,8 @@ Ability SelfRepair() {
     selfRepair.range = 0;
     selfRepair.abilitySave = 0;
     selfRepair.miscStat = ((rand() % selfRepair.maxDMG) + selfRepair.minDMG);
-    strcpy(selfRepair.abilityName, "Self Repair");
-    strcpy(selfRepair.abilityDesc, "none");
+    selfRepair.abilityName = "Self Repair";
+    selfRepair.abilityDesc = "none";
     return selfRepair;
 }
 
@@ -202,8 +202,8 @@ Ability SummonSkeleton() {
     summonSkeleton.range = 1;
     summonSkeleton.abilitySave = 0;
     summonSkeleton.miscStat = 8; // skeletons HP
-    strcpy(summonSkeleton.abilityName, "Summon Skeleton");
-    strcpy(summonSkeleton.abilityDesc, "none");
+    summonSkeleton.abilityName = "Summon Skeleton";
+    summonSkeleton.abilityDesc = "none";
     return summonSkeleton;
 }
 
@@ -220,8 +220,8 @@ Ability ShadowBolt() {
     shadowBolt.range = 15;
     shadowBolt.abilitySave = (player->playerStats.ATK) + 6;
     shadowBolt.miscStat = 0;
-    strcpy(shadowBolt.abilityName, "ShadowBolt");
-    strcpy(shadowBolt.abilityDesc, "none");
+    shadowBolt.abilityName = "ShadowBolt";
+    shadowBolt.abilityDesc = "none";
     return shadowBolt;
 }
 
@@ -238,8 +238,8 @@ Ability Vengeance() {
     vengeance.range = 0;
     vengeance.abilitySave = (player->playerStats.ATK) + 6;
     vengeance.miscStat = 0;
-    strcpy(vengeance.abilityName, "Vengeance");
-    strcpy(vengeance.abilityDesc, "none");
+    vengeance.abilityName = "Vengeance";
+    vengeance.abilityDesc = "none";
     return vengeance;
 }
 
@@ -256,8 +256,8 @@ Ability Dash() {
     dash.range = 5;
     dash.abilitySave = 0;
     dash.miscStat = 0;
-    strcpy(dash.abilityName, "Dash");
-    strcpy(dash.abilityDesc, "none");
+    dash.abilityName = "Dash";
+    dash.abilityDesc = "none";
     return dash;
 }
 
@@ -274,8 +274,8 @@ Ability DevastatingInsult() {
     devastatingInsult.range = 4;
     devastatingInsult.abilitySave = (player->playerStats.ATK);
     devastatingInsult.miscStat = 0;
-    strcpy(devastatingInsult.abilityName, "Devastating Insult");
-    strcpy(devastatingInsult.abilityDesc, "Do you know who else missed their attack?");
+    devastatingInsult.abilityName = "Devastating Insult";
+    devastatingInsult.abilityDesc = "Do you know who else missed their attack?";
     return devastatingInsult;
 }
 
@@ -294,8 +294,8 @@ void CastDash() {
     int x = player->pos.x;
     int y = player->pos.y;
     Cursor(y, x, 1);
-    strcpy(combatHistory->event, "Choose a direction to Dash.");
-    QueueEvent(q, combatHistory->event);
+    combatHistory->event = "Choose a direction to Dash.";
+    QueueEvent(q, (char*)combatHistory->event.c_str());
     // char event[] = "Choose a direction to Dash.";
     // DrawCombatEvent(event);
     while((ch = getch()) != 10 && ch != 32 && !(CheckEscape(ch))) {
@@ -375,8 +375,8 @@ void CastDash() {
         MakeFOV(player);
     }
     else{
-        strcpy(combatHistory->event, "Too far away to Dash.");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "Too far away to Dash.";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
     }
 }
 
@@ -394,22 +394,22 @@ bool DashPOSHelper(int x, int y) {
 void CastDrainLife(){
     if ((combatHistory->playerResult)) {
         char eventDMGBuffer[DMG_BUFFER];
-        strcpy(combatHistory->event, "You drain your enemy of life force,");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "You drain your enemy of life force,";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
         int healVal = (combatHistory->playerDMG) / 2; // Divide Damage by 2 for HP gained.
         if(((player->playerStats.HP) + healVal) >= (player->playerStats.maxHP)) {
-            strcpy(combatHistory->event, "healing to full for ");
+            combatHistory->event = "healing to full for ";
             snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", ((player->playerStats.maxHP) - (player->playerStats.HP)));
-            strcat(combatHistory->event, eventDMGBuffer);
-            QueueEvent(q, combatHistory->event);
+            combatHistory->event += eventDMGBuffer;
+            QueueEvent(q, (char*)combatHistory->event.c_str());
             player->playerStats.HP = player->playerStats.maxHP;
         }
         else {
             (player->playerStats.HP) += healVal;
-            strcpy(combatHistory->event, "healing yourself for ");
+            combatHistory->event = "healing yourself for ";
             snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", healVal);
-            strcat(combatHistory->event, eventDMGBuffer);
-            QueueEvent(q, combatHistory->event);
+            combatHistory->event += eventDMGBuffer;
+            QueueEvent(q, (char*)combatHistory->event.c_str());
             
         }
         player->playerStats.mana -= (player->equippedAbility.manaCost);
@@ -418,8 +418,8 @@ void CastDrainLife(){
 
 void CastIceArmor(){
     if (player->passiveAbility.abilityID == NO_ABILITY) {
-        strcpy(combatHistory->event, "You're covered in an icy embrace.");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "You're covered in an icy embrace.";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
         int shieldVal = player->equippedAbility.miscStat;
         player->playerStats.AC += shieldVal;
         player->abilityTimer = player->equippedAbility.duration;
@@ -427,22 +427,22 @@ void CastIceArmor(){
         player->playerStats.mana -= (player->equippedAbility.manaCost);
     }
     else {
-        strcpy(combatHistory->event, "That spell is still active.");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "That spell is still active.";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
     }
 }
 
 void CastVengeance() {
     if (player->passiveAbility.abilityID == NO_ABILITY) {
-        strcpy(combatHistory->event, "You prepare to retaliate.");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "You prepare to retaliate.";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
         player->abilityTimer = player->equippedAbility.duration;
         player->passiveAbility = player->equippedAbility;
         player->playerStats.mana -= (player->equippedAbility.manaCost);
     }
     else {
-        strcpy(combatHistory->event, "That spell is still active.");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "That spell is still active.";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
     }
 }
 
@@ -452,29 +452,29 @@ void CastSecondWind(){
         int healValFull = (player->playerStats.maxHP) - (player->playerStats.HP);
         int healVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
         combatHistory->playerCombat = false;
-        strcpy(combatHistory->event, "You mend your wounds.");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "You mend your wounds.";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
 
         if(((player->playerStats.HP) + healVal) >= (player->playerStats.maxHP)) {
-            strcpy(combatHistory->event, "You heal yourself for ");
+            combatHistory->event = "You heal yourself for ";
             snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", healValFull);
-            strcat(combatHistory->event, eventDMGBuffer);
-            QueueEvent(q, combatHistory->event);
+            combatHistory->event += eventDMGBuffer;
+            QueueEvent(q, (char*)combatHistory->event.c_str());
             player->playerStats.HP = player->playerStats.maxHP;
             player->playerStats.mana -= (player->equippedAbility.manaCost);
         }
         else {
             (player->playerStats.HP) += healVal;
-            strcpy(combatHistory->event, "You heal yourself for ");
+            combatHistory->event = "You heal yourself for ";
             snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", healVal);
-            strcat(combatHistory->event, eventDMGBuffer);
-            QueueEvent(q, combatHistory->event);
+            combatHistory->event += eventDMGBuffer;
+            QueueEvent(q, (char*)combatHistory->event.c_str());
             player->playerStats.mana -= (player->equippedAbility.manaCost);
         }
     }
     else{
-        strcpy(combatHistory->event, "You are already at full HP.");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "You are already at full HP.";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
     }
 }
 
@@ -482,8 +482,8 @@ void CastSelfRepair(){
     if(player->playerStats.HP != player->playerStats.maxHP) {
         char eventDMGBuffer[DMG_BUFFER];
         combatHistory->playerCombat = false;
-        strcpy(combatHistory->event, "You repair your metal frame.");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "You repair your metal frame.";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
         int repairVal = (rand() % (player->equippedAbility.maxDMG)) + (player->equippedAbility.minDMG);
         if(((player->playerStats.HP) + repairVal) >= (player->playerStats.maxHP)) {
             player->playerStats.HP = player->playerStats.maxHP;
@@ -492,20 +492,20 @@ void CastSelfRepair(){
             (player->playerStats.HP) += repairVal;
         }
         player->playerStats.mana -= (player->equippedAbility.manaCost);
-        strcpy(combatHistory->event, "You heal yourself for ");
+        combatHistory->event = "You heal yourself for ";
         snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", repairVal);
-        strcat(combatHistory->event, eventDMGBuffer);
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event += eventDMGBuffer;
+        QueueEvent(q, (char*)combatHistory->event.c_str());
     }
     else {
-        strcpy(combatHistory->event, "You are already at full HP.");
-        QueueEvent(q, combatHistory->event);
+        combatHistory->event = "You are already at full HP.";
+        QueueEvent(q, (char*)combatHistory->event.c_str());
     }
 }
 
 /* When Ice Armors duration is up, remove the armor.*/
 void RemoveIceArmor(){
-    strcpy(combatHistory->event, "You're icy armor melts.");
+    combatHistory->event = "You're icy armor melts.";
     QueueEvent(q, combatHistory->event);
     int shieldVal = player->passiveAbility.miscStat;
     player->playerStats.AC -= shieldVal;
@@ -513,7 +513,7 @@ void RemoveIceArmor(){
 }
 
 void RemoveVengeance(){
-    strcpy(combatHistory->event, "You're thirst for revenge fades.");
+    combatHistory->event = "You're thirst for revenge fades.";
     QueueEvent(q, combatHistory->event);
     player->passiveAbility = NoAbility();
 }
@@ -577,7 +577,7 @@ void CheckPassiveAbilities(int n_monsters) {
     switch(player->passiveAbility.abilityID) {
         case VENGEANCE:
         if((combatHistory->attackerDMG > 0) && (combatHistory->defender.isMonster)) {
-            strcpy(combatHistory->event, "You take vengeance on your enemy.");
+            combatHistory->event = "You take vengeance on your enemy.";
             QueueEvent(q, combatHistory->event);
             Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
             if (target->isMonster) {

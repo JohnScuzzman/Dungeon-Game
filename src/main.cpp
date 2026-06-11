@@ -70,7 +70,7 @@ int main(void)
     /* Pass the monsterList to populate it.*/
     start_pos = SetupMap(mptr, n_rooms);
 
-    /* Place player using method in makeplayer.c*/
+    /* Place player using method in makeplayer.cpp*/
     player = CreatePlayer(start_pos);
 
     /* Player's Inv*/
@@ -80,15 +80,15 @@ int main(void)
     combatHistory = CreateCombatHistory(mptr[0]);
     q = MakeCombatLogQueue();
 
-    /* Call Title Screen from asciiart.c*/
+    /* Call Title Screen from asciiart.cpp*/
     TitleScreen();
 
-    /* Ask info about the player's character from functions in player.c */
+    /* Ask info about the player's character from functions in player.cpp */
     AskPlayerInfo(player);
 
     keypad(stdscr, TRUE);
 
-    /* Start main game loop located in engine.c */
+    /* Start main game loop located in engine.cpp */
     /* Pass the pointer to monsterList[0]. */
     /* Pass the number of monsters and rooms made. */
     GameLoop(mptr, combatHistory, n_monsters, q, items);

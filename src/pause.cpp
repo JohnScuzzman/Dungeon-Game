@@ -3,7 +3,7 @@
 #define WINDOW_HEIGHT 10
 #define OFFSET 11
 
-void RenderPauseMenu(WINDOW *menu, int cursor, int n_options, char** options) {
+void RenderPauseMenu(WINDOW *menu, int cursor, int n_options, const char** options) {
     int y = 3;
     int bottom = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
     int center = ((WINDOW_WIDTH - OFFSET) / 2) + 3;
@@ -38,7 +38,7 @@ void RenderPauseMenu(WINDOW *menu, int cursor, int n_options, char** options) {
 /* Creates a pause window and returns true if player quits */
 /* Processes a new window and does a task if false. */
 bool MakePauseMenu() {
-    char *options[] = {
+    const char *options[] = {
     "Resume",
     "Options",
     "Save Game",

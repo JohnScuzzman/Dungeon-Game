@@ -1,20 +1,20 @@
 #include <rogue.h>
 
 Entity** CreateEntities(void) {
-    Entity** map = calloc(MAP_HEIGHT, sizeof(Entity *));
+    Entity** map = (Entity**)calloc(MAP_HEIGHT, sizeof(Entity *));
 
     /* Change amount of wall entities created based on map dimensions. */ 
     for (int y = 0; y < MAP_HEIGHT; y++) {
-        map[y] = calloc(MAP_WIDTH, sizeof(Entity));
+        map[y] = (Entity*)calloc(MAP_WIDTH, sizeof(Entity));
         for (int x = 0 ; x < MAP_WIDTH; x++) {
             map[y][x].ch = '#';
             map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
             map[y][x].entityID = 1;
             map[y][x].entityStats.AC = 30;
             map[y][x].entityStats.HP = 1000;
-            strcpy(map[y][x].entityClass, "None");
-            strcpy(map[y][x].entityName, "Stone Wall");
-            strcpy(map[y][x].entityRace, "None");
+            map[y][x].entityClass = "None";
+            map[y][x].entityName = "Stone Wall";
+            map[y][x].entityRace = "None";
             map[y][x].entityArmor = NoArmor();
             map[y][x].entityWeapon = NoWeapon();
         }
@@ -30,7 +30,7 @@ Since rooms can currently overlap, this appears as random monster placement.
 */ 
 Position SetupMap(Entity* mptr, int n_rooms) {
     int y, x, height, width, n_monsters;
-    Room* rooms = calloc(n_rooms, sizeof(Room));
+    Room* rooms = (Room*)calloc(n_rooms, sizeof(Room));
     Position start_pos;
 
     for (int i = 0; i < n_rooms; i++) {

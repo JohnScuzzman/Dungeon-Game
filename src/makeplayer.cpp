@@ -2,7 +2,7 @@
 
 
 Player* CreatePlayer(Position start_pos) {
-    Player* player = calloc(1, sizeof(Player));
+    Player* player = (Player*)calloc(1, sizeof(Player));
     player->noCollision = false;
     player->abilityTimer = 0;
     player->invHead = 0;
@@ -22,7 +22,7 @@ Uses the TitleScreen ASCII art, and prints to certain areas of it.
 void AskPlayerInfo(Player* player) {
     char* name;
     char* race;
-    char* class;
+    char* playerClass;
     char* armor;
     char* weapon;
     int nameBufferSize = 3;
@@ -184,7 +184,7 @@ void ChooseName(char* name) {
     nocbreak();         
     mvprintw(18, 40, "Please Enter your name: ");
     mvgetnstr(20, 44, name, 32);
-    strcpy(player->playerName, name);
+    player->playerName = name;
 }
 
 /*

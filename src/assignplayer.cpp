@@ -293,7 +293,7 @@ void AssignStats(int input) {
     switch(input){
         case 62:
             player->raceID = HUMAN;
-            strcpy(player->playerRace, "Human");
+            player->playerRace = "Human";
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 12;
             player->playerStats.CON = 12;
@@ -304,7 +304,7 @@ void AssignStats(int input) {
         break;
         case 63:
             player->raceID = ELF;
-            strcpy(player->playerRace, "Elf");
+            player->playerRace = "Elf";
             player->playerStats.maxHP = 8;
             player->playerStats.CHA = 12;
             player->playerStats.CON = 10;
@@ -315,7 +315,7 @@ void AssignStats(int input) {
         break;
         case 64:
             player->raceID = DWARF;
-            strcpy(player->playerRace, "Dwarf");
+            player->playerRace = "Dwarf";
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 10;
             player->playerStats.CON = 14;
@@ -326,7 +326,7 @@ void AssignStats(int input) {
         break;
         case 65:
             player->raceID = DRAGONBORN;
-            strcpy(player->playerRace, "Dragonborn");
+            player->playerRace = "Dragonborn";
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 10;
             player->playerStats.CON = 16;
@@ -337,7 +337,7 @@ void AssignStats(int input) {
         break;
         case 66:
             player->raceID = GNOLL;
-            strcpy(player->playerRace, "Gnoll");
+            player->playerRace = "Gnoll";
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 10;
             player->playerStats.CON = 16;
@@ -348,7 +348,7 @@ void AssignStats(int input) {
         break;
         case 67:
             player->raceID = CANIDAE;
-            strcpy(player->playerRace, "Canidae");
+            player->playerRace = "Canidae";
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 12;
             player->playerStats.CON = 16;
@@ -359,7 +359,7 @@ void AssignStats(int input) {
         break;
         case 82:
             player->raceID = SKELETON;
-            strcpy(player->playerRace, "Skeleton");
+            player->playerRace = "Skeleton";
             player->playerStats.maxHP = 8;
             player->playerStats.CHA = 10;
             player->playerStats.CON = 14;
@@ -370,7 +370,7 @@ void AssignStats(int input) {
         break;
         case 83:
             player->raceID = MANTIS;
-            strcpy(player->playerRace, "Mantis");
+            player->playerRace = "Mantis";
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 8;
             player->playerStats.CON = 14;
@@ -381,7 +381,7 @@ void AssignStats(int input) {
         break;
         case 84:
             player->raceID = AUTOMATON;
-            strcpy(player->playerRace, "Automaton");
+            player->playerRace = "Automaton";
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 10;
             player->playerStats.CON = 16;
@@ -392,7 +392,7 @@ void AssignStats(int input) {
         break;
         case 85:
             player->raceID = WEREWOLF;
-            strcpy(player->playerRace, "Werewolf");
+            player->playerRace = "Werewolf";
             player->playerStats.maxHP = 12;
             player->playerStats.CHA = 10;
             player->playerStats.CON = 16;
@@ -403,7 +403,7 @@ void AssignStats(int input) {
         break;
         case 86:
             player->raceID = VAMPIRE;
-            strcpy(player->playerRace, "Vampire");
+            player->playerRace = "Vampire";
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 16;
             player->playerStats.CON = 10;
@@ -414,7 +414,7 @@ void AssignStats(int input) {
         break;
         case 87:
             player->raceID = SUCCUBUS;
-            strcpy(player->playerRace, "Succubus");
+            player->playerRace = "Succubus";
             player->playerStats.maxHP = 8;
             player->playerStats.CHA = 16;
             player->playerStats.CON = 10;
@@ -425,7 +425,7 @@ void AssignStats(int input) {
         break;
         default:
             player->raceID = HUMAN;
-            strcpy(player->playerRace, "Human");
+            player->playerRace = "Human";
             player->playerStats.maxHP = 10;
             player->playerStats.CHA = 12;
             player->playerStats.CON = 12;
