@@ -2,7 +2,7 @@
 
 CombatHistory* CreateCombatHistory(Entity monster) {
     CombatHistory* combatHistory;
-    combatHistory = calloc(1, sizeof(CombatHistory));
+    combatHistory = (CombatHistory*)calloc(1, sizeof(CombatHistory));
     combatHistory->defender = monster;
     return combatHistory;
 }
@@ -70,14 +70,14 @@ bool ShootTargetWithAbility(int x, int y) {
         GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
             combatHistory->playerUsedAbility = false;
             combatHistory->playerCombat = false;
-            strcpy(combatHistory->event, "Target not in line of sight.");
+            combatHistory->event = "Target not in line of sight.";
             QueueEvent(q, combatHistory->event);
         }
         else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
         GetDistance(player->pos, map[y][x].pos) > player->equippedAbility.range){
             combatHistory->playerUsedAbility = false;
             combatHistory->playerCombat = false;
-            strcpy(combatHistory->event, "Target not in range.");
+            combatHistory->event = "Target not in range.";
             QueueEvent(q, combatHistory->event);
         }
     }
@@ -106,21 +106,21 @@ bool ShootTarget(int x, int y) {
         GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
             combatHistory->playerUsedRanged = false;
             combatHistory->playerCombat = false;
-            strcpy(combatHistory->event, "Target not in line of sight.");
+            combatHistory->event = "Target not in line of sight.";
             QueueEvent(q, combatHistory->event);
         }
         else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
         GetDistance(player->pos, map[y][x].pos) > player->equippedRanged.range){
             combatHistory->playerUsedRanged = false;
             combatHistory->playerCombat = false;
-            strcpy(combatHistory->event, "Target not in range.");
+            combatHistory->event = "Target not in range.";
             QueueEvent(q, combatHistory->event);
         }
     }
     else {
         combatHistory->playerUsedRanged = false;
         combatHistory->playerCombat = false;
-        strcpy(combatHistory->event, "No ranged weapons equipped.");
+        combatHistory->event = "No ranged weapons equipped.";
         QueueEvent(q, combatHistory->event);
     }
     return targetHit;

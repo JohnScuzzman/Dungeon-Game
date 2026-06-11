@@ -13,8 +13,8 @@ Ability ThornBolt() {
     thornBolt.range = 10;
     thornBolt.abilitySave = (player->playerStats.ATK) + 1;
     thornBolt.miscStat = 0;
-    strcpy(thornBolt.abilityName, "Thorn Bolt");
-    strcpy(thornBolt.abilityDesc, "none");
+    thornBolt.abilityName = "Thorn Bolt";
+    thornBolt.abilityDesc = "none";
     return thornBolt;
 }
 

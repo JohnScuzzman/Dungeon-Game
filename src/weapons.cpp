@@ -12,7 +12,7 @@ Weapon NoWeapon() {
     none.minDMG = 0;
     none.maxDMG = 0;
     none.range = 0;
-    strcpy(none.item.itemName, "None");
+    none.item.itemName = "None";
     return none;
 }
 
@@ -28,7 +28,7 @@ Weapon Fists() {
     fists.minDMG = 1;
     fists.maxDMG = 3;
     fists.range = 0;
-    strcpy(fists.item.itemName, "Fists");
+    fists.item.itemName = "Fists";
     return fists;
 }
 
@@ -39,13 +39,13 @@ Weapon Claws() {
     claws.item.itemID = CLAWS;
     claws.item.unequippable = false;
     claws.item.value = 0;
-    strcpy(claws.item.itemName, "Claws");
+    claws.item.itemName = "Claws";
     claws.isMagic = false;
     claws.isRanged = false;
     claws.minDMG = 1;
     claws.maxDMG = 4;
     claws.range = 0;
-    strcpy(claws.item.itemName, "Claws");
+    claws.item.itemName = "Claws";
     return claws;
 }
 
@@ -56,7 +56,7 @@ Weapon Dagger() {
     dagger.item.itemID = DAGGER;
     dagger.item.unequippable = false;
     dagger.item.value = 5;
-    strcpy(dagger.item.itemName, "Dagger");
+    dagger.item.itemName = "Dagger";
     dagger.isMagic = false;
     dagger.isRanged = false;
     dagger.minDMG = 1;
@@ -72,7 +72,7 @@ Weapon Shortsword() {
     shortSword.item.itemID = SHORTSWORD;
     shortSword.item.unequippable = false;
     shortSword.item.value = 10;
-    strcpy(shortSword.item.itemName, "Shortsword");
+    shortSword.item.itemName = "Shortsword";
     shortSword.isMagic = false;
     shortSword.isRanged = false;
     shortSword.minDMG = 1;
@@ -88,7 +88,7 @@ Weapon Longsword() {
     longSword.item.itemID = LONGSWORD;
     longSword.item.unequippable = false;
     longSword.item.value = 20;
-    strcpy(longSword.item.itemName, "Longsword");
+    longSword.item.itemName = "Longsword";
     longSword.isMagic = false;
     longSword.isRanged = false;
     longSword.minDMG = 1;
@@ -104,7 +104,7 @@ Weapon Greatsword() {
     greatSword.item.itemID = GREATSWORD;
     greatSword.item.unequippable = false;
     greatSword.item.value = 45;
-    strcpy(greatSword.item.itemName, "Greatsword");
+    greatSword.item.itemName = "Greatsword";
     greatSword.isMagic = false;
     greatSword.isRanged = false;
     greatSword.minDMG = 1;
@@ -120,7 +120,7 @@ Weapon Cutlass() {
     cutlass.item.itemID = CUTLASS;
     cutlass.item.unequippable = false;
     cutlass.item.value = 25;
-    strcpy(cutlass.item.itemName, "Cutlass");
+    cutlass.item.itemName = "Cutlass";
     cutlass.isMagic = false;
     cutlass.isRanged = false;
     cutlass.minDMG = 2;
@@ -136,7 +136,7 @@ Weapon Scimitar() {
     scimitar.item.itemID = SCIMITAR;
     scimitar.item.unequippable = false;
     scimitar.item.value = 30;
-    strcpy(scimitar.item.itemName, "Scimitar");
+    scimitar.item.itemName = "Scimitar";
     scimitar.isMagic = false;
     scimitar.isRanged = false;
     scimitar.minDMG = 2;
@@ -152,7 +152,7 @@ Weapon Quarterstaff() {
     quarterstaff.item.itemID = QUARTERSTAFF;
     quarterstaff.item.unequippable = false;
     quarterstaff.item.value = 10;
-    strcpy(quarterstaff.item.itemName, "Quarterstaff");
+    quarterstaff.item.itemName = "Quarterstaff";
     quarterstaff.isMagic = false;
     quarterstaff.isRanged = false;
     quarterstaff.minDMG = 1;
@@ -168,7 +168,7 @@ Weapon ChromeFists() {
     chromeFists.item.itemID = CHROME_FISTS;
     chromeFists.item.unequippable = false;
     chromeFists.item.value = 100;
-    strcpy(chromeFists.item.itemName, "Chrome Fists");
+    chromeFists.item.itemName = "Chrome Fists";
     chromeFists.isMagic = false;
     chromeFists.isRanged = false;
     chromeFists.minDMG = 1;
@@ -184,7 +184,7 @@ Weapon AcidPotion() {
     acidPotion.item.itemID = ACID_POTION;
     acidPotion.item.unequippable = false;
     acidPotion.item.value = 25;
-    strcpy(acidPotion.item.itemName, "Acid Potion");
+    acidPotion.item.itemName = "Acid Potion";
     acidPotion.isMagic = false;
     acidPotion.isRanged = true;
     acidPotion.minDMG = 2;
@@ -200,7 +200,7 @@ Weapon Shortbow() {
     shortbow.item.itemID = SHORTBOW;
     shortbow.item.unequippable = false;
     shortbow.item.value = 25;
-    strcpy(shortbow.item.itemName, "Shortbow");
+    shortbow.item.itemName = "Shortbow";
     shortbow.isMagic = false;
     shortbow.isRanged = true;
     shortbow.minDMG = 1;
@@ -216,7 +216,7 @@ Weapon Longbow() {
     longbow.item.itemID = LONGBOW;
     longbow.item.unequippable = false;
     longbow.item.value = 50;
-    strcpy(longbow.item.itemName, "Longbow");
+    longbow.item.itemName = "Longbow";
     longbow.isMagic = false;
     longbow.isRanged = true;
     longbow.minDMG = 1;
@@ -232,7 +232,7 @@ Weapon FlintlockPistol() {
     flintlockPistol.item.itemID = FLINTLOCK_PISTOL;
     flintlockPistol.item.unequippable = false;
     flintlockPistol.item.value = 75;
-    strcpy(flintlockPistol.item.itemName, "Flintlock Pistol");
+    flintlockPistol.item.itemName = "Flintlock Pistol";
     flintlockPistol.isMagic = false;
     flintlockPistol.isRanged = true;
     flintlockPistol.minDMG = 1;
@@ -248,7 +248,7 @@ Weapon LightningWand() {
     lightningWand.item.itemID = LIGHTNING_WAND;
     lightningWand.item.unequippable = false;
     lightningWand.item.value = 75;
-    strcpy(lightningWand.item.itemName, "Wand of Sparks");
+    lightningWand.item.itemName = "Wand of Sparks";
     lightningWand.isMagic = true;
     lightningWand.isRanged = true;
     lightningWand.minDMG = 1;
@@ -265,7 +265,7 @@ Weapon DualFlintlocks() {
     dualFlintlocks.item.itemID = DUAL_FLINTLOCKS;
     dualFlintlocks.item.unequippable = false;
     dualFlintlocks.item.value = 150;
-    strcpy(dualFlintlocks.item.itemName, "Dual Flintlocks");
+    dualFlintlocks.item.itemName = "Dual Flintlocks";
     dualFlintlocks.isMagic = false;
     dualFlintlocks.isRanged = true;
     dualFlintlocks.minDMG = 2;

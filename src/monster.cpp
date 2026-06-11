@@ -334,12 +334,12 @@ void ResetMoveFlags(Entity* mptr, int n_monsters) {
 
 void RecordMonsterSeen(Entity* monster) {
     if(!monster->seenByPlayer){
-        strcpy(combatHistory->event, "You see a ");
-        strcat(combatHistory->event, monster->entityName);
-        strcat(combatHistory->event, " to the ");
+        combatHistory->event = "You see a ";
+        combatHistory->event += monster->entityName;
+        combatHistory->event += " to the ";
         QueueEvent(q, combatHistory->event);
-        strcpy(combatHistory->event, DIRECTIONS[MonsterDirection(monster)]);
-        strcat(combatHistory->event, ".");
+        combatHistory->event = DIRECTIONS[MonsterDirection(monster)];
+        combatHistory->event += ".";
         QueueEvent(q, combatHistory->event);
         monster->seenByPlayer = true;
     }

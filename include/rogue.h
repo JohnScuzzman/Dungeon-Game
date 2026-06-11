@@ -11,7 +11,9 @@
 #include "math.h" // complex math funtions
 #include <stdio.h> // standard io
 #include <unistd.h> // File reading
-#include <string.h> // String copying
+#include <string> // Modern string handling
+#include <vector> // Modern containers
+#include <cstring> // String copying
 #include <ctype.h> // toupper functions
 #include <stdbool.h>
 #include <items.h>
@@ -59,7 +61,7 @@ typedef enum {
 } Levels;
 
 typedef struct {
-  char events[MAX_LOG_SIZE][MAX_EVENT_SIZE];
+  std::string events[MAX_LOG_SIZE];
   int front;
   int rear;
 } LogQueue;
@@ -127,8 +129,8 @@ typedef struct {
   Ability passiveAbility;
   Class playerClass;
   Item inventory[MAX_INVENTORY_SIZE];
-  char playerName[MAX_NAME_SIZE];
-  char playerRace[MAX_NAME_SIZE];
+  std::string playerName;
+  std::string playerRace;
 } Player;
   
 typedef struct {
@@ -154,9 +156,9 @@ typedef struct {
   Armor entityArmor;
   Weapon entityWeapon;
   Item inventory[MAX_INVENTORY_SIZE];
-  char entityName[MAX_NAME_SIZE];
-  char entityRace[MAX_NAME_SIZE];
-  char entityClass[MAX_NAME_SIZE];
+  std::string entityName;
+  std::string entityRace;
+  std::string entityClass;
 } Entity;
 
 typedef struct {
@@ -173,7 +175,7 @@ typedef struct {
     int playerAccRoll;
     int playerDMG;
     int playerAC;
-    char event[MAX_EVENT_SIZE];
+    std::string event;
 } CombatHistory;
 
 typedef struct
@@ -239,12 +241,12 @@ bool IsEmpty(LogQueue *q);
 bool IsFull(LogQueue *q);
 LogQueue* MakeCombatLogQueue();
 void NotEnoughMana();
-char* PeekCombatQueue (LogQueue *q);
+std::string PeekCombatQueue (LogQueue *q);
 void PlayerMeleeOrRanged(Player* player);
 void PlayerPrepareCombat(int n_monsters);
 bool PlayerRangedAttack(int n_monsters);
 void PrintCombatQueue (LogQueue*q, WINDOW *pad);
-void QueueEvent(LogQueue *q, char* event);
+void QueueEvent(LogQueue *q, std::string event);
 void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
 void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC);
 void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
@@ -297,7 +299,7 @@ void RemoveFromNPCInventory(Entity* npc, Item target);
 void RemoveFromPlayerInventory(Item target);
 Weapon GetWeaponFromItem(int itemID);
 Armor GetArmorFromItem(int itemID);
-char* GetArmorType(int ArmorType);
+const char* GetArmorType(int ArmorType);
 void Equip(Item target);
 void EquipMelee(Item target);
 void EquipRanged(Item target);
@@ -319,7 +321,7 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
 bool MakeInventoryMenu(Item* items);
 bool InventorySelect(int choice, WINDOW* menu);
 bool MakeItemOptionsWindow(Item** playerInv, int choice,WINDOW *menu, WINDOW *loot);
-void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** entityInv);
+void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, const char** entityInv);
 bool InvOptionSelect(Item** playerInv, int prevChoice, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot, bool unEquipMenu);
 // void RenderLootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
 // bool LootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
@@ -374,7 +376,7 @@ void MoveUpLeft(Entity* mptr);
 //pause.c functions
 bool MakePauseMenu();
 bool ProcessPauseSelect(int choice, WINDOW* menu);
-void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options);
+void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, const char** options);
 
 // player.c functions
 bool CheckPlayerAdjacent(Position origin);

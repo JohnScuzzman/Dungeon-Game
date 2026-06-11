@@ -1,6 +1,8 @@
 #ifndef CLASSES_H // These prevent compiling items_h multiple times.
 #define CLASSES_H
 
+#include <string>
+
 #define MAX_ABILITIES 5 // change later to 10
 #define MAX_NAME_SIZE 33
 #define MAX_DESC_SIZE 65
@@ -59,8 +61,8 @@ typedef struct {
     int range;
     int abilitySave;
     int miscStat;
-    char abilityName[MAX_NAME_SIZE];
-    char abilityDesc[MAX_DESC_SIZE];
+    std::string abilityName;
+    std::string abilityDesc;
 } Ability;
 
 typedef struct {
@@ -71,8 +73,8 @@ typedef struct {
     int mainStat;
     int secondaryStat;
     Ability abilities[MAX_ABILITIES];
-    char className[MAX_NAME_SIZE];
-    char classDesc[MAX_DESC_SIZE];
+    std::string className;
+    std::string classDesc;
 } Class;
 
 
