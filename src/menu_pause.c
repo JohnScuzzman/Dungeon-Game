@@ -46,6 +46,7 @@ bool MakePauseMenu() {
     "Quit"
     };
 
+    // TODO make this into a window struct and make one anytime we need one.
     int n_options = sizeof(options) / sizeof(char*);
     int pauseX = (COLS - WINDOW_WIDTH) / 2;
     int pauseY = (LINES - WINDOW_HEIGHT) / 2;

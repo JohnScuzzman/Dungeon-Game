@@ -284,6 +284,7 @@ void RemoveFromPlayerInventory(Item target);
 Weapon GetWeaponFromItem(int itemID);
 Armor GetArmorFromItem(int itemID);
 char* GetArmorType(int ArmorType);
+int CompareStrings(const void *a, const void *b);
 void Equip(Item target);
 void EquipMelee(Item target);
 void EquipRanged(Item target);
@@ -338,7 +339,7 @@ void PrintAllItems (WINDOW* menu, WINDOW* desc, WINDOW* loot, int cursor, int* y
 // bool LootChoice(WINDOW* loot, int lootChoice);
 
 //menu_loot.c functions
-void MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv);
+bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv);
 void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** entityInv, Item** playerInv);
 bool MakeLootOptionsWindow(Item** playerInv, Item** entityInv, int choice, int n_options, WINDOW *menu, WINDOW *loot);
 bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot);

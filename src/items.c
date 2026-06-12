@@ -100,6 +100,16 @@ void RemoveFromPlayerInventory(Item target) {
         }
     }
 }
+/*
+Helper method for Sort Inventory.
+*/
+int CompareStrings(const void *a, const void *b) {
+    const char *strA = *(const char **)a;
+    const char *strB = *(const char **)b;
+
+    return strcmp(strA, strB);
+    
+}
 
 /* Equips an item if it is valid to do so.*/
 void Equip(Item target) {
