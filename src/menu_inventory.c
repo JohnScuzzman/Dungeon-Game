@@ -60,7 +60,7 @@ bool MoveInventoryCursor (WINDOW *menu, WINDOW *desc, WINDOW *loot){
             if (is_keypad(menu) == TRUE)
                 keypad(menu, FALSE);
                 keypad(loot, TRUE);
-                MoveLootCursor(menu, desc, loot, playerInv);
+                escFlag = MoveLootCursor(menu, desc, loot, playerInv);
                 keypad(menu, TRUE);
                 keypad(loot, FALSE);
                 //TODO -> escFlag = MakeLootMenu(); Make a loot menu work for this
@@ -97,7 +97,6 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
             mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 2), " (Equipped)");
             wattroff(menu, A_DIM);
         }
-        mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName);
         if (cursor == i) {
             wattron(menu, A_REVERSE);
             mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
@@ -111,11 +110,18 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
             // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc);
         }
     y++;
+    }
+
+    y = 3;
+    for (int i = 0; i < map[player->pos.y][player->pos.x].invTail; i++) {
+            mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName);
+            y++;
+        }
     wrefresh(loot);
     wrefresh(desc);
     wrefresh(menu);
-    }
 }
+
 
 bool MakeItemOptionsWindow(Item** playerInv, int choice, int n_options, WINDOW *menu, WINDOW *loot) {
     bool unEquipMenu = false;

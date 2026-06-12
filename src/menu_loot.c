@@ -3,7 +3,7 @@
 #define WINDOW_WIDTH 61
 #define WINDOW_HEIGHT 47
 
-void MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
+bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
     Item* entityInv[INVENTORY_SIZE];
     for(int i = 0; i < INVENTORY_SIZE; i++) {
         entityInv[i] = &map[player->pos.y][player->pos.x].inventory[i];
@@ -17,35 +17,36 @@ void MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
 
     RenderLootMenu(menu, desc, loot, cursor, n_options, entityInv, playerInv);
     while(!escFlag) {
-    ch = wgetch(loot);
-    escFlag = CheckEscape(ch);
-    switch(ch) {
-        case KEY_UP:
-            if (cursor == 0) cursor = n_options - 1;
-            else cursor--;
-            break;
-        case KEY_DOWN: 
-            if (cursor == n_options - 1) cursor = 0;
-            else cursor++;
-            break;
-        case KEY_LEFT: 
-            if (is_keypad(menu) == FALSE)
-                refresh();
-                return;
-            break;
-        case 32: // SPB
-            choice = cursor;
-            escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
-            break;
-        case 10: // ENTER
-            choice = cursor;
-            escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
-            break;
-        default:
-            break;
-        }
-    RenderLootMenu(menu, desc, loot, cursor, n_options, entityInv, playerInv);
+        ch = wgetch(loot);
+        escFlag = CheckEscape(ch);
+        switch(ch) {
+            case KEY_UP:
+                if (cursor == 0) cursor = n_options - 1;
+                else cursor--;
+                break;
+            case KEY_DOWN: 
+                if (cursor == n_options - 1) cursor = 0;
+                else cursor++;
+                break;
+            case KEY_LEFT: 
+                if (is_keypad(menu) == FALSE)
+                    refresh();
+                    return false;
+                break;
+            case 32: // SPB
+                choice = cursor;
+                escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
+                break;
+            case 10: // ENTER
+                choice = cursor;
+                escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
+                break;
+            default:
+                break;
+            }
+        RenderLootMenu(menu, desc, loot, cursor, n_options, entityInv, playerInv);
     }
+    return false;
 }
 
 void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** entityInv, Item** playerInv) {
@@ -59,27 +60,29 @@ void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_
     
     for (int i = 0; i < player->invTail; i++){
         if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID) {
+            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
             wattron(menu, A_DIM);
             mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 2), " (Equipped)");
             wattroff(menu, A_DIM);
-            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
         }
+        else mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
         y++;
     }
     y = 3;
 
-    for (int i = 0; i < map[player->pos.y][player->pos.x].invTail; i++) {
-        mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName);
-        if (cursor == i) {
-            wattron(loot, A_REVERSE);
-            mvwprintw(desc, 2, 2, "%s", entityInv[cursor]->itemDesc);
-            mvwprintw(loot, y, 2, "%s", entityInv[i]->itemName);
-            RenderItemInfo(desc, entityInv[cursor]);
-            wattroff(loot, A_REVERSE);
-        }
-        else {
-            mvwprintw(loot, y, 2, "%s", entityInv[i]->itemName);
-            // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc);
+    for (int i = 0; i < INVENTORY_SIZE; i++) {
+        if (entityInv[i]->itemID != NULL_ITEM_ID) {
+            if (cursor == i) {
+                wattron(loot, A_REVERSE);
+                mvwprintw(desc, 2, 2, "%s", entityInv[cursor]->itemDesc);
+                mvwprintw(loot, y, 2, "%s", entityInv[i]->itemName);
+                RenderItemInfo(desc, entityInv[cursor]);
+                wattroff(loot, A_REVERSE);
+            }
+            else {
+                mvwprintw(loot, y, 2, "%s", entityInv[i]->itemName);
+                // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc);
+            }
         }
     y++;
     wrefresh(loot);
@@ -161,9 +164,9 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             refresh();
             wrefresh(loot);
             delwin(invOp);
+            if (entityInv[0]->itemID == NULL_ITEM_ID) return true; // if empty floor/npc inv, return to players
+            else return false;
             return false;
-            break;
-
         case 1: // Take All
             //while entity Quantity of item > 0
             AddToPlayerInventory(*entityInv[prevChoice]);
@@ -172,37 +175,33 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             refresh();
             wrefresh(loot);
             delwin(invOp);
-            return false;
-            break;
-
+            if (entityInv[0]->itemID == NULL_ITEM_ID) return true;
+            else return false;
         case 2: // Equip
             AddToPlayerInventory(*entityInv[prevChoice]);
-            EquipOrUnequip(playerInv, false, prevChoice);
+            Equip(*entityInv[prevChoice]);
             RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice]);
             DrawEverything();
             refresh();
             wrefresh(loot);
             delwin(invOp);
-            return false;
-            break;
-
+            if (entityInv[0]->itemID == NULL_ITEM_ID) return true;
+            else return false;
         case 3: // Examine
-            // Do the load window here
+            // Ascii art of the item or something here.
             refresh();
             delwin(invOp);
-            return false;
+            if (entityInv[0]->itemID == NULL_ITEM_ID) return true;
+            else return false;
             break;
         case 4: // Exit
-            // Do the load window here
+            // leave.
             refresh();
             delwin(invOp);
             return true;
             break;
 
         default:
-            refresh();
-            delwin(invOp);
-            return false;
             break;
     }
 }
