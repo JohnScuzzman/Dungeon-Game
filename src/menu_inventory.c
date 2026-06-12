@@ -45,6 +45,7 @@ bool MoveInventoryCursor (WINDOW *menu, WINDOW *desc, WINDOW *loot){
     /* First Render of Menu*/
     RenderInventoryMenu(menu, desc, loot, cursor, n_options, playerInv);
     while(!escFlag) {
+    n_options = player->invTail;
     ch = wgetch(menu);
     escFlag = CheckEscape(ch);
     switch(ch) {
@@ -57,14 +58,15 @@ bool MoveInventoryCursor (WINDOW *menu, WINDOW *desc, WINDOW *loot){
             else cursor++;
             break;
         case KEY_RIGHT: 
-            if (is_keypad(menu) == TRUE)
+            if (is_keypad(menu) == TRUE && map[player->pos.y][player->pos.x].inventory[0].itemID != NULL_ITEM_ID){
                 keypad(menu, FALSE);
                 keypad(loot, TRUE);
                 escFlag = MoveLootCursor(menu, desc, loot, playerInv);
                 keypad(menu, TRUE);
                 keypad(loot, FALSE);
                 //TODO -> escFlag = MakeLootMenu(); Make a loot menu work for this
-            break;
+            }
+                break;
         case 32: // SPB
             choice = cursor;
             escFlag = MakeItemOptionsWindow(playerInv, choice, n_options, menu, loot);
