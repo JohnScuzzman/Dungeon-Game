@@ -29,17 +29,17 @@ bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
                 else cursor++;
                 break;
             case KEY_LEFT: 
-                if (is_keypad(menu) == FALSE)
-                    refresh();
-                    return false;
-                break;
+                refresh();
+                return false;
             case 32: // SPB
                 choice = cursor;
                 escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
+                if(entityInv[0] == NULL_ITEM_ID) return false;
                 break;
             case 10: // ENTER
                 choice = cursor;
                 escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
+                if(entityInv[0] == NULL_ITEM_ID) return false;
                 break;
             default:
                 break;

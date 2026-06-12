@@ -68,7 +68,6 @@ void RemoveFromNPCInventory(Entity* npc, Item target) {
     }
     for(int i = npc->invHead; i < npc->invTail; i++) {
         if(npc->inventory[i].itemID == target.itemID){
-            AddToNPCInventory(&map[npc->pos.y][npc->pos.x], npc->inventory[i]);
             npc->invTail--;
             npc->inventory[i] = npc->inventory[npc->invTail];
             npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
