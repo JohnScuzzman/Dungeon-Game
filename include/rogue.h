@@ -341,8 +341,9 @@ void PrintAllItems (WINDOW* menu, WINDOW* desc, WINDOW* loot, int cursor, int* y
 //menu_loot.c functions
 bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv);
 void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** entityInv, Item** playerInv);
+void RenderLootOptionMenu(WINDOW *lootOp, int cursor, int n_options, char** options);
 bool MakeLootOptionsWindow(Item** playerInv, Item** entityInv, int choice, int n_options, WINDOW *menu, WINDOW *loot);
-bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot);
+bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* lootOp, WINDOW* loot);
 
 //menu_pause.c functions
 bool MakePauseMenu();

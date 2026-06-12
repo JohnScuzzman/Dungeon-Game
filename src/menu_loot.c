@@ -2,6 +2,7 @@
 #define INVENTORY_SIZE 64
 #define WINDOW_WIDTH 61
 #define WINDOW_HEIGHT 47
+#define OFFSET 11
 
 bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
     Item* entityInv[INVENTORY_SIZE];
@@ -103,22 +104,22 @@ bool MakeLootOptionsWindow(Item** playerInv, Item** entityInv, int choice, int n
 
     //Sorry about the magic numbers
     int m_options = sizeof(options) / sizeof(char*);
-    int invX = WINDOW_WIDTH / 2;
-    int invY = choice + 3;
+    int invX = (WINDOW_WIDTH + OFFSET * 2) + strlen(entityInv[choice]->itemName);
+    int invY = (WINDOW_HEIGHT / 2) + choice + 5;
     bool escFlag = false;
     int cursor = 0;
     int newChoice = -1;
     int ch;
     
     // Make a tiny window with 5 options for player to choose from.
-    WINDOW *invOp = newwin(((WINDOW_HEIGHT / 4) - 4), (WINDOW_WIDTH / 4), invY, invX);
-    keypad(invOp, TRUE);
+    WINDOW *lootOp = newwin(((WINDOW_HEIGHT / 4) - 4), (WINDOW_WIDTH / 4), invY, invX);
+    keypad(lootOp, TRUE);
 
     // Borrows function fomr menu_inventory.c
-    RenderInvOptionMenu(invOp, cursor, m_options, options);
+    RenderLootOptionMenu(lootOp, cursor, m_options, options);
 
     while(!escFlag) {
-        ch = wgetch(invOp);
+        ch = wgetch(lootOp);
         escFlag = CheckEscape(ch);
         switch(ch) {
             case KEY_UP:
@@ -148,14 +149,39 @@ bool MakeLootOptionsWindow(Item** playerInv, Item** entityInv, int choice, int n
             default:
                 break;
             }
-        RenderInvOptionMenu(invOp, cursor, m_options, options);
+        RenderLootOptionMenu(lootOp, cursor, m_options, options);
     }
-    return LootOptionSelect(playerInv, entityInv, choice, n_options, newChoice, menu, invOp, loot);
+    return LootOptionSelect(playerInv, entityInv, choice, n_options, newChoice, menu, lootOp, loot);
 }
 
+/* Tiny window for selecting Equip, Drop, transfer, etc. */
+void RenderLootOptionMenu(WINDOW *lootOp, int cursor, int n_options, char** options) {
+    int y = 1;
+    int titleRight = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
+    int center = (WINDOW_WIDTH / 2) - (OFFSET * 3) + 5;
+    int numLines = WINDOW_WIDTH - 2 - titleRight;
+    int top = 1;
+    int centerY, centerX;
+    getmaxyx(lootOp, centerY, centerX);
+    box(lootOp, 0, 0);
+
+    for (int i = 0; i < n_options; i++) {
+        center = (centerX - strlen(options[i])) / 2;
+        if (cursor == i) {
+            wattron(lootOp, A_REVERSE);
+            mvwprintw(lootOp, y, center, "%s", options[i]);
+            wattroff(lootOp, A_REVERSE);
+        }
+        else {
+            mvwprintw(lootOp, y, center, "%s", options[i]);
+        }
+        y++;
+    }
+    wrefresh(lootOp);
+}
 
 /* Selects an option from the tiny one above and acts based on the chosen selection. */
-bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot) {
+bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* lootOp, WINDOW* loot) {
     switch(newChoice){
         case 0: // Take
             AddToPlayerInventory(*entityInv[prevChoice]);
@@ -163,7 +189,7 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             DrawEverything();
             refresh();
             wrefresh(loot);
-            delwin(invOp);
+            delwin(lootOp);
             if (entityInv[0]->itemID == NULL_ITEM_ID) return true; // if empty floor/npc inv, return to players
             else return false;
             return false;
@@ -174,7 +200,7 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             DrawEverything();
             refresh();
             wrefresh(loot);
-            delwin(invOp);
+            delwin(lootOp);
             if (entityInv[0]->itemID == NULL_ITEM_ID) return true;
             else return false;
         case 2: // Equip
@@ -184,20 +210,20 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             DrawEverything();
             refresh();
             wrefresh(loot);
-            delwin(invOp);
+            delwin(lootOp);
             if (entityInv[0]->itemID == NULL_ITEM_ID) return true;
             else return false;
         case 3: // Examine
             // Ascii art of the item or something here.
             refresh();
-            delwin(invOp);
+            delwin(lootOp);
             if (entityInv[0]->itemID == NULL_ITEM_ID) return true;
             else return false;
             break;
         case 4: // Exit
             // leave.
             refresh();
-            delwin(invOp);
+            delwin(lootOp);
             return true;
             break;
 
