@@ -15,6 +15,7 @@ bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
     }
     int n_options = map[player->pos.y][player->pos.x].invTail;
     bool escFlag = false;
+    bool moveTail = false;
     int cursor = 0;
     int choice = -1;
     int ch;
@@ -37,11 +38,19 @@ bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
                 return false;
             case 32: // SPB
                 choice = cursor;
-                escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
+                moveTail = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
+                if (cursor == n_options - 1){
+                    cursor--;
+                }
+                escFlag = moveTail;
                 break;
             case 10: // ENTER
                 choice = cursor;
-                escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
+                moveTail = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
+                if (cursor == n_options - 1){
+                    cursor--;
+                }
+                escFlag = moveTail;
                 break;
             default:
                 break;
