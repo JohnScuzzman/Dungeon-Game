@@ -38,50 +38,68 @@ bool MoveInventoryCursor (WINDOW *menu, WINDOW *desc, WINDOW *loot){
     }
     int n_options = player->invTail;
     bool escFlag = false;
-    bool quitMenu = false;
+    bool moveTail = false;
     int cursor = 0;
     int choice = -1;
     int ch;
     /* First Render of Menu*/
     RenderInventoryMenu(menu, desc, loot, cursor, n_options, playerInv);
     while(!escFlag) {
-    n_options = player->invTail;
-    ch = wgetch(menu);
-    escFlag = CheckEscape(ch);
-    switch(ch) {
-        case KEY_UP:
-            if (cursor == 0) cursor = n_options - 1;
-            else cursor--;
-            break;
-        case KEY_DOWN: 
-            if (cursor == n_options - 1) cursor = 0;
-            else cursor++;
-            break;
-        case KEY_RIGHT: 
-            if (is_keypad(menu) == TRUE && map[player->pos.y][player->pos.x].inventory[0].itemID != NULL_ITEM_ID){
-                keypad(menu, FALSE);
-                keypad(loot, TRUE);
-                escFlag = MoveLootCursor(menu, desc, loot, playerInv);
-                keypad(menu, TRUE);
-                keypad(loot, FALSE);
-                //TODO -> escFlag = MakeLootMenu(); Make a loot menu work for this
-            }
+        n_options = player->invTail;
+        ch = wgetch(menu);
+        escFlag = CheckEscape(ch);
+        switch(ch) {
+            case KEY_UP:
+                if (cursor == 0) cursor = n_options - 1;
+                else cursor--; 
                 break;
-        case 32: // SPB
-            choice = cursor;
-            escFlag = MakeItemOptionsWindow(playerInv, choice, n_options, menu, loot);
-            break;
-        case 10: // ENTER
-            choice = cursor;
-            escFlag = MakeItemOptionsWindow(playerInv, choice, n_options, menu, loot);
-            break;
-        default:
-            break;
+            case KEY_DOWN: 
+                if (cursor == n_options - 1) cursor = 0;
+                else cursor++;
+                break;
+            case KEY_RIGHT: 
+                if (is_keypad(menu) == TRUE && map[player->pos.y][player->pos.x].inventory[0].itemID != NULL_ITEM_ID){
+                    keypad(menu, FALSE);
+                    keypad(loot, TRUE);
+                    moveTail = MoveLootCursor(menu, desc, loot, playerInv);
+                    n_options = player->invTail;
+                    if(moveTail) {
+                        cursor = n_options - 1;
+                    }
+                    keypad(menu, TRUE);
+                    keypad(loot, FALSE);
+                }
+                break;
+            case 32: // SPB
+                choice = cursor;
+                moveTail = MakeItemOptionsWindow(playerInv, choice, n_options, menu, loot);
+                if(moveTail) {
+                    if (cursor == n_options - 1){
+                        cursor--;
+                    }
+                    moveTail = false;
+                }
+                escFlag = moveTail;
+                break;
+            case 10: // ENTER
+                choice = cursor;
+                moveTail = MakeItemOptionsWindow(playerInv, choice, n_options, menu, loot);
+                if(moveTail) {
+                    if (cursor == n_options - 1){
+                        cursor--;
+                    }
+                    moveTail = false;
+                }
+                escFlag = moveTail;
+                break;
+            default:
+                break;
         }
-    RenderInventoryMenu(menu, desc, loot, cursor, n_options, playerInv);
+        RenderInventoryMenu(menu, desc, loot, cursor, n_options, playerInv);
     }
     return false;
 }
+
 
 void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** playerInv) {
     int y = 3; // Items starting pos within window.
@@ -131,16 +149,16 @@ bool MakeItemOptionsWindow(Item** playerInv, int choice, int n_options, WINDOW *
         unEquipMenu = true;
     }
     char *options1[] = {
+        "Drop",
     "Equip",
     "Transfer",
-    "Drop",
     "Examine",
     "Exit",
     };
     char *options2[] = {
+        "Drop",
     "Unequip",
     "Transfer",
-    "Drop",
     "Examine",
     "Exit",
     };
@@ -233,9 +251,18 @@ void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** option
 }
 
 /* Selects an option from the tiny one above and acts based on the chosen selection. */
+/* Returns true if the player drops their last item.*/
 bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot, bool unEquipMenu) {
     switch(newChoice){
-        case 0: // Equip / Unequip
+        case 0: // Drop
+            Unequip(*playerInv[prevChoice]);
+            RemoveFromPlayerInventory(*playerInv[prevChoice]);
+            DrawEverything();
+            refresh();
+            delwin(invOp);
+            return true;
+            break;
+        case 1: // Equip
             EquipOrUnequip(playerInv, unEquipMenu, prevChoice);
             DrawEverything();
             refresh();
@@ -243,26 +270,14 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
             delwin(invOp);
             return false;
             break;
-
-        case 1: // Transfer
-            // ChooseEquipMenu (Item** playerInv, bool unEquipMenu, int prevChoice)
-            // keypad(menu, FALSE);
-            // keypad(loot, TRUE);
-            // LootMenu(loot, 0, -1, playerInv);
-            refresh();
-            delwin(invOp);
-            return false;
-            break;
-
-        case 2: // Drop
+        case 2: // Transfer
             Unequip(*playerInv[prevChoice]);
             RemoveFromPlayerInventory(*playerInv[prevChoice]);
             DrawEverything();
             refresh();
             delwin(invOp);
-            return false;
+            return true;
             break;
-
         case 3: // Examine
             // Do the load window here
             refresh();
@@ -318,6 +333,7 @@ void EquipOrUnequip (Item** playerInv, bool unEquipMenu, int prevChoice) {
     }
 }
 
+/* Makes and prints the inventory menus headers*/
 void PrintInventoryHeaders(WINDOW* menu, WINDOW* desc, WINDOW* loot) {
     int titleRight = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
     int center = ((WINDOW_WIDTH - OFFSET) / 2) + 3;
@@ -338,129 +354,3 @@ void PrintInventoryHeaders(WINDOW* menu, WINDOW* desc, WINDOW* loot) {
     mvwprintw(loot, top, center - 3, map[player->pos.y][player->pos.x].entityName);
     mvwhline(loot, top + 1, top, ACS_HLINE, (WINDOW_WIDTH) - 2);
 }
-
-// void RenderLootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv) {
-//     int y = 3;
-//     int titleRight = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
-//     int center = ((WINDOW_WIDTH - OFFSET) / 2) + 3;
-//     int numLines = WINDOW_WIDTH - 2 - titleRight;
-//     int top = 1;
-//     /* Update players info in real time. */
-
-//     box(loot, 0, 0);
-//     mvwprintw(loot, top, center - 3, map[player->pos.y][player->pos.x].entityName);
-//     mvwhline(loot, top + 1, top, ACS_HLINE, (WINDOW_WIDTH) - 2);
-    
-//     for (int i = 0; i < map[player->pos.y][player->pos.x].invTail; i++) {
-//         if (cursor == i) {
-//             wattron(loot, A_REVERSE);
-//             mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName);
-//             switch (map[player->pos.y][player->pos.x].inventory[i].type) {
-//                 case WEAPON:
-//                     Weapon weapon;
-//                     weapon = GetWeaponFromItem(map[player->pos.y][player->pos.x].inventory[i].itemID);
-//                     mvwprintw(loot, 3, 2, "DMG: %d - %d", weapon.minDMG, weapon.maxDMG);
-//                     mvwprintw(loot, 4, 2, "Range: %d", weapon.range);
-//                     mvwprintw(loot, 5, 2, "Value: %d", weapon.item.value);
-//                     break;
-//                 case ARMOR:
-//                     Armor armor;
-//                     armor = GetArmorFromItem(map[player->pos.y][player->pos.x].inventory[i].itemID);
-//                     mvwprintw(loot, 3, 2, "AC: %d", armor.AC);
-//                     char* armorType = GetArmorType(armor.type);
-//                     mvwprintw(loot, 4, 2, "Type: %s", armorType);
-//                     mvwprintw(loot, 5, 2, "Value: %d", armor.item.value);
-//                     break;
-//                 default:
-//                     break;
-//             }
-//             wattroff(loot, A_REVERSE);
-//         }
-//         else {
-//             mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName);
-//         }
-//     y++;
-//     wrefresh(loot);
-//     }
-// }
-
-// bool LootMenu(WINDOW *loot, int cursor, int n_options, Item** entityInv) {
-//     bool escFlag = false;
-//     int lootChoice = -1;
-//     int ch;
-//     RenderLootMenu(loot, cursor, n_options, entityInv);
-//     while(!escFlag) {
-//         ch = wgetch(loot);
-//         escFlag = CheckEscape(ch);
-//         switch(ch) {
-//             case KEY_UP:
-//                 if (cursor == 0) {
-//                     cursor = n_options - 1;
-//                 }
-//                 else {
-//                     cursor--;
-//                 }
-//                 break;
-//             case KEY_DOWN: 
-//                 if (cursor == n_options - 1) {
-//                     cursor = 0;
-//                 }
-//                 else {
-//                     cursor++;
-//                 }
-//                 break;
-//             case 32: // SPB
-//                 lootChoice = cursor;
-//                 escFlag = true;
-//                 break;
-//             case 10: // ENTER
-//                 lootChoice = cursor;
-//                 escFlag = true;
-//                 break;
-//             default:
-//                 break;
-//         }
-//     RenderLootMenu(loot, cursor, n_options, entityInv);
-//     }
-//     return (LootChoice(loot, lootChoice));
-// }
-
-// bool LootChoice(WINDOW* loot, int lootChoice) {
-//     switch(lootChoice){ 
-//         case 0: // Equip / Unequip
-//         refresh();
-//         delwin(loot);
-//         return false;
-//         break;
-
-//     case 1: // Transfer
-//         refresh();
-//         delwin(loot);
-//         return false;
-//         break;
-
-//     case 2: // Drop
-//         refresh();
-//         delwin(loot);
-//         return false;
-//         break;
-
-//     case 3: // Examine
-//         refresh();
-//         delwin(loot);
-//         return false;
-//         break;
-//     case 4:
-//         refresh();
-//         delwin(loot);
-//         return false;
-//         break;
-
-//     default:
-//         refresh();
-//         delwin(loot);
-//         return false;
-//         break;
-//     }
-//     return true;
-// }
