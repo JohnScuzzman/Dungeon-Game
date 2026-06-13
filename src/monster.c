@@ -197,9 +197,6 @@ void UpdateMonsterMap(Entity* monster, int n_monsters) {
         if((monster + i)->isMonster) {
             map[y][x] = monster[i];
         }
-        if(!((monster + i)->isMonster) && !(map[y][x].isMonster)) {
-            map[y][x] = monster[i];
-        }
     }
 }
 
@@ -209,7 +206,9 @@ void UpdateMonsters(Entity* monster, int n_monsters) {
         int y, x;
         y = monster[i].pos.y;
         x = monster[i].pos.x;
-        monster[i] = map[y][x];
+        if((map[y][x]).isMonster && !(monster[i].isMonster)) {
+            monster[i] = map[y][x];
+        }
     }
 }
 
