@@ -153,6 +153,7 @@ void EquipArmor(Item target) {
     else {
         Unequip(player->equippedArmor.item);
         player->equippedArmor = GetArmorFromItem(target.itemID);
+        player->playerStats.AC = player->equippedArmor.AC;
     };
 }
 
