@@ -8,6 +8,7 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
 {   
     if (map[pos.y][pos.x].noCollision) {
         Entity monster = {0};
+        AssignMonsterDefaults(&monster, pos, monsterID);
         switch (RNG) {
             /* Call functions from assign.c */
             case 0:
@@ -26,7 +27,6 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
             AssignGoblinWarrior(&monster);
             break; 
         }
-        AssignMonsterDefaults(&monster, pos, monsterID);
         return monster;
     }
     else { 
