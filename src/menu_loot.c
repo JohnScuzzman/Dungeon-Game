@@ -4,6 +4,10 @@
 #define WINDOW_HEIGHT 47
 #define OFFSET 11
 
+
+/*
+Should only return true if the loot menu is empty.
+*/
 bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
     Item* entityInv[INVENTORY_SIZE];
     for(int i = 0; i < INVENTORY_SIZE; i++) {
@@ -11,7 +15,6 @@ bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
     }
     int n_options = map[player->pos.y][player->pos.x].invTail;
     bool escFlag = false;
-    bool quitMenu = false;
     int cursor = 0;
     int choice = -1;
     int ch;
@@ -35,19 +38,17 @@ bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
             case 32: // SPB
                 choice = cursor;
                 escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
-                if(entityInv[0] == NULL_ITEM_ID) return false;
                 break;
             case 10: // ENTER
                 choice = cursor;
                 escFlag = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
-                if(entityInv[0] == NULL_ITEM_ID) return false;
                 break;
             default:
                 break;
             }
         RenderLootMenu(menu, desc, loot, cursor, n_options, entityInv, playerInv);
     }
-    return false;
+    return true;
 }
 
 void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_options, Item** entityInv, Item** playerInv) {
@@ -192,7 +193,6 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             delwin(lootOp);
             if (entityInv[0]->itemID == NULL_ITEM_ID) return true; // if empty floor/npc inv, return to players
             else return false;
-            return false;
         case 1: // Take All
             //while entity Quantity of item > 0
             AddToPlayerInventory(*entityInv[prevChoice]);
@@ -224,7 +224,7 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             // leave.
             refresh();
             delwin(lootOp);
-            return true;
+            return false;
             break;
 
         default:
