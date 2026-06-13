@@ -344,7 +344,6 @@ void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_
 void RenderLootOptionMenu(WINDOW *lootOp, int cursor, int n_options, char** options);
 bool MakeLootOptionsWindow(Item** playerInv, Item** entityInv, int choice, int n_options, WINDOW *menu, WINDOW *loot);
 bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* lootOp, WINDOW* loot);
-int MoveCursorToLast(int n_options);
 
 //menu_pause.c functions
 bool MakePauseMenu();
