@@ -14,7 +14,9 @@ void CreatePlayerInv() {
         player->inventory[i].equippable = false;
         player->inventory[i].lootable = false;
         player->inventory[i].unequippable = true;
+        player->inventory[i].isEquipped = true;
         player->inventory[i].itemID = NULL_ITEM_ID;
+        player->inventory[i].quantity = 0;
         player->inventory[i].type = NULL_ITEM_TYPE;
         strcpy(player->inventory[i].itemName, " ");
     }
@@ -25,7 +27,9 @@ void CreateMonsterInv(Entity* monster) {
         monster->inventory[i].equippable = false;
         monster->inventory[i].lootable = false;
         monster->inventory[i].unequippable = true;
+        monster->inventory[i].isEquipped = false;
         monster->inventory[i].itemID = NULL_ITEM_ID;
+        monster->inventory[i].quantity = 0;
         monster->inventory[i].type = NULL_ITEM_TYPE;
         strcpy(monster->inventory[i].itemName, " ");
     }
@@ -37,7 +41,9 @@ Item* CreateItemTable() {
     items[NULL_ITEM_ID].equippable = false;
     items[NULL_ITEM_ID].lootable = false;
     items[NULL_ITEM_ID].unequippable = true;
+    items[NULL_ITEM_ID].isEquipped = false;
     items[NULL_ITEM_ID].itemID = NULL_ITEM_ID;
+    items[NULL_ITEM_ID].quantity = 0;
     items[NULL_ITEM_ID].type = NULL_ITEM_TYPE;
     strcpy(items[NULL_ITEM_ID].itemName, " ");
     strcpy(items[NULL_ITEM_ID].itemDesc, " ");
@@ -50,57 +56,107 @@ Item* CreateItemTable() {
     return items;
 }
 
-void AddToNPCInventory(Entity* npc, Item newItem) {
+void AddToNPCInventory(Entity* npc, Item newItem, int itemQuantity) {
     if(npc->invTail == (INVENTORY_SIZE - 1)) {
         return;
     }
+    for (int i = 0; i < npc->invTail; i++) {
+        if(npc->inventory[i].itemID == newItem.itemID && npc->inventory[i].quantity > 0) {
+            npc->inventory[i].quantity += itemQuantity;
+            return;
+        }
+    }
     npc->inventory[npc->invTail] = newItem;
+    npc->inventory[npc->invTail].quantity = itemQuantity;
     npc->invTail++;
+    return;
 }
 
-/* finds the item if its exists in the npc's inventory.*/
-/* If it does, add it to the map tile, deincrement tail from null item to last real item.*/
-/* Make the found item the tail item, copying it over, */
-/* Now that the tail has been copied, make tail*/
-void RemoveFromNPCInventory(Entity* npc, Item target) {
+/* finds the item if its exists in the npc's inventory.
+ Make the found item the tail item, copying it over, 
+ Now that the tail has been copied, make tail
+Unlike players remove item, Does not add it to the map.
+This is becuase removing a map's item would copy it again and effectively duplciate it accidentally.*/
+void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity) {
     if(npc->invTail == 0) {
         return;
     }
     for(int i = npc->invHead; i < npc->invTail; i++) {
         if(npc->inventory[i].itemID == target.itemID){
-            npc->invTail--;
-            npc->inventory[i] = npc->inventory[npc->invTail];
-            npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
+            if(npc->inventory[i].quantity == 0) return;
+            if(npc->inventory[i].quantity == 1) {
+                    npc->inventory[i].quantity--;
+                    npc->invTail--;
+                    npc->inventory[i] = npc->inventory[npc->invTail];
+                    npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
+                    return;
+            } 
+            else{
+                npc->inventory[i].quantity -= itemQuantity;
+                // Bounds checking
+                if(npc->inventory[i].quantity <= 0) {
+                    npc->inventory[i].quantity = 0;
+                    npc->invTail--;
+                    npc->inventory[i] = npc->inventory[npc->invTail];
+                    npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
+                    return;
+                }
+            }
         }
     }
 }
 
-void AddToPlayerInventory(Item newItem) {
+void AddToPlayerInventory(Item newItem, int itemQuantity) {
     if(player->invTail == (INVENTORY_SIZE - 1)) {
         return;
     }
+    for (int i = 0; i < player->invTail; i++) {
+        if(player->inventory[i].itemID == newItem.itemID && player->inventory[i].quantity > 0) {
+            player->inventory[i].quantity += itemQuantity;
+            return;
+        }
+    }
     player->inventory[player->invTail] = newItem;
+    player->inventory[player->invTail].quantity = itemQuantity;
     player->invTail++;
+    return;
 }
 
 /* Search player inventory for item, if found, set the item to the last item in the players inventory.*/
 /* Set the last item in players inventory to NULL, then move tail backward once.*/
 /* If equipped, unequip the item.*/
-void RemoveFromPlayerInventory(Item target) {
+void RemoveFromPlayerInventory(Item target, int itemQuantity) {
     if(player->invTail == 0) {
         return;
     }
     for (int i = 0; i < player->invTail; i++) {
         if(player->inventory[i].itemID == target.itemID) {
-            AddToNPCInventory(&map[player->pos.y][player->pos.x], player->inventory[i]);
-            player->invTail--;
-            player->inventory[i] = player->inventory[player->invTail];
-            player->inventory[player->invTail] = items[NULL_ITEM_ID];
+            if(player->inventory[i].quantity == 0) return;
+            if(player->inventory[i].quantity == 1) {
+                AddToNPCInventory(&map[player->pos.y][player->pos.x], player->inventory[i], 1);
+                player->invTail--;
+                player->inventory[i] = player->inventory[player->invTail];
+                player->inventory[player->invTail] = items[NULL_ITEM_ID];
+                return;
+            }
+            else{
+                player->inventory[i].quantity -= itemQuantity;
+                AddToNPCInventory(&map[player->pos.y][player->pos.x], player->inventory[i], itemQuantity);
+                if(player->inventory[i].quantity <= 0) {
+                    player->inventory[i].quantity = 0;
+                    player->invTail--;
+                    player->inventory[i] = player->inventory[player->invTail];
+                    player->inventory[player->invTail] = items[NULL_ITEM_ID];
+                }
+                return;
+            }
         }
     }
 }
+
 /*
 Helper method for Sort Inventory.
+Currently not implemented but will be used later in conjuction with Q-sort.
 */
 int CompareStrings(const void *a, const void *b) {
     const char *strA = *(const char **)a;
@@ -133,6 +189,7 @@ void EquipMelee(Item target) {
         Unequip(player->equippedMelee.item);
         player->equippedMelee = GetWeaponFromItem(target.itemID);
     }
+    player->equippedMelee.item.isEquipped = true;
 }
 
 void EquipRanged(Item target) {
@@ -142,7 +199,8 @@ void EquipRanged(Item target) {
     else {
         Unequip(player->equippedRanged.item);
         player->equippedRanged = GetWeaponFromItem(target.itemID);
-    };
+    }
+    player->equippedRanged.item.isEquipped = true;
 }
 
 void EquipArmor(Item target) {
@@ -154,22 +212,27 @@ void EquipArmor(Item target) {
         Unequip(player->equippedArmor.item);
         player->equippedArmor = GetArmorFromItem(target.itemID);
         player->playerStats.AC = player->equippedArmor.AC;
-    };
+    }
+    player->equippedArmor.item.isEquipped = true;
 }
 
 /* Unequips target item but does NOT add it back to player inventory. */
 void Unequip(Item target) {
     // If player is a humanoid class they get fists, otherwise they get claws.
     if (target.itemID == player->equippedMelee.item.itemID && player->raceID < DRAGONBORN) {
+        target.isEquipped = false;
         player->equippedMelee = Fists();
     }
     else if (target.itemID == player->equippedMelee.item.itemID) {
+        target.isEquipped = false;
         player->equippedMelee = Claws();
     }
     if (target.itemID == player->equippedRanged.item.itemID) {
+        target.isEquipped = false;
         player->equippedRanged = NoWeapon();
     }
     if (target.itemID == player->equippedArmor.item.itemID) {
+        target.isEquipped = false;
         player->equippedArmor = NoArmor();
         player->playerStats.AC = player->equippedArmor.AC;
     }
@@ -295,6 +358,7 @@ Weapon GetWeaponFromItem(int itemID) {
         case LIGHTNING_WAND: return LightningWand();
         case DUAL_FLINTLOCKS: return DualFlintlocks();
     }
+    return NoWeapon();
 }
 
 Armor GetArmorFromItem(int itemID) {
@@ -306,6 +370,7 @@ Armor GetArmorFromItem(int itemID) {
         case RANGERS_CLOAK: return RangersCloak();
         case METALLIC_SKIN: return MetallicSkin();
     }
+    return NoArmor();
 }
 
 char* GetArmorType(int ArmorType) {
@@ -317,6 +382,7 @@ char* GetArmorType(int ArmorType) {
         case POWER_ARMOR: return "Power Armor";
         case MAGIC_ARMOR: return "Magic Armor";
     }
+    return "None";
 }
 
 /* This suite of functions just checks if an item is a certain type and returns true if it is*/

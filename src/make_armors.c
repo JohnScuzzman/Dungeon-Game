@@ -7,9 +7,11 @@ These initialize the armors that will equipped to the player and npcs.
 Armor NoArmor() {
     Armor none;
     none.item.equippable = true;
+    none.item.unequippable = false;
+    none.item.isEquipped = false;
     none.item.type = NULL_ITEM_TYPE;
     none.item.itemID = NULL_ITEM_ID;
-    none.item.unequippable = false;
+    none.item.quantity = 0;
     none.item.value = 0;
     strcpy(none.item.itemName, "None");
     none.AC = 0;
@@ -20,9 +22,11 @@ Armor NoArmor() {
 Armor Rags() {
     Armor rags;
     rags.item.equippable = true;
+    rags.item.unequippable = false;
+    rags.item.isEquipped = false;
     rags.item.type = ARMOR;
     rags.item.itemID = RAGS; 
-    rags.item.unequippable = false;
+    rags.item.quantity = 0;
     rags.item.value = 2;
     strcpy(rags.item.itemName, "Rags");
     rags.AC = 0;
@@ -33,11 +37,13 @@ Armor Rags() {
 Armor Robes() {
     Armor robes;
     robes.item.equippable = true;
+    robes.item.unequippable = false;
+    robes.item.isEquipped = false;
     robes.item.type = ARMOR;
     robes.item.itemID = ROBES;
-    robes.item.unequippable = false;
-    strcpy(robes.item.itemName, "Robes");
+    robes.item.quantity = 0;
     robes.item.value = 10;
+    strcpy(robes.item.itemName, "Robes");
     robes.AC = 1;
     robes.type = LIGHT; 
     return robes;
@@ -46,9 +52,11 @@ Armor Robes() {
 Armor LeatherArmor() {
     Armor leatherArmor;
     leatherArmor.item.equippable = true;
+    leatherArmor.item.unequippable = false;
+    leatherArmor.item.isEquipped = false;
     leatherArmor.item.type = ARMOR;
     leatherArmor.item.itemID = LEATHER_ARMOR;
-    leatherArmor.item.unequippable = false;
+    leatherArmor.item.quantity = 0;
     leatherArmor.item.value = 30;
     strcpy(leatherArmor.item.itemName, "Leather Armor");
     leatherArmor.AC = 2;
@@ -59,9 +67,11 @@ Armor LeatherArmor() {
 Armor Chainmail() {
     Armor chainmail;
     chainmail.item.equippable = true;
+    chainmail.item.unequippable = false;
+    chainmail.item.isEquipped = false;
     chainmail.item.type = ARMOR;
     chainmail.item.itemID = CHAINMAIL;
-    chainmail.item.unequippable = false;
+    chainmail.item.quantity = 0;
     chainmail.item.value = 50;
     strcpy(chainmail.item.itemName, "Chainmail");
     chainmail.AC = 3;
@@ -72,9 +82,11 @@ Armor Chainmail() {
 Armor RangersCloak() {
     Armor rangersCloak;
     rangersCloak.item.equippable = true;
+    rangersCloak.item.unequippable = false;
+    rangersCloak.item.isEquipped = false;
     rangersCloak.item.type = ARMOR;
     rangersCloak.item.itemID = RANGERS_CLOAK;
-    rangersCloak.item.unequippable = false;
+    rangersCloak.item.quantity = 0;
     rangersCloak.item.value = 75;
     strcpy(rangersCloak.item.itemName, "Ranger's Cloak");
     rangersCloak.AC = 2;
@@ -85,9 +97,11 @@ Armor RangersCloak() {
 Armor MetallicSkin() {
     Armor metallicSkin;
     metallicSkin.item.equippable = true;
+    metallicSkin.item.unequippable = true;
+    metallicSkin.item.isEquipped = false;
     metallicSkin.item.type = ARMOR;
     metallicSkin.item.itemID = METALLIC_SKIN;
-    metallicSkin.item.unequippable = true;
+    metallicSkin.item.quantity = 0;
     metallicSkin.item.value = 200;
     strcpy(metallicSkin.item.itemName, "Metallic Skin");
     metallicSkin.AC = 4;
