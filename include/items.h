@@ -59,7 +59,9 @@ typedef struct {
   bool equippable;
   bool lootable;
   bool unequippable;
+  bool isEquipped;
   int itemID;
+  int quantity;
   int type;
   int value;
   char itemName[MAX_NAME_SIZE];

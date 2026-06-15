@@ -43,7 +43,7 @@ Attempts to turn the monster into a corpse, changing both map entity and monster
 void AssignCorpse(Entity* entity) {
     int x = entity->pos.x;
     int y = entity->pos.y;
-    AssignFloor(x,y);
+
     entity->ch = 'X';
     entity->color = COLOR_PAIR(VISIBLE_COLOR);
     entity->aggroFlag = false;
@@ -73,7 +73,18 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
 
-    //In theory this should also copy inventory?
+    // if(map[y][x].ch == 'X') {
+    //     // Save inventory
+    //     if(map[entity->pos.y][entity->pos.x].invTail > 0){
+    //         for(int i = 0; i < map[entity->pos.y][entity->pos.x].invTail; i++){
+    //             AddToNPCInventory(entity, map[entity->pos.y][entity->pos.x].inventory[i], map[entity->pos.y][entity->pos.x].inventory[i].quantity);
+    //         }
+    //     }
+    // }
+
+    AssignFloor(x,y); // DO NOT REMOVE
+
+    // Make the map tile the dead entity with the now combined inventories.
     map[entity->pos.y][entity->pos.x] = *entity;
 }
 
@@ -131,8 +142,8 @@ void AssignGoblinWarrior(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->entityArmor = Rags();
     monster->entityWeapon = Shortsword();
-    AddToNPCInventory(monster, items[RAGS]);
-    AddToNPCInventory(monster, items[SHORTSWORD]);
+    AddToNPCInventory(monster, items[RAGS], 1);
+    AddToNPCInventory(monster, items[SHORTSWORD], 1);
     monster->aggroRange = 15;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 2; // Their swords suck.
@@ -161,8 +172,8 @@ void AssignKoboldWarrior(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->entityArmor = LeatherArmor();
     monster->entityWeapon = Dagger();
-    AddToNPCInventory(monster, items[LEATHER_ARMOR]);
-    AddToNPCInventory(monster, items[DAGGER]);
+    AddToNPCInventory(monster, items[LEATHER_ARMOR], 1);
+    AddToNPCInventory(monster, items[DAGGER], 1);
     monster->aggroRange = 20;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = monster->entityWeapon.maxDMG;
@@ -187,8 +198,8 @@ void AssignGoblinRanger(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->entityArmor = Rags();
     monster->entityWeapon = Shortbow();
-    AddToNPCInventory(monster, items[RAGS]);
-    AddToNPCInventory(monster, items[SHORTBOW]);
+    AddToNPCInventory(monster, items[RAGS], 1);
+    AddToNPCInventory(monster, items[SHORTBOW], 1);
     monster->aggroRange = 15;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 3; // Their shortbows should suck more than normal.
@@ -213,8 +224,8 @@ void AssignHobgoblinWarrior(Entity* monster) {
     monster->entityStats.WIS = 8;
     monster->entityArmor = LeatherArmor();
     monster->entityWeapon = Scimitar();
-    AddToNPCInventory(monster, items[LEATHER_ARMOR]);
-    AddToNPCInventory(monster, items[SCIMITAR]);
+    AddToNPCInventory(monster, items[LEATHER_ARMOR], 1);
+    AddToNPCInventory(monster, items[SCIMITAR], 1);
     monster->aggroRange = 12;
     monster->entityStats.AC = ((monster->entityStats.STR - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = monster->entityWeapon.maxDMG;

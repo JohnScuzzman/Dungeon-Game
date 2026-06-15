@@ -73,8 +73,9 @@ bool MoveInventoryCursor (WINDOW *menu, WINDOW *desc, WINDOW *loot){
             case 32: // SPB
                 choice = cursor;
                 moveTail = MakeItemOptionsWindow(playerInv, choice, n_options, menu, loot);
+                n_options = player->invTail;
                 if(moveTail) {
-                    if (cursor == n_options - 1){
+                    if (cursor == n_options && cursor != 0){
                         cursor--;
                     }
                     moveTail = false;
@@ -84,8 +85,9 @@ bool MoveInventoryCursor (WINDOW *menu, WINDOW *desc, WINDOW *loot){
             case 10: // ENTER
                 choice = cursor;
                 moveTail = MakeItemOptionsWindow(playerInv, choice, n_options, menu, loot);
+                n_options = player->invTail;
                 if(moveTail) {
-                    if (cursor == n_options - 1){
+                    if (cursor == n_options && cursor != 0){
                         cursor--;
                     }
                     moveTail = false;
@@ -114,8 +116,9 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
 
         if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID) {
             wattron(menu, A_DIM);
-            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 2), " (Equipped)");
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 5), " (Equipped)");
             wattroff(menu, A_DIM);
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 3), "x%d", playerInv[i]->quantity);
         }
         if (cursor == i) {
             wattron(menu, A_REVERSE);
@@ -124,9 +127,11 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
             mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName);
             RenderItemInfo(desc, playerInv[cursor]);
             wattroff(menu, A_REVERSE);
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 3), "x%d", playerInv[i]->quantity); 
         }
         else {
             mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 3), "x%d", playerInv[i]->quantity);
             // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc);
         }
     y++;
@@ -135,6 +140,7 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
     y = 3;
     for (int i = 0; i < map[player->pos.y][player->pos.x].invTail; i++) {
             mvwprintw(loot, y, 2, "%s", map[player->pos.y][player->pos.x].inventory[i].itemName);
+            mvwprintw(loot, y, (strlen(map[player->pos.y][player->pos.x].inventory[i].itemName) + 3), "x%d", map[player->pos.y][player->pos.x].inventory[i].quantity);
             y++;
         }
     wrefresh(loot);
@@ -255,8 +261,8 @@ void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** option
 bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot, bool unEquipMenu) {
     switch(newChoice){
         case 0: // Drop
-            Unequip(*playerInv[prevChoice]);
-            RemoveFromPlayerInventory(*playerInv[prevChoice]);
+            if(playerInv[prevChoice]->quantity == 1) Unequip(*playerInv[prevChoice]);
+            RemoveFromPlayerInventory(*playerInv[prevChoice], 1);
             DrawEverything();
             refresh();
             delwin(invOp);
@@ -272,7 +278,7 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
             break;
         case 2: // Transfer
             Unequip(*playerInv[prevChoice]);
-            RemoveFromPlayerInventory(*playerInv[prevChoice]);
+            RemoveFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
             DrawEverything();
             refresh();
             delwin(invOp);

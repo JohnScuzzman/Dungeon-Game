@@ -39,7 +39,8 @@ bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
             case 32: // SPB
                 choice = cursor;
                 moveTail = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
-                if (cursor == n_options - 1){
+                n_options = map[player->pos.y][player->pos.x].invTail;
+                if (cursor == n_options && cursor != 0){
                     cursor--;
                 }
                 escFlag = moveTail;
@@ -47,7 +48,8 @@ bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv) {
             case 10: // ENTER
                 choice = cursor;
                 moveTail = MakeLootOptionsWindow(playerInv, entityInv, choice, n_options, menu, loot);
-                if (cursor == n_options - 1){
+                n_options = map[player->pos.y][player->pos.x].invTail;
+                if (cursor == n_options && cursor != 0){
                     cursor--;
                 }
                 escFlag = moveTail;
@@ -71,16 +73,21 @@ void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_
     
     for (int i = 0; i < player->invTail; i++){
         if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID) {
-            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
             wattron(menu, A_DIM);
-            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 2), " (Equipped)");
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 5), " (Equipped)");
             wattroff(menu, A_DIM);
+            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 3), "x%d", playerInv[i]->quantity);
         }
-        else mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
+        else {
+            mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 3), "x%d", playerInv[i]->quantity);
+            // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc);
+        }
         y++;
     }
-    y = 3;
 
+    y = 3;
     for (int i = 0; i < INVENTORY_SIZE; i++) {
         if (entityInv[i]->itemID != NULL_ITEM_ID) {
             if (cursor == i) {
@@ -89,9 +96,11 @@ void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_
                 mvwprintw(loot, y, 2, "%s", entityInv[i]->itemName);
                 RenderItemInfo(desc, entityInv[cursor]);
                 wattroff(loot, A_REVERSE);
+                mvwprintw(loot, y, (strlen(entityInv[i]->itemName) + 3), "x%d", entityInv[i]->quantity);
             }
             else {
                 mvwprintw(loot, y, 2, "%s", entityInv[i]->itemName);
+                mvwprintw(loot, y, (strlen(entityInv[i]->itemName) + 3), "x%d", entityInv[i]->quantity);
                 // mvwprintw(desc, y, 2, "%s\n", playerInv[cursor]->itemDesc);
             }
         }
@@ -194,8 +203,8 @@ void RenderLootOptionMenu(WINDOW *lootOp, int cursor, int n_options, char** opti
 bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* lootOp, WINDOW* loot) {
     switch(newChoice){
         case 0: // Take
-            AddToPlayerInventory(*entityInv[prevChoice]);
-            RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice]);
+            AddToPlayerInventory(*entityInv[prevChoice], 1);
+            RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice], 1);
             DrawEverything();
             refresh();
             wrefresh(loot);
@@ -204,8 +213,8 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             else return false;
         case 1: // Take All
             //while entity Quantity of item > 0
-            AddToPlayerInventory(*entityInv[prevChoice]);
-            RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice]);
+            AddToPlayerInventory(*entityInv[prevChoice], entityInv[prevChoice]->quantity);
+            RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice], entityInv[prevChoice]->quantity);
             DrawEverything();
             refresh();
             wrefresh(loot);
@@ -213,9 +222,9 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             if (entityInv[0]->itemID == NULL_ITEM_ID) return true;
             else return false;
         case 2: // Equip
-            AddToPlayerInventory(*entityInv[prevChoice]);
+            AddToPlayerInventory(*entityInv[prevChoice], 1);
             Equip(*entityInv[prevChoice]);
-            RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice]);
+            RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice], 1);
             DrawEverything();
             refresh();
             wrefresh(loot);
