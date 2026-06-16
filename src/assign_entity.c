@@ -27,6 +27,8 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
             AssignGoblinWarrior(&monster);
             break; 
         }
+        monster.entityStats.mana = monster.entityStats.maxMana;
+        monster.entityStats.HP = monster.entityStats.maxHP;
         return monster;
     }
     else { 
@@ -43,7 +45,6 @@ Attempts to turn the monster into a corpse, changing both map entity and monster
 void AssignCorpse(Entity* entity) {
     int x = entity->pos.x;
     int y = entity->pos.y;
-
     entity->ch = 'X';
     entity->color = COLOR_PAIR(VISIBLE_COLOR);
     entity->aggroFlag = false;
@@ -52,6 +53,7 @@ void AssignCorpse(Entity* entity) {
     entity->transparent = true;
     entity->seen = true;
     entity->visible = false;
+    entity->isMonster = true;
     entity->isMonster = false;
     entity->seenByPlayer = true;
     entity->aggroRange = 0;
@@ -73,18 +75,7 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
 
-    // if(map[y][x].ch == 'X') {
-    //     // Save inventory
-    //     if(map[entity->pos.y][entity->pos.x].invTail > 0){
-    //         for(int i = 0; i < map[entity->pos.y][entity->pos.x].invTail; i++){
-    //             AddToNPCInventory(entity, map[entity->pos.y][entity->pos.x].inventory[i], map[entity->pos.y][entity->pos.x].inventory[i].quantity);
-    //         }
-    //     }
-    // }
-
     AssignFloor(x,y); // DO NOT REMOVE
-
-    // Make the map tile the dead entity with the now combined inventories.
     map[entity->pos.y][entity->pos.x] = *entity;
 }
 
@@ -100,6 +91,7 @@ void AssignFloor(int x, int y) {
     map[y][x].transparent = true;
     map[y][x].seen = false;
     map[y][x].visible = false;
+    map[y][x].isCorpse = false;
     map[y][x].isMonster = false;
     map[y][x].seenByPlayer = false;
     map[y][x].aggroRange = 0;
@@ -250,11 +242,10 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->seen = false;
     monster->transparent = false;
     monster->visible = false;
+    monster->isCorpse = false;
     monster->isMonster = true;
     monster->seenByPlayer = false;
     monster->entityID = monsterID;
-    monster->entityStats.mana = monster->entityStats.maxMana;
-    monster->entityStats.HP = monster->entityStats.maxHP;
     monster->color = COLOR_PAIR(VISIBLE_COLOR);
     monster->pos.y = m_pos.y;
     monster->pos.x = m_pos.x;

@@ -126,6 +126,7 @@ typedef struct {
   bool seen;
   bool transparent;
   bool visible;
+  bool isCorpse;
   bool isMonster;
   bool seenByPlayer;
   char ch;
@@ -274,6 +275,7 @@ bool LineOfSight(Position origin, Position target);
 void MakeFOV(Player* playerint);
 
 //items.c functions
+void CombineEntityInventories(Entity* npc1, Entity* npc2);
 void CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
