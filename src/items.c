@@ -122,6 +122,18 @@ void AddToPlayerInventory(Item newItem, int itemQuantity) {
     return;
 }
 
+/*
+Adds npc1's inventory to npc2's
+*/
+void CombineEntityInventories(Entity* npc1, Entity* npc2) {
+    int i = 0;
+        while(npc1->inventory[i].itemID != NULL_ITEM_ID){
+            AddToNPCInventory(npc2, npc1->inventory[i], npc1->inventory[i].quantity);
+            RemoveFromNPCInventory(npc1, npc1->inventory[i], npc1->inventory[i].quantity);
+            i++;
+        }
+    }
+
 /* Search player inventory for item, if found, set the item to the last item in the players inventory.*/
 /* Set the last item in players inventory to NULL, then move tail backward once.*/
 /* If equipped, unequip the item.*/
