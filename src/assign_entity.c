@@ -53,7 +53,7 @@ void AssignCorpse(Entity* entity) {
     entity->transparent = true;
     entity->seen = true;
     entity->visible = false;
-    entity->isMonster = true;
+    entity->isCorpse = true;
     entity->isMonster = false;
     entity->seenByPlayer = true;
     entity->aggroRange = 0;
@@ -74,7 +74,6 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.EXP = 0;
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
-
     AssignFloor(x,y); // DO NOT REMOVE
     map[entity->pos.y][entity->pos.x] = *entity;
 }

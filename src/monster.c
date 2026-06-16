@@ -194,16 +194,13 @@ void UpdateMonsterMap(Entity* monster, int n_monsters) {
         int y, x;
         y = (monster + i)->pos.y;
         x = (monster + i)->pos.x;
-        if((monster + i)->isMonster && (map[y][x].isCorpse)) {
-            CombineEntityInventories(&map[y][x], (monster+ i));
-        }
         // If monster, stay as monster
         if((monster + i)->isMonster) {
             map[y][x] = monster[i];
         }
         // If corpse, stay as a corpse.
-        else if(!((monster + i)->isMonster) && !(map[y][x].isMonster)) {
-            map[y][x] = monster[i];
+        if(!((monster + i)->isMonster) && !(map[y][x].isMonster)) {
+            monster[i] = map[y][x];
         }
     }
 }
