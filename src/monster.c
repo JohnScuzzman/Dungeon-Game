@@ -98,6 +98,7 @@ bool MoveTowards(Entity* entity, Position pos) {
         // up & left
         if (y > pos.y && x > pos.x) {
             if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+                if(map[entity->pos.y - 1][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x - 1)], entity);
                 MoveUpLeft(entity);
                 KeepMonsterIntegrity(entity);
                 map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
@@ -109,6 +110,7 @@ bool MoveTowards(Entity* entity, Position pos) {
         // down & left
         else if (y < pos.y && x > pos.x) {
             if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+                if (map[entity->pos.y + 1][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x - 1)], entity);
                 MoveDownLeft(entity);
                 KeepMonsterIntegrity(entity);
                 map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
@@ -120,6 +122,7 @@ bool MoveTowards(Entity* entity, Position pos) {
         // down & right
         else if (y < pos.y && x < pos.x) {
             if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+                if (map[entity->pos.y + 1][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x + 1)], entity);
                 MoveDownRight(entity);
                 KeepMonsterIntegrity(entity);
                 map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
@@ -131,6 +134,7 @@ bool MoveTowards(Entity* entity, Position pos) {
         // move up & right
         else if (y > pos.y && x < pos.x) {
             if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+                if (map[entity->pos.y - 1][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x + 1)], entity);
                 MoveUpRight(entity);
                 KeepMonsterIntegrity(entity);
                 map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
@@ -142,6 +146,7 @@ bool MoveTowards(Entity* entity, Position pos) {
         //move up, y--
         if (y > pos.y) {
             if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
+                if (map[entity->pos.y - 1][(entity->pos.x)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x)], entity);
                 MoveUp(entity);
                 KeepMonsterIntegrity(entity);
                 map[entity->pos.y + 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
@@ -153,6 +158,7 @@ bool MoveTowards(Entity* entity, Position pos) {
         //move left, x--
         else if (x > pos.x) {
             if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+                if (map[entity->pos.y][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y][(entity->pos.x - 1)], entity);
                 MoveLeft(entity);
                 KeepMonsterIntegrity(entity);
                 map[entity->pos.y][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
@@ -164,6 +170,7 @@ bool MoveTowards(Entity* entity, Position pos) {
         //move down, y++
         else if (y < pos.y) {
             if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
+                if (map[entity->pos.y + 1][(entity->pos.x)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x)], entity);
                 MoveDown(entity);
                 KeepMonsterIntegrity(entity);
                 map[entity->pos.y - 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
@@ -175,6 +182,7 @@ bool MoveTowards(Entity* entity, Position pos) {
         //move right, x++
         else if (x < pos.x) {
             if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+                if (map[entity->pos.y][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y][(entity->pos.x + 1)], entity);
                 MoveRight(entity);
                 KeepMonsterIntegrity(entity);
                 map[entity->pos.y][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
@@ -194,13 +202,13 @@ void UpdateMonsterMap(Entity* monster, int n_monsters) {
         int y, x;
         y = (monster + i)->pos.y;
         x = (monster + i)->pos.x;
-        // If monster, stay as monster
-        if((monster + i)->isMonster) {
-            map[y][x] = monster[i];
-        }
-        // If corpse, stay as a corpse.
+        // If corpse, stay as a corpse. Keep living monster integrity.
         if(!((monster + i)->isMonster) && !(map[y][x].isMonster)) {
             monster[i] = map[y][x];
+        }
+        // If monster, stay as monster
+        else if ((monster + i)->isMonster) {
+            map[y][x] = monster[i];
         }
     }
 }
