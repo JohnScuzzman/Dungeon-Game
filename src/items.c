@@ -106,6 +106,23 @@ void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity) {
     }
 }
 
+/*
+Adds npc1's inventory to npc2's
+*/
+void CombineEntityInventories(Entity* npc1, Entity* npc2) {
+    npc1->invTail;
+    int i = 0;
+    while(i < npc1->invTail){
+        AddToNPCInventory(npc2, npc1->inventory[i], npc1->inventory[i].quantity);
+        i++;
+    }
+    i = 0;
+    while(npc1->invTail != 0){
+        RemoveFromNPCInventory(npc1, npc1->inventory[i], npc1->inventory[i].quantity);
+        i++;
+    }
+}
+
 void AddToPlayerInventory(Item newItem, int itemQuantity) {
     if(player->invTail == (INVENTORY_SIZE - 1)) {
         return;
@@ -122,17 +139,6 @@ void AddToPlayerInventory(Item newItem, int itemQuantity) {
     return;
 }
 
-/*
-Adds npc1's inventory to npc2's
-*/
-void CombineEntityInventories(Entity* npc1, Entity* npc2) {
-    int i = 0;
-        while(npc1->inventory[i].itemID != NULL_ITEM_ID){
-            AddToNPCInventory(npc2, npc1->inventory[i], npc1->inventory[i].quantity);
-            RemoveFromNPCInventory(npc1, npc1->inventory[i], npc1->inventory[i].quantity);
-            i++;
-        }
-    }
 
 /* Search player inventory for item, if found, set the item to the last item in the players inventory.*/
 /* Set the last item in players inventory to NULL, then move tail backward once.*/
@@ -165,6 +171,7 @@ void RemoveFromPlayerInventory(Item target, int itemQuantity) {
         }
     }
 }
+
 
 /*
 Helper method for Sort Inventory.
