@@ -274,6 +274,9 @@ bool IsInMap(int y, int x);
 bool LineOfSight(Position origin, Position target);
 void MakeFOV(Player* playerint);
 
+// handle_crash.c functions
+void handle_crash(int sig);
+
 //items.c functions
 void CombineEntityInventories(Entity* npc1, Entity* npc2);
 void CreatePlayerInv();

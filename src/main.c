@@ -39,6 +39,12 @@ Armor* armors;
 
 int main(void)
 {
+  // Register crash handlers before doing anything else
+  signal(SIGBUS, handle_crash);
+  signal(SIGSEGV, handle_crash);
+  // Optional: Catch Ctrl+C if you want to clean up on manual exits
+  // signal(SIGINT, handle_crash);
+  
   /* Check if user is playing in a compatible terminal. */
   bool compatibleTerminal;
   compatibleTerminal = NcursesSetup();
