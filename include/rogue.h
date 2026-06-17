@@ -6,6 +6,7 @@
 
 
 #include <ncurses.h>
+#include <signal.h>
 #include <stdlib.h>
 #include <time.h> // rng related stuff
 #include "math.h" // complex math funtions
