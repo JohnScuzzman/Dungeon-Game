@@ -94,6 +94,7 @@ It then resets the monsters moveflags and games combatHistory.
 void RefreshGamestate(Entity* mptr, int n_monsters) {
     // UpdateMonsterCorpses(mptr, n_monsters);
     UpdateMonsterMap(mptr, n_monsters);
+    UpdateMonsterCorpses(mptr, n_monsters);
     MakeFOV(player);
     DrawEverything();
     ResetMoveFlags(mptr, n_monsters);

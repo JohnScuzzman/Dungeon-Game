@@ -46,6 +46,7 @@ void AssignCorpse(Entity* entity) {
     int x = entity->pos.x;
     int y = entity->pos.y;
     entity->ch = 'X';
+    entity->staticCh = 'X';
     entity->color = COLOR_PAIR(VISIBLE_COLOR);
     entity->aggroFlag = false;
     entity->hasMoved = true;
