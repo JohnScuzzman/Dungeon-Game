@@ -58,7 +58,6 @@ void AssignCorpse(Entity* entity, int n_monsters) {
     entity->isMonster = false;
     entity->seenByPlayer = true;
     entity->aggroRange = 0;
-    entity->entityID = 0;
     entity->entityStats.ATK = 0;
     entity->entityStats.CHA = 0;
     entity->entityStats.CON = 0;
@@ -75,30 +74,41 @@ void AssignCorpse(Entity* entity, int n_monsters) {
     entity->entityStats.EXP = 0;
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
-    CombineCorpseInventories(entity, n_monsters);
+    for(int i = 0; i < n_monsters; i++){
+        if (((mptr + i)->pos.x == entity->pos.x) &&
+        ((mptr + i)->pos.y == entity->pos.y) &&
+        ((mptr + i)->entityID > 0) &&
+        ((mptr + i)->entityID != entity->entityID) &&
+        ((mptr + i)->invTail > 0)) {
+            CombineEntityInventories((mptr + i), entity);
+            (mptr + i)->entityID = 0; // mark as zero so we dont loot again.
+            AssignFloor(x,y); // DO NOT REMOVE
+            map[y][x] = *entity;
+            return;
+        }
+    }
     AssignFloor(x,y); // DO NOT REMOVE
-    map[entity->pos.y][entity->pos.x] = *entity;
+    map[y][x] = *entity;
 }
 
 /* 
 Assigns the entity at the given coordinates to a floor, and zeroes out all the information.
 */
 void AssignFloor(int x, int y) {
-    map[y][x].ch = '.';
-    map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
     map[y][x].aggroFlag = false;
     map[y][x].hasMoved = false;
     map[y][x].noCollision = true;
-    map[y][x].transparent = true;
     map[y][x].seen = false;
+    map[y][x].transparent = true;
     map[y][x].visible = false;
     map[y][x].isCorpse = false;
     map[y][x].isMonster = false;
     map[y][x].seenByPlayer = false;
+    map[y][x].ch = '.';
+    map[y][x].staticCh = '.';
     map[y][x].aggroRange = 0;
+    map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
     map[y][x].entityID = 0;
-    map[y][x].invHead = 0;
-    map[y][x].invTail = 0;
     map[y][x].entityStats.ATK = 0;
     map[y][x].entityStats.CHA = 0;
     map[y][x].entityStats.CON = 0;
@@ -115,12 +125,20 @@ void AssignFloor(int x, int y) {
     map[y][x].entityStats.EXP = 0;
     map[y][x].entityStats.maxDMG = 0;
     map[y][x].entityStats.minDMG = 0;
-    map[y][x].entityWeapon = NoWeapon();
+    map[y][x].pos.x = x;
+    map[y][x].pos.y = y;
+    map[y][x].mapInfo.oldSeen = false;
+    map[y][x].mapInfo.newSeen = false;
+    map[y][x].mapInfo.oldVisible = false;
+    map[y][x].mapInfo.newSeen = false;
+    map[y][x].mapInfo.oldChar = '.';
+    map[y][x].mapInfo.newChar = '.';
     map[y][x].entityArmor = NoArmor();
+    map[y][x].entityWeapon = NoWeapon();
+    ClearEntityInventory(&map[y][x]);
     strcpy(map[y][x].entityClass, "None");
     strcpy(map[y][x].entityName, "Floor");
     strcpy(map[y][x].entityRace, "None");
-
 }
 
 
@@ -250,6 +268,9 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->color = COLOR_PAIR(VISIBLE_COLOR);
     monster->pos.y = m_pos.y;
     monster->pos.x = m_pos.x;
+    monster->pos.y = m_pos.y;
+    monster->lastPos.x = m_pos.x;
+    monster->lastPos.y = m_pos.y;
     monster->playerLastPos.x = 0;
     monster->playerLastPos.y = 0;
 }
