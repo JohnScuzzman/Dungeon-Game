@@ -98,9 +98,10 @@ bool MoveTowards(Entity* entity, Position pos) {
         // up & left
         if (y > pos.y && x > pos.x) {
             if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                if(map[entity->pos.y - 1][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x - 1)], entity);
+                // if(map[entity->pos.y - 1][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x - 1)], entity);
                 MoveUpLeft(entity);
                 KeepMonsterIntegrity(entity);
+                AssignFloor(entity->pos.x, entity->pos.y);
                 map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -110,9 +111,10 @@ bool MoveTowards(Entity* entity, Position pos) {
         // down & left
         else if (y < pos.y && x > pos.x) {
             if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                if (map[entity->pos.y + 1][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x - 1)], entity);
+                // if (map[entity->pos.y + 1][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x - 1)], entity);
                 MoveDownLeft(entity);
                 KeepMonsterIntegrity(entity);
+                AssignFloor(entity->pos.x, entity->pos.y);
                 map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -122,9 +124,10 @@ bool MoveTowards(Entity* entity, Position pos) {
         // down & right
         else if (y < pos.y && x < pos.x) {
             if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                if (map[entity->pos.y + 1][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x + 1)], entity);
+                // if (map[entity->pos.y + 1][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x + 1)], entity);
                 MoveDownRight(entity);
                 KeepMonsterIntegrity(entity);
+                AssignFloor(entity->pos.x, entity->pos.y);
                 map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -134,9 +137,10 @@ bool MoveTowards(Entity* entity, Position pos) {
         // move up & right
         else if (y > pos.y && x < pos.x) {
             if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                if (map[entity->pos.y - 1][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x + 1)], entity);
+                // if (map[entity->pos.y - 1][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x + 1)], entity);
                 MoveUpRight(entity);
                 KeepMonsterIntegrity(entity);
+                AssignFloor(entity->pos.x, entity->pos.y);
                 map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -146,9 +150,10 @@ bool MoveTowards(Entity* entity, Position pos) {
         //move up, y--
         if (y > pos.y) {
             if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
-                if (map[entity->pos.y - 1][(entity->pos.x)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x)], entity);
+                // if (map[entity->pos.y - 1][(entity->pos.x)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x)], entity);
                 MoveUp(entity);
                 KeepMonsterIntegrity(entity);
+                AssignFloor(entity->pos.x, entity->pos.y);
                 map[entity->pos.y + 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -158,9 +163,10 @@ bool MoveTowards(Entity* entity, Position pos) {
         //move left, x--
         else if (x > pos.x) {
             if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                if (map[entity->pos.y][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y][(entity->pos.x - 1)], entity);
+                // if (map[entity->pos.y][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y][(entity->pos.x - 1)], entity);
                 MoveLeft(entity);
                 KeepMonsterIntegrity(entity);
+                AssignFloor(entity->pos.x, entity->pos.y);
                 map[entity->pos.y][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -170,9 +176,10 @@ bool MoveTowards(Entity* entity, Position pos) {
         //move down, y++
         else if (y < pos.y) {
             if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
-                if (map[entity->pos.y + 1][(entity->pos.x)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x)], entity);
+                // if (map[entity->pos.y + 1][(entity->pos.x)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x)], entity);
                 MoveDown(entity);
                 KeepMonsterIntegrity(entity);
+                AssignFloor(entity->pos.x, entity->pos.y);
                 map[entity->pos.y - 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -182,9 +189,10 @@ bool MoveTowards(Entity* entity, Position pos) {
         //move right, x++
         else if (x < pos.x) {
             if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                if (map[entity->pos.y][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y][(entity->pos.x + 1)], entity);
+                // if (map[entity->pos.y][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y][(entity->pos.x + 1)], entity);
                 MoveRight(entity);
                 KeepMonsterIntegrity(entity);
+                AssignFloor(entity->pos.x, entity->pos.y);
                 map[entity->pos.y][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -197,17 +205,20 @@ bool MoveTowards(Entity* entity, Position pos) {
 }
 
 /* update monster positions on map from mptr. */
+/* update corpses, then monsters to place them on top. */
 void UpdateMonsterMap(Entity* monster, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
         int y, x;
         y = (monster + i)->pos.y;
         x = (monster + i)->pos.x;
-        if((monster + i)->isMonster) {
-            map[y][x] = monster[i];
-        }
-        else if(!((monster + i)->isMonster) && !(map[y][x].isMonster)) {
-            map[y][x] = monster[i];
-        }
+        if((monster + i)->isCorpse && (monster + i)->inventory[0].itemID != NULL_ITEM_ID) map[y][x] = monster[i];
+        else if ((monster + i)->isCorpse && (monster + i)->inventory[0].itemID == NULL_ITEM_ID) map[y][x] = monster[i];
+    }
+    for (int i = 0; i < n_monsters; i++) {
+        int y, x;
+        y = (monster + i)->pos.y;
+        x = (monster + i)->pos.x;
+        if(!(monster + i)->isCorpse) map[y][x] = monster[i];
     }
 }
 

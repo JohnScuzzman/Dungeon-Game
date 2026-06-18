@@ -139,6 +139,7 @@ typedef struct {
   int invHead;
   Stats entityStats;
   Position pos;
+  Position lastPos;
   Position playerLastPos;
   MapInfo mapInfo;
   Armor entityArmor;
@@ -279,19 +280,18 @@ void MakeFOV(Player* playerint);
 void handle_crash(int sig);
 
 //items.c functions
-void CombineCorpseInventories(Entity* corpse, int n_monsters);
+void AddToNPCInventory(Entity* npc, Item newItem, int itemQuantity);
+void AddToPlayerInventory(Item newItem, int itemQuantity);
+void ArmorItemDescriptions(Item* items);
 void CombineEntityInventories(Entity* npc1, Entity* npc2);
+int CompareStrings(const void *a, const void *b);
+void ClearEntityInventory(Entity* npc);
 void CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
 Item* CreateItemTable();
-void AddToNPCInventory(Entity* npc, Item newItem, int itemQuantity);
-void AddToPlayerInventory(Item newItem, int itemQuantity);
-void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity);
-void RemoveFromPlayerInventory(Item target, int itemQuantity);
 Weapon GetWeaponFromItem(int itemID);
 Armor GetArmorFromItem(int itemID);
 char* GetArmorType(int ArmorType);
-int CompareStrings(const void *a, const void *b);
 void Equip(Item target);
 void EquipMelee(Item target);
 void EquipRanged(Item target);
@@ -304,8 +304,10 @@ void MakeWeaponItems(Item* items);
 void MakeArmorItems(Item* items);
 void NameWeaponItems(Item* items);
 void NameArmorItems(Item* items);
+void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity);
+void RemoveFromPlayerInventory(Item target, int itemQuantity);
 void WeaponItemDescriptions(Item* items);
-void ArmorItemDescriptions(Item* items);
+
 // void NullItem(Item item);
 
 // make_player.c functions
