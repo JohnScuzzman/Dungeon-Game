@@ -300,7 +300,7 @@ void CheckPassiveAbilities(int n_monsters) {
             QueueEvent(q, combatHistory->event);
             Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
             if (target->isMonster) {
-                combatHistory->playerCombat = AttackEntity(target, combatHistory, player);
+                combatHistory->playerCombat = AttackEntity(target, combatHistory, player, n_monsters);
                 ResetCombatHistory();
             }
         }

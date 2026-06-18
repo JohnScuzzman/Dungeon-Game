@@ -3,6 +3,36 @@
 const int ALL_ITEMS = 256;
 const int INVENTORY_SIZE = 64;
 
+/*
+Checks if two monster have the same POS and are both corpse, then moves inventories.
+*/
+void CombineCorpseInventories(Entity* corpse, int n_monsters) {
+    for (int i = 0; i < n_monsters; i++) {
+        if(((mptr + i)->pos.y == corpse->pos.y && (mptr + i)->pos.x == corpse->pos.x) && (corpse->entityID != (mptr + i)->entityID)) {
+            if(((mptr + i)->inventory[0].itemID != NULL_ITEM_ID) && ((mptr + (i-1))->inventory[0].itemID != NULL_ITEM_ID)) {
+                CombineEntityInventories((mptr + i), corpse);
+            }
+        }
+    }
+}
+
+/*
+Adds npc1's inventory to npc2's
+*/
+void CombineEntityInventories(Entity* npc1, Entity* npc2) {
+    npc1->invTail;
+    int i = 0;
+    while(i < npc1->invTail){
+        AddToNPCInventory(npc2, npc1->inventory[i], npc1->inventory[i].quantity);
+        i++;
+    }
+    i = 0;
+    while(npc1->invTail != 0){
+        RemoveFromNPCInventory(npc1, npc1->inventory[i], npc1->inventory[i].quantity);
+        i++;
+    }
+}
+
 // Parent Class Item goes at the top of Armor, Weapon, etc structs to make it a child struct.
 // Weapon newItem = ShortSword();
 // reference the items variables with Item* itemPtr = (Item *)&newItem
@@ -103,23 +133,6 @@ void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity) {
                 }
             }
         }
-    }
-}
-
-/*
-Adds npc1's inventory to npc2's
-*/
-void CombineEntityInventories(Entity* npc1, Entity* npc2) {
-    npc1->invTail;
-    int i = 0;
-    while(i < npc1->invTail){
-        AddToNPCInventory(npc2, npc1->inventory[i], npc1->inventory[i].quantity);
-        i++;
-    }
-    i = 0;
-    while(npc1->invTail != 0){
-        RemoveFromNPCInventory(npc1, npc1->inventory[i], npc1->inventory[i].quantity);
-        i++;
     }
 }
 
