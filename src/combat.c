@@ -27,7 +27,7 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
 Player tries to attack entity
 Returns true if combat happens at all. 
 */
-bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player) {
+bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player, int n_monsters) {
     int defenderAC = CalculateEntityAC(defender);
     int playerAccRoll = CalculatePlayerAccuracy();
     int playerDMG = CalculatePlayerDamage();
@@ -37,7 +37,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
         defender->entityStats.HP = (defenderHP - playerDMG);
         if (defender->entityStats.HP <= 0) {
             RecordPlayerKill(defender, combatHistory, playerAccRoll, playerDMG);
-            AssignCorpse(defender);
+            AssignCorpse(defender, n_monsters);
             CheckForLevelUp();
             return true;
         }
@@ -152,7 +152,7 @@ void PlayerPrepareCombat(int n_monsters) {
     PlayerMeleeOrRanged(player);
     Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
     if (target->isMonster) {
-        combatHistory->playerCombat = AttackEntity(target, combatHistory, player);
+        combatHistory->playerCombat = AttackEntity(target, combatHistory, player, n_monsters);
     }
     // If a monster died, let other monsters still move.
     if(combatHistory->monsterKilled){

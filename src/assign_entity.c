@@ -42,7 +42,7 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
 /* 
 Attempts to turn the monster into a corpse, changing both map entity and monster list entity into a "corpse".
 */
-void AssignCorpse(Entity* entity) {
+void AssignCorpse(Entity* entity, int n_monsters) {
     int x = entity->pos.x;
     int y = entity->pos.y;
     entity->ch = 'X';
@@ -75,6 +75,7 @@ void AssignCorpse(Entity* entity) {
     entity->entityStats.EXP = 0;
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
+    CombineCorpseInventories(entity, n_monsters);
     AssignFloor(x,y); // DO NOT REMOVE
     map[entity->pos.y][entity->pos.x] = *entity;
 }

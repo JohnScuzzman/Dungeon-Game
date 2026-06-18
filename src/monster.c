@@ -202,29 +202,25 @@ void UpdateMonsterMap(Entity* monster, int n_monsters) {
         int y, x;
         y = (monster + i)->pos.y;
         x = (monster + i)->pos.x;
-        // If corpse, stay as a corpse. Keep living monster integrity.
-        // Reversed to keep inventories correct.
-        if(!((monster + i)->isMonster) && !(map[y][x].isMonster)) {
-            monster[i] = map[y][x];
+        if((monster + i)->isMonster) {
+            map[y][x] = monster[i];
         }
-        // If monster, stay as monster
-        else if (!(monster + i)->isCorpse) {
+        else if(!((monster + i)->isMonster) && !(map[y][x].isMonster)) {
             map[y][x] = monster[i];
         }
     }
 }
 
-/* update monster list based on map*/
-void UpdateMonsterCorpses(Entity* monster, int n_monsters) {
-    for (int i = 0; i < n_monsters; i++) {
-        int y, x;
-        y = monster[i].pos.y;
-        x = monster[i].pos.x;
-        if(!(map[y][x]).isMonster && !(monster[i].isMonster)) {
-            map[y][x] = monster[i];
-        }
-    }
-}
+// /* update monster list based on map*/
+// void UpdateMonsters(Entity* monster, int n_monsters) {
+//     for (int i = 0; i < n_monsters; i++) {
+//         int y, x;
+//         y = monster[i].pos.y;
+//         x = monster[i].pos.x;
+//         monster[i] = map[y][x];
+//     }
+// }
+
 
 /* Credit to Harpy for helping me prototype this function. */
 /* This would have taken signifiantly longer without her, I owe her a case of monster for this.*/

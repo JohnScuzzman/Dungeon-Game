@@ -181,7 +181,7 @@ typedef struct
 void TitleScreen();
 
 // assign_npc.c functions
-void AssignCorpse(Entity* entity);
+void AssignCorpse(Entity* entity, int n_monsters);
 void AssignFloor(int x, int y);
 void AssignGoblinWarrior(Entity* monster);
 void AssignGoblinRanger(Entity* monster);
@@ -210,7 +210,7 @@ void AssignBard();
 //combat.c functions 
 CombatHistory* CreateCombatHistory(Entity monster);
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player);
-bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player);
+bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player, int n_monsters);
 int CalculateEntityAccuracy(Entity* attacker) ;
 int CalculateEntityDMG(Entity* attacker);
 int CalculateEntityAC(Entity* defender);
@@ -279,6 +279,7 @@ void MakeFOV(Player* playerint);
 void handle_crash(int sig);
 
 //items.c functions
+void CombineCorpseInventories(Entity* corpse, int n_monsters);
 void CombineEntityInventories(Entity* npc1, Entity* npc2);
 void CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
@@ -369,8 +370,6 @@ void MoveMonster(Entity* monster, Position newPOS);
 void RecordMonsterSeen(Entity* monster);
 void ResetMoveFlags(Entity* mptr, int n_monsters);
 void UpdateMonsterMap(Entity* monster, int n_monsters);
-void UpdateMonsterCorpses(Entity* monster, int n_monsters);
-void UpdateMonster(Entity* monster, int monsterID, int n_monsters);
 void UpdateMonsterVisible(Entity* monster, Player* player);
 void Wander(Entity* mptr);
 

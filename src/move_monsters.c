@@ -13,6 +13,7 @@ void MoveUp(Entity* mptr){
         map[mptr->pos.y][mptr->pos.x].ch = '.';
     }
     if(map[mptr->pos.y + 1][mptr->pos.x].ch == 'X') {
+        AssignFloor(mptr->pos.x, mptr->pos.y + 1);
         map[mptr->pos.y + 1][mptr->pos.x].ch = '.';
     }
     if(mptr->mapInfo.newChar == 'X') {
@@ -33,6 +34,7 @@ void MoveDown(Entity* mptr){
         map[mptr->pos.y][mptr->pos.x].ch = '.';
     }
     if(map[mptr->pos.y - 1][mptr->pos.x].ch == 'X') {
+        AssignFloor(mptr->pos.x, mptr->pos.y - 1);
         map[mptr->pos.y - 1][mptr->pos.x].ch = '.';
     }
     if(mptr->mapInfo.newChar == 'X') {
@@ -53,6 +55,7 @@ void MoveLeft(Entity* mptr){
         map[mptr->pos.y][mptr->pos.x].ch = '.';
     }
     if(map[mptr->pos.y][mptr->pos.x].ch == 'X') {
+        AssignFloor(mptr->pos.x + 1, mptr->pos.y);
         map[mptr->pos.y][mptr->pos.x + 1].ch = '.';
     }
     if(mptr->mapInfo.newChar == 'X') {
@@ -73,6 +76,7 @@ void MoveRight(Entity* mptr){
         map[mptr->pos.y][mptr->pos.x].ch = '.';
     }
     if(map[mptr->pos.y][mptr->pos.x - 1].ch == 'X') {
+        AssignFloor(mptr->pos.x - 1, mptr->pos.y);
         map[mptr->pos.y][mptr->pos.x - 1].ch = '.';
     }
     if(mptr->mapInfo.newChar == 'X') {
@@ -94,6 +98,7 @@ void MoveDownRight(Entity* mptr){
         map[mptr->pos.y][mptr->pos.x].ch = '.';
     }
     if(map[mptr->pos.y - 1][mptr->pos.x - 1].ch == 'X') {
+        AssignFloor(mptr->pos.x - 1, mptr->pos.y + 1);
         map[mptr->pos.y - 1][mptr->pos.x - 1].ch = '.';
     }
     if(mptr->mapInfo.newChar == 'X') {
@@ -115,6 +120,7 @@ void MoveDownLeft(Entity* mptr){
         map[mptr->pos.y][mptr->pos.x].ch = '.';
     }
     if(map[mptr->pos.y - 1][mptr->pos.x + 1].ch == 'X') {
+        AssignFloor(mptr->pos.x + 1, mptr->pos.y - 1);
         map[mptr->pos.y - 1][mptr->pos.x + 1].ch = '.';
     }
     if(mptr->mapInfo.newChar == 'X') {
@@ -136,6 +142,7 @@ void MoveUpRight(Entity* mptr){
         map[mptr->pos.y][mptr->pos.x].ch = '.';
     }
     if(map[mptr->pos.y + 1][mptr->pos.x - 1].ch == 'X') {
+        AssignFloor(mptr->pos.x - 1, mptr->pos.y + 1);
         map[mptr->pos.y + 1][mptr->pos.x - 1].ch = '.';
     }
     if(mptr->mapInfo.newChar == 'X') {
@@ -157,6 +164,7 @@ void MoveUpLeft(Entity* mptr){
         map[mptr->pos.y][mptr->pos.x].ch = '.';
     }
     if(map[mptr->pos.y + 1][mptr->pos.x + 1].ch == 'X') {
+        AssignFloor(mptr->pos.x + 1, mptr->pos.y + 1);
         map[mptr->pos.y + 1][mptr->pos.x + 1].ch = '.';
     }
     if(mptr->mapInfo.newChar == 'X') {
