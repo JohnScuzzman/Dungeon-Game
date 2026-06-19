@@ -14,6 +14,7 @@ Armor NoArmor() {
     none.item.quantity = 0;
     none.item.value = 0;
     strcpy(none.item.itemName, "None");
+    strcpy(none.item.itemDesc, " ");
     none.AC = 0;
     none.type = LIGHT; // 1 = light, 2 = med, 3 = heavy
     return none;
@@ -28,7 +29,6 @@ Armor Rags() {
     rags.item.itemID = RAGS; 
     rags.item.quantity = 0;
     rags.item.value = 2;
-    strcpy(rags.item.itemName, "Rags");
     rags.AC = 0;
     rags.type = LIGHT; 
     return rags;
@@ -43,7 +43,6 @@ Armor Robes() {
     robes.item.itemID = ROBES;
     robes.item.quantity = 0;
     robes.item.value = 10;
-    strcpy(robes.item.itemName, "Robes");
     robes.AC = 1;
     robes.type = LIGHT; 
     return robes;
@@ -58,7 +57,6 @@ Armor LeatherArmor() {
     leatherArmor.item.itemID = LEATHER_ARMOR;
     leatherArmor.item.quantity = 0;
     leatherArmor.item.value = 30;
-    strcpy(leatherArmor.item.itemName, "Leather Armor");
     leatherArmor.AC = 2;
     leatherArmor.type = MEDIUM; // 1 = light, 2 = med, 3 = heavy
     return leatherArmor;
@@ -73,7 +71,6 @@ Armor Chainmail() {
     chainmail.item.itemID = CHAINMAIL;
     chainmail.item.quantity = 0;
     chainmail.item.value = 50;
-    strcpy(chainmail.item.itemName, "Chainmail");
     chainmail.AC = 3;
     chainmail.type = HEAVY; // 1 = light, 2 = med, 3 = heavy
     return chainmail;
@@ -88,7 +85,6 @@ Armor RangersCloak() {
     rangersCloak.item.itemID = RANGERS_CLOAK;
     rangersCloak.item.quantity = 0;
     rangersCloak.item.value = 75;
-    strcpy(rangersCloak.item.itemName, "Ranger's Cloak");
     rangersCloak.AC = 2;
     rangersCloak.type = LIGHT;
     return rangersCloak;
@@ -103,7 +99,6 @@ Armor MetallicSkin() {
     metallicSkin.item.itemID = METALLIC_SKIN;
     metallicSkin.item.quantity = 0;
     metallicSkin.item.value = 200;
-    strcpy(metallicSkin.item.itemName, "Metallic Skin");
     metallicSkin.AC = 4;
     metallicSkin.type = HEAVY;
     return metallicSkin;

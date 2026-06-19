@@ -72,7 +72,7 @@ void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_
     PrintInventoryHeaders(menu, desc, loot);
     
     for (int i = 0; i < player->invTail; i++){
-        if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID) {
+        if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID || playerInv[i]->itemID == player->equippedAmmo.item.itemID) {
             wattron(menu, A_DIM);
             mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 5), " (Equipped)");
             wattroff(menu, A_DIM);

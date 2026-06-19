@@ -114,7 +114,7 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
     
     for (int i = 0; i < player->invTail; i++) {
 
-        if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID) {
+        if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID || playerInv[i]->itemID == player->equippedAmmo.item.itemID) {
             wattron(menu, A_DIM);
             mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 5), " (Equipped)");
             wattroff(menu, A_DIM);
@@ -151,20 +151,20 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
 
 bool MakeItemOptionsWindow(Item** playerInv, int choice, int n_options, WINDOW *menu, WINDOW *loot) {
     bool unEquipMenu = false;
-    if (playerInv[choice]->itemID == player->equippedMelee.item.itemID || playerInv[choice]->itemID == player->equippedRanged.item.itemID || playerInv[choice]->itemID == player->equippedArmor.item.itemID) {
+    if (playerInv[choice]->itemID == player->equippedMelee.item.itemID || playerInv[choice]->itemID == player->equippedRanged.item.itemID || playerInv[choice]->itemID == player->equippedArmor.item.itemID || playerInv[choice]->itemID == player->equippedAmmo.item.itemID) {
         unEquipMenu = true;
     }
     char *options1[] = {
-        "Drop",
+    "Drop",
+    "Drop All",
     "Equip",
-    "Transfer",
     "Examine",
     "Exit",
     };
     char *options2[] = {
-        "Drop",
+    "Drop",
+    "Drop All",
     "Unequip",
-    "Transfer",
     "Examine",
     "Exit",
     };
@@ -268,21 +268,21 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
             delwin(invOp);
             return true;
             break;
-        case 1: // Equip
-            EquipOrUnequip(playerInv, unEquipMenu, prevChoice);
-            DrawEverything();
-            refresh();
-            wrefresh(loot);
-            delwin(invOp);
-            return false;
-            break;
-        case 2: // Transfer
+        case 1: // Drop All
             Unequip(*playerInv[prevChoice]);
             RemoveFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
             DrawEverything();
             refresh();
             delwin(invOp);
             return true;
+            break;
+        case 2: // Equip
+            EquipOrUnequip(playerInv, unEquipMenu, prevChoice);
+            DrawEverything();
+            refresh();
+            wrefresh(loot);
+            delwin(invOp);
+            return false;
             break;
         case 3: // Examine
             // Do the load window here
@@ -316,6 +316,13 @@ void RenderItemInfo(WINDOW* desc, Item* item) {
             mvwprintw(desc, 3, 2, "DMG: %d - %d", weapon.minDMG, weapon.maxDMG);
             mvwprintw(desc, 4, 2, "Range: %d", weapon.range);
             mvwprintw(desc, 5, 2, "Value: %d", weapon.item.value);
+            break;
+        case AMMO:
+            Ammo ammo;
+            ammo = GetAmmoFromItem(item->itemID);
+            // char* ammoType = GetArmorType(ammo.type);
+            // mvwprintw(desc, 4, 2, "Type: %s", ammoType);
+            mvwprintw(desc, 3, 2, "Value: %d", ammo.item.value);
             break;
         case ARMOR:
             Armor armor;

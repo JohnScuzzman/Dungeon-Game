@@ -23,6 +23,22 @@ typedef enum {
     FLINTLOCK_PISTOL,
     LIGHTNING_WAND,
     DUAL_FLINTLOCKS,
+	ARROWS,
+    DARTS,
+	ACID_POTION_AMMO,
+	BULLET_MUSKET,
+	BULLET_5MM,
+	BULLET_9MM,
+	BULLET_556,
+	BULLET_762,
+	BULLET_308,
+	BULLET_50CAL,
+	BULLET_BUCKSHOT,
+	BULLET_SLUG,
+	BULLET_DRAGONS_BREATH,
+	MISSILES,
+    ENERGY_PACKS,
+	HEAVY_ENERGY_PACKS,
     RAGS,
     ROBES,
     LEATHER_ARMOR,
@@ -32,6 +48,7 @@ typedef enum {
 } ItemIDs;
 
 typedef enum {
+	NULL_ARMOR_TYPE,
     LIGHT,
     MEDIUM,
     HEAVY,
@@ -41,8 +58,19 @@ typedef enum {
 } ArmorTypes;
 
 typedef enum {
+	NULL_AMMO_TYPE,
+    PRIMITIVE,
+	MAGIC,
+	FLINTLOCK,
+	BULLET,
+	EXPLOSIVE,
+	ENERGY
+} AmmoTypes;
+
+typedef enum {
     NULL_ITEM_TYPE,
     WEAPON,
+	AMMO,
     ARMOR,
     CYBERNETICS,
     HELMET,
@@ -75,6 +103,7 @@ typedef struct {
   int minDMG;
   int maxDMG;
   int range;
+  //int ammoType
 } Weapon;
 
 typedef struct {
@@ -82,6 +111,12 @@ typedef struct {
   int AC;
   int type; // 1 = light, 2 = medium, 3 = heavy.
 } Armor;
+
+typedef struct {
+  Item item;
+  int bonusDamage;
+  int type; // Bullet or Arrow, etc.
+} Ammo;
 
 // typedef struct {
 //   Amulets amulets;
@@ -122,6 +157,26 @@ Armor LeatherArmor();
 Armor Chainmail();
 Armor RangersCloak();
 Armor MetallicSkin();
+
+//make_ammos.c fucntions
+Ammo NoAmmo();
+Ammo Arrows();
+Ammo Darts();
+Ammo AcidPotionAmmo();
+Ammo BulletMusket();
+Ammo Bullet5mm();
+Ammo Bullet9mm();
+Ammo Bullet556();
+Ammo Bullet762();
+Ammo Bullet308();
+Ammo Bullet50Cal();
+Ammo BulletBuckshot();
+Ammo BulletSlug();
+Ammo BulletDragonsBreath();
+Ammo Missiles();
+Ammo EnergyPacks();
+Ammo HeavyEnergyPacks();
+
 
 
 

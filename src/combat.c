@@ -237,8 +237,17 @@ bool PlayerRangedAttack(int n_monsters){
     if(combatHistory->playerUsedAbility){
         return ShootTargetWithAbility(x, y);
     }
-    else{
+    else if (player->equippedAmmo.item.quantity > 0) {
+        ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+        if(player->equippedAmmo.type == PRIMITIVE) { // Lets player pick up their arrows lol.
+            AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+        }
         return ShootTarget(x, y);
+    }
+    else {
+        strcpy(combatHistory->event, "You do not have any ammo equipped.");
+        QueueEvent(q, combatHistory->event);
+        return false;
     }
 }
 
