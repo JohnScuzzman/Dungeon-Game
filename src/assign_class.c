@@ -10,9 +10,12 @@ void AssignKnight() {
     player->equippedArmor = Chainmail();
     player->equippedMelee = Greatsword();
     player->equippedRanged = Shortbow();
+    player->equippedAmmo = Arrows();
     AddToPlayerInventory(items[CHAINMAIL], 1);
     AddToPlayerInventory(items[GREATSWORD], 1);
     AddToPlayerInventory(items[SHORTBOW], 1);
+    AddToPlayerInventory(items[ARROWS], 20);
+    player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -30,9 +33,12 @@ void AssignSwashbuckler() {
     player->equippedArmor = LeatherArmor();
     player->equippedMelee = Cutlass();
     player->equippedRanged = FlintlockPistol();
+    player->equippedAmmo = BulletMusket();
     AddToPlayerInventory(items[LEATHER_ARMOR], 1);
     AddToPlayerInventory(items[CUTLASS], 1);
     AddToPlayerInventory(items[FLINTLOCK_PISTOL], 1);
+    AddToPlayerInventory(items[BULLET_MUSKET], 20);
+    player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -89,8 +95,11 @@ void AssignGunslinger() {
     player->equippedArmor = LeatherArmor();
     player->equippedMelee = Fists();
     player->equippedRanged = DualFlintlocks();
+    player->equippedAmmo = BulletMusket();
     AddToPlayerInventory(items[LEATHER_ARMOR], 1);
     AddToPlayerInventory(items[DUAL_FLINTLOCKS], 1);
+    AddToPlayerInventory(items[BULLET_MUSKET], 20);
+    player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -106,6 +115,7 @@ void AssignDruid() {
     player->equippedArmor = Robes();
     player->equippedMelee = Claws();
     player->equippedRanged = LightningWand();
+    player->equippedAmmo = NoAmmo();
     AddToPlayerInventory(items[ROBES], 1);
     AddToPlayerInventory(items[LIGHTNING_WAND], 1);
     player->playerStats.mana = 20;
@@ -124,9 +134,12 @@ void AssignRanger() {
     player->equippedArmor = RangersCloak();
     player->equippedMelee = Longsword();
     player->equippedRanged = Longbow();
+    player->equippedAmmo = Arrows();
     AddToPlayerInventory(items[RANGERS_CLOAK], 1);
     AddToPlayerInventory(items[LONGSWORD], 1);
     AddToPlayerInventory(items[LONGBOW], 1);
+    AddToPlayerInventory(items[ARROWS], 20);
+    player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -144,6 +157,7 @@ void AssignDarkKnight() {
     player->equippedArmor = Chainmail();
     player->equippedMelee = Greatsword();
     player->equippedRanged = NoWeapon();
+    player->equippedAmmo = NoAmmo();
     AddToPlayerInventory(items[CHAINMAIL], 1);
     AddToPlayerInventory(items[GREATSWORD], 1);
     player->playerStats.mana = 16;
@@ -162,6 +176,7 @@ void AssignWarlock() {
     player->equippedArmor = Robes();
     player->equippedMelee = Dagger();
     player->equippedRanged = LightningWand();
+    player->equippedAmmo = NoAmmo();
     AddToPlayerInventory(items[ROBES], 1);
     AddToPlayerInventory(items[DAGGER], 1);
     AddToPlayerInventory(items[LIGHTNING_WAND], 1);
@@ -182,6 +197,7 @@ void AssignConjurer() {
     player->equippedArmor = Robes();
     player->equippedMelee = Quarterstaff();
     player->equippedRanged = NoWeapon();
+    player->equippedAmmo = NoAmmo();
     AddToPlayerInventory(items[ROBES], 1);
     AddToPlayerInventory(items[QUARTERSTAFF], 1);
     player->playerStats.mana = 20;
@@ -202,6 +218,7 @@ void AssignCyborg() {
     player->equippedArmor = MetallicSkin();
     player->equippedMelee = ChromeFists();
     player->equippedRanged = NoWeapon();
+    player->equippedAmmo = NoAmmo();
     AddToPlayerInventory(items[METALLIC_SKIN], 1);
     AddToPlayerInventory(items[CHROME_FISTS], 1);
     player->playerStats.mana = 20;
@@ -221,9 +238,12 @@ void AssignBard() {
     player->equippedArmor = RangersCloak();
     player->equippedMelee = Dagger();
     player->equippedRanged = Shortbow();
+    player->equippedAmmo = Arrows();
     AddToPlayerInventory(items[RANGERS_CLOAK], 1);
     AddToPlayerInventory(items[DAGGER], 1);
     AddToPlayerInventory(items[SHORTBOW], 1);
+    AddToPlayerInventory(items[ARROWS], 20);
+    player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 20;
     player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;
