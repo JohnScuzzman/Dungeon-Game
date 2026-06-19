@@ -1,28 +1,5 @@
 #include <rogue.h>
 
-Entity** CreateEntities(void) {
-    Entity** map = calloc(MAP_HEIGHT, sizeof(Entity *));
-
-    /* Change amount of wall entities created based on map dimensions. */ 
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        map[y] = calloc(MAP_WIDTH, sizeof(Entity));
-        for (int x = 0 ; x < MAP_WIDTH; x++) {
-            map[y][x].ch = '#';
-            map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
-            map[y][x].entityID = 1;
-            map[y][x].entityStats.AC = 30;
-            map[y][x].entityStats.HP = 1000;
-            strcpy(map[y][x].entityClass, "None");
-            strcpy(map[y][x].entityName, "Stone Wall");
-            strcpy(map[y][x].entityRace, "None");
-            map[y][x].entityArmor = NoArmor();
-            map[y][x].entityWeapon = NoWeapon();
-        }
-    }
-    /* Return a 2D arr thats a pointer that points at pointers that point to our wall entities. */ 
-    return map;
-}
-
 /* 
 Fills map with randomly sized rooms full of dots. 
 Place a monster in the center of the room as well.

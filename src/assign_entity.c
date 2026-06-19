@@ -1,5 +1,28 @@
 #include <rogue.h>
 
+Entity** CreateEntities(void) {
+    Entity** map = calloc(MAP_HEIGHT, sizeof(Entity *));
+
+    /* Change amount of wall entities created based on map dimensions. */ 
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        map[y] = calloc(MAP_WIDTH, sizeof(Entity));
+        for (int x = 0 ; x < MAP_WIDTH; x++) {
+            map[y][x].ch = '#';
+            map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
+            map[y][x].entityID = 1;
+            map[y][x].entityStats.AC = 30;
+            map[y][x].entityStats.HP = 1000;
+            strcpy(map[y][x].entityClass, "None");
+            strcpy(map[y][x].entityName, "Stone Wall");
+            strcpy(map[y][x].entityRace, "None");
+            map[y][x].entityArmor = NoArmor();
+            map[y][x].entityWeapon = NoWeapon();
+        }
+    }
+    /* Return a 2D arr thats a pointer that points at pointers that point to our wall entities. */ 
+    return map;
+}
+
 /* 
 Populates a monster struct with a char and their position.
 monsterID is a random int 0-3 passed from map.c
@@ -75,16 +98,14 @@ void AssignCorpse(Entity* entity, int n_monsters) {
     entity->entityStats.maxDMG = 0;
     entity->entityStats.minDMG = 0;
     for(int i = 0; i < n_monsters; i++){
-        if (((mptr + i)->pos.x == entity->pos.x) &&
-        ((mptr + i)->pos.y == entity->pos.y) &&
-        ((mptr + i)->entityID > 0) &&
-        ((mptr + i)->entityID != entity->entityID) &&
-        ((mptr + i)->invTail > 0)) {
-            CombineEntityInventories((mptr + i), entity);
-            (mptr + i)->entityID = 0; // mark as zero so we dont loot again.
-            AssignFloor(x,y); // DO NOT REMOVE
-            map[y][x] = *entity;
-            return;
+        if(((mptr + i)->entityID != entity->entityID)) {
+            if (((mptr + i)->pos.x == entity->pos.x) && ((mptr + i)->pos.y == entity->pos.y) && (!(mptr + i)->wasReplaced) &&
+            ((mptr + i)->inventory[0].itemID != NULL_ITEM_ID)) {
+                (mptr + i)->wasReplaced = true; // mark as looted so we dont loot again.
+                CombineEntityInventories((mptr + i), entity);
+                map[y][x] = *entity;
+                return;
+            }
         }
     }
     AssignFloor(x,y); // DO NOT REMOVE
@@ -104,6 +125,8 @@ void AssignFloor(int x, int y) {
     map[y][x].isCorpse = false;
     map[y][x].isMonster = false;
     map[y][x].seenByPlayer = false;
+    map[y][x].wasLooted = false;
+    map[y][x].wasReplaced = false;
     map[y][x].ch = '.';
     map[y][x].staticCh = '.';
     map[y][x].aggroRange = 0;
@@ -264,6 +287,8 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->isCorpse = false;
     monster->isMonster = true;
     monster->seenByPlayer = false;
+    monster->wasLooted = false;
+    monster->wasReplaced = false;
     monster->entityID = monsterID;
     monster->color = COLOR_PAIR(VISIBLE_COLOR);
     monster->pos.y = m_pos.y;

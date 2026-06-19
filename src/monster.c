@@ -211,8 +211,15 @@ void UpdateMonsterMap(Entity* monster, int n_monsters) {
         int y, x;
         y = (monster + i)->pos.y;
         x = (monster + i)->pos.x;
-        if((monster + i)->isCorpse && (monster + i)->inventory[0].itemID != NULL_ITEM_ID) map[y][x] = monster[i];
-        else if ((monster + i)->isCorpse && (monster + i)->inventory[0].itemID == NULL_ITEM_ID) map[y][x] = monster[i];
+        /* Draw monsters that died ontop of other monsters */
+        if((monster + i)->isCorpse && !(monster + i)->wasReplaced && map[y][x].wasLooted) {
+            map[y][x].wasLooted = false;
+            monster[i] = map[y][x];
+            map[y][x] = monster[i];
+        }
+        else if((monster + i)->isCorpse && !(monster + i)->wasReplaced && !map[y][x].wasLooted) {
+            map[y][x] = monster[i];
+        }
     }
     for (int i = 0; i < n_monsters; i++) {
         int y, x;
