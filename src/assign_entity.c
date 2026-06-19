@@ -236,7 +236,7 @@ void AssignGoblinRanger(Entity* monster) {
     AddToNPCInventory(monster, items[SHORTBOW], 1);
     monster->aggroRange = 15;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
-    monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 3; // Their shortbows should suck more than normal.
+    monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 4; // Their shortbows should suck more than normal.
     monster->entityStats.minDMG = monster->entityWeapon.minDMG;
     monster->entityStats.maxHP = 4;
     monster->entityStats.maxMana = 0;
