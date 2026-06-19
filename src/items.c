@@ -7,21 +7,20 @@ const int INVENTORY_SIZE = 64;
 Adds npc1's inventory to npc2's
 */
 void CombineEntityInventories(Entity* npc1, Entity* npc2) {
+    if(npc1->inventory[0].itemID == NULL_ITEM_ID) {
+        return;
+    }
     int tail = npc1->invTail;
     int i = 0;
     while(i < tail){
         AddToNPCInventory(npc2, npc1->inventory[i], npc1->inventory[i].quantity);
         i++;
     }
-    i = 0;
-    while(i < tail){
-        RemoveFromNPCInventory(npc1, npc1->inventory[i], npc1->inventory[i].quantity);
-        i++;
-    }
+    ClearEntityInventory(npc1);
 }
 
 void ClearEntityInventory(Entity* npc) {
-    if(npc->invTail == 0) {
+    if(npc->inventory[0].itemID == NULL_ITEM_ID) {
         return;
     }
     int i = 0;
@@ -29,6 +28,10 @@ void ClearEntityInventory(Entity* npc) {
     while(i < tail){
         RemoveFromNPCInventory(npc, npc->inventory[i], npc->inventory[i].quantity);
         i++;
+    }
+    if(npc->inventory[0].itemID != 0) {
+        npc->invTail = npc->invHead;
+        npc->inventory[0] = items[NULL_ITEM_ID]; // replace with a null item, clearing the last one out.
     }
 }
 
@@ -92,12 +95,14 @@ void AddToNPCInventory(Entity* npc, Item newItem, int itemQuantity) {
     for (int i = 0; i < npc->invTail; i++) {
         if(npc->inventory[i].itemID == newItem.itemID && npc->inventory[i].quantity > 0) {
             npc->inventory[i].quantity += itemQuantity;
+            map[npc->pos.y][npc->pos.x].wasLooted = true;
             return;
         }
     }
     npc->inventory[npc->invTail] = newItem;
     npc->inventory[npc->invTail].quantity = itemQuantity;
     npc->invTail++;
+    map[npc->pos.y][npc->pos.x].wasLooted = true;
     return;
 }
 
@@ -110,7 +115,7 @@ void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity) {
     if(npc->invTail == 0) {
         return;
     }
-    for(int i = npc->invHead; i < npc->invTail; i++) {
+    for(int i = npc->invHead; i < npc->invTail; i++) { 
         if(npc->inventory[i].itemID == target.itemID){
             if(npc->inventory[i].quantity == 0) return;
             if(npc->inventory[i].quantity == 1) {
@@ -118,6 +123,7 @@ void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity) {
                     npc->invTail--;
                     npc->inventory[i] = npc->inventory[npc->invTail];
                     npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
+                    map[npc->pos.y][npc->pos.x].wasLooted = true;
                     return;
             } 
             else{
@@ -128,6 +134,7 @@ void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity) {
                     npc->invTail--;
                     npc->inventory[i] = npc->inventory[npc->invTail];
                     npc->inventory[npc->invTail] = items[NULL_ITEM_ID];
+                    map[npc->pos.y][npc->pos.x].wasLooted = true;
                     return;
                 }
             }
@@ -137,6 +144,12 @@ void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity) {
 
 void AddToPlayerInventory(Item newItem, int itemQuantity) {
     if(player->invTail == (INVENTORY_SIZE - 1)) {
+        return;
+    }
+    if(player->invTail == player->invHead) {
+        player->inventory[player->invTail] = newItem;
+        player->inventory[player->invTail].quantity = itemQuantity;
+        player->invTail++;
         return;
     }
     for (int i = 0; i < player->invTail; i++) {
@@ -156,7 +169,7 @@ void AddToPlayerInventory(Item newItem, int itemQuantity) {
 /* Set the last item in players inventory to NULL, then move tail backward once.*/
 /* If equipped, unequip the item.*/
 void RemoveFromPlayerInventory(Item target, int itemQuantity) {
-    if(player->invTail == 0) {
+   if(player->invTail == 0) {
         return;
     }
     for (int i = 0; i < player->invTail; i++) {

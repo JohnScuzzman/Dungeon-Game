@@ -130,6 +130,8 @@ typedef struct {
   bool isCorpse;
   bool isMonster;
   bool seenByPlayer;
+  bool wasLooted;
+  bool wasReplaced;
   char ch;
   char staticCh;
   int aggroRange;
@@ -181,7 +183,8 @@ typedef struct
 // asciiart.c funcions
 void TitleScreen();
 
-// assign_npc.c functions
+// assign_entity.c functions
+Entity** CreateEntities(void);
 void AssignCorpse(Entity* entity, int n_monsters);
 void AssignFloor(int x, int y);
 void AssignGoblinWarrior(Entity* monster);
@@ -320,7 +323,6 @@ void PrintRaces();
 void PrintClasses();
 
 // map.c functions
-Entity** CreateEntities(void);
 void FreeMap(void);
 Position SetupMap(Entity* mptr, int n_rooms);
 // Position FindClosestUnexplored(void);

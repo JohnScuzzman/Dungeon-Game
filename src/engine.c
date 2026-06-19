@@ -95,6 +95,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     MakeFOV(player);
     DrawEverything();
+    // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
 }
@@ -120,6 +121,10 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
         PMove = false;
         if (ch == 105 || ch == 73) {
             MakeInventoryMenu();
+            if(map[player->pos.y][player->pos.x].wasLooted){
+                Entity* entityToUpdate = FindMonsterInList(map[player->pos.y][player->pos.x].entityID, n_monsters);
+                entityToUpdate = &map[player->pos.y][player->pos.x];
+            }
         }
         if(ch != ERR) {
             PlayerRegen(&playerRegen);
