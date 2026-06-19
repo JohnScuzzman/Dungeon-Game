@@ -8,6 +8,45 @@ void CastCharge(){
     // combatHistory->defender.hasMoved = true; // "stun" the enemy.
 }
 
+void ChargePlacement(){
+    if((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)) {
+        player->pos.x = ((combatHistory->defender.pos.x) - 1);
+        player->pos.y = ((combatHistory->defender.pos.y) - 1);
+        return;
+    }
+    else if ((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){
+        player->pos.x = ((combatHistory->defender.pos.x) - 1);
+        player->pos.y = ((combatHistory->defender.pos.y) + 1);
+        return;
+    }
+    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)){
+        player->pos.x = ((combatHistory->defender.pos.x) + 1);
+        player->pos.y = ((combatHistory->defender.pos.y) - 1);
+        return;
+    }
+    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){
+        player->pos.x = ((combatHistory->defender.pos.x) + 1);
+        player->pos.y = ((combatHistory->defender.pos.y) + 1);
+        return;
+    }
+    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) == (combatHistory->defender.pos.y)){
+        player->pos.x = ((combatHistory->defender.pos.x) + 1);
+        return;
+    }
+    else if ((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) == (combatHistory->defender.pos.y)){
+        player->pos.x = ((combatHistory->defender.pos.x) - 1);
+        return;
+    }
+    else if ((player->pos.x) == (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){
+        player->pos.y = ((combatHistory->defender.pos.y) + 1);
+        return;
+    }
+    else if ((player->pos.x) == (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)){
+        player->pos.y = ((combatHistory->defender.pos.y) - 1);
+        return;
+    }
+}
+
 void CastDash() {
     int ch, i;
     int x = player->pos.x;
@@ -337,44 +376,6 @@ void ResetPassiveAbility(int abilityID) {
 
 }
 
-void ChargePlacement(){
-    if((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)) {
-        player->pos.x = ((combatHistory->defender.pos.x) - 1);
-        player->pos.y = ((combatHistory->defender.pos.y) - 1);
-        return;
-    }
-    else if ((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) - 1);
-        player->pos.y = ((combatHistory->defender.pos.y) + 1);
-        return;
-    }
-    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) + 1);
-        player->pos.y = ((combatHistory->defender.pos.y) - 1);
-        return;
-    }
-    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) + 1);
-        player->pos.y = ((combatHistory->defender.pos.y) + 1);
-        return;
-    }
-    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) == (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) + 1);
-        return;
-    }
-    else if ((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) == (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) - 1);
-        return;
-    }
-    else if ((player->pos.x) == (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){
-        player->pos.y = ((combatHistory->defender.pos.y) + 1);
-        return;
-    }
-    else if ((player->pos.x) == (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)){
-        player->pos.y = ((combatHistory->defender.pos.y) - 1);
-        return;
-    }
-}
 
 /* Called from PlayerRangedAttack in player.c*/
 /* We use PlayerRangedAttack since melee abilities technically have a range of 1.*/

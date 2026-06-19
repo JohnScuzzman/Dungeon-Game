@@ -260,6 +260,10 @@ void ResetCombatHistory(){
 int CalculateEntityAccuracy(Entity* attacker) {
     int attackerATKMod = attacker->entityStats.ATK;
     int attackerAccRoll = (rand() % 20) + 1;
+    /* Ranged weapon in melee suffers a minus 4 penalty.*/
+    if(attacker->entityWeapon.isRanged && CheckPlayerAdjacent(attacker->pos)){
+        attackerAccRoll -= 4;
+    }
     attackerAccRoll = attackerAccRoll + attackerATKMod;
     return attackerAccRoll;
 }
@@ -289,6 +293,9 @@ int CalculatePlayerAccuracy() {
         playerATKMod = player->playerStats.ATK;
     }
     int playerAccRoll = (rand() % 20) + 1;
+    if(combatHistory->playerUsedRanged && CheckPlayerAdjacent(combatHistory->defender.pos)){
+        playerAccRoll -= 4;
+    }
     playerAccRoll = playerAccRoll + playerATKMod;
     return playerAccRoll;
 }

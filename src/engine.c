@@ -56,7 +56,7 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
     /* Wander checks if LOS to player and flips aggro is they are in range.*/
     while (!((mptr + i)->hasMoved) && i < n_monsters && PMove == true){
         /* Check if player is in aggro range. */
-        if(!((mptr+i)->aggroFlag)){
+        if(!((mptr + i)->aggroFlag)){
             (mptr + i)->aggroFlag = CheckAggro((mptr + i), player);
         }
 
@@ -65,8 +65,20 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
             Wander(mptr + i);
             i++;
         }
-        /* If adjacent to player, attack them.*/
+        /* If adjacent to player, attack them in melee.*/
         else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->isMonster == true){
+            monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
+            /* If monsterCombat = false, player died, end the game.*/
+            if (monsterCombat == false) {
+                return true;
+            }
+            i++;
+        }
+        /* If in range of player and have a ranged weapon equipped, attack them at range.*/
+        else if (((mptr + i)->entityWeapon.isRanged) &&
+        (GetDistance((mptr + i)->pos, player->pos) <= (mptr + i)->entityWeapon.range) &&
+        (LineOfSight((mptr + i)->pos, player->pos)) &&
+        ((mptr + i)->isMonster == true)){
             monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
             /* If monsterCombat = false, player died, end the game.*/
             if (monsterCombat == false) {
@@ -133,6 +145,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             if (combatHistory->playerCombat) {
                 PlayerPrepareCombat(n_monsters);
                 PostCombatEffects();
+                PMove = true;
             }
             if(MoveMonsterLoop(mptr, n_monsters, PMove)){
                 leaveFlag = true;
