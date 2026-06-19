@@ -125,7 +125,7 @@ void CastDash() {
     Position dashPOS;
     dashPOS.y = y;
     dashPOS.x = x;
-    if (map[y][x].noCollision && (GetDistance(player->pos, dashPOS) <= (player->equippedAbility.range))){
+    if (map[y][x].noCollision && (GetDistance(player->pos, dashPOS) <= (player->equippedAbility.range)) && map[y][x].visible){
         player->pos.y = y;
         player->pos.x = x;
         player->playerStats.mana -= (player->equippedAbility.manaCost);

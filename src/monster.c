@@ -102,6 +102,7 @@ bool MoveTowards(Entity* entity, Position pos) {
                 MoveUpLeft(entity);
                 KeepMonsterIntegrity(entity);
                 AssignFloor(entity->pos.x, entity->pos.y);
+                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
                 map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -115,6 +116,7 @@ bool MoveTowards(Entity* entity, Position pos) {
                 MoveDownLeft(entity);
                 KeepMonsterIntegrity(entity);
                 AssignFloor(entity->pos.x, entity->pos.y);
+                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
                 map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -128,6 +130,7 @@ bool MoveTowards(Entity* entity, Position pos) {
                 MoveDownRight(entity);
                 KeepMonsterIntegrity(entity);
                 AssignFloor(entity->pos.x, entity->pos.y);
+                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
                 map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -141,6 +144,7 @@ bool MoveTowards(Entity* entity, Position pos) {
                 MoveUpRight(entity);
                 KeepMonsterIntegrity(entity);
                 AssignFloor(entity->pos.x, entity->pos.y);
+                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
                 map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -154,6 +158,7 @@ bool MoveTowards(Entity* entity, Position pos) {
                 MoveUp(entity);
                 KeepMonsterIntegrity(entity);
                 AssignFloor(entity->pos.x, entity->pos.y);
+                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
                 map[entity->pos.y + 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -167,6 +172,7 @@ bool MoveTowards(Entity* entity, Position pos) {
                 MoveLeft(entity);
                 KeepMonsterIntegrity(entity);
                 AssignFloor(entity->pos.x, entity->pos.y);
+                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
                 map[entity->pos.y][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -180,6 +186,7 @@ bool MoveTowards(Entity* entity, Position pos) {
                 MoveDown(entity);
                 KeepMonsterIntegrity(entity);
                 AssignFloor(entity->pos.x, entity->pos.y);
+                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
                 map[entity->pos.y - 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
@@ -193,6 +200,7 @@ bool MoveTowards(Entity* entity, Position pos) {
                 MoveRight(entity);
                 KeepMonsterIntegrity(entity);
                 AssignFloor(entity->pos.x, entity->pos.y);
+                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
                 map[entity->pos.y][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
                 map[entity->pos.y][entity->pos.x] = *entity;
                 UpdateMonsterVisible(entity, player);
