@@ -231,7 +231,7 @@ bool PlayerRangedAttack(int n_monsters){
             }
             Cursor(y, x, 1);
         }
-    if (CheckEscape(ch)) {
+    if (CheckEscape(ch) || y == player->pos.y && x == player->pos.x) {
         return false;
     }
     if(combatHistory->playerUsedAbility){
@@ -239,8 +239,13 @@ bool PlayerRangedAttack(int n_monsters){
     }
     else if (player->equippedAmmo.item.quantity > 0) {
         ShootFromPlayerInventory(player->equippedAmmo.item, 1);
-        if(player->equippedAmmo.type == PRIMITIVE) { // Lets player pick up their arrows lol.
+        player->equippedAmmo.item.quantity--;
+        if(player->equippedAmmo.type == PRIMITIVE && !map[y][x].isMonster) { // Lets player pick up their arrows lol.
             AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+            strcpy(combatHistory->event, "You shoot the ");
+            strcat(combatHistory->event, map[y][x].entityName);
+            strcat(combatHistory->event, ".");
+            QueueEvent(q, combatHistory->event);
         }
         return ShootTarget(x, y);
     }
