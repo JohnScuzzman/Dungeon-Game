@@ -165,6 +165,7 @@ void PlayerPrepareCombat(int n_monsters) {
 Uses the players ranged weapon or ability for damage and ATK stat from
 players stats or abilitySave from the used ability for accuracy.
 Tries to lock on to the nearest monster.
+FindClosestMonster is located in monster.c
 */
 bool PlayerRangedAttack(int n_monsters){
     int ch;

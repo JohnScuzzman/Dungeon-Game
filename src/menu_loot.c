@@ -1,5 +1,5 @@
 #include <rogue.h>
-#define INVENTORY_SIZE 64
+#define INVENTORY_SIZE 65
 #define WINDOW_WIDTH 61
 #define WINDOW_HEIGHT 47
 #define OFFSET 11

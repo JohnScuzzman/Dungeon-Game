@@ -1,7 +1,7 @@
 #include <rogue.h>
 
 const int ALL_ITEMS = 256;
-const int INVENTORY_SIZE = 64;
+const int INVENTORY_SIZE = 65;
 
 /*
 Adds npc1's inventory to npc2's

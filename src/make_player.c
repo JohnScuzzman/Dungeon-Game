@@ -4,6 +4,7 @@
 Player* CreatePlayer(Position start_pos) {
     Player* player = calloc(1, sizeof(Player));
     player->noCollision = false;
+    player->isResting = false;
     player->abilityTimer = 0;
     player->invHead = 0;
     player->invTail = 0;

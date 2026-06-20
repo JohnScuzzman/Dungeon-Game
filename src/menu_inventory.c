@@ -2,14 +2,14 @@
 #define WINDOW_WIDTH 61
 #define WINDOW_HEIGHT 47
 #define OFFSET 11
-#define INVENTORY_SIZE 64
+#define INVENTORY_SIZE 65
 
 /*
 Creates the inventory window for the player, item description, and floor's inventory.
 */
 bool MakeInventoryMenu() {
     int invX1 = 2; // begins at X
-    int invX2 = 64; 
+    int invX2 = 65; 
     int invY1 = 1; // begins at Y
     int invY2 = 25;
 
