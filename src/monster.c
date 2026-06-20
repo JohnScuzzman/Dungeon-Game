@@ -56,7 +56,8 @@ int FindClosestMonster(Entity* mptr, int n_monsters) {
     int closest = GetDistance(player->pos, (mptr)->pos);
     int temp = 0;
     for (int i = 0; i < n_monsters; i++) {
-        if(((mptr + i)->visible) && GetDistance(player->pos, (mptr + i)->pos) <= 15 && ((mptr + i)->isMonster == true)) {
+        if (CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->isMonster) return i;
+        else if(((mptr + i)->visible) && ((mptr + i)->isMonster == true)) {
             temp = GetDistance(player->pos, (mptr + i)->pos);
             if(temp <= closest) {
                 closest = temp;
@@ -66,16 +67,12 @@ int FindClosestMonster(Entity* mptr, int n_monsters) {
     }
     /* no monsters in LOS*/
     /* returns a floor entity */
-    if (closest == GetDistance(player->pos, (mptr)->pos) && !LineOfSight(player->pos, (mptr)->pos)){
-        return -2;
-    }
-    if ((mptr + closestMonster)->isMonster){
+    if (((mptr + closestMonster)->isMonster) && ((mptr + closestMonster)->visible)){
         return (closestMonster);
     }
-
     return -2;
-    
 }
+
 
 Entity* FindMonsterInList(int monsterID, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
@@ -354,10 +351,10 @@ void UpdateMonsterVisible(Entity* monster, Player* player){
         } 
     }
     else {
+        monster->seenByPlayer = false;
         monster->visible = false;
         monster->transparent = false;
         map[monster->pos.y][monster->pos.x].visible = false;
-
     }
  }
 
@@ -371,12 +368,13 @@ void RecordMonsterSeen(Entity* monster) {
     if(!monster->seenByPlayer){
         strcpy(combatHistory->event, "You see a ");
         strcat(combatHistory->event, monster->entityName);
-        strcat(combatHistory->event, " to the ");
         QueueEvent(q, combatHistory->event);
-        strcpy(combatHistory->event, DIRECTIONS[MonsterDirection(monster)]);
+        strcpy(combatHistory->event, "to the ");
+        strcat(combatHistory->event, DIRECTIONS[MonsterDirection(monster)]);
         strcat(combatHistory->event, ".");
         QueueEvent(q, combatHistory->event);
         monster->seenByPlayer = true;
+        player->isResting = false;
     }
 }
 

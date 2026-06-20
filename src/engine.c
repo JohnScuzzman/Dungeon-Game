@@ -107,7 +107,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     MakeFOV(player);
     DrawEverything();
-    // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
+    DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
 }
@@ -139,16 +139,22 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             }
         }
         if(ch != ERR) {
-            PlayerRegen(&playerRegen);
-            ManaRegen(&manaRegen);
-            PMove = PlayerInput(ch, q, n_monsters);
-            if (combatHistory->playerCombat) {
-                PlayerPrepareCombat(n_monsters);
-                PostCombatEffects();
-                PMove = true;
+            if (ch == 96) {
+                RestUntilHealed(n_monsters, &playerRegen, &manaRegen, PMove);
+                player->isResting = false;
             }
-            if(MoveMonsterLoop(mptr, n_monsters, PMove)){
-                leaveFlag = true;
+            else {
+                PlayerRegen(&playerRegen);
+                ManaRegen(&manaRegen);
+                PMove = PlayerInput(ch, q, n_monsters, &playerRegen, &manaRegen);
+                if (combatHistory->playerCombat) {
+                    PlayerPrepareCombat(n_monsters);
+                    PostCombatEffects();
+                    PMove = true;
+                }
+                if(MoveMonsterLoop(mptr, n_monsters, PMove)){
+                    leaveFlag = true;
+                }
             }
         }
         CheckPassiveAbilities(n_monsters);

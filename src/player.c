@@ -1,5 +1,5 @@
 #include <rogue.h>
-
+#define TURN_BUFFER 8
 
 /* checks if the player is adjacent to the passed coordinates. */
 bool CheckPlayerAdjacent(Position origin) {
@@ -20,7 +20,7 @@ bool CheckPlayerAdjacent(Position origin) {
 /* If player moves into monster, fight, count it as a move.*/
 /* If player fires their ranged weapon, count it as a move. */
 /* If legal move, move player. */
-bool PlayerInput(int input, LogQueue *q, int n_monsters) {
+bool PlayerInput(int input, LogQueue *q, int n_monsters, int* playerRegen, int* manaRegen) {
     // Get new coordinates.
     Position newPos = { player->pos.y, player->pos.x };
     bool rangedAttack;
@@ -105,6 +105,9 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters) {
             break;
         case 105: // i key
             break;
+        case 126:
+            // RestUntilHealed(n_monsters, playerRegen, manaRegen);
+            break;
         default:
             break;
     }
@@ -133,6 +136,58 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory) {
         return;
     }
 
+}
+
+void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMove) {
+    /* Check if player already is at full */
+    if (player->playerStats.HP == player->playerStats.maxHP && player->playerStats.mana == player->playerStats.maxMana){
+        strcpy(combatHistory->event, "You are already fully rested.");
+        QueueEvent(q, combatHistory->event);
+        return;
+    }
+    /* Check if in range of a visible monster. */
+    for (int i = 0; i < n_monsters; i++){
+        if((mptr + i)->visible && (mptr + i)->isMonster) {
+            strcpy(combatHistory->event, "You cannot rest now, a");
+            strcat(combatHistory->event, (mptr + i)->entityName);
+            QueueEvent(q, combatHistory->event);
+            strcpy(combatHistory->event, " lies to the ");
+            strcpy(combatHistory->event, DIRECTIONS[MonsterDirection((mptr + i))]);
+            strcat(combatHistory->event, ".");
+            QueueEvent(q, combatHistory->event);
+            return;
+        }
+    }
+    char eventBuffer[TURN_BUFFER];
+    int turnCount = 0;
+    player->isResting = true;
+    bool moveMonsters = false;
+    PMove = true;
+    while(player->isResting) {
+        PMove = true;  
+        PlayerRegen(playerRegen);
+        PlayerRegen(playerRegen);
+        PlayerRegen(playerRegen);
+        ManaRegen(manaRegen);
+        ManaRegen(manaRegen);
+        ManaRegen(manaRegen);
+        moveMonsters = MoveMonsterLoop(mptr, n_monsters, PMove);
+        CheckPassiveAbilities(n_monsters);
+        UpdateMonsterMap(mptr, n_monsters);
+        ResetMoveFlags(mptr, n_monsters); 
+        turnCount++;
+        if(player->playerStats.HP == player->playerStats.maxHP && player->playerStats.mana == player->playerStats.maxMana){
+            player->isResting = false;
+        }
+    }
+    strcpy(combatHistory->event, "You finish resting.");
+    QueueEvent(q, combatHistory->event);
+    snprintf(eventBuffer, sizeof(eventBuffer), "%d ", turnCount);
+    strcpy(combatHistory->event, eventBuffer);
+    strcat(combatHistory->event, " turns have passed.");
+    QueueEvent(q, combatHistory->event);
+    RefreshGamestate(mptr, n_monsters);
+    PMove = false;  
 }
 
 void PlayerRegen(int *playerRegen){

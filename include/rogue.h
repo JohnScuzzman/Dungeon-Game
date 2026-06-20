@@ -28,7 +28,7 @@
 #define MAX_LEVEL 10 // change later to 20
 #define MAX_NAME_SIZE 33
 #define MAX_EVENT_SIZE 64
-#define MAX_INVENTORY_SIZE 64
+#define MAX_INVENTORY_SIZE 65
 #define MAX_LOG_SIZE 28
 
 /* IMPORTANT*/
@@ -101,6 +101,7 @@ typedef struct {
 
 typedef struct {
   bool noCollision;
+  bool isResting;
   char ch;
   int raceID;
   int color;
@@ -400,8 +401,9 @@ void MoveUpLeft(Entity* mptr);
 bool CheckPlayerAdjacent(Position origin);
 void ManaRegen(int *manaRegen);
 void MovePlayer(Position newPos, CombatHistory* combatHistory);
-bool PlayerInput(int input, LogQueue *q, int n_monsters);
+bool PlayerInput(int input, LogQueue *q, int n_monsters, int* playerRegen, int* manaRegen);
 void PlayerRegen(int *playerRegen);
+void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMove);
 // bool AutoExplore(CombatHistory* combatHistory);
 
 // Externals 

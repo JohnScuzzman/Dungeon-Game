@@ -55,7 +55,7 @@ Ability Charge() {
     charge.maxDMG = (player->equippedMelee.maxDMG) + 3;
     charge.manaCost = 4;
     charge.range = 5;
-    charge.abilitySave = (player->playerStats.ATK) + 5;
+    charge.abilitySave = (player->playerStats.ATK) + 40;
     charge.miscStat = 0;
     strcpy(charge.abilityName, "Charge");
     strcpy(charge.abilityDesc, "none");
