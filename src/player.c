@@ -184,7 +184,7 @@ void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMov
     QueueEvent(q, combatHistory->event);
     snprintf(eventBuffer, sizeof(eventBuffer), "%d ", turnCount);
     strcpy(combatHistory->event, eventBuffer);
-    strcat(combatHistory->event, " turns have passed.");
+    strcat(combatHistory->event, "turns have passed.");
     QueueEvent(q, combatHistory->event);
     RefreshGamestate(mptr, n_monsters);
     PMove = false;  
