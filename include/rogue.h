@@ -59,6 +59,13 @@ typedef enum {
     LEVEL_10 = 55000
 } Levels;
 
+typedef enum {
+  FLOOR,
+  WALL,
+  MONSTER,
+  DOOR
+} EntityTypes;
+
 typedef struct {
   char events[MAX_LOG_SIZE][MAX_EVENT_SIZE];
   int front;
@@ -188,6 +195,7 @@ void TitleScreen();
 // assign_entity.c functions
 Entity** CreateEntities(void);
 void AssignCorpse(Entity* entity, int n_monsters);
+void AssignDoor(int x, int y);
 void AssignFloor(int x, int y);
 void AssignGoblinWarrior(Entity* monster);
 void AssignGoblinRanger(Entity* monster);
@@ -369,6 +377,11 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
 bool MakePauseMenu();
 bool ProcessPauseSelect(int choice, WINDOW* menu);
 void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options);
+
+//monster_loot_tables.c functions
+void GoblinWarriorLoot(Entity* goblin);
+void HobGoblinWarriorLoot(Entity* hobGoblin);
+void KoboldWarriorLoot(Entity* kobold);
 
 // monster.c functions
 void AggroMove(Entity* mptr);
