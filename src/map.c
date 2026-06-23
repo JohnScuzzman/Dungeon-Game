@@ -12,8 +12,8 @@ Position SetupMap(Entity* mptr, int n_rooms) {
 
     for (int i = 0; i < n_rooms; i++) {
         // left corner of room.
-        y = (rand() % (MAP_HEIGHT - 15)) + 1; // 1-15
-        x = (rand() % (MAP_WIDTH - 25)) + 1; // 1-80
+        y = (rand() % (MAP_HEIGHT - 15)) + 1; // 1-35
+        x = (rand() % (MAP_WIDTH - 25)) + 1; // 1-100
         height = (rand() % 7) + 3; // 3-9
         width = (rand() % 15) + 5;// 5-19
 
@@ -37,6 +37,12 @@ Position SetupMap(Entity* mptr, int n_rooms) {
             UpdateMonsterMap(mptr, n_rooms - 1);
         }
     }
+    // int doorRand1 = (rand() % 2) + 1;
+    // int doorRand2 = (rand() % 2) + 1;
+    // // Place the door to the next dungeon floor in the last made room.
+    // AssignDoor(rooms[n_rooms].center.x + doorRand1, rooms[n_rooms].center.y + doorRand2);
+
+    //Prepare to return players starting POS to main.c
     start_pos.y = rooms[0].center.y;
     start_pos.x = rooms[0].center.x;
     free(rooms);

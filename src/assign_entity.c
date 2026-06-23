@@ -112,6 +112,51 @@ void AssignCorpse(Entity* entity, int n_monsters) {
     map[y][x] = *entity;
 }
 
+void AssignDoor(int x, int y) {
+    map[y][x].aggroFlag = false;
+    map[y][x].hasMoved = false;
+    map[y][x].noCollision = false;
+    map[y][x].seen = false;
+    map[y][x].transparent = true;
+    map[y][x].visible = false;
+    map[y][x].isCorpse = false;
+    map[y][x].isMonster = false;
+    map[y][x].seenByPlayer = false;
+    map[y][x].wasLooted = false;
+    map[y][x].wasReplaced = false;
+    map[y][x].ch = 'D';
+    map[y][x].staticCh = 'D';
+    map[y][x].aggroRange = 0;
+    map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
+    map[y][x].entityID = 0;
+    map[y][x].entityStats.ATK = 0;
+    map[y][x].entityStats.CHA = 0;
+    map[y][x].entityStats.CON = 0;
+    map[y][x].entityStats.DEX = 0;
+    map[y][x].entityStats.INT = 0;
+    map[y][x].entityStats.STR = 0;
+    map[y][x].entityStats.WIS = 0;
+    map[y][x].entityStats.AC = 0;
+    map[y][x].entityStats.HP = 0;
+    map[y][x].entityStats.mana = 0;
+    map[y][x].entityStats.maxHP = 0;
+    map[y][x].entityStats.maxMana = 0;
+    map[y][x].entityStats.LVL = 0;
+    map[y][x].entityStats.EXP = 0;
+    map[y][x].entityStats.maxDMG = 0;
+    map[y][x].entityStats.minDMG = 0;
+    map[y][x].pos.x = x;
+    map[y][x].pos.y = y;
+    map[y][x].mapInfo.oldSeen = false;
+    map[y][x].mapInfo.newSeen = false;
+    map[y][x].mapInfo.oldVisible = false;
+    map[y][x].mapInfo.newSeen = false;
+    map[y][x].mapInfo.oldChar = 'D';
+    map[y][x].mapInfo.newChar = 'D';
+    map[y][x].entityArmor = NoArmor();
+    map[y][x].entityWeapon = NoWeapon();
+}
+
 /* 
 Assigns the entity at the given coordinates to a floor, and zeroes out all the information.
 */
@@ -175,9 +220,8 @@ void AssignGoblinWarrior(Entity* monster) {
     monster->entityStats.STR = 12;
     monster->entityStats.WIS = 8;
     monster->entityArmor = Rags();
-    monster->entityWeapon = Shortsword();
     AddToNPCInventory(monster, items[RAGS], 1);
-    AddToNPCInventory(monster, items[SHORTSWORD], 1);
+    GoblinWarriorLoot(monster);
     monster->aggroRange = 15;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 2; // Their swords suck.
@@ -204,10 +248,10 @@ void AssignKoboldWarrior(Entity* monster) {
     monster->entityStats.INT = 8;
     monster->entityStats.STR = 10;
     monster->entityStats.WIS = 8;
-    monster->entityArmor = LeatherArmor();
+    monster->entityArmor = Rags();
     monster->entityWeapon = Dagger();
-    AddToNPCInventory(monster, items[LEATHER_ARMOR], 1);
-    AddToNPCInventory(monster, items[DAGGER], 1);
+    AddToNPCInventory(monster, items[RAGS], 1);
+    KoboldWarriorLoot(monster);
     monster->aggroRange = 20;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = monster->entityWeapon.maxDMG;
@@ -222,6 +266,7 @@ void AssignKoboldWarrior(Entity* monster) {
 }
 
 void AssignGoblinRanger(Entity* monster) {
+    int randArrows = 12;
     monster->ch = 'G';
     monster->staticCh = 'G'; 
     monster->entityStats.CHA = 8;
@@ -234,6 +279,7 @@ void AssignGoblinRanger(Entity* monster) {
     monster->entityWeapon = Shortbow();
     AddToNPCInventory(monster, items[RAGS], 1);
     AddToNPCInventory(monster, items[SHORTBOW], 1);
+    AddToNPCInventory(monster, items[ARROWS], (rand() % randArrows) + 5); // 5 - 12 arrows
     monster->aggroRange = 15;
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 4; // Their shortbows should suck more than normal.
@@ -259,7 +305,7 @@ void AssignHobgoblinWarrior(Entity* monster) {
     monster->entityArmor = LeatherArmor();
     monster->entityWeapon = Scimitar();
     AddToNPCInventory(monster, items[LEATHER_ARMOR], 1);
-    AddToNPCInventory(monster, items[SCIMITAR], 1);
+    HobGoblinWarriorLoot(monster);
     monster->aggroRange = 12;
     monster->entityStats.AC = ((monster->entityStats.STR - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = monster->entityWeapon.maxDMG;

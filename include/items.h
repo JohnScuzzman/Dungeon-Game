@@ -11,11 +11,11 @@ typedef enum {
     CLAWS,
     DAGGER,
     SHORTSWORD,
+    QUARTERSTAFF,
     LONGSWORD,
-    GREATSWORD,
     CUTLASS,
     SCIMITAR,
-    QUARTERSTAFF,
+    GREATSWORD,
     CHROME_FISTS,
     ACID_POTION,
     SHORTBOW,
@@ -40,9 +40,9 @@ typedef enum {
     ENERGY_PACKS,
 	HEAVY_ENERGY_PACKS,
     RAGS,
-    ROBES,
     LEATHER_ARMOR,
     CHAINMAIL,
+    ROBES,
     RANGERS_CLOAK,
     METALLIC_SKIN
 } ItemIDs;
@@ -81,6 +81,7 @@ typedef enum {
     AMULET,
     FOOD,
     POTIONS,
+    CURRENCY
 } ItemTypes;
 
 typedef struct {
@@ -176,8 +177,6 @@ Ammo BulletDragonsBreath();
 Ammo Missiles();
 Ammo EnergyPacks();
 Ammo HeavyEnergyPacks();
-
-
 
 
 // typedef struct {
