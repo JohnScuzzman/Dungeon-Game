@@ -48,13 +48,13 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters, int* playerRegen, int* 
             MovePlayer(newPos, combatHistory);
             return true;
         //move up and left with insert
-        case KEY_IC:
+        case KEY_HOME:
             newPos.y--;
             newPos.x--;
             MovePlayer(newPos, combatHistory);
             return true;
         //move down and left with End
-        case KEY_DC:
+        case KEY_END:
             newPos.y++;
             newPos.x--;
             MovePlayer(newPos, combatHistory);
@@ -71,16 +71,14 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters, int* playerRegen, int* 
             newPos.x++;
             MovePlayer(newPos, combatHistory);
             return true;
+        case 1005: // keypad center
+            return true;
+        case 1040: // keypad center
+            return true;
         case 102: // f key
             return PlayerRangedAttack(n_monsters);
         case 70: // F key
             return PlayerRangedAttack(n_monsters);
-        case KEY_HOME: // debug
-            player->playerStats.EXP += 90;
-            break;
-        case 92: // debug
-            player->playerStats.EXP += 90;
-            break;
         case 49: // 1 key
             return UsePlayerAbility(n_monsters, ABILITY_1);
         case 50: // 2 key
@@ -100,14 +98,20 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters, int* playerRegen, int* 
                     return UsePlayerAbility(n_monsters , ABILITY_5);
             }
             break;
-        case 65: // c key
-            //Player menu function here
-            break;
-        case 105: // i key
-            break;
-        case 126:
-            // RestUntilHealed(n_monsters, playerRegen, manaRegen);
-            break;
+        // case 65: // c key
+        //     //Player menu function here
+        //     break;
+        // case 105: // i key
+        //     break;
+        // case 126:
+        //     // RestUntilHealed(n_monsters, playerRegen, manaRegen);
+        //     break;
+        // case KEY_HOME: // debug
+        //     player->playerStats.EXP += 90;
+        //     break;
+        // case 92: // debug
+        //     player->playerStats.EXP += 90;
+        //     break;
         default:
             break;
     }

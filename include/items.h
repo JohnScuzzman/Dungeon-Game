@@ -72,7 +72,6 @@ typedef enum {
     WEAPON,
 	AMMO,
     ARMOR,
-    CYBERNETICS,
     HELMET,
     SHOES,
     GLOVES,
@@ -81,7 +80,8 @@ typedef enum {
     AMULET,
     FOOD,
     POTIONS,
-    CURRENCY
+    CURRENCY,
+    CYBERNETICS
 } ItemTypes;
 
 typedef struct {
