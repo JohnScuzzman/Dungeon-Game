@@ -2,100 +2,151 @@
 
 #define ABILITY_BAR_STARTX 2
 #define ABILITIY_BAR_BUFFERX 12
-#define ABILITY_BAR_Y (MAP_HEIGHT - 1)
-
-/* Sidebar/layout helpers */
-#define SIDEBAR_X (MAP_WIDTH + 2)
-#define STATS_COL2 (SIDEBAR_X + 29)
 #define STATS_WIDTH 40
-#define RIGHT_BORDER (SIDEBAR_X + STATS_WIDTH)
+#define ABILITY_BAR_Y (LINES - 1)
 
-/* Draw the Map to the screen. */
+/* * DYNAMIC LAYOUT ENGINE
+ * Instead of hardcoding, we compute coordinates relative to the screen dimensions
+ */
+static int camera_x = 0;
+static int camera_y = 0;
+static int current_map_view_width = 0;
+static int current_map_view_height = 0;
+static int dynamic_sidebar_x = 0;
+
+void UpdateCameraAndLayout(void) {
+    // 1. Determine how much room we have for the sidebar
+    // Stats width is 40. Let's give the sidebar absolute priority on screen space.
+    dynamic_sidebar_x = COLS - 42; 
+    if (dynamic_sidebar_x > MAP_WIDTH + 2) {
+        dynamic_sidebar_x = MAP_WIDTH + 2; // Cap it at its max beautiful layout size
+    }
+
+    // 2. The map gets whatever space is left over on the left side
+    current_map_view_width = dynamic_sidebar_x - 2;
+    if (current_map_view_width > MAP_WIDTH) current_map_view_width = MAP_WIDTH;
+
+    // 3. Vertical layout allocation (Reserve 2 rows at bottom for abilities if needed)
+    current_map_view_height = LINES - 3; 
+    if (current_map_view_height > MAP_HEIGHT) current_map_view_height = MAP_HEIGHT;
+
+    // 4. Center the camera viewport around the player's physical location
+    camera_x = player->pos.x - (current_map_view_width / 2);
+    camera_y = player->pos.y - (current_map_view_height / 2);
+
+    // 5. Clamp the camera viewport bounds so we don't look into empty code void
+    if (camera_x < 0) camera_x = 0;
+    if (camera_y < 0) camera_y = 0;
+    if (camera_x > MAP_WIDTH - current_map_view_width)   camera_x = MAP_WIDTH - current_map_view_width;
+    if (camera_y > MAP_HEIGHT - current_map_view_height) camera_y = MAP_HEIGHT - current_map_view_height;
+}
+
+/* Draw the Map to the screen using our sliding camera viewport. */
 void DrawMap()
 { 
-  for (int y = 0; y < MAP_HEIGHT; y++)
+  // We only iterate through what can physically fit on screen right now!
+  for (int y = 0; y < current_map_view_height; y++)
   { 
-    for (int x = 0; x < MAP_WIDTH; x++)
+    for (int x = 0; x < current_map_view_width; x++)
     { 
-        if (map[y][x].visible) {
-          mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR));
+        // Translate screen coordinate to our internal large virtual map index
+        int map_y = camera_y + y;
+        int map_x = camera_x + x;
+
+        if (map[map_y][map_x].visible) {
+          mvaddch(y + 1, x + 1, map[map_y][map_x].ch | COLOR_PAIR(VISIBLE_COLOR));
         }
-        else if (map[y][x].seen && map[y][x].entityID < 2){
-          mvaddch(y, x, map[y][x].ch | COLOR_PAIR(SEEN_COLOR));
+        else if (map[map_y][map_x].seen && map[map_y][map_x].entityID < 2){
+          mvaddch(y + 1, x + 1, map[map_y][map_x].ch | COLOR_PAIR(SEEN_COLOR));
         }
-        else if (map[y][x].seen && map[y][x].entityID > 1){
-          mvaddch(y, x, '.' | COLOR_PAIR(SEEN_COLOR));
+        else if (map[map_y][map_x].seen && map[map_y][map_x].entityID > 1){
+          mvaddch(y + 1, x + 1, '.' | COLOR_PAIR(SEEN_COLOR));
         }
-        else if (!map[y][x].seen && map[y][x].entityID > 1){
-          mvaddch(y, x, ' ' | COLOR_PAIR(SEEN_COLOR));
+        else if (!map[map_y][map_x].seen && map[map_y][map_x].entityID > 1){
+          mvaddch(y + 1, x + 1, ' ' | COLOR_PAIR(SEEN_COLOR));
         }
         else {
-          mvaddch(y, x, ' ');
+          mvaddch(y + 1, x + 1, ' ');
         }
     } 
   } 
 }
 
-/* Draw Player based on position. */
+/* Draw Player adjusting for camera position offset */
 void DrawPlayer(Player* player) { 
-	mvaddch(player->pos.y, player->pos.x, player->ch | player->color | A_BOLD | A_DIM);
-  	refresh();
-	} 
+  int screen_x = (player->pos.x - camera_x) + 1;
+  int screen_y = (player->pos.y - camera_y) + 1;
 
-/* Makes the players avatar blink when called.*/
+  // Only draw player if they are physically within our screen bounds
+  if (screen_x > 0 && screen_x <= current_map_view_width && screen_y > 0 && screen_y <= current_map_view_height) {
+      mvaddch(screen_y, screen_x, player->ch | player->color | A_BOLD | A_DIM);
+  }
+  refresh();
+} 
+
 void DrawPlayerBlink(Player* player) { 
-	// attron(A_STANDOUT);
-	mvaddch(player->pos.y, player->pos.x, player->ch | player->color | A_BOLD | A_DIM | A_BLINK);
-	// attroff(A_STANDOUT); 
-	}  
+  int screen_x = (player->pos.x - camera_x) + 1;
+  int screen_y = (player->pos.y - camera_y) + 1;
 
-/* Draws equipped items.*/
-void DrawPlayerEquipment(){
-  mvprintw(2, SIDEBAR_X, "Name: %s", player->playerName);
-  mvprintw(4, SIDEBAR_X, "Race: %s", player->playerRace);
-  mvprintw(6, SIDEBAR_X, "Class: %s", player->playerClass.className);
-  mvprintw(8, SIDEBAR_X, "Armor: %s", player->equippedArmor.item.itemName);
-  mvprintw(12, SIDEBAR_X, "Melee: %s", player->equippedMelee.item.itemName);
-  mvprintw(14, SIDEBAR_X, "Ranged: %s", player->equippedRanged.item.itemName);
-  // mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
-  // mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
-  // mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
+  if (screen_x > 0 && screen_x <= current_map_view_width && screen_y > 0 && screen_y <= current_map_view_height) {
+      mvaddch(screen_y, screen_x, player->ch | player->color | A_BOLD | A_DIM | A_BLINK);
+  }
 }
 
-/* Draw the players stats like INT, HP, EXP, LVL, etc.*/
-void DrawPlayerStats() {
+/* Draws equipped items based on dynamic layout anchor */
+void DrawPlayerEquipment(){
+  mvprintw(2, dynamic_sidebar_x, "Name: %s", player->playerName);
+  mvprintw(4, dynamic_sidebar_x, "Race: %s", player->playerRace);
+  mvprintw(6, dynamic_sidebar_x, "Class: %s", player->playerClass.className);
+  mvprintw(8, dynamic_sidebar_x, "Armor: %s", player->equippedArmor.item.itemName);
+  mvprintw(12, dynamic_sidebar_x, "Melee: %s", player->equippedMelee.item.itemName);
+  mvprintw(14, dynamic_sidebar_x, "Ranged: %s", player->equippedRanged.item.itemName);
+}
 
+/* Draw the players stats adjusting columns dynamically */
+void DrawPlayerStats() {
+  int stats_col2 = dynamic_sidebar_x + 24; // shifted closer to look clean on tight layouts
   int EXPLen = NumberOfDigits(player->playerStats.EXP);
   int nextEXPLen = NumberOfDigits(player->playerStats.nextLVLEXP);
   int EXPbuffer = (EXPLen + nextEXPLen);
-  mvprintw(10, SIDEBAR_X, "Armor Class: %d", (player->playerStats.AC) + 10);
-  mvprintw(16, SIDEBAR_X, "HP: %d", player->playerStats.HP);
+
+  mvprintw(10, dynamic_sidebar_x, "Armor Class: %d", (player->playerStats.AC) + 10);
+  mvprintw(16, dynamic_sidebar_x, "HP: %d", player->playerStats.HP);
   if(player->playerClass.isCaster) {
-    mvprintw(18, SIDEBAR_X, "Mana: %d", player->playerStats.mana);
+    mvprintw(18, dynamic_sidebar_x, "Mana: %d", player->playerStats.mana);
   }
   else {
-    mvprintw(18, SIDEBAR_X, "Energy: %d", player->playerStats.mana);
+    mvprintw(18, dynamic_sidebar_x, "Energy: %d", player->playerStats.mana);
   }
-  mvprintw(2, STATS_COL2, "LVL: %d", player->playerStats.LVL);
-  mvprintw(4, STATS_COL2, "CHA: %d", player->playerStats.CHA);
-  mvprintw(6, STATS_COL2, "CON: %d", player->playerStats.CON);
-  mvprintw(8, STATS_COL2, "DEX: %d", player->playerStats.DEX);
-  mvprintw(10, STATS_COL2, "INT: %d", player->playerStats.INT);
-  mvprintw(12, STATS_COL2, "STR: %d", player->playerStats.STR);
-  mvprintw(14, STATS_COL2, "WIS: %d", player->playerStats.WIS);
-  mvprintw(16, STATS_COL2 + 1 - EXPbuffer, "EXP: %d/%d", player->playerStats.EXP, player->playerStats.nextLVLEXP);
+  mvprintw(2, stats_col2, "LVL: %d", player->playerStats.LVL);
+  mvprintw(4, stats_col2, "CHA: %d", player->playerStats.CHA);
+  mvprintw(6, stats_col2, "CON: %d", player->playerStats.CON);
+  mvprintw(8, stats_col2, "DEX: %d", player->playerStats.DEX);
+  mvprintw(10, stats_col2, "INT: %d", player->playerStats.INT);
+  mvprintw(12, stats_col2, "STR: %d", player->playerStats.STR);
+  mvprintw(14, stats_col2, "WIS: %d", player->playerStats.WIS);
+  mvprintw(16, stats_col2 + 1 - EXPbuffer, "EXP: %d/%d", player->playerStats.EXP, player->playerStats.nextLVLEXP);
 }
 
-/* Draw the players Abilities in the bottom left of screen. */
-/*1: %s - %d |, 2: %s - %d |, etc, are ABILITY_BAR_BUFFERX*/
+void DrawCombatLog() {
+  if (IsEmpty(q)){
+        return;
+  }
+  // Let log draw starting below stats box bounding box
+  for (int i = 0; i <= q->rear; i++) {
+    mvprintw(22 + i, dynamic_sidebar_x, "%s", q->events[i]);
+  }
+}
+
 void DrawAbilities() { 
+  int ability_y = current_map_view_height + 1;
   int buffer;
-  mvprintw(ABILITY_BAR_Y, ABILITY_BAR_STARTX, "1: %s - %d |", 
+  mvprintw(ability_y, ABILITY_BAR_STARTX, "1: %s - %d |", 
   player->playerClass.abilities[ABILITY_1].abilityName, 
   player->playerClass.abilities[ABILITY_1].manaCost);
 
   buffer = strlen(player->playerClass.abilities[ABILITY_1].abilityName) + ABILITIY_BAR_BUFFERX;
-  mvprintw(ABILITY_BAR_Y, buffer, "2: %s - %d |", player->playerClass.abilities[ABILITY_2].abilityName,
+  mvprintw(ability_y, buffer, "2: %s - %d |", player->playerClass.abilities[ABILITY_2].abilityName,
   player->playerClass.abilities[ABILITY_2].manaCost);
   buffer -= ABILITY_BAR_STARTX;
   if (player->playerClass.abilities[ABILITY_3].abilityID > NO_ABILITY) {
@@ -118,34 +169,36 @@ void DrawAbilities() {
   }
 }
 
-
-/* Draw a pretty border around the map and stats.*/
 void DrawBorder(void) {
-  for (int y = 0; y < MAP_HEIGHT; y++) {
+  // Draw box around dynamic map viewport
+  for (int y = 0; y <= current_map_view_height + 1; y++) {
     mvprintw(y, 0, "|");
-    mvprintw(y, MAP_WIDTH, "|");
+    mvprintw(y, current_map_view_width + 1, "|");
   }
 
-  for (int x = 0; x <= MAP_WIDTH + 1; x++) {
+  for (int x = 0; x <= current_map_view_width + 1; x++) {
     mvprintw(0, x, "=");
-    mvprintw(MAP_HEIGHT, x, "=");
+    mvprintw(current_map_view_height + 1, x, "=");
   }
 
-  /* Internal borders for stats & abilites */
-  for (int x = 0; x < STATS_WIDTH + 1; x++) {
-    mvprintw(0, SIDEBAR_X + x, "=");
-    mvprintw(20, SIDEBAR_X + x, "=");
-    mvprintw(MAP_HEIGHT, SIDEBAR_X + x, "=");
+  // Draw box around dynamic sidebar panel
+  int right_border_edge = dynamic_sidebar_x + STATS_WIDTH;
+  for (int x = 0; x <= STATS_WIDTH; x++) {
+    mvprintw(0, dynamic_sidebar_x + x, "=");
+    mvprintw(20, dynamic_sidebar_x + x, "=");
+    mvprintw(current_map_view_height + 1, dynamic_sidebar_x + x, "=");
   }
 
-  for (int y = 1; y < MAP_HEIGHT; y ++) {
-    mvprintw(y, RIGHT_BORDER, "|");
+  for (int y = 1; y <= current_map_view_height; y++) {
+    mvprintw(y, right_border_edge, "|");
   }
+}
 
-  for (int x = 0; x < MAP_WIDTH; x++) {
-    mvprintw(ABILITY_BAR_Y - 1, x, "=");
-  }
 
+void DrawPlayerInventory() {
+    for(int i = player->invHead; i < player->invTail; i++) {
+        mvprintw(26 + i, 2, "ItemID:%d, Item:%s", player->inventory[i].itemID, player->inventory[i].itemName);
+    }
 }
 
 void DrawDebug(Entity* mptr, int n_monsters) {
@@ -164,37 +217,19 @@ void DrawDebug(Entity* mptr, int n_monsters) {
   
 }
 
-/* 
-Draws the combatlog Queue to the rightmost display area under player's stats.
-*/
-void DrawCombatLog() {
- 	if (IsEmpty(q)){
-        return;
-    }
-    for (int i = 0; i <= q->rear; i++) {
-    	mvprintw(LOG_HEIGHT + i, SIDEBAR_X, "%s", q->events[i]);
-  	}
-}
-
-
-void DrawPlayerInventory() {
-    for(int i = player->invHead; i < player->invTail; i++) {
-        mvprintw(26 + i, 2, "ItemID:%d, Item:%s", player->inventory[i].itemID, player->inventory[i].itemName);
-    }
-}
-
-/*Draw Everything*/ 
-//void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
 void DrawEverything() {
-	clear();
-	DrawMap();
-	DrawPlayer(player);
-	DrawBorder();
+  clear();
+  
+  // Force recalculating limits dynamically based on current window boundaries
+  UpdateCameraAndLayout();
+  
+  DrawMap();
+  DrawPlayer(player);
+  DrawBorder();
   DrawPlayerEquipment();
   DrawPlayerStats();
   DrawAbilities();
   // DrawPlayerInventory();
   // DrawDebug(mptr, n_monsters);
-	DrawCombatLog();
+  DrawCombatLog();
 }
-
