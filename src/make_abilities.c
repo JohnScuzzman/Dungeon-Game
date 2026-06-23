@@ -51,11 +51,11 @@ Ability Charge() {
     charge.hasEffects = true;
     charge.abilityID = CHARGE;
     charge.duration = 0;
-    charge.minDMG = (player->equippedMelee.minDMG) + 3;
-    charge.maxDMG = (player->equippedMelee.maxDMG) + 3;
+    charge.minDMG = (player->equippedMelee.minDMG) + 1;
+    charge.maxDMG = (player->equippedMelee.maxDMG) + 1;
     charge.manaCost = 4;
     charge.range = 5;
-    charge.abilitySave = (player->playerStats.ATK) + 40;
+    charge.abilitySave = (player->playerStats.ATK) + 10;
     charge.miscStat = 0;
     strcpy(charge.abilityName, "Charge");
     strcpy(charge.abilityDesc, "none");

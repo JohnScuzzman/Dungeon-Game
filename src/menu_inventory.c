@@ -261,16 +261,20 @@ void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** option
 bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot, bool unEquipMenu) {
     switch(newChoice){
         case 0: // Drop
-            if(playerInv[prevChoice]->quantity == 1) Unequip(*playerInv[prevChoice]);
-            RemoveFromPlayerInventory(*playerInv[prevChoice], 1);
+            if(playerInv[prevChoice]->quantity == 1 && playerInv[prevChoice]->unequippable) {
+                Unequip(*playerInv[prevChoice]);
+                RemoveFromPlayerInventory(*playerInv[prevChoice], 1);
+            }
             DrawEverything();
             refresh();
             delwin(invOp);
             return true;
             break;
         case 1: // Drop All
-            Unequip(*playerInv[prevChoice]);
-            RemoveFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
+            if(playerInv[prevChoice]->unequippable) {
+                Unequip(*playerInv[prevChoice]);
+                RemoveFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
+            }
             DrawEverything();
             refresh();
             delwin(invOp);
@@ -339,10 +343,20 @@ void RenderItemInfo(WINDOW* desc, Item* item) {
 
 void EquipOrUnequip (Item** playerInv, bool unEquipMenu, int prevChoice) {
     if(unEquipMenu){
-        Unequip(*playerInv[prevChoice]);
+        if(playerInv[prevChoice]->unequippable)Unequip(*playerInv[prevChoice]);
+        else{
+            strcpy(combatHistory->event, "You cannot unequip that.");
+            QueueEvent(q, combatHistory->event);
+            DrawCombatLog();
+        }
     } 
     else {
-        Equip(*playerInv[prevChoice]);
+        if(playerInv[prevChoice]->equippable)Equip(*playerInv[prevChoice]);
+        else{
+            strcpy(combatHistory->event, "You cannot equip that.");
+            QueueEvent(q, combatHistory->event);
+            DrawCombatLog();
+        }
     }
 }
 

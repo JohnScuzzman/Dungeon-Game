@@ -284,6 +284,7 @@ void AssignGoblinRanger(Entity* monster) {
     monster->entityStats.AC = ((monster->entityStats.DEX - 10) / 2) + (monster->entityArmor.AC);
     monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 4; // Their shortbows should suck more than normal.
     monster->entityStats.minDMG = monster->entityWeapon.minDMG;
+    monster->entityWeapon.range -= 4; 
     monster->entityStats.maxHP = 4;
     monster->entityStats.maxMana = 0;
     monster->entityStats.LVL = 1;
@@ -303,12 +304,11 @@ void AssignHobgoblinWarrior(Entity* monster) {
     monster->entityStats.STR = 12;
     monster->entityStats.WIS = 8;
     monster->entityArmor = LeatherArmor();
-    monster->entityWeapon = Scimitar();
     AddToNPCInventory(monster, items[LEATHER_ARMOR], 1);
     HobGoblinWarriorLoot(monster);
     monster->aggroRange = 12;
     monster->entityStats.AC = ((monster->entityStats.STR - 10) / 2) + (monster->entityArmor.AC);
-    monster->entityStats.maxDMG = monster->entityWeapon.maxDMG;
+    monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 3; // hit hard but shouldn't 1-shot
     monster->entityStats.minDMG = monster->entityWeapon.minDMG;
     monster->entityStats.maxHP = 6;
     monster->entityStats.maxMana = 0;

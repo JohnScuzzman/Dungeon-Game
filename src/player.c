@@ -152,11 +152,11 @@ void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMov
     /* Check if in range of a visible monster. */
     for (int i = 0; i < n_monsters; i++){
         if((mptr + i)->visible && (mptr + i)->isMonster) {
-            strcpy(combatHistory->event, "You cannot rest now, a");
+            strcpy(combatHistory->event, "You cannot rest now, a ");
             strcat(combatHistory->event, (mptr + i)->entityName);
             QueueEvent(q, combatHistory->event);
-            strcpy(combatHistory->event, " lies to the ");
-            strcpy(combatHistory->event, DIRECTIONS[MonsterDirection((mptr + i))]);
+            strcpy(combatHistory->event, "lies to the ");
+            strcat(combatHistory->event, DIRECTIONS[MonsterDirection((mptr + i))]);
             strcat(combatHistory->event, ".");
             QueueEvent(q, combatHistory->event);
             return;
