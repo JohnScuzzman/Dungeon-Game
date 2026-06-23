@@ -82,6 +82,7 @@ Item* CreateItemTable() {
     MakeWeaponItems(items);
     MakeAmmoItems(items);
     MakeArmorItems(items);
+    FillNullItems(items);
     NameWeaponItems(items);
     NameAmmoItems(items);
     NameArmorItems(items);
@@ -393,7 +394,7 @@ void MakeAmmoItems(Item* items) {
 
 void MakeArmorItems(Item* items) {
     // Armor
-    for (int i = RAGS; i <= METALLIC_SKIN; i++){
+    for (int i = RAGS; i < METALLIC_SKIN; i++){
         items[i].equippable = true;
         items[i].lootable = true;
         items[i].unequippable = true;
@@ -401,6 +402,19 @@ void MakeArmorItems(Item* items) {
         items[i].type = ARMOR;
     }
     // Cybernetics
+     for (int i = METALLIC_SKIN; i <= METALLIC_SKIN; i++){
+        items[i].equippable = true;
+        items[i].lootable = true;
+        items[i].unequippable = false;
+        items[i].itemID = i;
+        items[i].type = ARMOR;
+    }
+}
+
+/*
+Fills remaining item list with empty items.
+*/
+void FillNullItems(Item* items){
     for (int i = METALLIC_SKIN + 1; i < ALL_ITEMS; i++){
         items[i].equippable = false;
         items[i].lootable = false;

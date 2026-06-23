@@ -153,7 +153,7 @@ typedef struct {
   Position lastPos;
   Position playerLastPos;
   MapInfo mapInfo;
-  Armor entityArmor;
+  Armor entityArmor; // armor and weapons located in items.h
   Weapon entityWeapon;
   Item inventory[MAX_INVENTORY_SIZE];
   char entityName[MAX_NAME_SIZE];
@@ -320,6 +320,7 @@ bool IsArmorItem(Item target);
 void MakeWeaponItems(Item* items);
 void MakeAmmoItems(Item* items);
 void MakeArmorItems(Item* items);
+void FillNullItems(Item* items);
 void NameWeaponItems(Item* items);
 void NameAmmoItems(Item* items);
 void NameArmorItems(Item* items);
