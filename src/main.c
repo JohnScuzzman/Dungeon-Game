@@ -50,7 +50,23 @@ int main(void)
   compatibleTerminal = NcursesSetup();
   
   if (compatibleTerminal)
-  {
+  {/* Dungeon Crawl Stone Soup Method for handling numpad inputs*/
+    define_key("\033Op", 1000);
+    define_key("\033Oq", 1001);
+    define_key("\033Or", 1002);
+    define_key("\033Os", 1003);
+    define_key("\033Ot", 1004);
+    define_key("\033Ou", 1005);
+    define_key("\033Ov", 1006);
+    define_key("\033Ow", 1007);
+    define_key("\033Ox", 1008);
+    define_key("\033Oy", 1009);
+
+	/* Weird exceptions */
+	define_key("\033[1~", 1031); // Home
+	define_key("\033[4~", 1034); // End
+	define_key("\033[E",  1040); // center arrow
+
     mousemask(BUTTON1_CLICKED, NULL);
     Position start_pos;
     /* Generate seeds */
