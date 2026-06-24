@@ -112,7 +112,7 @@ void AssignCorpse(Entity* entity, int n_monsters) {
     map[y][x] = *entity;
 }
 
-void AssignDoor(int x, int y) {
+void AssignStairsDown(int x, int y) {
     map[y][x].aggroFlag = false;
     map[y][x].hasMoved = false;
     map[y][x].noCollision = false;
@@ -124,11 +124,11 @@ void AssignDoor(int x, int y) {
     map[y][x].seenByPlayer = false;
     map[y][x].wasLooted = false;
     map[y][x].wasReplaced = false;
-    map[y][x].ch = 'D';
-    map[y][x].staticCh = 'D';
+    map[y][x].ch = '=';
+    map[y][x].staticCh = '=';
     map[y][x].aggroRange = 0;
     map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
-    map[y][x].entityID = 0;
+    map[y][x].entityID = 1000;
     map[y][x].entityStats.ATK = 0;
     map[y][x].entityStats.CHA = 0;
     map[y][x].entityStats.CON = 0;
@@ -151,10 +151,14 @@ void AssignDoor(int x, int y) {
     map[y][x].mapInfo.newSeen = false;
     map[y][x].mapInfo.oldVisible = false;
     map[y][x].mapInfo.newSeen = false;
-    map[y][x].mapInfo.oldChar = 'D';
-    map[y][x].mapInfo.newChar = 'D';
+    map[y][x].mapInfo.oldChar = '=';
+    map[y][x].mapInfo.newChar = '=';
     map[y][x].entityArmor = NoArmor();
     map[y][x].entityWeapon = NoWeapon();
+    ClearEntityInventory(&map[y][x]);
+    strcpy(map[y][x].entityClass, "None");
+    strcpy(map[y][x].entityName, "Stairs to Next Floor");
+    strcpy(map[y][x].entityRace, "None");
 }
 
 /* 

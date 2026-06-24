@@ -37,10 +37,8 @@ Position SetupMap(Entity* mptr, int n_rooms) {
             UpdateMonsterMap(mptr, n_rooms - 1);
         }
     }
-    // int doorRand1 = (rand() % 2) + 1;
-    // int doorRand2 = (rand() % 2) + 1;
-    // // Place the door to the next dungeon floor in the last made room.
-    // AssignDoor(rooms[n_rooms].center.x + doorRand1, rooms[n_rooms].center.y + doorRand2);
+    // Place the door to the next dungeon floor in the last made room.
+    AssignStairsDown(rooms[n_rooms - 1].center.x + 1, rooms[n_rooms - 1].center.y + 1);
 
     //Prepare to return players starting POS to main.c
     start_pos.y = rooms[0].center.y;
@@ -57,6 +55,42 @@ void FreeMap(void) {
     free(map);
 }
 
+void MakeNewLevel(int* old_n_monsters) {
+    for (int y = 0; y < MAP_HEIGHT; y++) { 
+        for (int x = 0; x < MAP_WIDTH; x++) { 
+            if (map[y][x].isCorpse) {
+                AssignFloor(x, y);
+            }
+        }
+    }
+    
+
+    for(int i = 0; i < *old_n_monsters; i++) {
+        AssignFloor((mptr + i)->pos.x, (mptr + i)->pos.y);
+        mptr[i] = map[(mptr + i)->pos.y][(mptr + i)->pos.x];
+    }
+
+    Position start_pos;
+    int n_rooms =  (rand() % 11) + 10;
+    *old_n_monsters = n_rooms - 1;
+    /* Create our map using function in map.c*/
+    map = CreateEntities();
+
+    free(mptr);
+
+    /* Make # of rooms -1 number of monsters. */
+    /* Point mptr at monsterlist[0]. */
+    mptr = MonsterList(*old_n_monsters);
+
+    /* Create a starting position for player and setup the floor in map.c*/
+    /* Pass the monsterList to populate it.*/
+    start_pos = SetupMap(mptr, n_rooms);
+
+    /* Place player */
+    player->pos.y = start_pos.y;
+    player->pos.x = start_pos.x;
+    AssignFloor(start_pos.x, start_pos.y);
+}
 // /* return farthest unexplored region in players FOV. */
 // /* return monsters pos if monster found. */
 // /* return players pos if no valid unexplored tile.*/

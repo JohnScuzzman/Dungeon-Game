@@ -50,6 +50,7 @@ typedef enum {
 typedef struct {
     bool isAttack;
     bool isMagic;
+    bool isRanged;
     bool hasEffects;
     int abilityID;
     int duration;
