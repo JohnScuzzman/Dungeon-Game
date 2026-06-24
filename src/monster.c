@@ -334,7 +334,7 @@ void UpdateMonsterVisible(Entity* monster, Player* player){
         map[monster->pos.y][monster->pos.x].visible = true;
         monster->ch = monster->staticCh;
         map[monster->pos.y][monster->pos.x].ch = monster->ch;
-        RecordMonsterSeen(monster);
+        RecordEntitySeen(monster);
         if (GetDistance(monster->pos, player->pos) < 6) {
             monster->transparent = true;
         }
@@ -356,44 +356,44 @@ void ResetMoveFlags(Entity* mptr, int n_monsters) {
     }
 }
 
-void RecordMonsterSeen(Entity* monster) {
-    if(!monster->seenByPlayer){
+void RecordEntitySeen(Entity* entity) {
+    if(!entity->seenByPlayer){
         strcpy(combatHistory->event, "You see a ");
-        strcat(combatHistory->event, monster->entityName);
+        strcat(combatHistory->event, entity->entityName);
         QueueEvent(q, combatHistory->event);
         strcpy(combatHistory->event, "to the ");
-        strcat(combatHistory->event, DIRECTIONS[MonsterDirection(monster)]);
+        strcat(combatHistory->event, DIRECTIONS[EntityDirection(entity)]);
         strcat(combatHistory->event, ".");
         QueueEvent(q, combatHistory->event);
-        monster->seenByPlayer = true;
+        entity->seenByPlayer = true;
         player->isResting = false;
     }
 }
 
-/* Returns an int representing the monsters direction relative to the player. */
-int MonsterDirection(Entity* monster) {
-    if((player->pos.x) < (monster->pos.x) && (player->pos.y) < (monster->pos.y)) {
+/* Returns an int representing the entitys direction relative to the player. */
+int EntityDirection(Entity* entity) {
+    if((player->pos.x) < (entity->pos.x) && (player->pos.y) < (entity->pos.y)) {
         return SOUTH_EAST;
     }
-    else if ((player->pos.x) < (monster->pos.x) && (player->pos.y) > (monster->pos.y)) {
+    else if ((player->pos.x) < (entity->pos.x) && (player->pos.y) > (entity->pos.y)) {
         return NORTH_EAST;
     }
-    else if ((player->pos.x) > (monster->pos.x) && (player->pos.y) > (monster->pos.y)) {
+    else if ((player->pos.x) > (entity->pos.x) && (player->pos.y) > (entity->pos.y)) {
         return NORTH_WEST;
     }
-    else if ((player->pos.x) > (monster->pos.x) && (player->pos.y) < (monster->pos.y)) {
+    else if ((player->pos.x) > (entity->pos.x) && (player->pos.y) < (entity->pos.y)) {
         return SOUTH_WEST;
     }
-    else if ((player->pos.x) < (monster->pos.x) && (player->pos.y) == (monster->pos.y)) {
+    else if ((player->pos.x) < (entity->pos.x) && (player->pos.y) == (entity->pos.y)) {
         return EAST;
     }
-    else if ((player->pos.x) > (monster->pos.x) && (player->pos.y) == (monster->pos.y)) {
+    else if ((player->pos.x) > (entity->pos.x) && (player->pos.y) == (entity->pos.y)) {
         return WEST;
     }
-    else if ((player->pos.x) == (monster->pos.x) && (player->pos.y) < (monster->pos.y)) {
+    else if ((player->pos.x) == (entity->pos.x) && (player->pos.y) < (entity->pos.y)) {
         return SOUTH;
     }
-    else if ((player->pos.x) == (monster->pos.x) && (player->pos.y) > (monster->pos.y)) {
+    else if ((player->pos.x) == (entity->pos.x) && (player->pos.y) > (entity->pos.y)) {
         return NORTH;
     } else {
         // Should never occur

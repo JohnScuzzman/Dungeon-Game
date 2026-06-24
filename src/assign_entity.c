@@ -60,7 +60,55 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
         Entity emptyMonster = {0};
         return emptyMonster;
     }
+}
 
+void AssignChest(int x, int y) {
+    map[y][x].aggroFlag = false;
+    map[y][x].hasMoved = false;
+    map[y][x].noCollision = true; // TODO give collision and rewrite MakeInventoryMenu to take position as param.
+    map[y][x].seen = false;
+    map[y][x].transparent = true;
+    map[y][x].visible = false;
+    map[y][x].seenByPlayer = false;
+    map[y][x].wasLooted = false;
+    map[y][x].wasReplaced = false;
+    map[y][x].ch = '$';
+    map[y][x].staticCh = '$';
+    map[y][x].aggroRange = 0;
+    map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
+    map[y][x].entityID = 0;
+    map[y][x].entityType = CHEST;
+    map[y][x].entityStats.ATK = 0;
+    map[y][x].entityStats.CHA = 0;
+    map[y][x].entityStats.CON = 0;
+    map[y][x].entityStats.DEX = 0;
+    map[y][x].entityStats.INT = 0;
+    map[y][x].entityStats.STR = 0;
+    map[y][x].entityStats.WIS = 0;
+    map[y][x].entityStats.AC = 0;
+    map[y][x].entityStats.HP = 0;
+    map[y][x].entityStats.mana = 0;
+    map[y][x].entityStats.maxHP = 0;
+    map[y][x].entityStats.maxMana = 0;
+    map[y][x].entityStats.LVL = 0;
+    map[y][x].entityStats.EXP = 0;
+    map[y][x].entityStats.maxDMG = 0;
+    map[y][x].entityStats.minDMG = 0;
+    map[y][x].pos.x = x;
+    map[y][x].pos.y = y;
+    map[y][x].mapInfo.oldSeen = false;
+    map[y][x].mapInfo.newSeen = false;
+    map[y][x].mapInfo.oldVisible = false;
+    map[y][x].mapInfo.newSeen = false;
+    map[y][x].mapInfo.oldChar = '$';
+    map[y][x].mapInfo.newChar = '$';
+    map[y][x].entityArmor = NoArmor();
+    map[y][x].entityWeapon = NoWeapon();
+    ClearEntityInventory(&map[y][x]);
+    LowLevelChestLoot(&map[y][x]);
+    strcpy(map[y][x].entityClass, "None");
+    strcpy(map[y][x].entityName, "A Chest");
+    strcpy(map[y][x].entityRace, "None");
 }
 
 /* 
@@ -211,6 +259,7 @@ void AssignFloor(int x, int y) {
     strcpy(map[y][x].entityRace, "None");
 }
 
+/* The following functions are used to create monster entities based on a passed Entity pointer.*/
 
 void AssignGoblinWarrior(Entity* monster) {
     monster->ch = 'G';
@@ -238,8 +287,6 @@ void AssignGoblinWarrior(Entity* monster) {
     strcpy(monster->entityName, "Goblin Warrior");
     strcpy(monster->entityRace, "Goblin");
 }
-
-/* The following functions are used to create monster entities based on a passed Entity pointer.*/
 
 void AssignKoboldWarrior(Entity* monster) {
     monster->ch = 'K';

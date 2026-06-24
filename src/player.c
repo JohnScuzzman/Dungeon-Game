@@ -139,6 +139,9 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
     else if (map[newPos.y][newPos.x].entityType == STAIRS) {
         MakeNewLevel(n_monsters);
     }
+    // else if (map[newPos.y][newPos.x].entityType == CHEST) {
+    //     MakeInventoryMenu();
+    // }
     else if (!combatHistory->monsterKilled){
         combatHistory->monsterKilled = false;
         return;
@@ -160,7 +163,7 @@ void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMov
             strcat(combatHistory->event, (mptr + i)->entityName);
             QueueEvent(q, combatHistory->event);
             strcpy(combatHistory->event, "lies to the ");
-            strcat(combatHistory->event, DIRECTIONS[MonsterDirection((mptr + i))]);
+            strcat(combatHistory->event, DIRECTIONS[EntityDirection((mptr + i))]);
             strcat(combatHistory->event, ".");
             QueueEvent(q, combatHistory->event);
             return;
