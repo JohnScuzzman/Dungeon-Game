@@ -61,12 +61,12 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
         }
 
         /* If no adjacent Player, Wander.*/
-        if (!CheckPlayerAdjacent((mptr + i)->pos) && !((mptr + i)->aggroFlag) && (mptr + i)->isMonster == true){
+        if (!CheckPlayerAdjacent((mptr + i)->pos) && !((mptr + i)->aggroFlag) && (mptr + i)->entityType == MONSTER){
             Wander(mptr + i);
             i++;
         }
         /* If adjacent to player, attack them in melee.*/
-        else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->isMonster == true){
+        else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->entityType == MONSTER){
             monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
             /* If monsterCombat = false, player died, end the game.*/
             if (monsterCombat == false) {
@@ -78,7 +78,7 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
         else if (((mptr + i)->entityWeapon.isRanged) &&
         (GetDistance((mptr + i)->pos, player->pos) <= (mptr + i)->entityWeapon.range) &&
         (LineOfSight((mptr + i)->pos, player->pos)) &&
-        ((mptr + i)->isMonster == true)){
+        ((mptr + i)->entityType == MONSTER)){
             monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
             /* If monsterCombat = false, player died, end the game.*/
             if (monsterCombat == false) {
@@ -87,7 +87,7 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
             i++;
         }
         /* If player was seen, move towards player.*/
-        else if (((mptr + i)->aggroFlag) && ((mptr + i)->isMonster)){
+        else if (((mptr + i)->aggroFlag) && ((mptr + i)->entityType == MONSTER)){
             /* Move towards players last known locations.*/
             AggroMove(mptr + i);
             i++;

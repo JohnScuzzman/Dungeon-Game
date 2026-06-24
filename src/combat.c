@@ -57,21 +57,21 @@ bool ShootTargetWithAbility(int x, int y) {
     bool targetHit = false;
     if ((player->playerStats.mana) >= (player->equippedAbility.manaCost)) {
         // Player selected a monster.
-        if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && 
+        if ((map[y][x].entityType == MONSTER) && LineOfSight(player->pos, map[y][x].pos) && 
         (GetDistance(player->pos, map[y][x].pos) <= player->equippedAbility.range)) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedAbility = true;
             combatHistory->defender = map[y][x];
             targetHit = true;
         }
-        else if (map[y][x].isMonster && !(LineOfSight(player->pos, map[y][x].pos)) && 
+        else if (map[y][x].entityType == MONSTER && !(LineOfSight(player->pos, map[y][x].pos)) && 
         GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
             combatHistory->playerUsedAbility = false;
             combatHistory->playerCombat = false;
             strcpy(combatHistory->event, "Target not in line of sight.");
             QueueEvent(q, combatHistory->event);
         }
-        else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
+        else if (map[y][x].entityType == MONSTER && LineOfSight(player->pos, map[y][x].pos) && 
         GetDistance(player->pos, map[y][x].pos) > player->equippedAbility.range){
             combatHistory->playerUsedAbility = false;
             combatHistory->playerCombat = false;
@@ -93,21 +93,21 @@ bool ShootTarget(int x, int y) {
     bool targetHit = false;
     if (player->equippedRanged.isRanged) {
             // Player selected a monster.
-        if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && 
+        if ((map[y][x].entityType == MONSTER) && LineOfSight(player->pos, map[y][x].pos) && 
         (GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range)) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedRanged = true;
             combatHistory->defender = map[y][x];
             targetHit = true;
         }
-        else if (map[y][x].isMonster && !(LineOfSight(player->pos, map[y][x].pos)) && 
+        else if (map[y][x].entityType == MONSTER && !(LineOfSight(player->pos, map[y][x].pos)) && 
         GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
             combatHistory->playerUsedRanged = false;
             combatHistory->playerCombat = false;
             strcpy(combatHistory->event, "Target not in line of sight.");
             QueueEvent(q, combatHistory->event);
         }
-        else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
+        else if (map[y][x].entityType == MONSTER && LineOfSight(player->pos, map[y][x].pos) && 
         GetDistance(player->pos, map[y][x].pos) > player->equippedRanged.range){
             combatHistory->playerUsedRanged = false;
             combatHistory->playerCombat = false;
@@ -151,7 +151,7 @@ void PlayerMeleeOrRanged(Player* player){
 void PlayerPrepareCombat(int n_monsters) {
     PlayerMeleeOrRanged(player);
     Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
-    if (target->isMonster) {
+    if (target->entityType == MONSTER) {
         combatHistory->playerCombat = AttackEntity(target, combatHistory, player, n_monsters);
     }
     // If a monster died, let other monsters still move.
@@ -240,7 +240,7 @@ bool PlayerRangedAttack(int n_monsters){
         if(player->equippedAbility.isRanged && !player->equippedAbility.isMagic){
             ShootFromPlayerInventory(player->equippedAmmo.item, 1);
             player->equippedAmmo.item.quantity--;
-            if(player->equippedAmmo.type == PRIMITIVE && !map[y][x].isMonster) { // Lets player pick up their arrows lol.
+            if(player->equippedAmmo.type == PRIMITIVE && map[y][x].entityType != MONSTER) { // Lets player pick up their arrows lol.
                 AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
             }
         }
@@ -249,7 +249,7 @@ bool PlayerRangedAttack(int n_monsters){
     else if (player->equippedAmmo.item.quantity > 0) {
         ShootFromPlayerInventory(player->equippedAmmo.item, 1);
         player->equippedAmmo.item.quantity--;
-        if(player->equippedAmmo.type == PRIMITIVE && !map[y][x].isMonster) { // Lets player pick up their arrows lol.
+        if(player->equippedAmmo.type == PRIMITIVE && map[y][x].entityType != MONSTER) { 
             AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
             strcpy(combatHistory->event, "You shoot the ");
             strcat(combatHistory->event, map[y][x].entityName);

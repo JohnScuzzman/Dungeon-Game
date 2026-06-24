@@ -10,6 +10,7 @@ Entity** CreateEntities(void) {
             map[y][x].ch = '#';
             map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
             map[y][x].entityID = 1;
+            map[y][x].entityType = WALL;
             map[y][x].entityStats.AC = 30;
             map[y][x].entityStats.HP = 1000;
             strcpy(map[y][x].entityClass, "None");
@@ -77,10 +78,9 @@ void AssignCorpse(Entity* entity, int n_monsters) {
     entity->transparent = true;
     entity->seen = true;
     entity->visible = false;
-    entity->isCorpse = true;
-    entity->isMonster = false;
     entity->seenByPlayer = true;
     entity->aggroRange = 0;
+    entity->entityType = CORPSE;
     entity->entityStats.ATK = 0;
     entity->entityStats.CHA = 0;
     entity->entityStats.CON = 0;
@@ -119,8 +119,6 @@ void AssignStairsDown(int x, int y) {
     map[y][x].seen = false;
     map[y][x].transparent = true;
     map[y][x].visible = false;
-    map[y][x].isCorpse = false;
-    map[y][x].isMonster = false;
     map[y][x].seenByPlayer = false;
     map[y][x].wasLooted = false;
     map[y][x].wasReplaced = false;
@@ -128,7 +126,8 @@ void AssignStairsDown(int x, int y) {
     map[y][x].staticCh = '=';
     map[y][x].aggroRange = 0;
     map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
-    map[y][x].entityID = 1000;
+    map[y][x].entityID = 0;
+    map[y][x].entityType = STAIRS;
     map[y][x].entityStats.ATK = 0;
     map[y][x].entityStats.CHA = 0;
     map[y][x].entityStats.CON = 0;
@@ -171,8 +170,6 @@ void AssignFloor(int x, int y) {
     map[y][x].seen = false;
     map[y][x].transparent = true;
     map[y][x].visible = false;
-    map[y][x].isCorpse = false;
-    map[y][x].isMonster = false;
     map[y][x].seenByPlayer = false;
     map[y][x].wasLooted = false;
     map[y][x].wasReplaced = false;
@@ -181,6 +178,7 @@ void AssignFloor(int x, int y) {
     map[y][x].aggroRange = 0;
     map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
     map[y][x].entityID = 0;
+    map[y][x].entityType = FLOOR;
     map[y][x].entityStats.ATK = 0;
     map[y][x].entityStats.CHA = 0;
     map[y][x].entityStats.CON = 0;
@@ -334,12 +332,11 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->seen = false;
     monster->transparent = false;
     monster->visible = false;
-    monster->isCorpse = false;
-    monster->isMonster = true;
     monster->seenByPlayer = false;
     monster->wasLooted = false;
     monster->wasReplaced = false;
     monster->entityID = monsterID;
+    monster->entityType = MONSTER;
     monster->color = COLOR_PAIR(VISIBLE_COLOR);
     monster->pos.y = m_pos.y;
     monster->pos.x = m_pos.x;

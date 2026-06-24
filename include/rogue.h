@@ -62,8 +62,11 @@ typedef enum {
 typedef enum {
   FLOOR,
   WALL,
+  DOOR,
+  STAIRS,
   MONSTER,
-  DOOR
+  CORPSE,
+  CHEST,
 } EntityTypes;
 
 typedef struct {
@@ -136,8 +139,6 @@ typedef struct {
   bool seen;
   bool transparent;
   bool visible;
-  bool isCorpse;
-  bool isMonster;
   bool seenByPlayer;
   bool wasLooted;
   bool wasReplaced;
@@ -146,6 +147,7 @@ typedef struct {
   int aggroRange;
   int color;
   int entityID;
+  int entityType;
   int invTail;
   int invHead;
   Stats entityStats;
