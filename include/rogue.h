@@ -195,7 +195,7 @@ void TitleScreen();
 // assign_entity.c functions
 Entity** CreateEntities(void);
 void AssignCorpse(Entity* entity, int n_monsters);
-void AssignDoor(int x, int y);
+void AssignStairsDown(int x, int y);
 void AssignFloor(int x, int y);
 void AssignGoblinWarrior(Entity* monster);
 void AssignGoblinRanger(Entity* monster);
@@ -272,7 +272,7 @@ void DrawPlayerBlink(Player* player);
 bool CheckEscape(int ch);
 void CloseGame(void);
 void Cursor(int x, int y, int length);
-void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items);
+void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items);
 void Gameover();
 void Greeting();
 bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove);
@@ -343,6 +343,7 @@ void PrintClasses();
 // map.c functions
 void FreeMap(void);
 Position SetupMap(Entity* mptr, int n_rooms);
+void MakeNewLevel(int* old_n_monsters);
 // Position FindClosestUnexplored(void);
 // Position FindClosestUnexplored();
 // Position FindClosestDoor();
@@ -414,8 +415,8 @@ void MoveUpLeft(Entity* mptr);
 // player.c functions
 bool CheckPlayerAdjacent(Position origin);
 void ManaRegen(int *manaRegen);
-void MovePlayer(Position newPos, CombatHistory* combatHistory);
-bool PlayerInput(int input, LogQueue *q, int n_monsters, int* playerRegen, int* manaRegen);
+void MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters);
+bool PlayerInput(int input, LogQueue *q, int* n_monsters, int* playerRegen, int* manaRegen);
 void PlayerRegen(int *playerRegen);
 void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMove);
 // bool AutoExplore(CombatHistory* combatHistory);

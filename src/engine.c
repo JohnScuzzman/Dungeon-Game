@@ -112,7 +112,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     ResetCombatHistory();
 }
 
-void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items) { 
+void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items) { 
     bool leaveFlag = false;
     bool PMove = false;
     bool escPressed = false;
@@ -146,7 +146,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             else {
                 PlayerRegen(&playerRegen);
                 ManaRegen(&manaRegen);
-                PMove = PlayerInput(ch, q, n_monsters, &playerRegen, &manaRegen);
+                PMove = PlayerInput(ch, q, &n_monsters, &playerRegen, &manaRegen);
                 if (combatHistory->playerCombat) {
                     PlayerPrepareCombat(n_monsters);
                     PostCombatEffects();

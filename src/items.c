@@ -210,6 +210,7 @@ void ShootFromPlayerInventory(Item target, int itemQuantity) {
         if(player->inventory[i].itemID == target.itemID) {
             if(player->inventory[i].quantity == 0) return;
             if(player->inventory[i].quantity == 1) {
+                Unequip(player->inventory[i]);
                 player->invTail--;
                 player->inventory[i] = player->inventory[player->invTail];
                 player->inventory[player->invTail] = items[NULL_ITEM_ID];
@@ -297,7 +298,7 @@ void EquipArmor(Item target) {
 void EquipAmmo(Item target) {
     if (player->equippedAmmo.item.itemID == NULL_ITEM_ID) {
         player->equippedAmmo = GetAmmoFromItem(target.itemID);
-        player->equippedAmmo.item.quantity = 0;
+        player->equippedAmmo.item.quantity = target.quantity;
     }
     else {
         Unequip(player->equippedAmmo.item);

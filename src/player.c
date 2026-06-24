@@ -20,7 +20,7 @@ bool CheckPlayerAdjacent(Position origin) {
 /* If player moves into monster, fight, count it as a move.*/
 /* If player fires their ranged weapon, count it as a move. */
 /* If legal move, move player. */
-bool PlayerInput(int input, LogQueue *q, int n_monsters, int* playerRegen, int* manaRegen) {
+bool PlayerInput(int input, LogQueue *q, int* n_monsters, int* playerRegen, int* manaRegen) {
     // Get new coordinates.
     Position newPos = { player->pos.y, player->pos.x };
     bool rangedAttack;
@@ -30,72 +30,72 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters, int* playerRegen, int* 
             return true;
         case KEY_UP:
             newPos.y--;
-            MovePlayer(newPos, combatHistory);
+            MovePlayer(newPos, combatHistory, n_monsters);
             return true;
         //move down
         case KEY_DOWN:
             newPos.y++;
-            MovePlayer(newPos, combatHistory);
+            MovePlayer(newPos, combatHistory, n_monsters);
             return true;
         //move left
         case KEY_LEFT:
             newPos.x--;
-            MovePlayer(newPos, combatHistory);
+            MovePlayer(newPos, combatHistory, n_monsters);
             return true;
         //move right
         case KEY_RIGHT:
             newPos.x++;
-            MovePlayer(newPos, combatHistory);
+            MovePlayer(newPos, combatHistory, n_monsters);
             return true;
         //move up and left with insert
         case KEY_HOME:
             newPos.y--;
             newPos.x--;
-            MovePlayer(newPos, combatHistory);
+            MovePlayer(newPos, combatHistory, n_monsters);
             return true;
         //move down and left with End
         case KEY_END:
             newPos.y++;
             newPos.x--;
-            MovePlayer(newPos, combatHistory);
+            MovePlayer(newPos, combatHistory, n_monsters);
             return true;
         //move down and right with pagedown
         case KEY_NPAGE:
             newPos.y++;
             newPos.x++;
-            MovePlayer(newPos, combatHistory);
+            MovePlayer(newPos, combatHistory, n_monsters);
             return true;
         //move up and right with pageup
         case KEY_PPAGE:
             newPos.y--;
             newPos.x++;
-            MovePlayer(newPos, combatHistory);
+            MovePlayer(newPos, combatHistory, n_monsters);
             return true;
         case 1005: // keypad center
             return true;
         case 1040: // keypad center
             return true;
         case 102: // f key
-            return PlayerRangedAttack(n_monsters);
+            return PlayerRangedAttack(*n_monsters);
         case 70: // F key
-            return PlayerRangedAttack(n_monsters);
+            return PlayerRangedAttack(*n_monsters);
         case 49: // 1 key
-            return UsePlayerAbility(n_monsters, ABILITY_1);
+            return UsePlayerAbility(*n_monsters, ABILITY_1);
         case 50: // 2 key
-            return UsePlayerAbility(n_monsters , ABILITY_2);
+            return UsePlayerAbility(*n_monsters , ABILITY_2);
         case 51: // 3 key
             if (player->playerClass.abilities[ABILITY_3].abilityID > NO_ABILITY){
-                    return UsePlayerAbility(n_monsters , ABILITY_3);
+                    return UsePlayerAbility(*n_monsters , ABILITY_3);
             }
             break;
         case 52: // 4 key
             if (player->playerClass.abilities[ABILITY_4].abilityID > NO_ABILITY){
-                    return UsePlayerAbility(n_monsters , ABILITY_4);
+                    return UsePlayerAbility(*n_monsters , ABILITY_4);
             }
             break;
         case 53: // 5 key
             if (player->playerClass.abilities[ABILITY_5].abilityID > NO_ABILITY){
-                    return UsePlayerAbility(n_monsters , ABILITY_5);
+                    return UsePlayerAbility(*n_monsters , ABILITY_5);
             }
             break;
         // case 65: // c key
@@ -119,7 +119,7 @@ bool PlayerInput(int input, LogQueue *q, int n_monsters, int* playerRegen, int* 
 }
 
 // Test for floor tile, move if one is detected.
-void MovePlayer(Position newPos, CombatHistory* combatHistory) { 
+void MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) { 
     if (map[newPos.y][newPos.x].noCollision && !combatHistory->monsterKilled) {
         // Update FOV
         ClearFOV(player);
@@ -134,6 +134,10 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory) {
         combatHistory->playerCombat = true;
         combatHistory->defender = map[newPos.y][newPos.x];
         return;
+    }
+    // Stairway down, make new level.
+    else if (map[newPos.y][newPos.x].entityID == 1) {
+        MakeNewLevel(n_monsters);
     }
     else if (!combatHistory->monsterKilled){
         combatHistory->monsterKilled = false;

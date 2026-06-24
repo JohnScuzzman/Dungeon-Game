@@ -30,6 +30,7 @@ Ability AimedShot() {
     Ability aimedShot;
     aimedShot.isAttack = true;
     aimedShot.isMagic = false;
+    aimedShot.isRanged = true;
     aimedShot.hasEffects = false;
     aimedShot.abilityID = AIMED_SHOT;
     aimedShot.duration = 0;
@@ -48,6 +49,7 @@ Ability Charge() {
     Ability charge;
     charge.isAttack = true;
     charge.isMagic = false;
+    charge.isRanged = false; // Doesnt use ammo, not technically ranged
     charge.hasEffects = true;
     charge.abilityID = CHARGE;
     charge.duration = 0;
@@ -66,6 +68,7 @@ Ability DrainLife() {
     Ability drainLife;
     drainLife.isAttack = true;
     drainLife.isMagic = true;
+    drainLife.isRanged = true;
     drainLife.hasEffects = true;
     drainLife.abilityID = DRAIN_LIFE;
     drainLife.duration = 0;
@@ -83,7 +86,8 @@ Ability DrainLife() {
 Ability Electrify() {
     Ability electrify;
     electrify.isAttack = true;
-    electrify.isMagic = false;
+    electrify.isMagic = true;
+    electrify.isRanged = true;
     electrify.hasEffects = false;
     electrify.abilityID = ELECTRIFY;
     electrify.duration = 0;
@@ -102,6 +106,7 @@ Ability FireVolley() {
     Ability fireVolley;
     fireVolley.isAttack = true;
     fireVolley.isMagic = false;
+    fireVolley.isRanged = true;
     fireVolley.hasEffects = false;
     fireVolley.abilityID = FIRE_VOLLEY;
     fireVolley.duration = 0;
@@ -124,6 +129,7 @@ Ability IceArmor() {
     Ability iceArmor;
     iceArmor.isAttack = false;
     iceArmor.isMagic = true;
+    iceArmor.isRanged = false;
     iceArmor.hasEffects = true;
     iceArmor.abilityID = ICE_ARMOR;
     iceArmor.duration = 240;
@@ -142,6 +148,7 @@ Ability MagicMissile() {
     Ability magicMissile;
     magicMissile.isAttack = true;
     magicMissile.isMagic = true;
+    magicMissile.isRanged = true;
     magicMissile.hasEffects = false;
     magicMissile.abilityID = MAGIC_MISSILE;
     magicMissile.duration = 0;
@@ -161,6 +168,7 @@ Ability SecondWind() {
     Ability secondWind;
     secondWind.isAttack = false;
     secondWind.isMagic = false;
+    secondWind.isRanged = false;
     secondWind.hasEffects = true;
     secondWind.abilityID = SECOND_WIND;
     secondWind.duration = 0;
@@ -179,6 +187,7 @@ Ability SelfRepair() {
     Ability selfRepair;
     selfRepair.isAttack = false;
     selfRepair.isMagic = false;
+    selfRepair.isRanged = false;
     selfRepair.hasEffects = true;
     selfRepair.abilityID = SELF_REPAIR;
     selfRepair.duration = 0;
@@ -197,6 +206,7 @@ Ability SummonSkeleton() {
     Ability summonSkeleton;
     summonSkeleton.isAttack = false;
     summonSkeleton.isMagic = true;
+    summonSkeleton.isRanged = false;
     summonSkeleton.hasEffects = true;
     summonSkeleton.abilityID = SUMMON_SKELETON;
     summonSkeleton.duration = 0; // skeleton lives until it dies
@@ -215,6 +225,7 @@ Ability ShadowBolt() {
     Ability shadowBolt;
     shadowBolt.isAttack = true;
     shadowBolt.isMagic = true;
+    shadowBolt.isRanged = true;
     shadowBolt.hasEffects = false;
     shadowBolt.abilityID = SHADOW_BOLT;
     shadowBolt.duration = 0;
@@ -233,6 +244,7 @@ Ability Vengeance() {
     Ability vengeance;
     vengeance.isAttack = false;
     vengeance.isMagic = false;
+    vengeance.isRanged = false;
     vengeance.hasEffects = true;
     vengeance.abilityID = VENGEANCE;
     vengeance.duration = 240;
@@ -251,6 +263,7 @@ Ability Dash() {
     Ability dash;
     dash.isAttack = false;
     dash.isMagic = false;
+    dash.isRanged = false;
     dash.hasEffects = true;
     dash.abilityID = DASH;
     dash.duration = 0;
@@ -269,6 +282,7 @@ Ability DevastatingInsult() {
     Ability devastatingInsult;
     devastatingInsult.isAttack = true;
     devastatingInsult.isMagic = true;
+    devastatingInsult.isRanged = true;
     devastatingInsult.hasEffects = false;
     devastatingInsult.abilityID = DEVASTATING_INSULT;
     devastatingInsult.duration = 0;

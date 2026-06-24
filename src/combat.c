@@ -235,7 +235,15 @@ bool PlayerRangedAttack(int n_monsters){
     if (CheckEscape(ch) || y == player->pos.y && x == player->pos.x) {
         return false;
     }
+    /* If player uses a ranged, non magic ability, charge them ammo.*/
     if(combatHistory->playerUsedAbility){
+        if(player->equippedAbility.isRanged && !player->equippedAbility.isMagic){
+            ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+            player->equippedAmmo.item.quantity--;
+            if(player->equippedAmmo.type == PRIMITIVE && !map[y][x].isMonster) { // Lets player pick up their arrows lol.
+                AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+            }
+        }
         return ShootTargetWithAbility(x, y);
     }
     else if (player->equippedAmmo.item.quantity > 0) {
@@ -247,6 +255,7 @@ bool PlayerRangedAttack(int n_monsters){
             strcat(combatHistory->event, map[y][x].entityName);
             strcat(combatHistory->event, ".");
             QueueEvent(q, combatHistory->event);
+            return true;
         }
         return ShootTarget(x, y);
     }

@@ -66,9 +66,9 @@ int main(void)
 	define_key("\033[1~", 1031); // Home
 	define_key("\033[4~", 1034); // End
 	define_key("\033[E",  1040); // center arrow
-
+	// Handle middle mouse clicks
     mousemask(BUTTON1_CLICKED, NULL);
-    Position start_pos;
+
     /* Generate seeds */
     srand(time(NULL));
 
@@ -77,6 +77,7 @@ int main(void)
     int n_rooms =  (rand() % 11) + 10;
     int n_monsters = n_rooms - 1;
 
+	  Position start_pos;
 
     /* Item table */
     items = CreateItemTable();
@@ -113,7 +114,8 @@ int main(void)
     /* Start main game loop located in engine.c */
     /* Pass the pointer to monsterList[0]. */
     /* Pass the number of monsters and rooms made. */
-    GameLoop(mptr, combatHistory, n_monsters, q, items);
+    GameLoop(combatHistory, n_monsters, q, items);
+    
     CloseGame();
   }
   else
