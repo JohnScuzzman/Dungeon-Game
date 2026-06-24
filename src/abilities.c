@@ -334,11 +334,11 @@ void CheckPassiveAbilities(int n_monsters) {
     }
     switch(player->passiveAbility.abilityID) {
         case VENGEANCE:
-        if((combatHistory->attackerDMG > 0) && (combatHistory->defender.isMonster)) {
+        if((combatHistory->attackerDMG > 0) && (combatHistory->defender.entityType == MONSTER)) {
             strcpy(combatHistory->event, "You take vengeance on your enemy.");
             QueueEvent(q, combatHistory->event);
             Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
-            if (target->isMonster) {
+            if (target->entityType == MONSTER) {
                 combatHistory->playerCombat = AttackEntity(target, combatHistory, player, n_monsters);
                 ResetCombatHistory();
             }

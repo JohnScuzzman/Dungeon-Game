@@ -58,7 +58,7 @@ void FreeMap(void) {
 void MakeNewLevel(int* old_n_monsters) {
     for (int y = 0; y < MAP_HEIGHT; y++) { 
         for (int x = 0; x < MAP_WIDTH; x++) { 
-            if (map[y][x].isCorpse) {
+            if (map[y][x].entityType == CORPSE) {
                 AssignFloor(x, y);
             }
         }

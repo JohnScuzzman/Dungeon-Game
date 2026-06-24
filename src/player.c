@@ -130,13 +130,13 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
         return;
     }
     // Attempted to move into monster, flag and prepare for combat.
-    else if (map[newPos.y][newPos.x].isMonster && !combatHistory->monsterKilled){
+    else if (map[newPos.y][newPos.x].entityType == MONSTER && !combatHistory->monsterKilled){
         combatHistory->playerCombat = true;
         combatHistory->defender = map[newPos.y][newPos.x];
         return;
     }
     // Stairway down, make new level.
-    else if (map[newPos.y][newPos.x].entityID == 1000) {
+    else if (map[newPos.y][newPos.x].entityType == STAIRS) {
         MakeNewLevel(n_monsters);
     }
     else if (!combatHistory->monsterKilled){
@@ -155,7 +155,7 @@ void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMov
     }
     /* Check if in range of a visible monster. */
     for (int i = 0; i < n_monsters; i++){
-        if((mptr + i)->visible && (mptr + i)->isMonster) {
+        if((mptr + i)->visible && (mptr + i)->entityType == MONSTER) {
             strcpy(combatHistory->event, "You cannot rest now, a ");
             strcat(combatHistory->event, (mptr + i)->entityName);
             QueueEvent(q, combatHistory->event);
