@@ -196,6 +196,7 @@ void TitleScreen();
 
 // assign_entity.c functions
 Entity** CreateEntities(void);
+void AssignChest(int x, int y);
 void AssignCorpse(Entity* entity, int n_monsters);
 void AssignStairsDown(int x, int y);
 void AssignFloor(int x, int y);
@@ -331,7 +332,13 @@ void RemoveFromPlayerInventory(Item target, int itemQuantity);
 void ShootFromPlayerInventory(Item target, int itemQuantity);
 void WeaponItemDescriptions(Item* items);
 
-// void NullItem(Item item);
+//loot_tables_containers.c functions.
+void LowLevelChestLoot(Entity* chest);
+
+//loot_tables_monsters.c functions
+void GoblinWarriorLoot(Entity* goblin);
+void HobGoblinWarriorLoot(Entity* hobGoblin);
+void KoboldWarriorLoot(Entity* kobold);
 
 // make_player.c functions
 void AskPlayerInfo(Player* player);
@@ -354,6 +361,7 @@ void MakeNewLevel(int* old_n_monsters);
 void AddRoomToMap(Room room);
 Room CreateRoom(int y, int x, int height, int width);
 void ConnectRooms(Position centerOne, Position centerTwo);
+void AddChestToRoom(Position center, int width, int height);
 
 //menu_inventory.c functions
 bool MakeInventoryMenu();
@@ -382,22 +390,17 @@ bool MakePauseMenu();
 bool ProcessPauseSelect(int choice, WINDOW* menu);
 void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options);
 
-//monster_loot_tables.c functions
-void GoblinWarriorLoot(Entity* goblin);
-void HobGoblinWarriorLoot(Entity* hobGoblin);
-void KoboldWarriorLoot(Entity* kobold);
-
 // monster.c functions
 void AggroMove(Entity* mptr);
 bool CheckAggro(Entity* mptr, Player* player);
+int EntityDirection(Entity* monster);
 int FindClosestMonster(Entity* mptr, int n_monsters);
 Entity* FindMonsterInList(int monsterID, int n_monsters);
 void KeepMonsterIntegrity(Entity* mptr);
 void KeepMonsterMapIntegrity(Entity* mptr);
-int MonsterDirection(Entity* monster);
 Entity* MonsterList(int n_monsters);
 void MoveMonster(Entity* monster, Position newPOS);
-void RecordMonsterSeen(Entity* monster);
+void RecordEntitySeen(Entity* monster);
 void ResetMoveFlags(Entity* mptr, int n_monsters);
 void UpdateMonsterMap(Entity* monster, int n_monsters);
 void UpdateMonsterVisible(Entity* monster, Player* player);

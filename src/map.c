@@ -6,7 +6,7 @@ Place a monster in the center of the room as well.
 Since rooms can currently overlap, this appears as random monster placement.
 */ 
 Position SetupMap(Entity* mptr, int n_rooms) {
-    int y, x, height, width, n_monsters;
+    int y, x, height, width, n_monsters, addChest;
     Room* rooms = calloc(n_rooms, sizeof(Room));
     Position start_pos;
 
@@ -14,8 +14,9 @@ Position SetupMap(Entity* mptr, int n_rooms) {
         // left corner of room.
         y = (rand() % (MAP_HEIGHT - 15)) + 1; // 1-35
         x = (rand() % (MAP_WIDTH - 25)) + 1; // 1-100
-        height = (rand() % 7) + 3; // 3-9
-        width = (rand() % 15) + 5;// 5-19
+        height = (rand() % 7) + 3; // 3-7
+        width = (rand() % 15) + 5;// 5-15
+        addChest = (rand() % 5) + 1; // 1-5
 
         rooms[i] = CreateRoom(y, x, height, width);
         
@@ -26,7 +27,7 @@ Position SetupMap(Entity* mptr, int n_rooms) {
         if (i > 0) {
             start_pos.y = rooms[i - 1].center.y;
             start_pos.x = rooms[i - 1].center.x;
-            ConnectRooms(rooms[i-1].center, rooms[i].center);
+            ConnectRooms(rooms[i - 1].center, rooms[i].center);
             int monsterID = i + 1;
             /* Add 10-20 monsters to the map. with monster.c's AddMonster. */
             /* Create and save monsters to use later. */
@@ -35,6 +36,7 @@ Position SetupMap(Entity* mptr, int n_rooms) {
 
             /* Use the list of monsters we just made and move them to our 2D matrix of entities.*/
             UpdateMonsterMap(mptr, n_rooms - 1);
+            if (addChest == 5) AddChestToRoom(rooms[i].center, width, height);
         }
     }
     // Place the door to the next dungeon floor in the last made room.
@@ -91,6 +93,8 @@ void MakeNewLevel(int* old_n_monsters) {
     player->pos.x = start_pos.x;
     AssignFloor(start_pos.x, start_pos.y);
 }
+
+
 // /* return farthest unexplored region in players FOV. */
 // /* return monsters pos if monster found. */
 // /* return players pos if no valid unexplored tile.*/
