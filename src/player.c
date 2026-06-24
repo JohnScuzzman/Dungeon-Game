@@ -136,7 +136,7 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
         return;
     }
     // Stairway down, make new level.
-    else if (map[newPos.y][newPos.x].entityID == 1) {
+    else if (map[newPos.y][newPos.x].entityID == 1000) {
         MakeNewLevel(n_monsters);
     }
     else if (!combatHistory->monsterKilled){
