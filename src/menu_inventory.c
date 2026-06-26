@@ -235,8 +235,6 @@ void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** option
     int y = 1;
     int titleRight = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
     int center = (WINDOW_WIDTH / 2) - (OFFSET * 3) + 5;
-    int numLines = WINDOW_WIDTH - 2 - titleRight;
-    int top = 1;
     int centerY, centerX;
     getmaxyx(invOp, centerY, centerX);
     box(invOp, 0, 0);

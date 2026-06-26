@@ -117,6 +117,13 @@ bool ProcessPauseSelect(int choice, WINDOW* menu){
 
         case 2: // Save
             // Do the save window here
+            char saveName[32] = "Save 1";
+            if(SavePlayerToJSON(saveName, player)){
+                mvprintw(52, 2, "Saved Successfully!");
+            }
+            else{
+                mvprintw(52, 2, "Saved Failed!");
+            }
             refresh();
             delwin(menu);
             return false;

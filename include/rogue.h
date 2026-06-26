@@ -4,20 +4,20 @@
 #ifndef ROGUE_H // These prevent compiling rogue_h multiple times.
 #define ROGUE_H
 
-
+#include <stdio.h> // standard io
+#include <stdlib.h>
+#include <string.h> // String copying
 #include <ncurses.h>
 #include <signal.h>
-#include <stdlib.h>
 #include <time.h> // rng related stuff
 #include "math.h" // complex math funtions
-#include <stdio.h> // standard io
 #include <unistd.h> // File reading
-#include <string.h> // String copying
 #include <ctype.h> // toupper functions
 #include <stdbool.h>
 #include <items.h>
 #include <races.h>
 #include <classes.h>
+#include <cjson/cJSON.h>
 
 // color pairs
 #define VISIBLE_COLOR 1
@@ -425,6 +425,18 @@ bool PlayerInput(int input, LogQueue *q, int* n_monsters, int* playerRegen, int*
 void PlayerRegen(int *playerRegen);
 void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMove);
 // bool AutoExplore(CombatHistory* combatHistory);
+
+char* FileToString(const char* filename);
+bool SavePlayerToJSON(const char *filename, const Player* player);
+cJSON* SerializePlayerStats(const Stats* playerStats);
+cJSON* SerializePlayerPOS(const Position* pos);
+cJSON* SerializeItem(const Item* item);
+cJSON* SerializePlayerWeapon(const Weapon* equippedMelee);
+cJSON* SerializePlayerAmmo(const Ammo* equippedAmmo);
+cJSON* SerializePlayerArmor(const Armor* equippedArmor);
+cJSON* SerializePlayerAbility(const Ability* ability);
+cJSON* SerializePlayerClass(const Class* class);
+cJSON* SerializePlayerInventory(const Player* player);
 
 // Externals 
 // Used in tandem with main to let any functions use these outside of main.

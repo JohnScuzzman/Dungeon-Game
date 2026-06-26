@@ -5,13 +5,16 @@ Player* CreatePlayer(Position start_pos) {
     Player* player = calloc(1, sizeof(Player));
     player->noCollision = false;
     player->isResting = false;
+    player->ch = '@';
+    player->color = COLOR_PAIR(VISIBLE_COLOR);
     player->abilityTimer = 0;
     player->invHead = 0;
     player->invTail = 0;
     player->pos.y = start_pos.y;
     player->pos.x = start_pos.x;
-    player->ch = '@';
-    player->color = COLOR_PAIR(VISIBLE_COLOR);
+    for(int i = 0; i < MAX_ABILITIES; i++){
+        player->playerClass.abilities[i] = NoAbility();
+    }
     AssignFloor(start_pos.x, start_pos.y);
     return player;
 }
