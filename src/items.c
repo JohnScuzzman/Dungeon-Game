@@ -51,6 +51,7 @@ void CreatePlayerInv() {
         player->inventory[i].quantity = 0;
         player->inventory[i].type = NULL_ITEM_TYPE;
         strcpy(player->inventory[i].itemName, " ");
+        strcpy(player->inventory[i].itemDesc, " ");
     }
 }
 
@@ -64,6 +65,7 @@ void CreateMonsterInv(Entity* monster) {
         monster->inventory[i].quantity = 0;
         monster->inventory[i].type = NULL_ITEM_TYPE;
         strcpy(monster->inventory[i].itemName, " ");
+        strcpy(monster->inventory[i].itemDesc, " ");
     }
 }
 

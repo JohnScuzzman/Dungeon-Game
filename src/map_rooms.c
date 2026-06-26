@@ -63,7 +63,7 @@ void AddRoomToMap(Room room)
 
 /* Code to place chests in corners of the passed rooms center.*/
 void AddChestToRoom(Position center, int width, int height) {
-    int bottom, top, right, left,randX, randY;
+    int bottom, top, right, left;
     bottom = center.y + (height / 2);
     top = center.y - (height / 2);
     right = center.x + (width / 2);

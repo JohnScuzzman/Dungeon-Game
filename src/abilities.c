@@ -48,7 +48,7 @@ void ChargePlacement(){
 }
 
 void CastDash() {
-    int ch, i;
+    int ch;
     int x = player->pos.x;
     int y = player->pos.y;
     Cursor(y, x, 1);
