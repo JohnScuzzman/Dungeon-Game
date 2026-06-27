@@ -143,6 +143,7 @@ cJSON* SerializePlayerWeapon(const Weapon* equippedMelee) {
     cJSON_AddNumberToObject(playerMeleeObj, "minDMG", equippedMelee->minDMG);
     cJSON_AddNumberToObject(playerMeleeObj, "maxDMG", equippedMelee->maxDMG);
     cJSON_AddNumberToObject(playerMeleeObj, "range", equippedMelee->range);
+    cJSON_AddNumberToObject(playerMeleeObj, "ammoType", equippedMelee->ammoType);
 
     return playerMeleeObj;
 }
