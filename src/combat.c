@@ -237,26 +237,32 @@ bool PlayerRangedAttack(int n_monsters){
     }
     /* If player uses a ranged, non magic ability, charge them ammo.*/
     if(combatHistory->playerUsedAbility){
-        if(player->equippedAbility.isRanged && !player->equippedAbility.isMagic){
+        if(player->equippedAbility.isRanged && !player->equippedAbility.isMagic && player->equippedAmmo.item.quantity > 0){
             ShootFromPlayerInventory(player->equippedAmmo.item, 1);
-            player->equippedAmmo.item.quantity--;
+            // player->equippedAmmo.item.quantity--;
             if(player->equippedAmmo.type == PRIMITIVE && map[y][x].entityType != MONSTER) { // Lets player pick up their arrows lol.
-                AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+                if(map[y][x].entityType == FLOOR || map[y][x].entityType == WALL) AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+                strcpy(combatHistory->event, "You shoot the ");
+                strcat(combatHistory->event, map[y][x].entityName);
+                strcat(combatHistory->event, ".");
+                ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+                QueueEvent(q, combatHistory->event);
             }
         }
         return ShootTargetWithAbility(x, y);
     }
     else if (player->equippedAmmo.item.quantity > 0) {
-        ShootFromPlayerInventory(player->equippedAmmo.item, 1);
-        player->equippedAmmo.item.quantity--;
         if(player->equippedAmmo.type == PRIMITIVE && map[y][x].entityType != MONSTER) { 
-            AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+            if(map[y][x].entityType == FLOOR || map[y][x].entityType == WALL) AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
             strcpy(combatHistory->event, "You shoot the ");
             strcat(combatHistory->event, map[y][x].entityName);
             strcat(combatHistory->event, ".");
             QueueEvent(q, combatHistory->event);
+            ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+            // player->equippedAmmo.item.quantity--;
             return true;
         }
+        ShootFromPlayerInventory(player->equippedAmmo.item, 1);
         return ShootTarget(x, y);
     }
     else {

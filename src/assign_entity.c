@@ -107,7 +107,7 @@ void AssignChest(int x, int y) {
     ClearEntityInventory(&map[y][x]);
     LowLevelChestLoot(&map[y][x]);
     strcpy(map[y][x].entityClass, "None");
-    strcpy(map[y][x].entityName, "A Chest");
+    strcpy(map[y][x].entityName, "Chest");
     strcpy(map[y][x].entityRace, "None");
 }
 

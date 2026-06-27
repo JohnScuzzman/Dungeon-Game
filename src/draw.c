@@ -18,8 +18,11 @@ void DrawMap()
     for (int x = 0; x < MAP_WIDTH; x++)
     { 
         if (map[y][x].visible) {
-          mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR));
-        }
+			mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR));
+        	if(map[y][x].entityType == FLOOR){
+        		if(map[y][x].inventory[0].itemID != NULL_ITEM_ID) mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR) | A_DIM);
+        	}
+		}
         else if (map[y][x].seen && map[y][x].entityID < 2){
           mvaddch(y, x, map[y][x].ch | COLOR_PAIR(SEEN_COLOR));
         }

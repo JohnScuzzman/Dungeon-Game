@@ -263,6 +263,9 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
                 Unequip(*playerInv[prevChoice]);
                 RemoveFromPlayerInventory(*playerInv[prevChoice], 1);
             }
+            else if(playerInv[prevChoice]->quantity > 1 && playerInv[prevChoice]->unequippable) {
+                RemoveFromPlayerInventory(*playerInv[prevChoice], 1);
+            }
             DrawEverything();
             refresh();
             delwin(invOp);
