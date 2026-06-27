@@ -161,6 +161,7 @@ void AddToPlayerInventory(Item newItem, int itemQuantity) {
     for (int i = 0; i < player->invTail; i++) {
         if(player->inventory[i].itemID == newItem.itemID && player->inventory[i].quantity > 0) {
             player->inventory[i].quantity += itemQuantity;
+            if(newItem.itemID == player->equippedAmmo.item.itemID) player->equippedAmmo.item.quantity += itemQuantity;
             return;
         }
     }
@@ -303,9 +304,19 @@ void EquipAmmo(Item target) {
         player->equippedAmmo.item.quantity = target.quantity;
     }
     else {
-        Unequip(player->equippedAmmo.item);
-        player->equippedAmmo = GetAmmoFromItem(target.itemID);
-        player->equippedAmmo.item.quantity = target.quantity;
+        if(player->equippedAmmo.item.itemID == target.itemID){
+            player->equippedAmmo.item.quantity += target.quantity;
+        }
+        else{
+            Unequip(player->equippedAmmo.item);
+            player->equippedAmmo = GetAmmoFromItem(target.itemID);
+            player->equippedAmmo.item.quantity = target.quantity;
+        }
+        for (int i = 0; i < MAX_INVENTORY_SIZE; i++) {
+            if (player->inventory[i].itemID == target.itemID) {
+                player->equippedAmmo.item.quantity += player->inventory[i].quantity;
+            }
+        }
     }
     player->equippedAmmo.item.isEquipped = true;
 }
@@ -478,7 +489,6 @@ void AmmoItemDescriptions(Item* items){
     strcpy(items[ENERGY_PACKS].itemDesc, "");
 	strcpy(items[HEAVY_ENERGY_PACKS].itemDesc, "");
 }
-
 
 void NameWeaponItems(Item* items){
     strcpy(items[FISTS].itemName, "Fists");

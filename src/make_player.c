@@ -25,10 +25,6 @@ Uses the TitleScreen ASCII art, and prints to certain areas of it.
 */
 void AskPlayerInfo(Player* player) {
     char* name;
-    char* race;
-    char* class;
-    char* armor;
-    char* weapon;
     int nameBufferSize = 3;
     char *nameBuffer = (char *)malloc(nameBufferSize * sizeof(char));
 
