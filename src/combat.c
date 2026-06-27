@@ -236,37 +236,51 @@ bool PlayerRangedAttack(int n_monsters){
         return false;
     }
     /* If player uses a ranged, non magic ability, charge them ammo.*/
-    if(combatHistory->playerUsedAbility){
-        if(player->equippedAbility.isRanged && !player->equippedAbility.isMagic && player->equippedAmmo.item.quantity > 0){
-            ShootFromPlayerInventory(player->equippedAmmo.item, 1);
-            // player->equippedAmmo.item.quantity--;
-            if(player->equippedAmmo.type == PRIMITIVE && map[y][x].entityType != MONSTER) { // Lets player pick up their arrows lol.
-                if(map[y][x].entityType == FLOOR || map[y][x].entityType == WALL) AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
-                strcpy(combatHistory->event, "You shoot the ");
-                strcat(combatHistory->event, map[y][x].entityName);
-                strcat(combatHistory->event, ".");
-                ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+    if (combatHistory->playerUsedAbility){
+        if (player->equippedAbility.isRanged && !player->equippedAbility.isMagic && player->equippedAmmo.item.quantity > 0){
+            if (player->equippedRanged.ammoType == player->equippedAmmo.item.itemID){
+                if (player->equippedAmmo.type == PRIMITIVE && map[y][x].entityType == FLOOR) { // Lets player pick up their arrows lol.
+                    AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+                    strcpy(combatHistory->event, "You shoot the ");
+                    strcat(combatHistory->event, map[y][x].entityName);
+                    strcat(combatHistory->event, ".");
+                    ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+                    QueueEvent(q, combatHistory->event);
+                    
+                }
+            }
+            else {
+                strcpy(combatHistory->event, "You have the wrong ammo equipped.");
                 QueueEvent(q, combatHistory->event);
+                return false;
             }
         }
         return ShootTargetWithAbility(x, y);
     }
     else if (player->equippedAmmo.item.quantity > 0) {
-        if(player->equippedAmmo.type == PRIMITIVE && map[y][x].entityType != MONSTER) { 
-            if(map[y][x].entityType == FLOOR || map[y][x].entityType == WALL) AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
-            strcpy(combatHistory->event, "You shoot the ");
-            strcat(combatHistory->event, map[y][x].entityName);
-            strcat(combatHistory->event, ".");
-            QueueEvent(q, combatHistory->event);
-            ShootFromPlayerInventory(player->equippedAmmo.item, 1);
-            // player->equippedAmmo.item.quantity--;
-            return true;
+        if (player->equippedRanged.ammoType == player->equippedAmmo.item.itemID){
+            if (player->equippedAmmo.type == PRIMITIVE && map[y][x].entityType == FLOOR) { 
+                    AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+                    strcpy(combatHistory->event, "You shoot the ");
+                    strcat(combatHistory->event, map[y][x].entityName);
+                    strcat(combatHistory->event, ".");
+                    QueueEvent(q, combatHistory->event);
+                    ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+                    return true;
+            }
+            else {
+                ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+                return ShootTarget(x, y);
+            }
         }
-        ShootFromPlayerInventory(player->equippedAmmo.item, 1);
-        return ShootTarget(x, y);
+        else {
+            strcpy(combatHistory->event, "You have the wrong ammo equipped.");
+            QueueEvent(q, combatHistory->event);
+            return false;
+        }
     }
     else {
-        strcpy(combatHistory->event, "You do not have any ammo equipped.");
+        strcpy(combatHistory->event, "You do not have enough ammo equipped.");
         QueueEvent(q, combatHistory->event);
         return false;
     }
