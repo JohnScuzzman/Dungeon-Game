@@ -104,7 +104,7 @@ typedef struct {
   int minDMG;
   int maxDMG;
   int range;
-  //int ammoType
+  int ammoType;
 } Weapon;
 
 typedef struct {

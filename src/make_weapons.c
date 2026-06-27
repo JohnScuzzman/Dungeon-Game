@@ -14,6 +14,7 @@ Weapon NoWeapon() {
     none.minDMG = 0;
     none.maxDMG = 0;
     none.range = 0;
+    none.ammoType = NULL_AMMO_TYPE;
     strcpy(none.item.itemName, "None");
     return none;
 }
@@ -32,6 +33,7 @@ Weapon Fists() {
     fists.minDMG = 1;
     fists.maxDMG = 3;
     fists.range = 0;
+    fists.ammoType = NULL_AMMO_TYPE;
     strcpy(fists.item.itemName, "Fists");
     return fists;
 }
@@ -51,6 +53,7 @@ Weapon Claws() {
     claws.minDMG = 1;
     claws.maxDMG = 4;
     claws.range = 0;
+    claws.ammoType = NULL_AMMO_TYPE;
     strcpy(claws.item.itemName, "Claws");
     return claws;
 }
@@ -70,6 +73,7 @@ Weapon Dagger() {
     dagger.minDMG = 1;
     dagger.maxDMG = 4;
     dagger.range = 0;
+    dagger.ammoType = NULL_AMMO_TYPE;
     return dagger;
 }
 
@@ -88,6 +92,7 @@ Weapon Shortsword() {
     shortSword.minDMG = 1;
     shortSword.maxDMG = 6;
     shortSword.range = 0;
+    shortSword.ammoType = NULL_AMMO_TYPE;
     return shortSword;
 }
 
@@ -106,6 +111,7 @@ Weapon Longsword() {
     longSword.minDMG = 1;
     longSword.maxDMG = 8;
     longSword.range = 0;
+    longSword.ammoType = NULL_AMMO_TYPE;
     return longSword;
 }
 
@@ -124,6 +130,7 @@ Weapon Greatsword() {
     greatSword.minDMG = 1;
     greatSword.maxDMG = 10;
     greatSword.range = 0;
+    greatSword.ammoType = NULL_AMMO_TYPE;
     return greatSword;
 }
 
@@ -142,6 +149,7 @@ Weapon Cutlass() {
     cutlass.minDMG = 2;
     cutlass.maxDMG = 7;
     cutlass.range = 0;
+    cutlass.ammoType = NULL_AMMO_TYPE;
     return cutlass;
 }
 
@@ -160,6 +168,7 @@ Weapon Scimitar() {
     scimitar.minDMG = 2;
     scimitar.maxDMG = 8;
     scimitar.range = 0;
+    scimitar.ammoType = NULL_AMMO_TYPE;
     return scimitar;
 }
 
@@ -178,6 +187,7 @@ Weapon Quarterstaff() {
     quarterstaff.minDMG = 1;
     quarterstaff.maxDMG = 4;
     quarterstaff.range = 0;
+    quarterstaff.ammoType = NULL_AMMO_TYPE;
     return quarterstaff;
 }
 
@@ -196,6 +206,7 @@ Weapon ChromeFists() {
     chromeFists.minDMG = 1;
     chromeFists.maxDMG = 6;
     chromeFists.range = 0;
+    chromeFists.ammoType = NULL_AMMO_TYPE;
     return chromeFists;
 }
 
@@ -214,6 +225,7 @@ Weapon AcidPotion() {
     acidPotion.minDMG = 2;
     acidPotion.maxDMG = 8;
     acidPotion.range = 6;
+    acidPotion.ammoType = ACID_POTION_AMMO;
     return acidPotion;
 }
 
@@ -232,6 +244,7 @@ Weapon Shortbow() {
     shortbow.minDMG = 1;
     shortbow.maxDMG = 6;
     shortbow.range = 8;
+    shortbow.ammoType = ARROWS;
     return shortbow;
 }
 
@@ -250,6 +263,7 @@ Weapon Longbow() {
     longbow.minDMG = 1;
     longbow.maxDMG = 8;
     longbow.range = 10;
+    longbow.ammoType = ARROWS;
     return longbow;
 }
 
@@ -268,6 +282,7 @@ Weapon FlintlockPistol() {
     flintlockPistol.minDMG = 1;
     flintlockPistol.maxDMG = 8;
     flintlockPistol.range = 5;
+    flintlockPistol.ammoType = BULLET_MUSKET;
     return flintlockPistol;
 }
 
@@ -286,6 +301,7 @@ Weapon LightningWand() {
     lightningWand.minDMG = 1;
     lightningWand.maxDMG = 3;
     lightningWand.range = 10;
+    lightningWand.ammoType = NULL_AMMO_TYPE;
     lightningWand.isRanged = true;
     return lightningWand;
 }
@@ -305,6 +321,7 @@ Weapon DualFlintlocks() {
     dualFlintlocks.minDMG = 2;
     dualFlintlocks.maxDMG = 12;
     dualFlintlocks.range = 5;
+    dualFlintlocks.ammoType = BULLET_MUSKET;
     return dualFlintlocks;
 }
 

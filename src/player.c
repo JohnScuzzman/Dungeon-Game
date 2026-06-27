@@ -27,6 +27,14 @@ bool PlayerInput(int input, LogQueue *q, int* n_monsters, int* playerRegen, int*
 
     switch(input) {
         case 32: // space bar
+            if(map[player->pos.y][player->pos.x].inventory[0].itemID != NULL_ITEM_ID) {
+                MakeInventoryMenu();
+                if(map[player->pos.y][player->pos.x].wasLooted){
+                    Entity* entityToUpdate = FindMonsterInList(map[player->pos.y][player->pos.x].entityID, *n_monsters);
+                    entityToUpdate = &map[player->pos.y][player->pos.x];
+                }
+                return false;
+            }
             return true;
         case KEY_UP:
             newPos.y--;
