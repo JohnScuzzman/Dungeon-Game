@@ -36,15 +36,18 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
         switch (RNG) {
             /* Call functions from assign.c */
             case 0:
-            AssignGoblinWarrior(&monster);
+            AssignRat(&monster);
             break;
             case 1:
-            AssignKoboldWarrior(&monster);
+            AssignGoblinWarrior(&monster);
             break;
             case 2:
-            AssignHobgoblinWarrior(&monster);
+            AssignKoboldWarrior(&monster);
             break;
             case 3:
+            AssignHobgoblinWarrior(&monster);
+            break;
+            case 4:
             AssignGoblinRanger(&monster);
             break;
             default:
@@ -257,6 +260,30 @@ void AssignFloor(int x, int y) {
     strcpy(map[y][x].entityClass, "None");
     strcpy(map[y][x].entityName, "Floor");
     strcpy(map[y][x].entityRace, "None");
+}
+
+void AssignRat(Entity* monster) {
+    monster->ch = 'R'; 
+    monster->staticCh = 'R'; 
+    monster->entityStats.CHA = 4;
+    monster->entityStats.CON = 4;
+    monster->entityStats.DEX = 4;
+    monster->entityStats.INT = 4;
+    monster->entityStats.STR = 4;
+    monster->entityStats.WIS = 4;
+    monster->entityArmor = NoArmor();
+    monster->entityWeapon = Claws();
+    monster->aggroRange = 12;
+    monster->entityStats.AC = ((monster->entityStats.STR - 10) / 2) + (monster->entityArmor.AC);
+    monster->entityStats.maxDMG = 2; // hit hard but shouldn't 1-shot
+    monster->entityStats.minDMG = 1;
+    monster->entityStats.maxHP = 2;
+    monster->entityStats.maxMana = 0;
+    monster->entityStats.LVL = 1;
+    monster->entityStats.EXP = 10;
+    strcpy(monster->entityName, "Rat");
+    strcpy(monster->entityRace, "Rat");
+    strcpy(monster->entityClass, "None");
 }
 
 /* The following functions are used to create monster entities based on a passed Entity pointer.*/
