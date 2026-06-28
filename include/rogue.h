@@ -200,6 +200,7 @@ void AssignChest(int x, int y);
 void AssignCorpse(Entity* entity, int n_monsters);
 void AssignStairsDown(int x, int y);
 void AssignFloor(int x, int y);
+void AssignRat(Entity* monster);
 void AssignGoblinWarrior(Entity* monster);
 void AssignGoblinRanger(Entity* monster);
 void AssignHobgoblinWarrior(Entity* monster);

@@ -31,7 +31,7 @@ Position SetupMap(Entity* mptr, int n_rooms) {
             int monsterID = i + 1;
             /* Add 10-20 monsters to the map. with monster.c's AddMonster. */
             /* Create and save monsters to use later. */
-            n_monsters = (rand() % 4);
+            n_monsters = (rand() % 5);
             mptr[i - 1] = AssignMonster(rooms[i].center, n_monsters, monsterID); 
 
             /* Use the list of monsters we just made and move them to our 2D matrix of entities.*/
