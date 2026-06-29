@@ -26,16 +26,16 @@ typedef enum {
 	ARROWS,
     DARTS,
 	ACID_POTION_AMMO,
-	BULLET_MUSKET,
+	BULLET_FLINTLOCK,
 	BULLET_5MM,
 	BULLET_9MM,
 	BULLET_556,
 	BULLET_762,
 	BULLET_308,
 	BULLET_50CAL,
-	BULLET_BUCKSHOT,
-	BULLET_SLUG,
-	BULLET_DRAGONS_BREATH,
+	SHELL_BUCKSHOT,
+	SHELL_SLUG,
+	SHELL_DRAGONS_BREATH,
 	MISSILES,
     ENERGY_PACKS,
 	HEAVY_ENERGY_PACKS,
@@ -62,9 +62,15 @@ typedef enum {
     PRIMITIVE,
 	MAGIC,
 	FLINTLOCK,
-	BULLET,
-	EXPLOSIVE,
-	ENERGY
+    TYPE_5MM,
+	TYPE_9MM,
+	TYPE_556,
+	TYPE_762,
+	TYPE_308,
+	TYPE_50CAL,
+	SHOTGUN,
+	EXPLOSIVE_MISSILE,
+	ENERGY,
 } AmmoTypes;
 
 typedef enum {
@@ -164,7 +170,7 @@ Ammo NoAmmo();
 Ammo Arrows();
 Ammo Darts();
 Ammo AcidPotionAmmo();
-Ammo BulletMusket();
+Ammo BulletFlintlock();
 Ammo Bullet5mm();
 Ammo Bullet9mm();
 Ammo Bullet556();

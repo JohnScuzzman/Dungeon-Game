@@ -33,11 +33,11 @@ void AssignSwashbuckler() {
     player->equippedArmor = LeatherArmor();
     player->equippedMelee = Cutlass();
     player->equippedRanged = FlintlockPistol();
-    player->equippedAmmo = BulletMusket();
+    player->equippedAmmo = BulletFlintlock();
     AddToPlayerInventory(items[LEATHER_ARMOR], 1);
     AddToPlayerInventory(items[CUTLASS], 1);
     AddToPlayerInventory(items[FLINTLOCK_PISTOL], 1);
-    AddToPlayerInventory(items[BULLET_MUSKET], 20);
+    AddToPlayerInventory(items[BULLET_FLINTLOCK], 20);
     player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
@@ -95,10 +95,10 @@ void AssignGunslinger() {
     player->equippedArmor = LeatherArmor();
     player->equippedMelee = Fists();
     player->equippedRanged = DualFlintlocks();
-    player->equippedAmmo = BulletMusket();
+    player->equippedAmmo = BulletFlintlock();
     AddToPlayerInventory(items[LEATHER_ARMOR], 1);
     AddToPlayerInventory(items[DUAL_FLINTLOCKS], 1);
-    AddToPlayerInventory(items[BULLET_MUSKET], 20);
+    AddToPlayerInventory(items[BULLET_FLINTLOCK], 20);
     player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;

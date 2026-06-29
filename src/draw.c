@@ -68,8 +68,8 @@ void DrawPlayerEquipment(){
 /* Draw the players stats like INT, HP, EXP, LVL, etc.*/
 void DrawPlayerStats() {
 
-  int EXPLen = NumberOfDigits(player->playerStats.EXP);
-  int nextEXPLen = NumberOfDigits(player->playerStats.nextLVLEXP);
+  int EXPLen = GetNumberOfDigits(player->playerStats.EXP);
+  int nextEXPLen = GetNumberOfDigits(player->playerStats.nextLVLEXP);
   int EXPbuffer = (EXPLen + nextEXPLen);
   mvprintw(10, SIDEBAR_X, "Armor Class: %d", (player->playerStats.AC) + 10);
   mvprintw(16, SIDEBAR_X, "HP: %d", player->playerStats.HP);

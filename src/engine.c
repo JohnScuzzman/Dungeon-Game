@@ -24,31 +24,6 @@ bool NcursesSetup(void) {
     }
 }
 
-/* Returns true if escape was passed in.*/
-/* Usually the passed in int 'ch' will be from getch().*/
-bool CheckEscape(int ch) {
-    int next_ch;
-    if (ch == 27) { 
-            // check for escape.
-            nodelay(stdscr, TRUE);
-            next_ch = getch();
-            nodelay(stdscr, FALSE);
-        }
-        if (next_ch == ERR) {
-            return true;
-        }
-    return false;
-}
-
-void Cursor(int x, int y, int length){
-    //A_BLINK 
-    mvchgat(x, y, length, A_BOLD | A_STANDOUT | A_DIM, VISIBLE_COLOR, NULL);
-}
-
-void RemoveCursor(int x, int y, int length) {
-    mvchgat(x, y, length, A_NORMAL, 0, NULL);
-}
-
 /* Moves monsters, returns false unless player dies.*/
 bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
     int i = 0;
@@ -107,7 +82,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     MakeFOV(player);
     DrawEverything();
-    DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
+    // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
 }
@@ -196,13 +171,4 @@ void Greeting(){
     QueueEvent(q, combatHistory->event);
     strcpy(combatHistory->event, "Use keys 1-5 to use abilities.");
     QueueEvent(q, combatHistory->event);
-}
-
-/* Used to count number of digits in a number.*/
-int NumberOfDigits(int input) {
-  int count;
-  int temp = abs(input);
-  // condition ? expression_if_true : expression_if_false, this one handles a zero input.
-  count = (temp == 0) ? 0 : (int)log10(temp) + 1;
-  return count;
 }

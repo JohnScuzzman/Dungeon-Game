@@ -194,12 +194,7 @@ typedef struct
 // asciiart.c funcions
 void TitleScreen();
 
-// assign_entity.c functions
-Entity** CreateEntities(void);
-void AssignChest(int x, int y);
-void AssignCorpse(Entity* entity, int n_monsters);
-void AssignStairsDown(int x, int y);
-void AssignFloor(int x, int y);
+// make_monster.c functions
 void AssignRat(Entity* monster);
 void AssignGoblinWarrior(Entity* monster);
 void AssignGoblinRanger(Entity* monster);
@@ -208,6 +203,12 @@ void AssignKoboldWarrior(Entity* monster);
 Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 
+// make entities.c functions
+Entity** CreateEntities(void);
+void AssignChest(int x, int y);
+void AssignCorpse(Entity* entity, int n_monsters);
+void AssignStairsDown(int x, int y);
+void AssignFloor(int x, int y);
 
 // assign_class.c functions
 void AssignClass(int input);
@@ -265,7 +266,6 @@ void DrawCombatLog();
 void DrawDebug(Entity* mptr, int n_monsters);
 void DrawEverything();
 void DrawPlayerEquipment();
-void DrawPlayerInventory();
 void DrawPlayerStats();
 void DrawMap();
 void DrawMonsters(Entity* mptr, int n_monsters);
@@ -273,17 +273,21 @@ void DrawPlayer(Player* player);
 void DrawPlayerBlink(Player* player);
 
 // engine.c functions
-bool CheckEscape(int ch);
 void CloseGame(void);
-void Cursor(int x, int y, int length);
 void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items);
 void Gameover();
 void Greeting();
 bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove);
 bool NcursesSetup(void);
 void RefreshGamestate(Entity* mptr, int n_monsters);
-void RemoveCursor(int x, int y, int length);
-int NumberOfDigits(int input);
+
+// equip.c functions
+void Equip(Item target);
+void EquipMelee(Item target);
+void EquipRanged(Item target);
+void EquipArmor(Item target);
+void EquipAmmo(Item target);
+void Unequip(Item target);
 
 // fov.c functions
 void ClearFOV(Player* player);
@@ -296,27 +300,24 @@ void MakeFOV(Player* playerint);
 // handle_crash.c functions
 void handle_crash(int sig);
 
-//items.c functions
+//inventory.c functions
 void AddToNPCInventory(Entity* npc, Item newItem, int itemQuantity);
 void AddToPlayerInventory(Item newItem, int itemQuantity);
-void AmmoItemDescriptions(Item* items);
-void ArmorItemDescriptions(Item* items);
 void CombineEntityInventories(Entity* npc1, Entity* npc2);
-int CompareStrings(const void *a, const void *b);
 void ClearEntityInventory(Entity* npc);
 void CreatePlayerInv();
 void CreateMonsterInv(Entity* monster);
+void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity);
+void RemoveFromPlayerInventory(Item target, int itemQuantity);
+void ShootFromPlayerInventory(Item target, int itemQuantity);
+
+//items.c functions
 Item* CreateItemTable();
 Weapon GetWeaponFromItem(int itemID);
 Ammo GetAmmoFromItem(int itemID);
 Armor GetArmorFromItem(int itemID);
+char* GetAmmoType(int AmmoType);
 char* GetArmorType(int ArmorType);
-void Equip(Item target);
-void EquipMelee(Item target);
-void EquipRanged(Item target);
-void EquipArmor(Item target);
-void EquipAmmo(Item target);
-void Unequip(Item target);
 bool IsMeleeWeaponItem(Item target);
 bool IsRangedWeaponItem(Item target);
 bool IsAmmoItem(Item target);
@@ -325,13 +326,6 @@ void MakeWeaponItems(Item* items);
 void MakeAmmoItems(Item* items);
 void MakeArmorItems(Item* items);
 void FillNullItems(Item* items);
-void NameWeaponItems(Item* items);
-void NameAmmoItems(Item* items);
-void NameArmorItems(Item* items);
-void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity);
-void RemoveFromPlayerInventory(Item target, int itemQuantity);
-void ShootFromPlayerInventory(Item target, int itemQuantity);
-void WeaponItemDescriptions(Item* items);
 
 //loot_tables_containers.c functions.
 void LowLevelChestLoot(Entity* chest);
@@ -375,9 +369,6 @@ void RenderItemInfo(WINDOW* desc, Item* item);
 void EquipOrUnequip(Item** playerInv, bool unEquipMenu, int prevChoice);
 void PrintInventoryHeaders(WINDOW* menu, WINDOW* desc, WINDOW* loot);
 void PrintAllItems (WINDOW* menu, WINDOW* desc, WINDOW* loot, int cursor, int* y, Item** playerInv);
-// void RenderLootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
-// bool LootMenu(WINDOW *loot, int cursor, int n_options, Item** playerInv);
-// bool LootChoice(WINDOW* loot, int lootChoice);
 
 //menu_loot.c functions
 bool MoveLootCursor(WINDOW* menu, WINDOW* desc,WINDOW* loot, Item** playerInv);
@@ -427,6 +418,7 @@ void PlayerRegen(int *playerRegen);
 void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMove);
 // bool AutoExplore(CombatHistory* combatHistory);
 
+// save_player.c functions 
 char* FileToString(const char* filename);
 bool SavePlayerToJSON(const char *filename, const Player* player);
 cJSON* SerializePlayerStats(const Stats* playerStats);
@@ -438,6 +430,13 @@ cJSON* SerializePlayerArmor(const Armor* equippedArmor);
 cJSON* SerializePlayerAbility(const Ability* ability);
 cJSON* SerializePlayerClass(const Class* class);
 cJSON* SerializePlayerInventory(const Player* player);
+
+// utility.c functions
+bool CheckEscape(int ch);
+int CompareStrings(const void *a, const void *b);
+void Cursor(int x, int y, int length);
+int GetNumberOfDigits(int input);
+void RemoveCursor(int x, int y, int length);
 
 // Externals 
 // Used in tandem with main to let any functions use these outside of main.

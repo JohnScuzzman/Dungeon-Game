@@ -13,10 +13,10 @@ Armor NoArmor() {
     none.item.itemID = NULL_ITEM_ID;
     none.item.quantity = 0;
     none.item.value = 0;
-    strcpy(none.item.itemName, "None");
-    strcpy(none.item.itemDesc, " ");
     none.AC = 0;
     none.type = LIGHT; // 1 = light, 2 = med, 3 = heavy
+    strcpy(none.item.itemName, "None");
+    strcpy(none.item.itemDesc, " ");
     return none;
 }
 
@@ -29,9 +29,10 @@ Armor Rags() {
     rags.item.itemID = RAGS; 
     rags.item.quantity = 0;
     rags.item.value = 2;
-    strcpy(rags.item.itemName, "Rags");
     rags.AC = 0;
     rags.type = LIGHT; 
+    strcpy(rags.item.itemName, "Rags");
+    strcpy(rags.item.itemDesc, "Filthy Rags, long overworn.");
     return rags;
 }
 
@@ -44,9 +45,10 @@ Armor Robes() {
     robes.item.itemID = ROBES;
     robes.item.quantity = 0;
     robes.item.value = 10;
-    strcpy(robes.item.itemName, "Rags");
     robes.AC = 1;
     robes.type = LIGHT; 
+    strcpy(robes.item.itemName, "Robes");
+    strcpy(robes.item.itemDesc, "Long silken robes.");
     return robes;
 }
 
@@ -59,9 +61,10 @@ Armor LeatherArmor() {
     leatherArmor.item.itemID = LEATHER_ARMOR;
     leatherArmor.item.quantity = 0;
     leatherArmor.item.value = 30;
-    strcpy(leatherArmor.item.itemName, "Leather Armor");
     leatherArmor.AC = 2;
     leatherArmor.type = MEDIUM; // 1 = light, 2 = med, 3 = heavy
+    strcpy(leatherArmor.item.itemName, "Leather Armor");
+    strcpy(leatherArmor.item.itemDesc, "Tough and rigid, made of animal hide.");
     return leatherArmor;
 }
 
@@ -74,9 +77,10 @@ Armor Chainmail() {
     chainmail.item.itemID = CHAINMAIL;
     chainmail.item.quantity = 0;
     chainmail.item.value = 50;
-    strcpy(chainmail.item.itemName, "Chainmail");
     chainmail.AC = 3;
     chainmail.type = HEAVY; // 1 = light, 2 = med, 3 = heavy
+    strcpy(chainmail.item.itemName, "Chainmail");
+    strcpy(chainmail.item.itemDesc, "Heavy, but provides formidable defense.");
     return chainmail;
 }
 
@@ -89,9 +93,10 @@ Armor RangersCloak() {
     rangersCloak.item.itemID = RANGERS_CLOAK;
     rangersCloak.item.quantity = 0;
     rangersCloak.item.value = 75;
-    strcpy(rangersCloak.item.itemName, "Ranger's Cloak");
     rangersCloak.AC = 2;
     rangersCloak.type = LIGHT;
+    strcpy(rangersCloak.item.itemName, "Ranger's Cloak");
+    strcpy(rangersCloak.item.itemDesc, "Provides concealment in dark and dense forests.");
     return rangersCloak;
 }
 
@@ -104,8 +109,9 @@ Armor MetallicSkin() {
     metallicSkin.item.itemID = METALLIC_SKIN;
     metallicSkin.item.quantity = 0;
     metallicSkin.item.value = 200;
-    strcpy(metallicSkin.item.itemName, "Metallic Skin");
     metallicSkin.AC = 4;
     metallicSkin.type = HEAVY;
+    strcpy(metallicSkin.item.itemName, "Metallic Skin");
+    strcpy(metallicSkin.item.itemDesc, "Servos and steel are your bastion.");
     return metallicSkin;
 }
