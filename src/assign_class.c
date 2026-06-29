@@ -196,10 +196,11 @@ void AssignWarlock() {
 void AssignConjurer() {
     player->equippedArmor = Robes();
     player->equippedMelee = Quarterstaff();
-    player->equippedRanged = NoWeapon();
+    player->equippedRanged = LightningWand();
     player->equippedAmmo = NoAmmo();
     AddToPlayerInventory(items[ROBES], 1);
     AddToPlayerInventory(items[QUARTERSTAFF], 1);
+    AddToPlayerInventory(items[LIGHTNING_WAND], 1);
     player->playerStats.mana = 20;
     player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;

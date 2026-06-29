@@ -50,6 +50,7 @@ void CreatePlayerInv() {
         player->inventory[i].itemID = NULL_ITEM_ID;
         player->inventory[i].quantity = 0;
         player->inventory[i].type = NULL_ITEM_TYPE;
+        player->inventory[i].value = 0;
         strcpy(player->inventory[i].itemName, " ");
         strcpy(player->inventory[i].itemDesc, " ");
     }
@@ -64,6 +65,7 @@ void CreateMonsterInv(Entity* monster) {
         monster->inventory[i].itemID = NULL_ITEM_ID;
         monster->inventory[i].quantity = 0;
         monster->inventory[i].type = NULL_ITEM_TYPE;
+        monster->inventory[i].value = 0;
         strcpy(monster->inventory[i].itemName, " ");
         strcpy(monster->inventory[i].itemDesc, " ");
     }
@@ -79,12 +81,15 @@ Item* CreateItemTable() {
     items[NULL_ITEM_ID].itemID = NULL_ITEM_ID;
     items[NULL_ITEM_ID].quantity = 0;
     items[NULL_ITEM_ID].type = NULL_ITEM_TYPE;
+    items[NULL_ITEM_ID].value = 0;
     strcpy(items[NULL_ITEM_ID].itemName, " ");
     strcpy(items[NULL_ITEM_ID].itemDesc, " ");
     MakeWeaponItems(items);
     MakeAmmoItems(items);
     MakeArmorItems(items);
     FillNullItems(items);
+
+    /* Not needed, TODO: Add these to the Make______ functions */
     NameWeaponItems(items);
     NameAmmoItems(items);
     NameArmorItems(items);
@@ -350,78 +355,44 @@ void Unequip(Item target) {
 /* Adds these weapons to a singleton-like global list called "items" */
 void MakeWeaponItems(Item* items) {
      // Innate biological weapons
-    for (int i = FISTS; i < DAGGER; i++){
-        items[i].equippable = true;
-        items[i].lootable = false;
-        items[i].unequippable = true;
-        items[i].itemID = i;
-        items[i].type = WEAPON;
-    }
-    // Weapons
-    for (int i = DAGGER; i <= DUAL_FLINTLOCKS; i++){
-        items[i].equippable = true;
-        items[i].lootable = true;
-        items[i].unequippable = true;
-        items[i].itemID = i;
-        items[i].type = WEAPON;
+    for (int i = FISTS; i <= DUAL_FLINTLOCKS; i++){
+        Weapon weapon = GetWeaponFromItem(i);
+        items[i].equippable = weapon.item.equippable;
+        items[i].lootable = weapon.item.lootable;
+        items[i].unequippable = weapon.item.unequippable;
+        items[i].itemID = weapon.item.itemID;
+        items[i].type = weapon.item.type;
+        items[i].value = weapon.item.value;
+        strcpy(items[i].itemName, weapon.item.itemName);
+        strcpy(items[i].itemDesc, weapon.item.itemDesc);
     }
 }
 
 void MakeAmmoItems(Item* items) {
-    // Primitives
-    for (int i = ARROWS; i <= DARTS; i++){
-        items[i].equippable = true;
-        items[i].lootable = true;
-        items[i].unequippable = true;
-        items[i].itemID = i;
-        items[i].type = AMMO;
-    } // Magic
-    for (int i = ACID_POTION_AMMO; i <= ACID_POTION_AMMO; i++){
-        items[i].equippable = true;
-        items[i].lootable = true;
-        items[i].unequippable = true;
-        items[i].itemID = i;
-        items[i].type = AMMO;
-    } // Bullets
-    for (int i = BULLET_MUSKET; i <= BULLET_DRAGONS_BREATH; i++){
-        items[i].equippable = true;
-        items[i].lootable = true;
-        items[i].unequippable = true;
-        items[i].itemID = i;
-        items[i].type = AMMO;
-    } // Explosives
-    for (int i = EXPLOSIVE; i <= EXPLOSIVE; i++){
-        items[i].equippable = true;
-        items[i].lootable = true;
-        items[i].unequippable = true;
-        items[i].itemID = i;
-        items[i].type = AMMO;
-    } // Energy
-    for (int i = ENERGY_PACKS; i <= HEAVY_ENERGY_PACKS; i++){
-        items[i].equippable = true;
-        items[i].lootable = true;
-        items[i].unequippable = true;
-        items[i].itemID = i;
-        items[i].type = AMMO;
-    }
+    for (int i = ARROWS; i <= HEAVY_ENERGY_PACKS; i++){
+        Ammo ammo = GetAmmoFromItem(i);
+        items[i].equippable = ammo.item.equippable;
+        items[i].lootable = ammo.item.lootable;
+        items[i].unequippable = ammo.item.unequippable;
+        items[i].itemID = ammo.item.itemID;
+        items[i].type = ammo.item.type;
+        items[i].value = ammo.item.value;
+        strcpy(items[i].itemName, ammo.item.itemName);
+        strcpy(items[i].itemDesc, ammo.item.itemDesc);
+    } 
 }
 
 void MakeArmorItems(Item* items) {
-    // Armor
-    for (int i = RAGS; i < METALLIC_SKIN; i++){
-        items[i].equippable = true;
-        items[i].lootable = true;
-        items[i].unequippable = true;
-        items[i].itemID = i;
-        items[i].type = ARMOR;
-    }
-    // Cybernetics
-     for (int i = METALLIC_SKIN; i <= METALLIC_SKIN; i++){
-        items[i].equippable = true;
-        items[i].lootable = true;
-        items[i].unequippable = false;
-        items[i].itemID = i;
-        items[i].type = ARMOR;
+    for (int i = RAGS; i <= METALLIC_SKIN; i++){
+        Armor armor = GetArmorFromItem(i);
+        items[i].equippable = armor.item.equippable;
+        items[i].lootable = armor.item.lootable;
+        items[i].unequippable = armor.item.unequippable;
+        items[i].itemID = armor.item.itemID;
+        items[i].type = armor.item.type;
+        items[i].value = armor.item.value;
+        strcpy(items[i].itemName, armor.item.itemName);
+        strcpy(items[i].itemDesc, armor.item.itemDesc);
     }
 }
 
@@ -435,6 +406,9 @@ void FillNullItems(Item* items){
         items[i].unequippable = true;
         items[i].itemID = NULL_ITEM_ID;
         items[i].type = NULL_ITEM_TYPE;
+        items[i].value = 0;
+        strcpy(items[i].itemName, " ");
+        strcpy(items[i].itemDesc, " ");
         // TODO items[i].subtype = CYBERNETICS;
     }
 }
@@ -547,11 +521,11 @@ Weapon GetWeaponFromItem(int itemID) {
         case CLAWS: return Claws();
         case DAGGER: return Dagger();
         case SHORTSWORD: return Shortsword();
+        case QUARTERSTAFF: return Quarterstaff();
         case LONGSWORD: return Longsword();
-        case GREATSWORD: return Greatsword();
         case CUTLASS: return Cutlass();
         case SCIMITAR: return Scimitar();
-        case QUARTERSTAFF: return Quarterstaff();
+        case GREATSWORD: return Greatsword();
         case CHROME_FISTS: return ChromeFists();
         case ACID_POTION: return AcidPotion();
         case SHORTBOW: return Shortbow();
@@ -559,6 +533,7 @@ Weapon GetWeaponFromItem(int itemID) {
         case FLINTLOCK_PISTOL: return FlintlockPistol();
         case LIGHTNING_WAND: return LightningWand();
         case DUAL_FLINTLOCKS: return DualFlintlocks();
+        default: return NoWeapon();
     }
     return NoWeapon();
 }

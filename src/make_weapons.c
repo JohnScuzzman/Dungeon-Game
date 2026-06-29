@@ -96,6 +96,25 @@ Weapon Shortsword() {
     return shortSword;
 }
 
+Weapon Quarterstaff() {
+    Weapon quarterstaff;
+    quarterstaff.item.equippable = true;
+    quarterstaff.item.unequippable = false;
+    quarterstaff.item.isEquipped = false;
+    quarterstaff.item.type = WEAPON;
+    quarterstaff.item.itemID = QUARTERSTAFF;
+    quarterstaff.item.quantity = 0;
+    quarterstaff.item.value = 10;
+    strcpy(quarterstaff.item.itemName, "Quarterstaff");
+    quarterstaff.isMagic = false;
+    quarterstaff.isRanged = false;
+    quarterstaff.minDMG = 1;
+    quarterstaff.maxDMG = 4;
+    quarterstaff.range = 0;
+    quarterstaff.ammoType = NULL_AMMO_TYPE;
+    return quarterstaff;
+}
+
 Weapon Longsword() {
     Weapon longSword;
     longSword.item.equippable = true;
@@ -172,24 +191,6 @@ Weapon Scimitar() {
     return scimitar;
 }
 
-Weapon Quarterstaff() {
-    Weapon quarterstaff;
-    quarterstaff.item.equippable = true;
-    quarterstaff.item.unequippable = false;
-    quarterstaff.item.isEquipped = false;
-    quarterstaff.item.type = WEAPON;
-    quarterstaff.item.itemID = QUARTERSTAFF;
-    quarterstaff.item.quantity = 0;
-    quarterstaff.item.value = 10;
-    strcpy(quarterstaff.item.itemName, "Quarterstaff");
-    quarterstaff.isMagic = false;
-    quarterstaff.isRanged = false;
-    quarterstaff.minDMG = 1;
-    quarterstaff.maxDMG = 4;
-    quarterstaff.range = 0;
-    quarterstaff.ammoType = NULL_AMMO_TYPE;
-    return quarterstaff;
-}
 
 Weapon ChromeFists() {
     Weapon chromeFists;
