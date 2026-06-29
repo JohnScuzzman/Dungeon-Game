@@ -88,7 +88,7 @@ void LowLevelChestLoot(Entity* chest){
         break;
         case 2:
         randQuantity = (rand() % 14) + 6;
-        AddToNPCInventory(chest, items[BULLET_MUSKET], randQuantity);
+        AddToNPCInventory(chest, items[BULLET_FLINTLOCK], randQuantity);
         break;
         default:
         break;

@@ -16,6 +16,7 @@ Weapon NoWeapon() {
     none.range = 0;
     none.ammoType = NULL_AMMO_TYPE;
     strcpy(none.item.itemName, "None");
+    strcpy(none.item.itemDesc, " ");
     return none;
 }
 
@@ -35,6 +36,7 @@ Weapon Fists() {
     fists.range = 0;
     fists.ammoType = NULL_AMMO_TYPE;
     strcpy(fists.item.itemName, "Fists");
+    strcpy(fists.item.itemDesc, "Punch something if you must.");
     return fists;
 }
 
@@ -47,7 +49,6 @@ Weapon Claws() {
     claws.item.itemID = CLAWS;
     claws.item.quantity = 0;
     claws.item.value = 0;
-    strcpy(claws.item.itemName, "Claws");
     claws.isMagic = false;
     claws.isRanged = false;
     claws.minDMG = 1;
@@ -55,6 +56,7 @@ Weapon Claws() {
     claws.range = 0;
     claws.ammoType = NULL_AMMO_TYPE;
     strcpy(claws.item.itemName, "Claws");
+    strcpy(claws.item.itemDesc, "Sharp claws, ready to scratch.");
     return claws;
 }
 
@@ -67,13 +69,14 @@ Weapon Dagger() {
     dagger.item.itemID = DAGGER;
     dagger.item.quantity = 0;
     dagger.item.value = 5;
-    strcpy(dagger.item.itemName, "Dagger");
     dagger.isMagic = false;
     dagger.isRanged = false;
     dagger.minDMG = 1;
     dagger.maxDMG = 4;
     dagger.range = 0;
     dagger.ammoType = NULL_AMMO_TYPE;
+    strcpy(dagger.item.itemName, "Dagger");
+    strcpy(dagger.item.itemDesc, "A small, sharpened dagger.");
     return dagger;
 }
 
@@ -86,13 +89,14 @@ Weapon Shortsword() {
     shortSword.item.itemID = SHORTSWORD;
     shortSword.item.quantity = 0;
     shortSword.item.value = 10;
-    strcpy(shortSword.item.itemName, "Shortsword");
     shortSword.isMagic = false;
     shortSword.isRanged = false;
     shortSword.minDMG = 1;
     shortSword.maxDMG = 6;
     shortSword.range = 0;
     shortSword.ammoType = NULL_AMMO_TYPE;
+    strcpy(shortSword.item.itemName, "Shortsword");
+    strcpy(shortSword.item.itemDesc, "A shortsword, only about arm's length.");
     return shortSword;
 }
 
@@ -105,13 +109,14 @@ Weapon Quarterstaff() {
     quarterstaff.item.itemID = QUARTERSTAFF;
     quarterstaff.item.quantity = 0;
     quarterstaff.item.value = 10;
-    strcpy(quarterstaff.item.itemName, "Quarterstaff");
     quarterstaff.isMagic = false;
     quarterstaff.isRanged = false;
     quarterstaff.minDMG = 1;
     quarterstaff.maxDMG = 4;
     quarterstaff.range = 0;
     quarterstaff.ammoType = NULL_AMMO_TYPE;
+    strcpy(quarterstaff.item.itemName, "Quarterstaff");
+    strcpy(quarterstaff.item.itemDesc, "A large wooden staff, gnarled and tough.");
     return quarterstaff;
 }
 
@@ -124,13 +129,14 @@ Weapon Longsword() {
     longSword.item.itemID = LONGSWORD;
     longSword.item.quantity = 0;
     longSword.item.value = 20;
-    strcpy(longSword.item.itemName, "Longsword");
     longSword.isMagic = false;
     longSword.isRanged = false;
     longSword.minDMG = 1;
     longSword.maxDMG = 8;
     longSword.range = 0;
     longSword.ammoType = NULL_AMMO_TYPE;
+    strcpy(longSword.item.itemName, "Longsword");
+    strcpy(longSword.item.itemDesc, "A mighty blade.");
     return longSword;
 }
 
@@ -143,13 +149,14 @@ Weapon Greatsword() {
     greatSword.item.itemID = GREATSWORD;
     greatSword.item.quantity = 0;
     greatSword.item.value = 45;
-    strcpy(greatSword.item.itemName, "Greatsword");
     greatSword.isMagic = false;
     greatSword.isRanged = false;
     greatSword.minDMG = 1;
     greatSword.maxDMG = 10;
     greatSword.range = 0;
     greatSword.ammoType = NULL_AMMO_TYPE;
+    strcpy(greatSword.item.itemName, "Greatsword");
+    strcpy(greatSword.item.itemDesc, "A large sword, demanding two hands of it's wielder.");
     return greatSword;
 }
 
@@ -162,13 +169,14 @@ Weapon Cutlass() {
     cutlass.item.itemID = CUTLASS;
     cutlass.item.quantity = 0;
     cutlass.item.value = 25;
-    strcpy(cutlass.item.itemName, "Cutlass");
     cutlass.isMagic = false;
     cutlass.isRanged = false;
     cutlass.minDMG = 2;
     cutlass.maxDMG = 7;
     cutlass.range = 0;
     cutlass.ammoType = NULL_AMMO_TYPE;
+    strcpy(cutlass.item.itemName, "Cutlass");
+    strcpy(cutlass.item.itemDesc, "A favored weapon of every brigand.");
     return cutlass;
 }
 
@@ -181,13 +189,14 @@ Weapon Scimitar() {
     scimitar.item.itemID = SCIMITAR;
     scimitar.item.quantity = 0;
     scimitar.item.value = 30;
-    strcpy(scimitar.item.itemName, "Scimitar");
     scimitar.isMagic = false;
     scimitar.isRanged = false;
     scimitar.minDMG = 2;
     scimitar.maxDMG = 8;
     scimitar.range = 0;
     scimitar.ammoType = NULL_AMMO_TYPE;
+    strcpy(scimitar.item.itemName, "Scimitar");
+    strcpy(scimitar.item.itemDesc, "A curved sword, honed for slashing.");
     return scimitar;
 }
 
@@ -201,13 +210,14 @@ Weapon ChromeFists() {
     chromeFists.item.itemID = CHROME_FISTS;
     chromeFists.item.quantity = 0;
     chromeFists.item.value = 100;
-    strcpy(chromeFists.item.itemName, "Chrome Fists");
     chromeFists.isMagic = false;
     chromeFists.isRanged = false;
     chromeFists.minDMG = 1;
     chromeFists.maxDMG = 6;
     chromeFists.range = 0;
     chromeFists.ammoType = NULL_AMMO_TYPE;
+    strcpy(chromeFists.item.itemName, "Chrome Fists");
+    strcpy(chromeFists.item.itemDesc, "Fists of chrome, glinting in the dark.");
     return chromeFists;
 }
 
@@ -220,13 +230,14 @@ Weapon AcidPotion() {
     acidPotion.item.itemID = ACID_POTION;
     acidPotion.item.quantity = 0;
     acidPotion.item.value = 25;
-    strcpy(acidPotion.item.itemName, "Acid Potion");
     acidPotion.isMagic = false;
     acidPotion.isRanged = true;
     acidPotion.minDMG = 2;
     acidPotion.maxDMG = 8;
     acidPotion.range = 6;
     acidPotion.ammoType = ACID_POTION_AMMO;
+    strcpy(acidPotion.item.itemName, "Acid Potion");
+    strcpy(acidPotion.item.itemDesc, "A potion of volatile acid.");
     return acidPotion;
 }
 
@@ -239,13 +250,14 @@ Weapon Shortbow() {
     shortbow.item.itemID = SHORTBOW;
     shortbow.item.quantity = 0;
     shortbow.item.value = 25;
-    strcpy(shortbow.item.itemName, "Shortbow");
     shortbow.isMagic = false;
     shortbow.isRanged = true;
     shortbow.minDMG = 1;
     shortbow.maxDMG = 6;
     shortbow.range = 8;
     shortbow.ammoType = ARROWS;
+    strcpy(shortbow.item.itemName, "Shortbow");
+    strcpy(shortbow.item.itemDesc, "A small bow.");
     return shortbow;
 }
 
@@ -258,13 +270,14 @@ Weapon Longbow() {
     longbow.item.itemID = LONGBOW;
     longbow.item.quantity = 0;
     longbow.item.value = 50;
-    strcpy(longbow.item.itemName, "Longbow");
     longbow.isMagic = false;
     longbow.isRanged = true;
     longbow.minDMG = 1;
     longbow.maxDMG = 8;
     longbow.range = 10;
     longbow.ammoType = ARROWS;
+    strcpy(longbow.item.itemName, "Longbow");
+    strcpy(longbow.item.itemDesc, "A large bow, capable of achieving great range.");
     return longbow;
 }
 
@@ -277,13 +290,14 @@ Weapon FlintlockPistol() {
     flintlockPistol.item.itemID = FLINTLOCK_PISTOL;
     flintlockPistol.item.quantity = 0;
     flintlockPistol.item.value = 75;
-    strcpy(flintlockPistol.item.itemName, "Flintlock Pistol");
     flintlockPistol.isMagic = false;
     flintlockPistol.isRanged = true;
     flintlockPistol.minDMG = 1;
     flintlockPistol.maxDMG = 8;
     flintlockPistol.range = 5;
-    flintlockPistol.ammoType = BULLET_MUSKET;
+    flintlockPistol.ammoType = BULLET_FLINTLOCK;
+    strcpy(flintlockPistol.item.itemName, "Flintlock Pistol");
+    strcpy(flintlockPistol.item.itemDesc, "A black powder pistol, devastating at close range.");
     return flintlockPistol;
 }
 
@@ -296,7 +310,6 @@ Weapon LightningWand() {
     lightningWand.item.itemID = LIGHTNING_WAND;
     lightningWand.item.quantity = 0;
     lightningWand.item.value = 75;
-    strcpy(lightningWand.item.itemName, "Wand of Sparks");
     lightningWand.isMagic = true;
     lightningWand.isRanged = true;
     lightningWand.minDMG = 1;
@@ -304,6 +317,8 @@ Weapon LightningWand() {
     lightningWand.range = 10;
     lightningWand.ammoType = NULL_AMMO_TYPE;
     lightningWand.isRanged = true;
+    strcpy(lightningWand.item.itemName, "Wand of Sparks");
+    strcpy(lightningWand.item.itemDesc, "A small wand of sparks, weak but efficient.");
     return lightningWand;
 }
 
@@ -316,13 +331,14 @@ Weapon DualFlintlocks() {
     dualFlintlocks.item.itemID = DUAL_FLINTLOCKS;
     dualFlintlocks.item.quantity = 0;
     dualFlintlocks.item.value = 150;
-    strcpy(dualFlintlocks.item.itemName, "Dual Flintlocks");
     dualFlintlocks.isMagic = false;
     dualFlintlocks.isRanged = true;
     dualFlintlocks.minDMG = 2;
     dualFlintlocks.maxDMG = 12;
     dualFlintlocks.range = 5;
-    dualFlintlocks.ammoType = BULLET_MUSKET;
+    dualFlintlocks.ammoType = BULLET_FLINTLOCK;
+    strcpy(dualFlintlocks.item.itemName, "Dual Flintlocks");
+    strcpy(dualFlintlocks.item.itemDesc, "A pair of black powder hand cannons.");
     return dualFlintlocks;
 }
 
