@@ -26,7 +26,7 @@ Ammo Arrows() {
     arrows.item.quantity = 0;
     arrows.item.value = 1;
     arrows.bonusDamage = 0;
-    arrows.type = PRIMITIVE;
+    arrows.type = TYPE_ARROWS;
     strcpy(arrows.item.itemName, "Arrows");
     strcpy(arrows.item.itemDesc, "Arrows, able to be fired from a bow.");
     return arrows;
@@ -42,7 +42,7 @@ Ammo Darts() {
     darts.item.quantity = 0;
     darts.item.value = 1;
     darts.bonusDamage = 1;
-    darts.type = PRIMITIVE;
+    darts.type = TYPE_DARTS;
     strcpy(darts.item.itemName, "Darts");
     strcpy(darts.item.itemDesc, "");
     return darts;
@@ -58,7 +58,7 @@ Ammo AcidPotionAmmo() {
     acidPotion.item.quantity = 0;
     acidPotion.item.value = 25;
     acidPotion.bonusDamage = 0;
-    acidPotion.type = MAGIC;
+    acidPotion.type = TYPE_MAGIC;
     strcpy(acidPotion.item.itemName, "Acid Potions");
     strcpy(acidPotion.item.itemDesc, "A green swirly potion, it burns the eyebrows.");
     return acidPotion;
@@ -75,7 +75,7 @@ Ammo BulletFlintlock() {
     bulletFlintlock.item.quantity = 0;
     bulletFlintlock.item.value = 5;
     bulletFlintlock.bonusDamage = 1;
-    bulletFlintlock.type = FLINTLOCK;
+    bulletFlintlock.type = TYPE_FLINTLOCK;
     strcpy(bulletFlintlock.item.itemName, "Flintlock Ammo");
 	strcpy(bulletFlintlock.item.itemDesc, "A small metal ball, fired with black powder.");
     return bulletFlintlock;
@@ -187,7 +187,7 @@ Ammo BulletBuckshot() {
     shellBuckshot.item.quantity = 0;
     shellBuckshot.item.value = 6;
     shellBuckshot.bonusDamage = 1;
-    shellBuckshot.type = SHOTGUN;
+    shellBuckshot.type = TYPE_SHOTGUN;
     strcpy(shellBuckshot.item.itemName, "Buckshot Ammo");
 	strcpy(shellBuckshot.item.itemDesc, "");
     return shellBuckshot;
@@ -203,7 +203,7 @@ Ammo BulletSlug() {
     shellSlug.item.quantity = 0;
     shellSlug.item.value = 7;
     shellSlug.bonusDamage = 1;
-    shellSlug.type = SHOTGUN;
+    shellSlug.type = TYPE_SHOTGUN;
     strcpy(shellSlug.item.itemName, "Shotgun Slugs");
 	strcpy(shellSlug.item.itemDesc, "");
     return shellSlug;
@@ -219,7 +219,7 @@ Ammo BulletDragonsBreath() {
     shellDragonsBreath.item.quantity = 0;
     shellDragonsBreath.item.value = 12;
     shellDragonsBreath.bonusDamage = 1;
-    shellDragonsBreath.type = SHOTGUN;
+    shellDragonsBreath.type = TYPE_SHOTGUN;
     strcpy(shellDragonsBreath.item.itemName, "Dragon's Breath Rounds");
 	strcpy(shellDragonsBreath.item.itemDesc, "");
     return shellDragonsBreath;
@@ -235,7 +235,7 @@ Ammo Missiles() {
     missiles.item.quantity = 0;
     missiles.item.value = 210;
     missiles.bonusDamage = 1;
-    missiles.type = EXPLOSIVE_MISSILE;
+    missiles.type = TYPE_EXPLOSIVE_MISSILE;
     strcpy(missiles.item.itemName, "Missiles");
 	strcpy(missiles.item.itemDesc, "");
     return missiles;
@@ -251,7 +251,7 @@ Ammo EnergyPacks() {
     energyPacks.item.quantity = 0;
     energyPacks.item.value = 38;
     energyPacks.bonusDamage = 1;
-    energyPacks.type = ENERGY;
+    energyPacks.type = TYPE_ENERGY;
     strcpy(energyPacks.item.itemName, "Energy Packs");
     strcpy(energyPacks.item.itemDesc, "");
     return energyPacks;
@@ -267,7 +267,7 @@ Ammo HeavyEnergyPacks() {
     heavyEnergyPacks.item.quantity = 0;
     heavyEnergyPacks.item.value = 124;
     heavyEnergyPacks.bonusDamage = 1;
-    heavyEnergyPacks.type = ENERGY;
+    heavyEnergyPacks.type = TYPE_ENERGY;
     strcpy(heavyEnergyPacks.item.itemName, "Heavy Energy Packs");
 	strcpy(heavyEnergyPacks.item.itemDesc, "");
     return heavyEnergyPacks;

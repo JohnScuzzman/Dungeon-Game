@@ -127,18 +127,19 @@ Armor GetArmorFromItem(int itemID) {
 
 char* GetAmmoType(int AmmoType) {
     switch(AmmoType) {
-        case PRIMITIVE: return "Primitive";
-        case MAGIC: return "Magic";
-        case FLINTLOCK: return "Flintlock";
+        case TYPE_DARTS: return "Darts";
+        case TYPE_ARROWS: return "Arrows";
+        case TYPE_MAGIC: return "Magic";
+        case TYPE_FLINTLOCK: return "Flintlock";
         case TYPE_5MM: return "5mm";
         case TYPE_9MM: return "9mm";
         case TYPE_556: return "5.56mm";
         case TYPE_762: return "7.62mm";
         case TYPE_308: return ".308";
         case TYPE_50CAL: return ".50";
-        case SHOTGUN: return "Shotgun Shell";
-        case EXPLOSIVE_MISSILE: return "Missile";
-        case ENERGY: return "Energy";
+        case TYPE_SHOTGUN: return "Shotgun Shell";
+        case TYPE_EXPLOSIVE_MISSILE: return "Missile";
+        case TYPE_ENERGY: return "Energy";
     }
     return "None";
 }
