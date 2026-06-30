@@ -179,13 +179,6 @@ void DrawCombatLog() {
   	}
 }
 
-
-void DrawPlayerInventory() {
-    for(int i = player->invHead; i < player->invTail; i++) {
-        mvprintw(26 + i, 2, "ItemID:%d, Item:%s", player->inventory[i].itemID, player->inventory[i].itemName);
-    }
-}
-
 /*Draw Everything*/ 
 //void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
 void DrawEverything() {
@@ -196,7 +189,6 @@ void DrawEverything() {
   DrawPlayerEquipment();
   DrawPlayerStats();
   DrawAbilities();
-  // DrawPlayerInventory();
   // DrawDebug(mptr, n_monsters);
 	DrawCombatLog();
 }

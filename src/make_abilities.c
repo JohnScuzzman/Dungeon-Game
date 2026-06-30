@@ -113,7 +113,7 @@ Ability FireVolley() {
     fireVolley.minDMG = (player->equippedRanged.minDMG);
     fireVolley.maxDMG = (player->equippedRanged.maxDMG);
     fireVolley.manaCost = 5;
-    fireVolley.range = 5;
+    fireVolley.range = (player->equippedRanged.range);
     fireVolley.abilitySave = (player->playerStats.ATK) + 3;
     fireVolley.miscStat = (player->playerStats.LVL); // number of shots fired.
     fireVolley.miscStat++;

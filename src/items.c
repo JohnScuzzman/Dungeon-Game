@@ -81,8 +81,11 @@ Weapon GetWeaponFromItem(int itemID) {
         case SHORTBOW: return Shortbow();
         case LONGBOW: return Longbow();
         case FLINTLOCK_PISTOL: return FlintlockPistol();
-        case LIGHTNING_WAND: return LightningWand();
         case DUAL_FLINTLOCKS: return DualFlintlocks();
+        case LIGHT_PISTOL: return LightPistol();
+        case MEDIUM_PISTOL: return MediumPistol();
+        case HEAVY_PISTOL: return HeavyPistol();
+        case LIGHTNING_WAND: return LightningWand();
         default: return NoWeapon();
     }
     return NoWeapon();

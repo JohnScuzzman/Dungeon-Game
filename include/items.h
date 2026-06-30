@@ -21,14 +21,18 @@ typedef enum {
     SHORTBOW,
     LONGBOW,
     FLINTLOCK_PISTOL,
-    LIGHTNING_WAND,
     DUAL_FLINTLOCKS,
+    LIGHT_PISTOL,
+    MEDIUM_PISTOL,
+    HEAVY_PISTOL,
+    LIGHTNING_WAND,
 	ARROWS,
     DARTS,
 	ACID_POTION_AMMO,
 	BULLET_FLINTLOCK,
 	BULLET_5MM,
 	BULLET_9MM,
+    BULLET_45,
 	BULLET_556,
 	BULLET_762,
 	BULLET_308,
@@ -64,6 +68,7 @@ typedef enum {
 	FLINTLOCK,
     TYPE_5MM,
 	TYPE_9MM,
+    TYPE_45,
 	TYPE_556,
 	TYPE_762,
 	TYPE_308,
@@ -153,8 +158,11 @@ Weapon AcidPotion();
 Weapon Shortbow();
 Weapon Longbow();
 Weapon FlintlockPistol();
-Weapon LightningWand();
 Weapon DualFlintlocks();
+Weapon LightPistol();
+Weapon MediumPistol();
+Weapon HeavyPistol();
+Weapon LightningWand();
 
 //make_armors.c functions
 Armor NoArmor();
