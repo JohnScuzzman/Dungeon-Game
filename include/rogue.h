@@ -274,6 +274,8 @@ void DrawPlayerBlink(Player* player);
 
 // engine.c functions
 void CloseGame(void);
+bool EquipWeaponRequirements(Weapon target);
+bool EquipArmorRequirements(Armor target);
 void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items);
 void Gameover();
 void Greeting();
@@ -288,6 +290,7 @@ void EquipRanged(Item target);
 void EquipArmor(Item target);
 void EquipAmmo(Item target);
 void Unequip(Item target);
+char* GetRequiredStat(int reqType);
 
 // fov.c functions
 void ClearFOV(Player* player);

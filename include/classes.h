@@ -12,6 +12,16 @@ typedef enum {
     ABILITY_4,
     ABILITY_5,
 } AbilityKeypress;
+
+typedef enum {
+    NULL_STAT_TYPE,
+    CHA,
+    CON,
+    DEX,
+    INT,
+    STR,
+    WIS
+} StatType;
     
 typedef enum {
     NO_ABILITY,

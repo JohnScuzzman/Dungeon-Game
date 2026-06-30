@@ -154,9 +154,10 @@ void DrawBorder(void) {
 void DrawDebug(Entity* mptr, int n_monsters) {
   // Position closest = FindClosestUnexplored();
     for (int i = 0; i < n_monsters ; i++) {
-	  mvprintw(52, 2, "Player POS x:%d, y:%d, Tail:%d, inv[0].ID:%d", player->pos.x, player->pos.y, player->invTail, player->inventory[0].itemID);
+	  // mvprintw(52, 2, "Player POS x:%d, y:%d, Tail:%d, inv[0].ID:%d", player->pos.x, player->pos.y, player->invTail, player->inventory[0].itemID);
+    mvprintw(52, 2, "Armor Req:%d, Armor Stat:%d, Melee Req:%d, Ranged Req:%d", player->equippedArmor.statReq, player->equippedArmor.statUsed, player->equippedMelee.statReq, player->equippedRanged.statReq);
     // mvprintw(23 + i, 128, "Playerlast x:%d y:%d ", mptr[i].playerLastPos.x, mptr[i].playerLastPos.y);
-    mvprintw(53 + i, 2, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c Tail:%d inv[0]ID:%d", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch, mptr[i].invTail, mptr[i].inventory[0].itemID);
+    // mvprintw(53 + i, 2, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c Tail:%d inv[0]ID:%d", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch, mptr[i].invTail, mptr[i].inventory[0].itemID);
     // mvprintw(27 + i, 2, "ID %c x:%d, y:%d MapID:%d, Mapc:%c", ((mptr + i)->entityID), mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
     // mvprintw(23 + i, 128, "isAggro: %d Range: %d Range: %d", mptr[i].aggroFlag, mptr[i].aggroRange, GetDistance(player->pos, (mptr + i)->pos));
 	  // mvprintw(30, 128, "CH: %c x:%d, y:%d ID:%d", combatHistory->defender.ch, combatHistory->defender.pos.x, combatHistory->defender.pos.y, combatHistory->defender.entityID);
@@ -189,7 +190,6 @@ void DrawEverything() {
   DrawPlayerEquipment();
   DrawPlayerStats();
   DrawAbilities();
-  // DrawDebug(mptr, n_monsters);
 	DrawCombatLog();
 }
 

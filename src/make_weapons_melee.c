@@ -15,6 +15,8 @@ Weapon NoWeapon() {
     none.maxDMG = 0;
     none.range = 0;
     none.ammoType = NULL_AMMO_TYPE;
+    none.statUsed = NULL_STAT_TYPE;
+    none.statReq = 0;
     strcpy(none.item.itemName, "None");
     strcpy(none.item.itemDesc, " ");
     return none;
@@ -35,6 +37,8 @@ Weapon Fists() {
     fists.maxDMG = 3;
     fists.range = 0;
     fists.ammoType = NULL_AMMO_TYPE;
+    fists.statUsed = NULL_STAT_TYPE;
+    fists.statReq = 0;
     strcpy(fists.item.itemName, "Fists");
     strcpy(fists.item.itemDesc, "Punch something if you must.");
     return fists;
@@ -55,6 +59,8 @@ Weapon Claws() {
     claws.maxDMG = 4;
     claws.range = 0;
     claws.ammoType = NULL_AMMO_TYPE;
+    claws.statUsed = NULL_STAT_TYPE;
+    claws.statReq = 0;
     strcpy(claws.item.itemName, "Claws");
     strcpy(claws.item.itemDesc, "Sharp claws, ready to scratch.");
     return claws;
@@ -75,6 +81,8 @@ Weapon Dagger() {
     dagger.maxDMG = 4;
     dagger.range = 0;
     dagger.ammoType = NULL_AMMO_TYPE;
+    dagger.statUsed = STR;
+    dagger.statReq = 6;
     strcpy(dagger.item.itemName, "Dagger");
     strcpy(dagger.item.itemDesc, "A small, sharpened dagger.");
     return dagger;
@@ -95,6 +103,8 @@ Weapon Shortsword() {
     shortSword.maxDMG = 6;
     shortSword.range = 0;
     shortSword.ammoType = NULL_AMMO_TYPE;
+    shortSword.statUsed = STR;
+    shortSword.statReq = 8;
     strcpy(shortSword.item.itemName, "Shortsword");
     strcpy(shortSword.item.itemDesc, "A shortsword, only about arm's length.");
     return shortSword;
@@ -115,6 +125,8 @@ Weapon Quarterstaff() {
     quarterstaff.maxDMG = 4;
     quarterstaff.range = 0;
     quarterstaff.ammoType = NULL_AMMO_TYPE;
+    quarterstaff.statUsed = STR;
+    quarterstaff.statReq = 6;
     strcpy(quarterstaff.item.itemName, "Quarterstaff");
     strcpy(quarterstaff.item.itemDesc, "A large wooden staff, gnarled and tough.");
     return quarterstaff;
@@ -135,6 +147,8 @@ Weapon Longsword() {
     longSword.maxDMG = 8;
     longSword.range = 0;
     longSword.ammoType = NULL_AMMO_TYPE;
+    longSword.statUsed = STR;
+    longSword.statReq = 12;
     strcpy(longSword.item.itemName, "Longsword");
     strcpy(longSword.item.itemDesc, "A mighty blade.");
     return longSword;
@@ -155,6 +169,8 @@ Weapon Greatsword() {
     greatSword.maxDMG = 10;
     greatSword.range = 0;
     greatSword.ammoType = NULL_AMMO_TYPE;
+    greatSword.statUsed = STR;
+    greatSword.statReq = 10;
     strcpy(greatSword.item.itemName, "Greatsword");
     strcpy(greatSword.item.itemDesc, "A large sword, demanding two hands of it's wielder.");
     return greatSword;
@@ -175,6 +191,8 @@ Weapon Cutlass() {
     cutlass.maxDMG = 7;
     cutlass.range = 0;
     cutlass.ammoType = NULL_AMMO_TYPE;
+    cutlass.statUsed = STR;
+    cutlass.statReq = 8;
     strcpy(cutlass.item.itemName, "Cutlass");
     strcpy(cutlass.item.itemDesc, "A favored weapon of every brigand.");
     return cutlass;
@@ -195,6 +213,8 @@ Weapon Scimitar() {
     scimitar.maxDMG = 8;
     scimitar.range = 0;
     scimitar.ammoType = NULL_AMMO_TYPE;
+    scimitar.statUsed = STR;
+    scimitar.statReq = 8;
     strcpy(scimitar.item.itemName, "Scimitar");
     strcpy(scimitar.item.itemDesc, "A curved sword, honed for slashing.");
     return scimitar;
@@ -216,6 +236,8 @@ Weapon ChromeFists() {
     chromeFists.maxDMG = 6;
     chromeFists.range = 0;
     chromeFists.ammoType = NULL_AMMO_TYPE;
+    chromeFists.statUsed = CON;
+    chromeFists.statReq = 10;
     strcpy(chromeFists.item.itemName, "Chrome Fists");
     strcpy(chromeFists.item.itemDesc, "Fists of chrome, glinting in the dark.");
     return chromeFists;

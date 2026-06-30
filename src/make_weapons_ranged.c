@@ -16,6 +16,8 @@ Weapon AcidPotion() {
     acidPotion.maxDMG = 8;
     acidPotion.range = 6;
     acidPotion.ammoType = TYPE_MAGIC;
+    acidPotion.statUsed = WIS;
+    acidPotion.statReq = 8;
     strcpy(acidPotion.item.itemName, "Acid Potion");
     strcpy(acidPotion.item.itemDesc, "A potion of volatile acid.");
     return acidPotion;
@@ -36,6 +38,8 @@ Weapon Shortbow() {
     shortbow.maxDMG = 6;
     shortbow.range = 8;
     shortbow.ammoType = TYPE_ARROWS;
+    shortbow.statUsed = DEX;
+    shortbow.statReq = 8;
     strcpy(shortbow.item.itemName, "Shortbow");
     strcpy(shortbow.item.itemDesc, "A small bow.");
     return shortbow;
@@ -56,6 +60,8 @@ Weapon Longbow() {
     longbow.maxDMG = 6;
     longbow.range = 8;
     longbow.ammoType = TYPE_ARROWS;
+    longbow.statUsed = DEX;
+    longbow.statReq = 10;
     strcpy(longbow.item.itemName, "Longbow");
     strcpy(longbow.item.itemDesc, "A large bow, capable of achieving great range.");
     return longbow;
@@ -76,6 +82,8 @@ Weapon FlintlockPistol() {
     flintlockPistol.maxDMG = 8;
     flintlockPistol.range = 4;
     flintlockPistol.ammoType = TYPE_FLINTLOCK;
+    flintlockPistol.statUsed = STR;
+    flintlockPistol.statReq = 6;
     strcpy(flintlockPistol.item.itemName, "Flintlock Pistol");
     strcpy(flintlockPistol.item.itemDesc, "A black powder pistol, devastating at close range.");
     return flintlockPistol;
@@ -96,6 +104,8 @@ Weapon DualFlintlocks() {
     dualFlintlocks.maxDMG = 12;
     dualFlintlocks.range = 3;
     dualFlintlocks.ammoType = TYPE_FLINTLOCK;
+    dualFlintlocks.statUsed = DEX;
+    dualFlintlocks.statReq = 10;
     strcpy(dualFlintlocks.item.itemName, "Dual Flintlocks");
     strcpy(dualFlintlocks.item.itemDesc, "A pair of black powder hand cannons.");
     return dualFlintlocks;
@@ -116,6 +126,8 @@ Weapon LightPistol() {
     lightPistol.maxDMG = 10;
     lightPistol.range = 5;
     lightPistol.ammoType = TYPE_9MM;
+    lightPistol.statUsed = DEX;
+    lightPistol.statReq = 6;
     strcpy(lightPistol.item.itemName, "9mm Pistol");
     strcpy(lightPistol.item.itemDesc, "A small, 9mm pistol.");
     return lightPistol;
@@ -136,6 +148,8 @@ Weapon MediumPistol() {
     mediumPistol.maxDMG = 12;
     mediumPistol.range = 6;
     mediumPistol.ammoType = TYPE_45;
+    mediumPistol.statUsed = DEX;
+    mediumPistol.statReq = 8;
     strcpy(mediumPistol.item.itemName, ".45 Pistol");
     strcpy(mediumPistol.item.itemDesc, "A small, .45 pistol.");
     return mediumPistol;
@@ -156,6 +170,8 @@ Weapon HeavyPistol() {
     heavyPistol.maxDMG = 12;
     heavyPistol.range = 6;
     heavyPistol.ammoType = TYPE_50CAL;
+    heavyPistol.statUsed = STR;
+    heavyPistol.statReq = 12;
     strcpy(heavyPistol.item.itemName, "50 Cal Pistol");
     strcpy(heavyPistol.item.itemDesc, "A Large, 50 Cal pistol.");
     return heavyPistol;
@@ -176,7 +192,8 @@ Weapon LightningWand() {
     lightningWand.maxDMG = 3;
     lightningWand.range = 10;
     lightningWand.ammoType = NULL_AMMO_TYPE;
-    lightningWand.isRanged = true;
+    lightningWand.statUsed = INT;
+    lightningWand.statReq = 10;
     strcpy(lightningWand.item.itemName, "Wand of Sparks");
     strcpy(lightningWand.item.itemDesc, "A small wand of sparks, weak but efficient.");
     return lightningWand;

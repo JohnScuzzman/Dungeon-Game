@@ -127,25 +127,28 @@ cJSON* SerializeItem(const Item* item) {
 }
 
 cJSON* SerializePlayerWeapon(const Weapon* equippedMelee) {
-    cJSON* playerMeleeObj = cJSON_CreateObject();
-    if (playerMeleeObj == NULL) return NULL;
+    cJSON* playerWeaponObj = cJSON_CreateObject();
+    if (playerWeaponObj == NULL) return NULL;
 
     // 1. Serialize the nested structure into its own cJSON object
     cJSON* weaponItemObj = SerializeItem(&equippedMelee->item);
     
     // 2. Attach the nested object to the root object
     if (weaponItemObj != NULL) {
-        cJSON_AddItemToObject(playerMeleeObj, "weaponItemObj", weaponItemObj);
+        cJSON_AddItemToObject(playerWeaponObj, "weaponItemObj", weaponItemObj);
     }
     
-    cJSON_AddBoolToObject(playerMeleeObj, "isMagic", equippedMelee->isMagic);
-    cJSON_AddBoolToObject(playerMeleeObj, "isRanged", equippedMelee->isRanged);
-    cJSON_AddNumberToObject(playerMeleeObj, "minDMG", equippedMelee->minDMG);
-    cJSON_AddNumberToObject(playerMeleeObj, "maxDMG", equippedMelee->maxDMG);
-    cJSON_AddNumberToObject(playerMeleeObj, "range", equippedMelee->range);
-    cJSON_AddNumberToObject(playerMeleeObj, "ammoType", equippedMelee->ammoType);
+    cJSON_AddBoolToObject(playerWeaponObj, "isMagic", equippedMelee->isMagic);
+    cJSON_AddBoolToObject(playerWeaponObj, "isRanged", equippedMelee->isRanged);
+    cJSON_AddNumberToObject(playerWeaponObj, "minDMG", equippedMelee->minDMG);
+    cJSON_AddNumberToObject(playerWeaponObj, "maxDMG", equippedMelee->maxDMG);
+    cJSON_AddNumberToObject(playerWeaponObj, "range", equippedMelee->range);
+    cJSON_AddNumberToObject(playerWeaponObj, "ammoType", equippedMelee->ammoType);
+    cJSON_AddNumberToObject(playerWeaponObj, "ammoType", equippedMelee->ammoType);
+    cJSON_AddNumberToObject(playerWeaponObj, "statUsed", equippedMelee->statUsed);
+    cJSON_AddNumberToObject(playerWeaponObj, "statReq", equippedMelee->statReq);
 
-    return playerMeleeObj;
+    return playerWeaponObj;
 }
 
 
@@ -178,6 +181,9 @@ cJSON* SerializePlayerArmor(const Armor* equippedArmor) {
     
     cJSON_AddNumberToObject(playerArmorObj, "AC", equippedArmor->AC);
     cJSON_AddNumberToObject(playerArmorObj, "type", equippedArmor->type);
+    cJSON_AddNumberToObject(playerArmorObj, "statUsed", equippedArmor->type);
+    cJSON_AddNumberToObject(playerArmorObj, "statReq", equippedArmor->type);
+
 
     return playerArmorObj;
 }
