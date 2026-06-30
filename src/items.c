@@ -3,16 +3,7 @@
 /* Weapons begin at 'FIST', Armor Begins at 'ROBES'*/
 Item* CreateItemTable() {
     Item* items = calloc(ALL_ITEMS, sizeof(Item));
-    items[NULL_ITEM_ID].equippable = false;
-    items[NULL_ITEM_ID].lootable = false;
-    items[NULL_ITEM_ID].unequippable = true;
-    items[NULL_ITEM_ID].isEquipped = false;
-    items[NULL_ITEM_ID].itemID = NULL_ITEM_ID;
-    items[NULL_ITEM_ID].quantity = 0;
-    items[NULL_ITEM_ID].type = NULL_ITEM_TYPE;
-    items[NULL_ITEM_ID].value = 0;
-    strcpy(items[NULL_ITEM_ID].itemName, " ");
-    strcpy(items[NULL_ITEM_ID].itemDesc, " ");
+    MakeHeaderItems(items);
     MakeWeaponItems(items);
     MakeAmmoItems(items);
     MakeArmorItems(items);
@@ -20,24 +11,42 @@ Item* CreateItemTable() {
     return items;
 }
 
+void MakeHeaderItems(Item* items) {
+    for (int i = NULL_ITEM_ID; i < _END_; i++){
+        if(i == NULL_ITEM_ID || i == _MELEE_ || i == _RANGED_ || i == _AMMO_ || i == _ARMOR_ || i == _END_)
+        {
+            items[i].equippable = false;
+            items[i].lootable = false;
+            items[i].unequippable = true;
+            items[i].isEquipped = false;
+            items[i].itemID = NULL_ITEM_ID;
+            items[i].quantity = 0;
+            items[i].type = NULL_ITEM_TYPE;
+            items[i].value = 0;
+            strcpy(items[i].itemName, " ");
+            strcpy(items[i].itemDesc, " ");
+        }
+    }
+}
+
 /* Adds these weapons to a singleton-like global list called "items" */
 void MakeWeaponItems(Item* items) {
      // Innate biological weapons
-    for (int i = FISTS; i <= LIGHTNING_WAND; i++){
+    for (int i = _MELEE_ + 1; i < _AMMO_; i++){
         Weapon weapon = GetWeaponFromItem(i);
         items[i] = weapon.item;
     }
 }
 
 void MakeAmmoItems(Item* items) {
-    for (int i = ARROWS; i <= HEAVY_ENERGY_PACKS; i++){
+    for (int i = _AMMO_ + 1; i < _ARMOR_; i++){
         Ammo ammo = GetAmmoFromItem(i);
         items[i] = ammo.item;
     } 
 }
 
 void MakeArmorItems(Item* items) {
-    for (int i = RAGS; i <= METALLIC_SKIN; i++){
+    for (int i = _ARMOR_ + 1; i < _END_; i++){
         Armor armor = GetArmorFromItem(i);
         items[i] = armor.item;
     }
@@ -47,7 +56,7 @@ void MakeArmorItems(Item* items) {
 Fills remaining item list with empty items.
 */
 void FillNullItems(Item* items){
-    for (int i = METALLIC_SKIN + 1; i < ALL_ITEMS; i++){
+    for (int i = _END_; i < ALL_ITEMS; i++){
         items[i].equippable = false;
         items[i].lootable = false;
         items[i].unequippable = true;
@@ -77,7 +86,7 @@ Weapon GetWeaponFromItem(int itemID) {
         case SCIMITAR: return Scimitar();
         case GREATSWORD: return Greatsword();
         case CHROME_FISTS: return ChromeFists();
-        case ACID_POTION: return AcidPotion();
+        case SLINGSHOT: return Slingshot();
         case SHORTBOW: return Shortbow();
         case LONGBOW: return Longbow();
         case FLINTLOCK_PISTOL: return FlintlockPistol();
@@ -139,6 +148,7 @@ char* GetAmmoType(int AmmoType) {
         case TYPE_50CAL: return ".50";
         case TYPE_SHOTGUN: return "Shotgun Shell";
         case TYPE_EXPLOSIVE_MISSILE: return "Missile";
+        case TYPE_THROWABLE: return "Throwable";
         case TYPE_ENERGY: return "Energy";
     }
     return "None";
@@ -160,7 +170,7 @@ char* GetArmorType(int ArmorType) {
 /* This suite of functions just checks if an item is a certain type and returns true if it is*/
 /* consult the enum list "ItemIDs" in items.h to modify this.*/
 bool IsMeleeWeaponItem(Item target) {
-    if (target.itemID > CLAWS && target.itemID < ACID_POTION) return true;
+    if (target.itemID > CLAWS && target.itemID < SLINGSHOT) return true;
     return false;
 }
 

@@ -1,5 +1,6 @@
 #include <rogue.h>
 #define DMG_BUFFER 8
+#define MAX_ENTITY 
 
 
 void CastCharge(){
@@ -57,14 +58,14 @@ void CastDash() {
     // char event[] = "Choose a direction to Dash.";
     // DrawCombatEvent(event);
     while((ch = getch()) != 10 && ch != 32 && !(CheckEscape(ch))) {
-    RemoveCursor(y, x, 1);
-    x = player->pos.x;
-    y = player->pos.y;
-    Cursor(y, x, 1);
+        RemoveCursor(y, x, 1);
+        x = player->pos.x;
+        y = player->pos.y;
+        Cursor(y, x, 1);
         switch(ch) {
             //move up
             case KEY_UP:
-                if (y == 0) {
+                if (y <= 0) {
                     break;
                 }
                 else {
@@ -77,11 +78,11 @@ void CastDash() {
             break;
             //move down
             case KEY_DOWN:
-                if (y == 50) {
+                if (y >= 50) {
                     break;
                 }
                 else {
-                    RemoveCursor(y, x,13);
+                    RemoveCursor(y, x, 1);
                     y = y + player->equippedAbility.range;
                     while(!DashPOSHelper(x, y)) {
                         y--;
@@ -90,7 +91,7 @@ void CastDash() {
                 break;
             //move left
             case KEY_LEFT:
-                if (x == 0) {
+                if (x <= 0) {
                     break;
                 }
                 else {
@@ -102,7 +103,7 @@ void CastDash() {
                 }
                 break;
             case KEY_RIGHT:
-                if (x == 125) {
+                if (x >= 125) {
                     break;
                 }
                 else {
@@ -236,6 +237,100 @@ void CastSecondWind(){
     }
 }
 
+void CastSummonSkeleton() {
+    int ch;
+    int x = player->pos.x;
+    int y = player->pos.y;
+    if (player->passiveAbility.abilityID == NO_ABILITY) {
+        player->abilityTimer = player->equippedAbility.duration;
+        player->passiveAbility = player->equippedAbility;
+    }
+    else {
+        strcpy(combatHistory->event, "Your skeleton is still active.");
+        QueueEvent(q, combatHistory->event);
+        return;
+    }
+
+    Cursor(y, x, 1);
+    strcpy(combatHistory->event, "Choose where to place a skeleton.");
+    QueueEvent(q, combatHistory->event);
+    DrawCombatLog();
+    // char event[] = "Choose a direction to Dash.";
+    // DrawCombatEvent(event);
+    while((ch = getch()) != 10 && ch != 32 && !(CheckEscape(ch))) {
+        RemoveCursor(y, x, 1);
+        x = player->pos.x;
+        y = player->pos.y;
+        Cursor(y, x, 1);
+        switch(ch) {
+            //move up
+            case KEY_UP:
+                if (y <= 0 || y == y - 1) break;
+                else {
+                    RemoveCursor(y, x, 1);
+                    y--;
+                }
+                break;
+            //move down
+            case KEY_DOWN:
+                if (y >= 50 || y == y + 1) break;
+                else {
+                    RemoveCursor(y, x, 1);
+                    y++;
+                }
+                break;
+            //move left
+            case KEY_LEFT:
+                if (x <= 0 || x == x - 1) break;
+                else {
+                    RemoveCursor(y, x, 1);
+                    x--;
+                }
+                break;
+            case KEY_RIGHT:
+                if (x >= 125 || x == x + 1) break;
+                else {
+                    RemoveCursor(y, x, 1);
+                    x++;
+                }
+                break;
+            default:
+                Cursor(y, x, 1);
+                break;
+            }
+        Cursor(y, x, 1);
+    }
+    if ((CheckEscape(ch))) {
+        return;
+    }
+    Position skeletonPOS;
+    skeletonPOS.y = y;
+    skeletonPOS.x = x;
+    if (map[y][x].noCollision && map[y][x].visible){
+        AssignNPC(skeletonPOS, NPC_SKELETON_WARRIOR, ENTITY_ID);
+        player->playerStats.mana -= (player->equippedAbility.manaCost);
+        ClearFOV(player);
+        MakeFOV(player);
+    }
+    else{
+        strcpy(combatHistory->event, "Could not Place skeleton.");
+        QueueEvent(q, combatHistory->event);
+    }
+}
+
+/* 
+Undoes the bonus provided by fire volley in precombat effects.
+*/
+void CastFireVolley(){
+    player->playerStats.mana -= (player->equippedAbility.manaCost);
+    if(CheckPlayerAdjacent(combatHistory->defender.pos)) {
+        player->equippedAbility.abilitySave -= 10;
+    }
+    else if (GetDistance(player->pos, combatHistory->defender.pos) <= 3) {
+        player->equippedAbility.abilitySave -= 4;
+    } 
+}
+
 void CastSelfRepair(){
     if(player->playerStats.HP != player->playerStats.maxHP) {
         char eventDMGBuffer[DMG_BUFFER];
@@ -261,6 +356,13 @@ void CastSelfRepair(){
     }
 }
 
+void RemoveSummonSkeleton() {
+    strcpy(combatHistory->event, "You're skeleton crumbles to dust.");
+    QueueEvent(q, combatHistory->event);
+    // Remove the NPC from the map here.
+    player->passiveAbility = NoAbility();
+}
+
 /* When Ice Armors duration is up, remove the armor.*/
 void RemoveIceArmor(){
     strcpy(combatHistory->event, "You're icy armor melts.");
@@ -278,51 +380,74 @@ void RemoveVengeance(){
 
 /* Only applies to abilities that are attacks with effects.*/
 void PostCombatEffects() {
-    if (player->equippedAbility.hasEffects) {
-        AbilityEffects(player->equippedAbility.abilityID);
+    if (player->equippedAbility.postCombatEffects) {
+        PostCombatAbilities(player->equippedAbility.abilityID);
     }
     player->equippedAbility = NoAbility();
 }
+
+void PreCombatEffects() {
+    if (player->equippedAbility.preCombatEffects) {
+        PreCombatAbilities(player->equippedAbility.abilityID);
+    }
+}
+
 
 /* Called if the players input is processed in UsePlayerAbility from player.c, including attacking a monster.*/
 /* Handles both attacks and non attacking abilities.*/
 /* This runs before the monster attacks back, so healing the player will save them from an otherwise killing blow.*/
 /* If an ability is just an attack with no effects, no CastAbility function is needed.*/
-void AbilityEffects(int abilityID){
+void PostCombatAbilities(int abilityID){
     if ((player->playerStats.mana) >= (player->equippedAbility.manaCost)) {
         switch (abilityID) {
-        case CHARGE:
-            CastCharge();
-        break;
-         case DASH:
-            CastDash();
-        break;
-        case DRAIN_LIFE:
-            CastDrainLife();
-        break;
-        case ICE_ARMOR:
-            CastIceArmor();
-        break;
-        case SECOND_WIND:
-            CastSecondWind();
-        break;
-        case SELF_REPAIR:
-            CastSelfRepair();
-        break;
-        case SUMMON_SKELETON:
-        break;
+        case CHARGE: CastCharge();
+            break;
+        case DASH: CastDash();
+            break;
+        case DRAIN_LIFE: CastDrainLife();
+            break;
+        case FIRE_VOLLEY: CastFireVolley();
+            break;
+        case ICE_ARMOR: CastIceArmor();
+            break;
+        case SECOND_WIND: CastSecondWind();
+            break;
+        case SELF_REPAIR: CastSelfRepair();
+            break;
+        case SUMMON_SKELETON: CastSummonSkeleton();
+            break;
         case VENGEANCE:
             ResetCombatHistory();
             CastVengeance();
-        break;
+            break;
         default:
-        break;
+            break;
         }
 
         return;
     }
     else if ((player->playerStats.mana) < (player->equippedAbility.manaCost) && !(player->equippedAbility.isAttack)) {
         NotEnoughMana();
+    }
+}
+
+/*
+Same as above, but happens prior to combat.
+*/
+void PreCombatAbilities(int abilityID) {
+    if ((player->playerStats.mana) >= (player->equippedAbility.manaCost)) {
+        switch (abilityID) {
+            case FIRE_VOLLEY:
+                if(CheckPlayerAdjacent(combatHistory->defender.pos)) {
+                    player->equippedAbility.abilitySave += 10;
+                }
+                else if (GetDistance(player->pos, combatHistory->defender.pos) <= 3) {
+                    player->equippedAbility.abilitySave += 4;
+                } 
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -343,6 +468,7 @@ void CheckPassiveAbilities(int n_monsters) {
                 ResetCombatHistory();
             }
         }
+        case SUMMON_SKELETON:// AggroMove(player->follower);
         break;
         default:
         break;
@@ -365,6 +491,7 @@ void ResetPassiveAbility(int abilityID) {
             RemoveIceArmor();
         break;
         case SUMMON_SKELETON:
+            RemoveSummonSkeleton();
         break;
         case VENGEANCE:
             RemoveVengeance();
@@ -381,13 +508,13 @@ void ResetPassiveAbility(int abilityID) {
 /* We use PlayerRangedAttack since melee abilities technically have a range of 1.*/
 /* A normal melee attack is made when a player simply moves into a monster, range of 0.*/
 /* Thus to differentiate a melee ability, we borrow the RangedAttack function. */
-/* PlayerRanged is in combat.c and AbilityEffects is in abilities.c*/
+/* PlayerRanged is in combat.c and PostCombatAbilities is in abilities.c*/
 /* If False, dont charge the player for mana yet, look for it later in PostCombatEffects in engine.c*/
 bool UsePlayerAbility(int n_monsters, int chosenAbility) {
     combatHistory->playerUsedAbility = true;
     player->equippedAbility = player->playerClass.abilities[chosenAbility];
     if(player->equippedAbility.isAttack) {
-        if(PlayerRangedAttack(n_monsters) && !(player->equippedAbility.hasEffects)) {
+        if(PlayerRangedAttack(n_monsters) && !(player->equippedAbility.postCombatEffects)) {
             player->playerStats.mana -= player->equippedAbility.manaCost;
             return true;
         }
@@ -396,7 +523,7 @@ bool UsePlayerAbility(int n_monsters, int chosenAbility) {
         }
     }
     else {
-            AbilityEffects(player->equippedAbility.abilityID);
+            PostCombatAbilities(player->equippedAbility.abilityID);
             return true;
         }
     return false;

@@ -145,6 +145,7 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
     }
     // Stairway down, make new level.
     else if (map[newPos.y][newPos.x].entityType == STAIRS) {
+        dungeonInfo->currentFloor++;
         MakeNewLevel(n_monsters);
     }
     // else if (map[newPos.y][newPos.x].entityType == CHEST) {

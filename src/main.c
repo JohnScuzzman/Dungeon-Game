@@ -23,6 +23,8 @@ int MAP_WIDTH = 125;
 int LOG_HEIGHT = 22;
 int LOG_SIZE  = 27;
 int LOG_WIDTH = 128;
+int MAX_DUNGEON_FLOORS = 1024;
+int ENTITY_ID  = 256; // accounting for a theorhetical 256 monsters
 
 
 
@@ -34,8 +36,7 @@ Entity* mptr;
 CombatHistory* combatHistory;
 LogQueue* q;
 Item* items;
-Weapon* weapons;
-Armor* armors;
+DungeonInfo* dungeonInfo;
 
 int main(void)
 {
@@ -78,6 +79,9 @@ int main(void)
     int n_monsters = n_rooms - 1;
 
 	  Position start_pos;
+
+    /*Dungeon Information*/
+    dungeonInfo = MakeDungeonInfo();
 
     /* Item table */
     items = CreateItemTable();

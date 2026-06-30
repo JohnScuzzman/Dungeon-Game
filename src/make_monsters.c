@@ -11,23 +11,19 @@ Entity AssignMonster(Position pos, int RNG, int monsterID)
         AssignMonsterDefaults(&monster, pos, monsterID);
         switch (RNG) {
             /* Call functions from assign.c */
-            case 0:
-            AssignRat(&monster);
+            case RAT: AssignRat(&monster);
             break;
-            case 1:
-            AssignGoblinWarrior(&monster);
+            case GOBLIN_WARRIOR: AssignGoblinWarrior(&monster);
             break;
-            case 2:
-            AssignKoboldWarrior(&monster);
+            case KOBOLD_WARRIOR: AssignKoboldWarrior(&monster);
             break;
-            case 3:
-            AssignHobgoblinWarrior(&monster);
+            case HOBGOBLIN: AssignHobgoblinWarrior(&monster);
             break;
-            case 4:
-            AssignGoblinRanger(&monster);
+            case GOBLIN_RANGER: AssignGoblinRanger(&monster);
             break;
-            default:
-            AssignGoblinWarrior(&monster);
+            case SKELETON_WARRIOR: AssignSkeletonWarrior(&monster);
+            break;
+            default: AssignGoblinWarrior(&monster);
             break; 
         }
         monster.entityStats.mana = monster.entityStats.maxMana;
@@ -173,9 +169,33 @@ void AssignHobgoblinWarrior(Entity* monster) {
     strcpy(monster->entityRace, "Hobgoblin");
     strcpy(monster->entityClass, "Warrior");
 }
+
+void AssignSkeletonWarrior(Entity* monster) {
+    monster->ch = 'S'; 
+    monster->staticCh = 'S'; 
+    monster->entityStats.CHA = 8;
+    monster->entityStats.CON = 12;
+    monster->entityStats.DEX = 12;
+    monster->entityStats.INT = 8;
+    monster->entityStats.STR = 10;
+    monster->entityStats.WIS = 8;
+    monster->entityArmor = Rags();
+    SkeletonWarriorLoot(monster);
+    monster->aggroRange = 15;
+    monster->entityStats.AC = ((monster->entityStats.STR - 10) / 2) + (monster->entityArmor.AC);
+    monster->entityStats.maxDMG = (monster->entityWeapon.maxDMG) - 3; 
+    monster->entityStats.minDMG = monster->entityWeapon.minDMG;
+    monster->entityStats.maxHP = 8;
+    monster->entityStats.maxMana = 0;
+    monster->entityStats.LVL = 1;
+    monster->entityStats.EXP = 25;
+    strcpy(monster->entityName, "Skeleton Warrior");
+    strcpy(monster->entityRace, "Skeleton");
+    strcpy(monster->entityClass, "Warrior");
+}
     
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
-    CreateMonsterInv(monster);
+    CreateEntityInv(monster);
     monster->entityStats.ATK = 0;
     monster->invTail = 0;
     monster->invHead = 0;
@@ -193,11 +213,8 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->color = COLOR_PAIR(VISIBLE_COLOR);
     monster->pos.y = m_pos.y;
     monster->pos.x = m_pos.x;
-    monster->pos.y = m_pos.y;
     monster->lastPos.x = m_pos.x;
     monster->lastPos.y = m_pos.y;
     monster->playerLastPos.x = 0;
     monster->playerLastPos.y = 0;
 }
-
-

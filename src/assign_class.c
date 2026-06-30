@@ -7,12 +7,12 @@
 /* Initializes the 1st level version of a class and assigns that class to the player.*/
 
 void AssignKnight() {
-    player->equippedArmor = Chainmail();
-    player->equippedMelee = Greatsword();
+    player->equippedArmor = LeatherArmor();
+    player->equippedMelee = Longsword();
     player->equippedRanged = Shortbow();
     player->equippedAmmo = Arrows();
-    AddToPlayerInventory(items[CHAINMAIL], 1);
-    AddToPlayerInventory(items[GREATSWORD], 1);
+    AddToPlayerInventory(items[LEATHER_ARMOR], 1);
+    AddToPlayerInventory(items[LONGSWORD], 1);
     AddToPlayerInventory(items[SHORTBOW], 1);
     AddToPlayerInventory(items[ARROWS], 20);
     player->equippedAmmo.item.quantity = 20;
@@ -74,10 +74,13 @@ void AssignWizard() {
 void AssignNecromancer() {
     player->equippedArmor = Robes();
     player->equippedMelee = Dagger();
-    player->equippedRanged = AcidPotion();
+    player->equippedRanged = Slingshot();
+    player->equippedAmmo = AcidPotionAmmo();
     AddToPlayerInventory(items[ROBES], 1);
     AddToPlayerInventory(items[DAGGER], 1);
-    AddToPlayerInventory(items[ACID_POTION], 1);
+    AddToPlayerInventory(items[SLINGSHOT], 1);
+    AddToPlayerInventory(items[ACID_POTION_AMMO], 10);
+    player->equippedAmmo.item.quantity = 10;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -154,12 +157,12 @@ void AssignRanger() {
 }
 
 void AssignDarkKnight() {
-    player->equippedArmor = Chainmail();
-    player->equippedMelee = Greatsword();
+    player->equippedArmor = LeatherArmor();
+    player->equippedMelee = Longsword();
     player->equippedRanged = NoWeapon();
     player->equippedAmmo = NoAmmo();
-    AddToPlayerInventory(items[CHAINMAIL], 1);
-    AddToPlayerInventory(items[GREATSWORD], 1);
+    AddToPlayerInventory(items[LEATHER_ARMOR], 1);
+    AddToPlayerInventory(items[LONGSWORD], 1);
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -196,11 +199,13 @@ void AssignWarlock() {
 void AssignConjurer() {
     player->equippedArmor = Robes();
     player->equippedMelee = Quarterstaff();
-    player->equippedRanged = LightningWand();
-    player->equippedAmmo = NoAmmo();
+    player->equippedRanged = Slingshot();
+    player->equippedAmmo = AcidPotionAmmo();
     AddToPlayerInventory(items[ROBES], 1);
     AddToPlayerInventory(items[QUARTERSTAFF], 1);
-    AddToPlayerInventory(items[LIGHTNING_WAND], 1);
+    AddToPlayerInventory(items[SLINGSHOT], 1);
+    AddToPlayerInventory(items[ACID_POTION_AMMO], 10);
+    player->equippedAmmo.item.quantity = 10;
     player->playerStats.mana = 20;
     player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;

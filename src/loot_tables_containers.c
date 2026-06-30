@@ -35,7 +35,7 @@ void LowLevelChestLoot(Entity* chest){
             AddToNPCInventory(chest, items[CHROME_FISTS], 1);
             break;
             case 9:
-            AddToNPCInventory(chest, items[ACID_POTION], 1);
+            AddToNPCInventory(chest, items[SLINGSHOT], 1);
             break;
             case 10:
             AddToNPCInventory(chest, items[SHORTBOW], 1);

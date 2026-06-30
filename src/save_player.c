@@ -197,7 +197,8 @@ cJSON* SerializePlayerAbility(const Ability* ability) {
     cJSON_AddBoolToObject(playerAbilityObj, "isAttack", ability->isAttack);
     cJSON_AddBoolToObject(playerAbilityObj, "isMagic", ability->isMagic);
     cJSON_AddBoolToObject(playerAbilityObj, "isRanged", ability->isRanged);
-    cJSON_AddBoolToObject(playerAbilityObj, "hasEffects", ability->hasEffects);
+    cJSON_AddBoolToObject(playerAbilityObj, "preCombatEffects", ability->preCombatEffects);
+    cJSON_AddBoolToObject(playerAbilityObj, "postCombatEffects", ability->postCombatEffects);
     cJSON_AddNumberToObject(playerAbilityObj, "abilityID", ability->abilityID);
     cJSON_AddNumberToObject(playerAbilityObj, "duration", ability->duration);
     cJSON_AddNumberToObject(playerAbilityObj, "minDMG", ability->minDMG);
