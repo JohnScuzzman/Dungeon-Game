@@ -264,7 +264,7 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
         case 0: // Drop{
             if (playerInv[prevChoice]->isEquipped && playerInv[prevChoice]->unequippable) {
                 Unequip(*playerInv[prevChoice]);
-                RemoveFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
+                RemoveFromPlayerInventory(*playerInv[prevChoice], 1);
             }
             else {
                 RemoveFromPlayerInventory(*playerInv[prevChoice], 1);

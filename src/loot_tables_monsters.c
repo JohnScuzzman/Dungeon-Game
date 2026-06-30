@@ -48,6 +48,37 @@ void KoboldWarriorLoot(Entity* kobold){
     // randCurrency = (rand() % 5) + 1; // 1-5 "gold"
 }
 
+void SkeletonWarriorLoot(Entity* skeleton){
+    int randWeapon, randCurrency;
+    randWeapon = (rand() % SCIMITAR) + DAGGER;
+    switch(randWeapon){
+        case DAGGER:
+        skeleton->entityWeapon = Dagger();
+        AddToNPCInventory(skeleton, items[DAGGER], 1);
+        break;
+        case SHORTSWORD:
+        skeleton->entityWeapon = Shortsword();
+        AddToNPCInventory(skeleton, items[SHORTSWORD], 1);
+        break;
+        case LONGSWORD:
+        skeleton->entityWeapon = Longsword();
+        AddToNPCInventory(skeleton, items[LONGSWORD], 1);
+        break;
+        case CUTLASS:
+        skeleton->entityWeapon = Cutlass();
+        AddToNPCInventory(skeleton, items[CUTLASS], 1);
+        break;
+        case SCIMITAR:
+        skeleton->entityWeapon = Scimitar();
+        AddToNPCInventory(skeleton, items[SCIMITAR], 1);
+        break;
+        default:
+        skeleton->entityWeapon = Shortsword();
+        AddToNPCInventory(skeleton, items[SHORTSWORD], 1);
+        break;
+    }
+    // randCurrency = (rand() % 5) + 1; // 1-5 "gold"
+}
 
 void HobGoblinWarriorLoot(Entity* hobGoblin){
     int randWeapon, randCurrency;

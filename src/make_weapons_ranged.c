@@ -1,26 +1,26 @@
 #include <rogue.h>
 
 
-Weapon AcidPotion() {
-    Weapon acidPotion;
-    acidPotion.item.equippable = true;
-    acidPotion.item.unequippable = true;
-    acidPotion.item.isEquipped = false;
-    acidPotion.item.type = WEAPON;
-    acidPotion.item.itemID = ACID_POTION;
-    acidPotion.item.quantity = 0;
-    acidPotion.item.value = 25;
-    acidPotion.isMagic = false;
-    acidPotion.isRanged = true;
-    acidPotion.minDMG = 2;
-    acidPotion.maxDMG = 8;
-    acidPotion.range = 6;
-    acidPotion.ammoType = TYPE_MAGIC;
-    acidPotion.statUsed = WIS;
-    acidPotion.statReq = 8;
-    strcpy(acidPotion.item.itemName, "Acid Potion");
-    strcpy(acidPotion.item.itemDesc, "A potion of volatile acid.");
-    return acidPotion;
+Weapon Slingshot() {
+    Weapon slingShot;
+    slingShot.item.equippable = true;
+    slingShot.item.unequippable = true;
+    slingShot.item.isEquipped = false;
+    slingShot.item.type = WEAPON;
+    slingShot.item.itemID = SLINGSHOT;
+    slingShot.item.quantity = 0;
+    slingShot.item.value = 25;
+    slingShot.isMagic = false;
+    slingShot.isRanged = true;
+    slingShot.minDMG = 1;
+    slingShot.maxDMG = 4;
+    slingShot.range = 6;
+    slingShot.ammoType = TYPE_THROWABLE;
+    slingShot.statUsed = DEX;
+    slingShot.statReq = 8;
+    strcpy(slingShot.item.itemName, "Slingshot");
+    strcpy(slingShot.item.itemDesc, "A wrist-mounted slingshot.");
+    return slingShot;
 }
 
 Weapon Shortbow() {
@@ -80,7 +80,7 @@ Weapon FlintlockPistol() {
     flintlockPistol.isRanged = true;
     flintlockPistol.minDMG = 1;
     flintlockPistol.maxDMG = 8;
-    flintlockPistol.range = 4;
+    flintlockPistol.range = 5;
     flintlockPistol.ammoType = TYPE_FLINTLOCK;
     flintlockPistol.statUsed = STR;
     flintlockPistol.statReq = 6;
@@ -102,7 +102,7 @@ Weapon DualFlintlocks() {
     dualFlintlocks.isRanged = true;
     dualFlintlocks.minDMG = 2;
     dualFlintlocks.maxDMG = 12;
-    dualFlintlocks.range = 3;
+    dualFlintlocks.range = 4;
     dualFlintlocks.ammoType = TYPE_FLINTLOCK;
     dualFlintlocks.statUsed = DEX;
     dualFlintlocks.statReq = 10;
@@ -124,7 +124,7 @@ Weapon LightPistol() {
     lightPistol.isRanged = true;
     lightPistol.minDMG = 1;
     lightPistol.maxDMG = 10;
-    lightPistol.range = 5;
+    lightPistol.range = 6;
     lightPistol.ammoType = TYPE_9MM;
     lightPistol.statUsed = DEX;
     lightPistol.statReq = 6;
@@ -146,7 +146,7 @@ Weapon MediumPistol() {
     mediumPistol.isRanged = true;
     mediumPistol.minDMG = 2;
     mediumPistol.maxDMG = 12;
-    mediumPistol.range = 6;
+    mediumPistol.range = 7;
     mediumPistol.ammoType = TYPE_45;
     mediumPistol.statUsed = DEX;
     mediumPistol.statReq = 8;
@@ -168,7 +168,7 @@ Weapon HeavyPistol() {
     heavyPistol.isRanged = true;
     heavyPistol.minDMG = 5;
     heavyPistol.maxDMG = 12;
-    heavyPistol.range = 6;
+    heavyPistol.range = 7;
     heavyPistol.ammoType = TYPE_50CAL;
     heavyPistol.statUsed = STR;
     heavyPistol.statReq = 12;

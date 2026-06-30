@@ -17,6 +17,7 @@
 #include <items.h>
 #include <races.h>
 #include <classes.h>
+#include <npcs.h>
 #include <cjson/cJSON.h>
 
 // color pairs
@@ -48,15 +49,15 @@ typedef enum {
 
 typedef enum {
     LEVEL_1 = 0,
-    LEVEL_2 = 100,
-    LEVEL_3 = 220,
-    LEVEL_4 = 480,
-    LEVEL_5 = 1000,
-    LEVEL_6 = 2300,
-    LEVEL_7 = 5150,
-    LEVEL_8 = 11330,
-    LEVEL_9 = 25000,
-    LEVEL_10 = 55000
+    LEVEL_2 = 200,
+    LEVEL_3 = 440,
+    LEVEL_4 = 1000,
+    LEVEL_5 = 2300,
+    LEVEL_6 = 5150,
+    LEVEL_7 = 11330,
+    LEVEL_8 = 25000,
+    LEVEL_9 = 55000,
+    LEVEL_10 = 100000
 } Levels;
 
 typedef enum {
@@ -67,6 +68,7 @@ typedef enum {
   MONSTER,
   CORPSE,
   CHEST,
+  NPC
 } EntityTypes;
 
 typedef struct {
@@ -189,26 +191,16 @@ typedef struct
   Position center;
 } Room;
 
+typedef struct
+{
+  int currentFloor;
+  // Entity** visitedFloors[MAX_DUNGEON_FLOORS];
+} DungeonInfo;
+
 //experimental.c functions
 
 // asciiart.c funcions
 void TitleScreen();
-
-// make_monster.c functions
-void AssignRat(Entity* monster);
-void AssignGoblinWarrior(Entity* monster);
-void AssignGoblinRanger(Entity* monster);
-void AssignHobgoblinWarrior(Entity* monster);
-void AssignKoboldWarrior(Entity* monster);
-Entity AssignMonster(Position pos, int RNG, int monsterID);
-void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
-
-// make entities.c functions
-Entity** CreateEntities(void);
-void AssignChest(int x, int y);
-void AssignCorpse(Entity* entity, int n_monsters);
-void AssignStairsDown(int x, int y);
-void AssignFloor(int x, int y);
 
 // assign_class.c functions
 void AssignClass(int input);
@@ -230,12 +222,13 @@ void AssignBard();
 CombatHistory* CreateCombatHistory(Entity monster);
 bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player);
 bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player, int n_monsters);
-int CalculateEntityAccuracy(Entity* attacker) ;
+int CalculateEntityAccuracy(Entity* attacker);
 int CalculateEntityDMG(Entity* attacker);
 int CalculateEntityAC(Entity* defender);
 int CalculatePlayerAccuracy();
 int CalculatePlayerDamage();
 int CalculatePlayerAC();
+bool ProcessRangedAttack(bool abilityUsed, int x, int y);
 void ResetCombatHistory();
 bool ShootTarget(int x, int y);
 bool ShootTargetWithAbility(int x, int y);
@@ -309,7 +302,7 @@ void AddToPlayerInventory(Item newItem, int itemQuantity);
 void CombineEntityInventories(Entity* npc1, Entity* npc2);
 void ClearEntityInventory(Entity* npc);
 void CreatePlayerInv();
-void CreateMonsterInv(Entity* monster);
+void CreateEntityInv(Entity* npc);
 void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity);
 void RemoveFromPlayerInventory(Item target, int itemQuantity);
 void ShootFromPlayerInventory(Item target, int itemQuantity);
@@ -325,9 +318,10 @@ bool IsMeleeWeaponItem(Item target);
 bool IsRangedWeaponItem(Item target);
 bool IsAmmoItem(Item target);
 bool IsArmorItem(Item target);
-void MakeWeaponItems(Item* items);
 void MakeAmmoItems(Item* items);
 void MakeArmorItems(Item* items);
+void MakeHeaderItems(Item* items);
+void MakeWeaponItems(Item* items);
 void FillNullItems(Item* items);
 
 //loot_tables_containers.c functions.
@@ -337,6 +331,28 @@ void LowLevelChestLoot(Entity* chest);
 void GoblinWarriorLoot(Entity* goblin);
 void HobGoblinWarriorLoot(Entity* hobGoblin);
 void KoboldWarriorLoot(Entity* kobold);
+void SkeletonWarriorLoot(Entity* skeleton);
+
+// make entities.c functions
+Entity** CreateEntities(void);
+void AssignChest(int x, int y);
+void AssignCorpse(Entity* entity, int n_monsters);
+void AssignStairsDown(int x, int y);
+void AssignFloor(int x, int y);
+Entity AssignNPC(Position pos, int npcName, int npcID);
+Entity AssignUniqueNPC(Position pos, int npcName, int npcID);
+void AssignNPCDefaults(Entity* npc, Position n_pos, int npcID);
+void PlaceNPC(Entity* npc, Position pos);
+
+// make_monster.c functions 
+void AssignRat(Entity* monster);
+void AssignGoblinWarrior(Entity* monster);
+void AssignGoblinRanger(Entity* monster);
+void AssignHobgoblinWarrior(Entity* monster);
+void AssignKoboldWarrior(Entity* monster);
+void AssignSkeletonWarrior(Entity* monster);
+Entity AssignMonster(Position pos, int RNG, int monsterID);
+void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 
 // make_player.c functions
 void AskPlayerInfo(Player* player);
@@ -348,9 +364,12 @@ void PrintRaces();
 void PrintClasses();
 
 // map.c functions
+DungeonInfo* MakeDungeonInfo();
 void FreeMap(void);
 Position SetupMap(Entity* mptr, int n_rooms);
 void MakeNewLevel(int* old_n_monsters);
+int MonsterSpawnCeiling(int dungeonFloor);
+int MonsterSpawnFloor(int dungeonFloor);
 // Position FindClosestUnexplored(void);
 // Position FindClosestUnexplored();
 // Position FindClosestDoor();
@@ -412,6 +431,9 @@ void MoveDownLeft(Entity* mptr);
 void MoveUpRight(Entity* mptr);
 void MoveUpLeft(Entity* mptr);
 
+// npc.c functions
+void FollowPlayer(Entity* npc);
+
 // player.c functions
 bool CheckPlayerAdjacent(Position origin);
 void ManaRegen(int *manaRegen);
@@ -446,11 +468,13 @@ void RemoveCursor(int x, int y, int length);
 extern int MAP_HEIGHT;
 extern int MAP_WIDTH;
 extern int MAX_MONSTER_NAME;
-extern const int EVENT_SIZE;
-extern const int INVENTORY_SIZE;
+extern int MAX_DUNGEON_FLOORS;
+extern int ENTITY_ID;
 extern int LOG_WIDTH;
 extern int LOG_HEIGHT;
 extern int LOG_SIZE;
+extern const int EVENT_SIZE;
+extern const int INVENTORY_SIZE;
 extern const int LVL_EXP_VALUES[MAX_LEVEL];
 extern const int ALL_ITEMS;
 extern const char *DIRECTIONS[HEADINGS];
@@ -467,6 +491,8 @@ extern CombatHistory* combatHistory;
 extern LogQueue* q;
 // Item Table
 extern Item* items;
+// Dungeon Info
+extern DungeonInfo* dungeonInfo;
 
 
 #endif

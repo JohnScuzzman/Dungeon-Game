@@ -61,7 +61,8 @@ typedef struct {
     bool isAttack;
     bool isMagic;
     bool isRanged;
-    bool hasEffects;
+    bool preCombatEffects;
+    bool postCombatEffects;
     int abilityID;
     int duration;
     int minDMG;
@@ -105,22 +106,28 @@ Ability DevastatingInsult();
 Ability ThornBolt();
 
 // abilities.c functions
-void AbilityEffects(int abilityID);
+
 void CastCharge();
 void CastDash();
-bool DashPOSHelper(int x, int y);
 void CastDrainLife();
+void CastFireVolley();
 void CastIceArmor();
 void CastSecondWind();
 void CastSelfRepair();
+void CastSummonSkeleton();
 void CastVengeance();
 void ChargePlacement();
 void CheckPassiveAbilities(int n_monsters);
+bool DashPOSHelper(int x, int y);
 bool DeincrementAbilityTimer();
 void PostCombatEffects();
+void PostCombatAbilities(int abilityID);
+void PreCombatAbilities(int abilityID);
+void PreCombatEffects();
 void PostChargeInfo();
 void RemoveIceArmor();
 void RemoveVengeance();
+void RemoveSummonSkeleton();
 void ResetPassiveAbility(int abilityID);
 bool UsePlayerAbility(int n_monsters, int chosenAbility);
 

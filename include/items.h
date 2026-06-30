@@ -7,6 +7,7 @@
 
 typedef enum {
     NULL_ITEM_ID,
+    _MELEE_,
     FISTS,
     CLAWS,
     DAGGER,
@@ -17,7 +18,8 @@ typedef enum {
     SCIMITAR,
     GREATSWORD,
     CHROME_FISTS,
-    ACID_POTION,
+    _RANGED_,
+    SLINGSHOT,
     SHORTBOW,
     LONGBOW,
     FLINTLOCK_PISTOL,
@@ -26,6 +28,7 @@ typedef enum {
     MEDIUM_PISTOL,
     HEAVY_PISTOL,
     LIGHTNING_WAND,
+    _AMMO_,
 	ARROWS,
     DARTS,
 	ACID_POTION_AMMO,
@@ -43,13 +46,15 @@ typedef enum {
 	MISSILES,
     ENERGY_PACKS,
 	HEAVY_ENERGY_PACKS,
+    _ARMOR_,
     RAGS,
     LEATHER_ARMOR,
     CHAINMAIL,
     HALF_PLATE,
     ROBES,
     RANGERS_CLOAK,
-    METALLIC_SKIN
+    METALLIC_SKIN,
+    _END_
 } ItemIDs;
 
 typedef enum {
@@ -77,6 +82,7 @@ typedef enum {
 	TYPE_50CAL,
 	TYPE_SHOTGUN,
 	TYPE_EXPLOSIVE_MISSILE,
+    TYPE_THROWABLE,
 	TYPE_ENERGY,
 } AmmoTypes;
 
@@ -85,6 +91,7 @@ typedef enum {
     WEAPON,
 	AMMO,
     ARMOR,
+    PANTS,
     HELMET,
     SHOES,
     GLOVES,
@@ -160,7 +167,7 @@ Weapon Cutlass();
 Weapon Scimitar();
 Weapon Greatsword();
 Weapon ChromeFists();
-Weapon AcidPotion();
+Weapon Slingshot();
 Weapon Shortbow();
 Weapon Longbow();
 Weapon FlintlockPistol();

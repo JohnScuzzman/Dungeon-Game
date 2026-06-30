@@ -148,6 +148,7 @@ void Gameover() {
 
 /* Free memory allocated by pointer. */
 void CloseGame(void) { 
+    free(dungeonInfo);
     free(items);
     free(q);
     free(combatHistory);

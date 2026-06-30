@@ -61,18 +61,18 @@ void CreatePlayerInv() {
     }
 }
 
-void CreateMonsterInv(Entity* monster) {
+void CreateEntityInv(Entity* npc) {
     for (int i = 0; i < INVENTORY_SIZE; i++){
-        monster->inventory[i].equippable = false;
-        monster->inventory[i].lootable = false;
-        monster->inventory[i].unequippable = true;
-        monster->inventory[i].isEquipped = false;
-        monster->inventory[i].itemID = NULL_ITEM_ID;
-        monster->inventory[i].quantity = 0;
-        monster->inventory[i].type = NULL_ITEM_TYPE;
-        monster->inventory[i].value = 0;
-        strcpy(monster->inventory[i].itemName, " ");
-        strcpy(monster->inventory[i].itemDesc, " ");
+        npc->inventory[i].equippable = false;
+        npc->inventory[i].lootable = false;
+        npc->inventory[i].unequippable = true;
+        npc->inventory[i].isEquipped = false;
+        npc->inventory[i].itemID = NULL_ITEM_ID;
+        npc->inventory[i].quantity = 0;
+        npc->inventory[i].type = NULL_ITEM_TYPE;
+        npc->inventory[i].value = 0;
+        strcpy(npc->inventory[i].itemName, " ");
+        strcpy(npc->inventory[i].itemDesc, " ");
     }
 }
 

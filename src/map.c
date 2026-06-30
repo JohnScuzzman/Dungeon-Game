@@ -1,5 +1,12 @@
 #include <rogue.h>
 
+DungeonInfo* MakeDungeonInfo(){
+    DungeonInfo* info;
+    info = calloc(1, sizeof(DungeonInfo));
+    info->currentFloor = 0;
+    return info;
+}
+
 /* 
 Fills map with randomly sized rooms full of dots. 
 Place a monster in the center of the room as well.
@@ -7,6 +14,8 @@ Since rooms can currently overlap, this appears as random monster placement.
 */ 
 Position SetupMap(Entity* mptr, int n_rooms) {
     int y, x, height, width, n_monsters, addChest;
+    int spawnCeiling = MonsterSpawnCeiling(dungeonInfo->currentFloor);
+    int spawnFloor = MonsterSpawnFloor(dungeonInfo->currentFloor);
     Room* rooms = calloc(n_rooms, sizeof(Room));
     Position start_pos;
 
@@ -25,17 +34,18 @@ Position SetupMap(Entity* mptr, int n_rooms) {
 
         /* If not the first room, run this to create hallways. */ 
         if (i > 0) {
+            int monsterID = i + 1;
+            int monsterType = (rand() % spawnCeiling) + spawnFloor; // currently 1 to 5 if below level 3
             start_pos.y = rooms[i - 1].center.y;
             start_pos.x = rooms[i - 1].center.x;
             ConnectRooms(rooms[i - 1].center, rooms[i].center);
-            int monsterID = i + 1;
+           
             /* Add 10-20 monsters to the map. with monster.c's AddMonster. */
             /* Create and save monsters to use later. */
-            n_monsters = (rand() % 5);
-            mptr[i - 1] = AssignMonster(rooms[i].center, n_monsters, monsterID); 
+            mptr[i - 1] = AssignMonster(rooms[i].center, monsterType, monsterID); 
 
             /* Use the list of monsters we just made and move them to our 2D matrix of entities.*/
-            UpdateMonsterMap(mptr, n_monsters);
+            UpdateMonsterMap(mptr, monsterType);
             if (addChest == 5) AddChestToRoom(rooms[i].center, width, height);
         }
     }
@@ -48,6 +58,8 @@ Position SetupMap(Entity* mptr, int n_rooms) {
     free(rooms);
     return start_pos;
 }
+
+
 
 void FreeMap(void) {
     for (int y = 0; y < MAP_HEIGHT; y++)
@@ -94,6 +106,21 @@ void MakeNewLevel(int* old_n_monsters) {
     AssignFloor(start_pos.x, start_pos.y);
 }
 
+int MonsterSpawnCeiling(int dungeonFloor) {
+    for (int i = 0; i < MAX_DUNGEON_FLOORS; i++) {
+        if (i < 1) return GOBLIN_RANGER;
+        if (i <= 6) return SKELETON_WARRIOR;
+    }
+    return SKELETON_WARRIOR;
+}
+
+int MonsterSpawnFloor(int dungeonFloor) {
+    for (int i = 0; i < MAX_DUNGEON_FLOORS; i++) {
+        if (i < 1) return RAT;
+        if (i <= 6) return GOBLIN_WARRIOR;
+    }
+    return GOBLIN_WARRIOR;
+}
 
 // /* return farthest unexplored region in players FOV. */
 // /* return monsters pos if monster found. */

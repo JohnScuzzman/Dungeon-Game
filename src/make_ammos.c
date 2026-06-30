@@ -57,13 +57,12 @@ Ammo AcidPotionAmmo() {
     acidPotion.item.itemID = ACID_POTION_AMMO;
     acidPotion.item.quantity = 0;
     acidPotion.item.value = 25;
-    acidPotion.bonusDamage = 0;
-    acidPotion.type = TYPE_MAGIC;
+    acidPotion.bonusDamage = 3;
+    acidPotion.type = TYPE_THROWABLE;
     strcpy(acidPotion.item.itemName, "Acid Potions");
     strcpy(acidPotion.item.itemDesc, "A green swirly potion, it burns the eyebrows.");
     return acidPotion;
 }
-
 
 Ammo BulletFlintlock() {
     Ammo bulletFlintlock;

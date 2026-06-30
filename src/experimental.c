@@ -4,7 +4,7 @@ Ability ThornBolt() {
     Ability thornBolt;
     thornBolt.isAttack = true;
     thornBolt.isMagic = true;
-    thornBolt.hasEffects = false;
+    thornBolt.postCombatEffects = false;
     thornBolt.abilityID = THORN_BOLT;
     thornBolt.duration = 0;
     thornBolt.minDMG = 1;
@@ -18,7 +18,7 @@ Ability ThornBolt() {
     return thornBolt;
 }
 
-// set hasEffects = true, then set to wander, then call in AbilityEffects() in  abilities.c
+// set postCombatEffects = true, then set to wander, then call in PostCombatAbilities() in  abilities.c
 // void CastthornBolt() {
 
 // }
