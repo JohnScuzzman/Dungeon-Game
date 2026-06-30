@@ -247,14 +247,16 @@ bool PlayerRangedAttack(int n_monsters){
                     ShootFromPlayerInventory(player->equippedAmmo.item, 1);
                     QueueEvent(q, combatHistory->event);
                 }
+                RemoveFromPlayerInventory(player->equippedAmmo.item, 1);
+                return ShootTargetWithAbility(x, y); // otherwise, dont add ammo to the monsters inv & shoot them.
             }
-            else {
+            else if (player->equippedRanged.ammoType != player->equippedAmmo.item.itemID){
                 strcpy(combatHistory->event, "You have the wrong ammo equipped.");
                 QueueEvent(q, combatHistory->event);
                 return false;
             }
-            return ShootTargetWithAbility(x, y);
         }
+        return ShootTargetWithAbility(x, y); // Not a ranged attack, Do not consume ammo.
     }
     else if (player->equippedAmmo.item.quantity > 0) {
         if (player->equippedRanged.ammoType == player->equippedAmmo.item.itemID){
