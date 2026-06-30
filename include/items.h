@@ -46,6 +46,7 @@ typedef enum {
     RAGS,
     LEATHER_ARMOR,
     CHAINMAIL,
+    HALF_PLATE,
     ROBES,
     RANGERS_CLOAK,
     METALLIC_SKIN
@@ -117,12 +118,16 @@ typedef struct {
   int maxDMG;
   int range;
   int ammoType;
+  int statReq;
+  int statUsed;
 } Weapon;
 
 typedef struct {
   Item item;
   int AC;
   int type; // 1 = light, 2 = medium, 3 = heavy.
+  int statReq;
+  int statUsed;
 } Armor;
 
 typedef struct {
@@ -171,6 +176,7 @@ Armor Robes();
 Armor Rags();
 Armor LeatherArmor();
 Armor Chainmail();
+Armor HalfPlate();
 Armor RangersCloak();
 Armor MetallicSkin();
 

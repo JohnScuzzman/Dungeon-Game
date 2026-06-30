@@ -23,7 +23,7 @@ Item* CreateItemTable() {
 /* Adds these weapons to a singleton-like global list called "items" */
 void MakeWeaponItems(Item* items) {
      // Innate biological weapons
-    for (int i = FISTS; i <= DUAL_FLINTLOCKS; i++){
+    for (int i = FISTS; i <= LIGHTNING_WAND; i++){
         Weapon weapon = GetWeaponFromItem(i);
         items[i] = weapon.item;
     }
