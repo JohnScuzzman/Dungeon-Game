@@ -246,7 +246,6 @@ bool PlayerRangedAttack(int n_monsters){
                     strcat(combatHistory->event, ".");
                     ShootFromPlayerInventory(player->equippedAmmo.item, 1);
                     QueueEvent(q, combatHistory->event);
-                    
                 }
             }
             else {
@@ -254,8 +253,8 @@ bool PlayerRangedAttack(int n_monsters){
                 QueueEvent(q, combatHistory->event);
                 return false;
             }
+            return ShootTargetWithAbility(x, y);
         }
-        return ShootTargetWithAbility(x, y);
     }
     else if (player->equippedAmmo.item.quantity > 0) {
         if (player->equippedRanged.ammoType == player->equippedAmmo.item.itemID){
