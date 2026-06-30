@@ -15,7 +15,7 @@ Weapon AcidPotion() {
     acidPotion.minDMG = 2;
     acidPotion.maxDMG = 8;
     acidPotion.range = 6;
-    acidPotion.ammoType = ACID_POTION_AMMO;
+    acidPotion.ammoType = TYPE_MAGIC;
     strcpy(acidPotion.item.itemName, "Acid Potion");
     strcpy(acidPotion.item.itemDesc, "A potion of volatile acid.");
     return acidPotion;
@@ -35,7 +35,7 @@ Weapon Shortbow() {
     shortbow.minDMG = 1;
     shortbow.maxDMG = 6;
     shortbow.range = 8;
-    shortbow.ammoType = ARROWS;
+    shortbow.ammoType = TYPE_ARROWS;
     strcpy(shortbow.item.itemName, "Shortbow");
     strcpy(shortbow.item.itemDesc, "A small bow.");
     return shortbow;
@@ -55,7 +55,7 @@ Weapon Longbow() {
     longbow.minDMG = 1;
     longbow.maxDMG = 6;
     longbow.range = 8;
-    longbow.ammoType = ARROWS;
+    longbow.ammoType = TYPE_ARROWS;
     strcpy(longbow.item.itemName, "Longbow");
     strcpy(longbow.item.itemDesc, "A large bow, capable of achieving great range.");
     return longbow;
@@ -75,7 +75,7 @@ Weapon FlintlockPistol() {
     flintlockPistol.minDMG = 1;
     flintlockPistol.maxDMG = 8;
     flintlockPistol.range = 4;
-    flintlockPistol.ammoType = FLINTLOCK;
+    flintlockPistol.ammoType = TYPE_FLINTLOCK;
     strcpy(flintlockPistol.item.itemName, "Flintlock Pistol");
     strcpy(flintlockPistol.item.itemDesc, "A black powder pistol, devastating at close range.");
     return flintlockPistol;
@@ -95,7 +95,7 @@ Weapon DualFlintlocks() {
     dualFlintlocks.minDMG = 2;
     dualFlintlocks.maxDMG = 12;
     dualFlintlocks.range = 3;
-    dualFlintlocks.ammoType = FLINTLOCK;
+    dualFlintlocks.ammoType = TYPE_FLINTLOCK;
     strcpy(dualFlintlocks.item.itemName, "Dual Flintlocks");
     strcpy(dualFlintlocks.item.itemDesc, "A pair of black powder hand cannons.");
     return dualFlintlocks;

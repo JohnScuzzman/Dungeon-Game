@@ -63,9 +63,10 @@ typedef enum {
 
 typedef enum {
 	NULL_AMMO_TYPE,
-    PRIMITIVE,
-	MAGIC,
-	FLINTLOCK,
+	TYPE_MAGIC,
+    TYPE_ARROWS,
+    TYPE_DARTS,
+    TYPE_FLINTLOCK,
     TYPE_5MM,
 	TYPE_9MM,
     TYPE_45,
@@ -73,9 +74,9 @@ typedef enum {
 	TYPE_762,
 	TYPE_308,
 	TYPE_50CAL,
-	SHOTGUN,
-	EXPLOSIVE_MISSILE,
-	ENERGY,
+	TYPE_SHOTGUN,
+	TYPE_EXPLOSIVE_MISSILE,
+	TYPE_ENERGY,
 } AmmoTypes;
 
 typedef enum {
