@@ -30,7 +30,7 @@ typedef enum {
     LIGHTNING_WAND,
     _AMMO_,
 	ARROWS,
-    DARTS,
+    BOLTS,
 	ACID_POTION_AMMO,
 	BULLET_FLINTLOCK,
 	BULLET_5MM,
@@ -71,7 +71,7 @@ typedef enum {
 	NULL_AMMO_TYPE,
 	TYPE_MAGIC,
     TYPE_ARROWS,
-    TYPE_DARTS,
+    TYPE_BOLTS,
     TYPE_FLINTLOCK,
     TYPE_5MM,
 	TYPE_9MM,
@@ -190,7 +190,7 @@ Armor MetallicSkin();
 //make_ammos.c fucntions
 Ammo NoAmmo();
 Ammo Arrows();
-Ammo Darts();
+Ammo Bolts();
 Ammo AcidPotionAmmo();
 Ammo BulletFlintlock();
 Ammo Bullet5mm();

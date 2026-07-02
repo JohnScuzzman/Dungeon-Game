@@ -3,7 +3,7 @@
 DungeonInfo* MakeDungeonInfo(){
     DungeonInfo* info;
     info = calloc(1, sizeof(DungeonInfo));
-    info->currentFloor = 0;
+    info->currentFloor = 1;
     return info;
 }
 
@@ -106,20 +106,25 @@ void MakeNewLevel(int* old_n_monsters) {
     AssignFloor(start_pos.x, start_pos.y);
 }
 
+// returns max - min + 1 to get ceiling
 int MonsterSpawnCeiling(int dungeonFloor) {
-    for (int i = 0; i < MAX_DUNGEON_FLOORS; i++) {
-        if (i < 1) return GOBLIN_RANGER;
-        if (i <= 6) return SKELETON_WARRIOR;
+    for (int i = dungeonFloor; i < MAX_DUNGEON_FLOORS; i++) {
+        if (i <= 1) return (GOBLIN_RANGER - RAT) + 1;
+        if (i <= 6) return (SKELETON_WARRIOR - RAT) + 1;
+        else {
+            return (SKELETON_WARRIOR - RAT) + 1;
+        }
     }
-    return SKELETON_WARRIOR;
 }
 
 int MonsterSpawnFloor(int dungeonFloor) {
-    for (int i = 0; i < MAX_DUNGEON_FLOORS; i++) {
-        if (i < 1) return RAT;
+    for (int i = dungeonFloor; i < MAX_DUNGEON_FLOORS; i++) {
+        if (i <= 2) return RAT;
         if (i <= 6) return GOBLIN_WARRIOR;
+        else {
+            return GOBLIN_WARRIOR;
+        }
     }
-    return GOBLIN_WARRIOR;
 }
 
 // /* return farthest unexplored region in players FOV. */

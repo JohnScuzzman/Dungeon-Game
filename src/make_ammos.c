@@ -32,20 +32,20 @@ Ammo Arrows() {
     return arrows;
 }
 
-Ammo Darts() {
-    Ammo darts;
-    darts.item.equippable = true;
-    darts.item.unequippable = true;
-    darts.item.isEquipped = false;
-    darts.item.type = AMMO;
-    darts.item.itemID = DARTS;
-    darts.item.quantity = 0;
-    darts.item.value = 1;
-    darts.bonusDamage = 1;
-    darts.type = TYPE_DARTS;
-    strcpy(darts.item.itemName, "Darts");
-    strcpy(darts.item.itemDesc, "");
-    return darts;
+Ammo Bolts() {
+    Ammo bolts;
+    bolts.item.equippable = true;
+    bolts.item.unequippable = true;
+    bolts.item.isEquipped = false;
+    bolts.item.type = AMMO;
+    bolts.item.itemID = BOLTS;
+    bolts.item.quantity = 0;
+    bolts.item.value = 1;
+    bolts.bonusDamage = 1;
+    bolts.type = TYPE_BOLTS;
+    strcpy(bolts.item.itemName, "Bolts");
+    strcpy(bolts.item.itemDesc, "Small wooden bolts, fired by crossbows.");
+    return bolts;
 }
 
 Ammo AcidPotionAmmo() {
