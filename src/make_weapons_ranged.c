@@ -80,7 +80,7 @@ Weapon FlintlockPistol() {
     flintlockPistol.isRanged = true;
     flintlockPistol.minDMG = 1;
     flintlockPistol.maxDMG = 8;
-    flintlockPistol.range = 5;
+    flintlockPistol.range = 4;
     flintlockPistol.ammoType = TYPE_FLINTLOCK;
     flintlockPistol.statUsed = STR;
     flintlockPistol.statReq = 6;
@@ -89,26 +89,26 @@ Weapon FlintlockPistol() {
     return flintlockPistol;
 }
 
-Weapon DualFlintlocks() {
-    Weapon dualFlintlocks;
-    dualFlintlocks.item.equippable = true;
-    dualFlintlocks.item.unequippable = true;
-    dualFlintlocks.item.isEquipped = false;
-    dualFlintlocks.item.type = WEAPON;
-    dualFlintlocks.item.itemID = DUAL_FLINTLOCKS;
-    dualFlintlocks.item.quantity = 0;
-    dualFlintlocks.item.value = 150;
-    dualFlintlocks.isMagic = false;
-    dualFlintlocks.isRanged = true;
-    dualFlintlocks.minDMG = 2;
-    dualFlintlocks.maxDMG = 12;
-    dualFlintlocks.range = 4;
-    dualFlintlocks.ammoType = TYPE_FLINTLOCK;
-    dualFlintlocks.statUsed = DEX;
-    dualFlintlocks.statReq = 10;
-    strcpy(dualFlintlocks.item.itemName, "Dual Flintlocks");
-    strcpy(dualFlintlocks.item.itemDesc, "A pair of black powder hand cannons.");
-    return dualFlintlocks;
+Weapon FlintlockRifle() {
+    Weapon flintlockRifle;
+    flintlockRifle.item.equippable = true;
+    flintlockRifle.item.unequippable = true;
+    flintlockRifle.item.isEquipped = false;
+    flintlockRifle.item.type = WEAPON;
+    flintlockRifle.item.itemID = FLINTLOCK_RIFLE;
+    flintlockRifle.item.quantity = 0;
+    flintlockRifle.item.value = 150;
+    flintlockRifle.isMagic = false;
+    flintlockRifle.isRanged = true;
+    flintlockRifle.minDMG = 2;
+    flintlockRifle.maxDMG = 12;
+    flintlockRifle.range = 5;
+    flintlockRifle.ammoType = TYPE_FLINTLOCK;
+    flintlockRifle.statUsed = DEX;
+    flintlockRifle.statReq = 10;
+    strcpy(flintlockRifle.item.itemName, "Flintlock Rifle");
+    strcpy(flintlockRifle.item.itemDesc, "A long, smooth-bored wooden musket.");
+    return flintlockRifle;
 }
 
 Weapon LightPistol() {

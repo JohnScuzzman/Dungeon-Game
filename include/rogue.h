@@ -355,13 +355,15 @@ Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 
 // make_player.c functions
-void AskPlayerInfo(Player* player);
+bool AskPlayerInfo(Player* player);
 void ChooseClass();
 void ChooseName(char* name);
-void ChooseRace();
+bool ChooseRace();
 Player* CreatePlayer(Position start_pos);
 void PrintRaces();
 void PrintClasses();
+void ClearClasses();
+void ClearRaces();
 
 // map.c functions
 DungeonInfo* MakeDungeonInfo();

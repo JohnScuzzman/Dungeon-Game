@@ -97,10 +97,10 @@ void AssignNecromancer() {
 void AssignGunslinger() {
     player->equippedArmor = LeatherArmor();
     player->equippedMelee = Fists();
-    player->equippedRanged = DualFlintlocks();
+    player->equippedRanged = FlintlockRifle();
     player->equippedAmmo = BulletFlintlock();
     AddToPlayerInventory(items[LEATHER_ARMOR], 1);
-    AddToPlayerInventory(items[DUAL_FLINTLOCKS], 1);
+    AddToPlayerInventory(items[FLINTLOCK_RIFLE], 1);
     AddToPlayerInventory(items[BULLET_FLINTLOCK], 20);
     player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 16;

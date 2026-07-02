@@ -1,5 +1,6 @@
 #include <rogue.h>
 
+// formula for rand item -> ((max - min) + 1) - min;
 void GoblinWarriorLoot(Entity* goblin){
     int randWeapon, randCurrency;
     randWeapon = (rand() % (QUARTERSTAFF - DAGGER) + 1) + DAGGER;

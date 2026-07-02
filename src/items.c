@@ -90,7 +90,7 @@ Weapon GetWeaponFromItem(int itemID) {
         case SHORTBOW: return Shortbow();
         case LONGBOW: return Longbow();
         case FLINTLOCK_PISTOL: return FlintlockPistol();
-        case DUAL_FLINTLOCKS: return DualFlintlocks();
+        case FLINTLOCK_RIFLE: return FlintlockRifle();
         case LIGHT_PISTOL: return LightPistol();
         case MEDIUM_PISTOL: return MediumPistol();
         case HEAVY_PISTOL: return HeavyPistol();
@@ -180,7 +180,7 @@ bool IsRangedWeaponItem(Item target) {
 }
 
 bool IsAmmoItem(Item target) {
-    if (target.itemID > DUAL_FLINTLOCKS && target.itemID < RAGS) return true;
+    if (target.itemID > FLINTLOCK_RIFLE && target.itemID < RAGS) return true;
     return false;
 }
 
