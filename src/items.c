@@ -103,7 +103,7 @@ Weapon GetWeaponFromItem(int itemID) {
 Ammo GetAmmoFromItem(int itemID) {
     switch(itemID) {
         case ARROWS: return Arrows();
-        case DARTS: return Darts();
+        case BOLTS: return Bolts();
         case ACID_POTION_AMMO: return AcidPotionAmmo();
         case BULLET_FLINTLOCK: return BulletFlintlock();
         case BULLET_5MM: return Bullet5mm();
@@ -136,7 +136,7 @@ Armor GetArmorFromItem(int itemID) {
 
 char* GetAmmoType(int AmmoType) {
     switch(AmmoType) {
-        case TYPE_DARTS: return "Darts";
+        case TYPE_BOLTS: return "Bolts";
         case TYPE_ARROWS: return "Arrows";
         case TYPE_MAGIC: return "Magic";
         case TYPE_FLINTLOCK: return "Flintlock";

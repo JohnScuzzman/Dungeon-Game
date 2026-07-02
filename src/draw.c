@@ -87,6 +87,7 @@ void DrawPlayerStats() {
   mvprintw(12, STATS_COL2, "STR: %d", player->playerStats.STR);
   mvprintw(14, STATS_COL2, "WIS: %d", player->playerStats.WIS);
   mvprintw(16, STATS_COL2 + 1 - EXPbuffer, "EXP: %d/%d", player->playerStats.EXP, player->playerStats.nextLVLEXP);
+  mvprintw(18, STATS_COL2, "FLR: %d", dungeonInfo->currentFloor);
 }
 
 /* Draw the players Abilities in the bottom left of screen. */

@@ -180,6 +180,7 @@ void AssignSkeletonWarrior(Entity* monster) {
     monster->entityStats.STR = 10;
     monster->entityStats.WIS = 8;
     monster->entityArmor = Rags();
+    AddToNPCInventory(monster, items[RAGS], 1);
     SkeletonWarriorLoot(monster);
     monster->aggroRange = 15;
     monster->entityStats.AC = ((monster->entityStats.STR - 10) / 2) + (monster->entityArmor.AC);

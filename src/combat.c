@@ -246,7 +246,7 @@ bool ProcessRangedAttack(bool abilityUsed, int x, int y) {
     if (abilityUsed){
         if (player->equippedAbility.isRanged && !player->equippedAbility.isMagic && player->equippedAmmo.item.quantity > 0){
             if (player->equippedRanged.ammoType == player->equippedAmmo.type){
-                if ((player->equippedAmmo.type == TYPE_ARROWS || player->equippedAmmo.type == TYPE_DARTS) && map[y][x].entityType == FLOOR) { // Lets player pick up their arrows lol.
+                if ((player->equippedAmmo.type == TYPE_ARROWS || player->equippedAmmo.type == TYPE_BOLTS) && map[y][x].entityType == FLOOR) { // Lets player pick up their arrows lol.
                     AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
                     ShootFromPlayerInventory(player->equippedAmmo.item, 1);
                     strcpy(combatHistory->event, "You shoot the ");
@@ -268,7 +268,7 @@ bool ProcessRangedAttack(bool abilityUsed, int x, int y) {
     }
     else if (player->equippedAmmo.item.quantity > 0) {
         if (player->equippedRanged.ammoType == player->equippedAmmo.type){
-            if ((player->equippedAmmo.type == TYPE_ARROWS || player->equippedAmmo.type == TYPE_DARTS) && map[y][x].entityType == FLOOR) { 
+            if ((player->equippedAmmo.type == TYPE_ARROWS || player->equippedAmmo.type == TYPE_BOLTS) && map[y][x].entityType == FLOOR) { 
                     AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
                     ShootFromPlayerInventory(player->equippedAmmo.item, 1);
                     strcpy(combatHistory->event, "You shoot the ");
