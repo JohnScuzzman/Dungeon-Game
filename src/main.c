@@ -110,8 +110,10 @@ int main(void)
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
 
-    /* Ask info about the player's character from functions in player.c */
+    /* Ask info about the player's character from functions in make_player.c */
     AskPlayerInfo(player);
+    
+    ChooseClass(); // Choose Class && Race.
 
     keypad(stdscr, TRUE);
 

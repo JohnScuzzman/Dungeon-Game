@@ -23,7 +23,7 @@ typedef enum {
     SHORTBOW,
     LONGBOW,
     FLINTLOCK_PISTOL,
-    DUAL_FLINTLOCKS,
+    FLINTLOCK_RIFLE,
     LIGHT_PISTOL,
     MEDIUM_PISTOL,
     HEAVY_PISTOL,
@@ -171,7 +171,7 @@ Weapon Slingshot();
 Weapon Shortbow();
 Weapon Longbow();
 Weapon FlintlockPistol();
-Weapon DualFlintlocks();
+Weapon FlintlockRifle();
 Weapon LightPistol();
 Weapon MediumPistol();
 Weapon HeavyPistol();
