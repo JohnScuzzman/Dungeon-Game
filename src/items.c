@@ -108,6 +108,7 @@ Ammo GetAmmoFromItem(int itemID) {
         case BULLET_FLINTLOCK: return BulletFlintlock();
         case BULLET_5MM: return Bullet5mm();
         case BULLET_9MM: return Bullet9mm();
+        case BULLET_45: return Bullet45();
         case BULLET_556: return Bullet556();
         case BULLET_762:return Bullet762();
         case BULLET_308: return Bullet308();
@@ -142,6 +143,7 @@ char* GetAmmoType(int AmmoType) {
         case TYPE_FLINTLOCK: return "Flintlock";
         case TYPE_5MM: return "5mm";
         case TYPE_9MM: return "9mm";
+        case TYPE_45: return ".45";
         case TYPE_556: return "5.56mm";
         case TYPE_762: return "7.62mm";
         case TYPE_308: return ".308";

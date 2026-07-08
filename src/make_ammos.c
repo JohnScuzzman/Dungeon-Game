@@ -108,8 +108,24 @@ Ammo Bullet9mm() {
     bullet9mm.bonusDamage = 1;
     bullet9mm.type = TYPE_9MM;
     strcpy(bullet9mm.item.itemName, "9mm Ammo");
-	strcpy(bullet9mm.item.itemDesc, "");
+	strcpy(bullet9mm.item.itemDesc, "Standard pistol ammunition.");
     return bullet9mm;
+}
+
+Ammo Bullet45() {
+    Ammo bullet45;
+    bullet45.item.equippable = true;
+    bullet45.item.unequippable = true;
+    bullet45.item.isEquipped = false;
+    bullet45.item.type = AMMO;
+    bullet45.item.itemID = BULLET_45;
+    bullet45.item.quantity = 0;
+    bullet45.item.value = 14;
+    bullet45.bonusDamage = 2;
+    bullet45.type = TYPE_45;
+    strcpy(bullet45.item.itemName, ".45 Ammo");
+	strcpy(bullet45.item.itemDesc, "Heavier pistol ammunition, packing more punch.");
+    return bullet45;
 }
 
 Ammo Bullet556() {
@@ -172,7 +188,7 @@ Ammo Bullet50Cal() {
     bullet50Cal.bonusDamage = 1;
     bullet50Cal.type = TYPE_50CAL;
     strcpy(bullet50Cal.item.itemName, ".50 Cal Ammo");
-	strcpy(bullet50Cal.item.itemDesc, "");
+	strcpy(bullet50Cal.item.itemDesc, "For heavy weapons.");
     return bullet50Cal;
 }
 

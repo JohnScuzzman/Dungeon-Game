@@ -467,6 +467,7 @@ bool CheckEscape(int ch);
 int CompareStrings(const void *a, const void *b);
 void Cursor(int x, int y, int length);
 int GetNumberOfDigits(int input);
+int RandomNumber(int min, int max);
 void RemoveCursor(int x, int y, int length);
 
 // Externals 

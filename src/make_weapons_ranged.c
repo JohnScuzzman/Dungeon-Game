@@ -151,7 +151,7 @@ Weapon MediumPistol() {
     mediumPistol.statUsed = DEX;
     mediumPistol.statReq = 8;
     strcpy(mediumPistol.item.itemName, ".45 Pistol");
-    strcpy(mediumPistol.item.itemDesc, "A small, .45 pistol.");
+    strcpy(mediumPistol.item.itemDesc, "A small, but fierce, .45 pistol.");
     return mediumPistol;
 }
 
