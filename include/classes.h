@@ -43,18 +43,18 @@ typedef enum {
 } AbilitiyIDs;
 
 typedef enum {
-    KNIGHT,
-    SWASHBUCKLER,
-    WIZARD,
-    NECROMANCER,
-    GUNSLINGER,
-    DRUID,
-    RANGER,
-    DARK_KNIGHT,
-    WARLOCK,
-    CONJURER,
-    CYBORG,
-    BARD
+    KNIGHT = 69,
+    SWASHBUCKLER = 70,
+    WIZARD = 71,
+    NECROMANCER = 72,
+    GUNSLINGER = 73,
+    DRUID = 74,
+    RANGER = 89,
+    DARK_KNIGHT = 90,
+    WARLOCK = 91,
+    CONJURER = 92,
+    CYBORG = 93,
+    BARD = 94
 } ClassIDs;
 
 typedef struct {
