@@ -195,6 +195,7 @@ Ammo AcidPotionAmmo();
 Ammo BulletFlintlock();
 Ammo Bullet5mm();
 Ammo Bullet9mm();
+Ammo Bullet45();
 Ammo Bullet556();
 Ammo Bullet762();
 Ammo Bullet308();

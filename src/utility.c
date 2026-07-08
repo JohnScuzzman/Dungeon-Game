@@ -48,3 +48,10 @@ void Cursor(int x, int y, int length){
 void RemoveCursor(int x, int y, int length) {
     mvchgat(x, y, length, A_NORMAL, 0, NULL);
 }
+
+/*
+Returns an integer between the given min and max number.
+*/
+int RandomNumber(int min, int max) {
+    return rand() % (max - min + 1) + min;
+}
