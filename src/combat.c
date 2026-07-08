@@ -248,7 +248,7 @@ bool ProcessRangedAttack(bool abilityUsed, int x, int y) {
             if (player->equippedRanged.ammoType == player->equippedAmmo.type){
                 if ((player->equippedAmmo.type == TYPE_ARROWS || player->equippedAmmo.type == TYPE_BOLTS) && map[y][x].entityType == FLOOR) { // Lets player pick up their arrows lol.
                     AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
-                    ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+                    RemoveFromPlayerInventory(player->equippedAmmo.item, 1);
                     strcpy(combatHistory->event, "You shoot the ");
                     strcat(combatHistory->event, map[y][x].entityName);
                     strcat(combatHistory->event, ".");
@@ -270,7 +270,7 @@ bool ProcessRangedAttack(bool abilityUsed, int x, int y) {
         if (player->equippedRanged.ammoType == player->equippedAmmo.type){
             if ((player->equippedAmmo.type == TYPE_ARROWS || player->equippedAmmo.type == TYPE_BOLTS) && map[y][x].entityType == FLOOR) { 
                     AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
-                    ShootFromPlayerInventory(player->equippedAmmo.item, 1);
+                    RemoveFromPlayerInventory(player->equippedAmmo.item, 1);
                     strcpy(combatHistory->event, "You shoot the ");
                     strcat(combatHistory->event, map[y][x].entityName);
                     strcat(combatHistory->event, ".");

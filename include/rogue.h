@@ -304,8 +304,8 @@ void ClearEntityInventory(Entity* npc);
 void CreatePlayerInv();
 void CreateEntityInv(Entity* npc);
 void RemoveFromNPCInventory(Entity* npc, Item target, int itemQuantity);
+void DropFromPlayerInventory(Item target, int itemQuantity);
 void RemoveFromPlayerInventory(Item target, int itemQuantity);
-void ShootFromPlayerInventory(Item target, int itemQuantity);
 
 //items.c functions
 Item* CreateItemTable();
@@ -359,11 +359,15 @@ bool AskPlayerInfo(Player* player);
 void ChooseClass();
 void ChooseName(char* name);
 bool ChooseRace();
+void ClearClassStats();
+void ClearRaceStats();
+void ClearClasses();
+void ClearRaces();
 Player* CreatePlayer(Position start_pos);
 void PrintRaces();
 void PrintClasses();
-void ClearClasses();
-void ClearRaces();
+void PrintClassStats(int input);
+void PrintRaceStats(int input);
 
 // map.c functions
 DungeonInfo* MakeDungeonInfo();

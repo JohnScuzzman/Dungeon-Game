@@ -264,10 +264,10 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
         case 0: // Drop{
             if (playerInv[prevChoice]->isEquipped && playerInv[prevChoice]->unequippable) {
                 Unequip(*playerInv[prevChoice]);
-                RemoveFromPlayerInventory(*playerInv[prevChoice], 1);
+                DropFromPlayerInventory(*playerInv[prevChoice], 1);
             }
             else {
-                RemoveFromPlayerInventory(*playerInv[prevChoice], 1);
+                DropFromPlayerInventory(*playerInv[prevChoice], 1);
             }
             DrawEverything();
             refresh();
@@ -277,10 +277,10 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
         case 1: // Drop All
             if(playerInv[prevChoice]->isEquipped && playerInv[prevChoice]->unequippable) {
                 Unequip(*playerInv[prevChoice]);
-                RemoveFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
+                DropFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
             }
             else{
-                RemoveFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
+                DropFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
             }
             DrawEverything();
             refresh();

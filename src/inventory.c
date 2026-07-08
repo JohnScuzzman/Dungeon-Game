@@ -164,7 +164,7 @@ Search player inventory for item, if found, set the item to the last item in the
 Set the last item in players inventory to NULL, then move tail backward once.
 If equipped, unequip the item.
 */
-void RemoveFromPlayerInventory(Item target, int itemQuantity) {
+void DropFromPlayerInventory(Item target, int itemQuantity) {
    if(player->invTail == 0) {
         return;
     }
@@ -196,7 +196,7 @@ void RemoveFromPlayerInventory(Item target, int itemQuantity) {
 /* 
 Used for removing projectiles from player inventory when shot.
 */
-void ShootFromPlayerInventory(Item target, int itemQuantity) {
+void RemoveFromPlayerInventory(Item target, int itemQuantity) {
    if(player->invTail == 0) {
         return;
     }
