@@ -79,11 +79,13 @@ Weapon GetWeaponFromItem(int itemID) {
         case FISTS: return Fists();
         case CLAWS: return Claws();
         case DAGGER: return Dagger();
+        case COMBAT_KNIFE: return CombatKnife();
         case SHORTSWORD: return Shortsword();
         case QUARTERSTAFF: return Quarterstaff();
         case LONGSWORD: return Longsword();
         case CUTLASS: return Cutlass();
         case SCIMITAR: return Scimitar();
+        case BATTLE_AXE: return BattleAxe();
         case GREATSWORD: return Greatsword();
         case CHROME_FISTS: return ChromeFists();
         case SLINGSHOT: return Slingshot();
@@ -129,6 +131,7 @@ Armor GetArmorFromItem(int itemID) {
         case ROBES: return Robes();
         case LEATHER_ARMOR: return LeatherArmor(); 
         case CHAINMAIL: return Chainmail();
+        case HALF_PLATE: return HalfPlate();
         case RANGERS_CLOAK: return RangersCloak();
         case METALLIC_SKIN: return MetallicSkin();
     }
@@ -164,6 +167,7 @@ char* GetArmorType(int ArmorType) {
         case EXOSUIT: return "Exosuit";
         case POWER_ARMOR: return "Power Armor";
         case MAGIC_ARMOR: return "Magic Armor";
+        case CYBERWARE: return "Cyberware";
     }
     return "None";
 }
@@ -172,21 +176,21 @@ char* GetArmorType(int ArmorType) {
 /* This suite of functions just checks if an item is a certain type and returns true if it is*/
 /* consult the enum list "ItemIDs" in items.h to modify this.*/
 bool IsMeleeWeaponItem(Item target) {
-    if (target.itemID > CLAWS && target.itemID < SLINGSHOT) return true;
+    if (target.itemID > CLAWS && target.itemID < _RANGED_) return true;
     return false;
 }
 
 bool IsRangedWeaponItem(Item target) {
-    if (target.itemID > CHROME_FISTS && target.itemID < ARROWS) return true;
+    if (target.itemID > _RANGED_ && target.itemID < _AMMO_) return true;
     return false;
 }
 
 bool IsAmmoItem(Item target) {
-    if (target.itemID > FLINTLOCK_RIFLE && target.itemID < RAGS) return true;
+    if (target.itemID > _AMMO_ && target.itemID < _ARMOR_) return true;
     return false;
 }
 
 bool IsArmorItem(Item target) {
-    if (target.itemID > HEAVY_ENERGY_PACKS && target.itemID <= METALLIC_SKIN) return true;
+    if (target.itemID > _ARMOR_ && target.itemID < _END_) return true;
     return false;
 }

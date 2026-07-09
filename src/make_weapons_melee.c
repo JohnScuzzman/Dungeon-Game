@@ -10,7 +10,10 @@ Weapon NoWeapon() {
     none.item.quantity = 0;
     none.item.value = 0;
     none.isMagic = false;
+    none.isEnchanted = false;
     none.isRanged = false;
+    none.capacity = 0;
+    none.enchantLevel = 0;
     none.minDMG = 0;
     none.maxDMG = 0;
     none.range = 0;
@@ -32,12 +35,15 @@ Weapon Fists() {
     fists.item.quantity = 0;
     fists.item.value = 0;
     fists.isMagic = false;
+    fists.isEnchanted = false;
     fists.isRanged = false;
+    fists.capacity = 0;
+    fists.enchantLevel = 0;
     fists.minDMG = 1;
     fists.maxDMG = 3;
     fists.range = 0;
     fists.ammoType = NULL_AMMO_TYPE;
-    fists.statUsed = NULL_STAT_TYPE;
+    fists.statUsed = STR;
     fists.statReq = 0;
     strcpy(fists.item.itemName, "Fists");
     strcpy(fists.item.itemDesc, "Punch something if you must.");
@@ -54,12 +60,15 @@ Weapon Claws() {
     claws.item.quantity = 0;
     claws.item.value = 0;
     claws.isMagic = false;
+    claws.isEnchanted = false;
     claws.isRanged = false;
+    claws.capacity = 0;
+    claws.enchantLevel = 0;
     claws.minDMG = 1;
     claws.maxDMG = 4;
     claws.range = 0;
     claws.ammoType = NULL_AMMO_TYPE;
-    claws.statUsed = NULL_STAT_TYPE;
+    claws.statUsed = STR;
     claws.statReq = 0;
     strcpy(claws.item.itemName, "Claws");
     strcpy(claws.item.itemDesc, "Sharp claws, ready to scratch.");
@@ -76,7 +85,10 @@ Weapon Dagger() {
     dagger.item.quantity = 0;
     dagger.item.value = 5;
     dagger.isMagic = false;
+    dagger.isEnchanted = false;
     dagger.isRanged = false;
+    dagger.capacity = 0;
+    dagger.enchantLevel = 0;
     dagger.minDMG = 1;
     dagger.maxDMG = 4;
     dagger.range = 0;
@@ -86,6 +98,55 @@ Weapon Dagger() {
     strcpy(dagger.item.itemName, "Dagger");
     strcpy(dagger.item.itemDesc, "A small, sharpened dagger.");
     return dagger;
+}
+
+Weapon CombatKnife() {
+    Weapon combatKnife;
+    combatKnife.item.equippable = true;
+    combatKnife.item.unequippable = true;
+    combatKnife.item.isEquipped = false;
+    combatKnife.item.type = WEAPON;
+    combatKnife.item.itemID = COMBAT_KNIFE;
+    combatKnife.item.quantity = 0;
+    combatKnife.item.value = 10;
+    combatKnife.isMagic = false;
+    combatKnife.isEnchanted = false;
+    combatKnife.isRanged = false;
+    combatKnife.capacity = 0;
+    combatKnife.enchantLevel = 0;
+    combatKnife.minDMG = 1;
+    combatKnife.maxDMG = 5;
+    combatKnife.range = 0;
+    combatKnife.ammoType = NULL_AMMO_TYPE;
+    combatKnife.statUsed = STR;
+    combatKnife.statReq = 6;
+    strcpy(combatKnife.item.itemName, "Combat Knife");
+    strcpy(combatKnife.item.itemDesc, "A compact, serrated military-grade blade.");
+    return combatKnife;
+}
+
+Weapon BattleAxe() {
+    Weapon battleAxe;
+    battleAxe.item.equippable = true;
+    battleAxe.item.unequippable = true;
+    battleAxe.item.isEquipped = false;
+    battleAxe.item.type = WEAPON;
+    battleAxe.item.itemID = BATTLE_AXE;
+    battleAxe.item.quantity = 0;
+    battleAxe.item.value = 10;
+    battleAxe.isMagic = false;
+    battleAxe.isEnchanted = false;
+    battleAxe.isRanged = false;
+    battleAxe.capacity = 0;
+    battleAxe.enchantLevel = 0;    battleAxe.minDMG = 2;
+    battleAxe.maxDMG = 8;
+    battleAxe.range = 0;
+    battleAxe.ammoType = NULL_AMMO_TYPE;
+    battleAxe.statUsed = STR;
+    battleAxe.statReq = 6;
+    strcpy(battleAxe.item.itemName, "Battle Axe");
+    strcpy(battleAxe.item.itemDesc, "A double-bladed axe, forged for war.");
+    return battleAxe;
 }
 
 Weapon Shortsword() {
@@ -98,7 +159,10 @@ Weapon Shortsword() {
     shortSword.item.quantity = 0;
     shortSword.item.value = 10;
     shortSword.isMagic = false;
+    shortSword.isEnchanted = false;
     shortSword.isRanged = false;
+    shortSword.capacity = 0;
+    shortSword.enchantLevel = 0;    
     shortSword.minDMG = 1;
     shortSword.maxDMG = 6;
     shortSword.range = 0;
@@ -120,7 +184,10 @@ Weapon Quarterstaff() {
     quarterstaff.item.quantity = 0;
     quarterstaff.item.value = 10;
     quarterstaff.isMagic = false;
+    quarterstaff.isEnchanted = false;
     quarterstaff.isRanged = false;
+    quarterstaff.capacity = 0;
+    quarterstaff.enchantLevel = 0;   
     quarterstaff.minDMG = 1;
     quarterstaff.maxDMG = 4;
     quarterstaff.range = 0;
@@ -142,13 +209,16 @@ Weapon Longsword() {
     longSword.item.quantity = 0;
     longSword.item.value = 20;
     longSword.isMagic = false;
+    longSword.isEnchanted = false;
     longSword.isRanged = false;
+    longSword.capacity = 0;
+    longSword.enchantLevel = 0;   
     longSword.minDMG = 1;
     longSword.maxDMG = 8;
     longSword.range = 0;
     longSword.ammoType = NULL_AMMO_TYPE;
     longSword.statUsed = STR;
-    longSword.statReq = 12;
+    longSword.statReq = 10;
     strcpy(longSword.item.itemName, "Longsword");
     strcpy(longSword.item.itemDesc, "A mighty blade.");
     return longSword;
@@ -164,13 +234,16 @@ Weapon Greatsword() {
     greatSword.item.quantity = 0;
     greatSword.item.value = 45;
     greatSword.isMagic = false;
+    greatSword.isEnchanted = false;
     greatSword.isRanged = false;
+    greatSword.capacity = 0;
+    greatSword.enchantLevel = 0;   
     greatSword.minDMG = 1;
     greatSword.maxDMG = 10;
     greatSword.range = 0;
     greatSword.ammoType = NULL_AMMO_TYPE;
     greatSword.statUsed = STR;
-    greatSword.statReq = 10;
+    greatSword.statReq = 12;
     strcpy(greatSword.item.itemName, "Greatsword");
     strcpy(greatSword.item.itemDesc, "A large sword, demanding two hands of it's wielder.");
     return greatSword;
@@ -186,7 +259,10 @@ Weapon Cutlass() {
     cutlass.item.quantity = 0;
     cutlass.item.value = 25;
     cutlass.isMagic = false;
+    cutlass.isEnchanted = false;
     cutlass.isRanged = false;
+    cutlass.capacity = 0;
+    cutlass.enchantLevel = 0;   
     cutlass.minDMG = 2;
     cutlass.maxDMG = 7;
     cutlass.range = 0;
@@ -208,7 +284,10 @@ Weapon Scimitar() {
     scimitar.item.quantity = 0;
     scimitar.item.value = 30;
     scimitar.isMagic = false;
+    scimitar.isEnchanted = false;
     scimitar.isRanged = false;
+    scimitar.capacity = 0;
+    scimitar.enchantLevel = 0;   
     scimitar.minDMG = 2;
     scimitar.maxDMG = 8;
     scimitar.range = 0;
@@ -231,7 +310,10 @@ Weapon ChromeFists() {
     chromeFists.item.quantity = 0;
     chromeFists.item.value = 100;
     chromeFists.isMagic = false;
+    chromeFists.isEnchanted = false;
     chromeFists.isRanged = false;
+    chromeFists.capacity = 0;
+    chromeFists.enchantLevel = 0;   
     chromeFists.minDMG = 1;
     chromeFists.maxDMG = 6;
     chromeFists.range = 0;
