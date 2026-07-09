@@ -13,7 +13,9 @@ Armor NoArmor() {
     none.item.itemID = NULL_ITEM_ID;
     none.item.quantity = 0;
     none.item.value = 0;
+    none.isEnchanted = false;
     none.AC = 0;
+    none.enchantLevel = 0;
     none.type = LIGHT; // 1 = light, 2 = med, 3 = heavy
     none.statUsed = NULL_STAT_TYPE;
     none.statReq = 0;
@@ -31,7 +33,9 @@ Armor Rags() {
     rags.item.itemID = RAGS; 
     rags.item.quantity = 0;
     rags.item.value = 2;
+    rags.isEnchanted = false;
     rags.AC = 0;
+    rags.enchantLevel = 0;
     rags.type = LIGHT; 
     rags.statUsed = STR;
     rags.statReq = 0;
@@ -49,7 +53,9 @@ Armor Robes() {
     robes.item.itemID = ROBES;
     robes.item.quantity = 0;
     robes.item.value = 10;
+    robes.isEnchanted = false;
     robes.AC = 1;
+    robes.enchantLevel = 0;
     robes.type = LIGHT; 
     robes.statUsed = STR;
     robes.statReq = 0;
@@ -67,7 +73,9 @@ Armor LeatherArmor() {
     leatherArmor.item.itemID = LEATHER_ARMOR;
     leatherArmor.item.quantity = 0;
     leatherArmor.item.value = 30;
+    leatherArmor.isEnchanted = false;
     leatherArmor.AC = 2;
+    leatherArmor.enchantLevel = 0;
     leatherArmor.type = MEDIUM; // 1 = light, 2 = med, 3 = heavy
     leatherArmor.statUsed = STR;
     leatherArmor.statReq = 8;
@@ -85,7 +93,9 @@ Armor Chainmail() {
     chainmail.item.itemID = CHAINMAIL;
     chainmail.item.quantity = 0;
     chainmail.item.value = 50;
+    chainmail.isEnchanted = false;
     chainmail.AC = 3;
+    chainmail.enchantLevel = 0;
     chainmail.type = HEAVY; // 1 = light, 2 = med, 3 = heavy
     chainmail.statUsed = STR;
     chainmail.statReq = 10;
@@ -103,7 +113,9 @@ Armor HalfPlate() {
     halfPlate.item.itemID = HALF_PLATE;
     halfPlate.item.quantity = 0;
     halfPlate.item.value = 300;
-    halfPlate.AC = 5;
+    halfPlate.isEnchanted = false;
+    halfPlate.AC = 4;
+    halfPlate.enchantLevel = 0;
     halfPlate.type = HEAVY;
     halfPlate.statUsed = STR;
     halfPlate.statReq = 14;
@@ -121,7 +133,9 @@ Armor RangersCloak() {
     rangersCloak.item.itemID = RANGERS_CLOAK;
     rangersCloak.item.quantity = 0;
     rangersCloak.item.value = 75;
-    rangersCloak.AC = 2;
+    rangersCloak.isEnchanted = false;
+    rangersCloak.AC = 1;
+    rangersCloak.enchantLevel = 0;
     rangersCloak.type = LIGHT;
     rangersCloak.statUsed = DEX;
     rangersCloak.statReq = 12;
@@ -132,15 +146,17 @@ Armor RangersCloak() {
 
 Armor MetallicSkin() {
     Armor metallicSkin;
-    metallicSkin.item.equippable = true;
+    metallicSkin.item.equippable = false;
     metallicSkin.item.unequippable = true;
     metallicSkin.item.isEquipped = false;
     metallicSkin.item.type = ARMOR;
     metallicSkin.item.itemID = METALLIC_SKIN;
     metallicSkin.item.quantity = 0;
     metallicSkin.item.value = 200;
+    metallicSkin.isEnchanted = false;
     metallicSkin.AC = 4;
-    metallicSkin.type = HEAVY;
+    metallicSkin.enchantLevel = 0;
+    metallicSkin.type = CYBERWARE;
     metallicSkin.statUsed = CON;
     metallicSkin.statReq = 10;
     strcpy(metallicSkin.item.itemName, "Metallic Skin");

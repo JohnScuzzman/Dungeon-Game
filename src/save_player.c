@@ -139,7 +139,10 @@ cJSON* SerializePlayerWeapon(const Weapon* equippedMelee) {
     }
     
     cJSON_AddBoolToObject(playerWeaponObj, "isMagic", equippedMelee->isMagic);
+    cJSON_AddBoolToObject(playerWeaponObj, "isEnchanted", equippedMelee->isEnchanted);
     cJSON_AddBoolToObject(playerWeaponObj, "isRanged", equippedMelee->isRanged);
+    cJSON_AddNumberToObject(playerWeaponObj, "capacity", equippedMelee->capacity);
+    cJSON_AddNumberToObject(playerWeaponObj, "enchantLevel", equippedMelee->enchantLevel);
     cJSON_AddNumberToObject(playerWeaponObj, "minDMG", equippedMelee->minDMG);
     cJSON_AddNumberToObject(playerWeaponObj, "maxDMG", equippedMelee->maxDMG);
     cJSON_AddNumberToObject(playerWeaponObj, "range", equippedMelee->range);

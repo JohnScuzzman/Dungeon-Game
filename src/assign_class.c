@@ -96,10 +96,11 @@ void AssignNecromancer() {
 
 void AssignGunslinger() {
     player->equippedArmor = LeatherArmor();
-    player->equippedMelee = Fists();
+    player->equippedMelee = CombatKnife();
     player->equippedRanged = FlintlockRifle();
     player->equippedAmmo = BulletFlintlock();
     AddToPlayerInventory(items[LEATHER_ARMOR], 1);
+    AddToPlayerInventory(items[COMBAT_KNIFE], 1);
     AddToPlayerInventory(items[FLINTLOCK_RIFLE], 1);
     AddToPlayerInventory(items[BULLET_FLINTLOCK], 20);
     player->equippedAmmo.item.quantity = 20;
@@ -139,7 +140,7 @@ void AssignRanger() {
     player->equippedRanged = Longbow();
     player->equippedAmmo = Arrows();
     AddToPlayerInventory(items[RANGERS_CLOAK], 1);
-    AddToPlayerInventory(items[LONGSWORD], 1);
+    AddToPlayerInventory(items[COMBAT_KNIFE], 1);
     AddToPlayerInventory(items[LONGBOW], 1);
     AddToPlayerInventory(items[ARROWS], 20);
     player->equippedAmmo.item.quantity = 20;

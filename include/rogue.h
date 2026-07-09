@@ -232,6 +232,8 @@ bool ProcessRangedAttack(bool abilityUsed, int x, int y);
 void ResetCombatHistory();
 bool ShootTarget(int x, int y);
 bool ShootTargetWithAbility(int x, int y);
+bool ShootWithAmmo(int ammoType, int x, int y);
+bool ShootAbilityWithAmmo(int ammoType, int x, int y);
 
 // combatlog.c functions
 void DequeueEvent (LogQueue *q);

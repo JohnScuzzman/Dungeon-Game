@@ -11,11 +11,13 @@ typedef enum {
     FISTS,
     CLAWS,
     DAGGER,
+    COMBAT_KNIFE,
     SHORTSWORD,
     QUARTERSTAFF,
     LONGSWORD,
     CUTLASS,
     SCIMITAR,
+    BATTLE_AXE,
     GREATSWORD,
     CHROME_FISTS,
     _RANGED_,
@@ -64,7 +66,8 @@ typedef enum {
     HEAVY,
     EXOSUIT,
     POWER_ARMOR,
-    MAGIC_ARMOR
+    MAGIC_ARMOR,
+    CYBERWARE
 } ArmorTypes;
 
 typedef enum {
@@ -105,42 +108,47 @@ typedef enum {
 } ItemTypes;
 
 typedef struct {
-  bool equippable;
-  bool lootable;
-  bool unequippable;
-  bool isEquipped;
-  int itemID;
-  int quantity;
-  int type;
-  int value;
-  char itemName[MAX_NAME_SIZE];
-  char itemDesc[ITEM_DESC_SIZE];
+    bool equippable;
+    bool lootable;
+    bool unequippable;
+    bool isEquipped;
+    int itemID;
+    int quantity;
+    int type;
+    int value;
+    char itemName[MAX_NAME_SIZE];
+    char itemDesc[ITEM_DESC_SIZE];
 }Item;
 
 typedef struct {
-  Item item;
-  bool isMagic;
-  bool isRanged;
-  int minDMG;
-  int maxDMG;
-  int range;
-  int ammoType;
-  int statReq;
-  int statUsed;
+    Item item;
+    bool isMagic;
+    bool isEnchanted;
+    bool isRanged;
+    int capacity;
+    int enchantLevel;
+    int minDMG;
+    int maxDMG;
+    int range;
+    int ammoType;
+    int statReq;
+    int statUsed;
 } Weapon;
 
 typedef struct {
-  Item item;
-  int AC;
-  int type; // 1 = light, 2 = medium, 3 = heavy.
-  int statReq;
-  int statUsed;
+    Item item;
+    bool isEnchanted;
+    int AC;
+    int enchantLevel;
+    int type; // 1 = light, 2 = medium, 3 = heavy.
+    int statReq;
+    int statUsed;
 } Armor;
 
 typedef struct {
-  Item item;
-  int bonusDamage;
-  int type; // Bullet or Arrow, etc.
+    Item item;
+    int bonusDamage;
+    int type; // Bullet or Arrow, etc.
 } Ammo;
 
 // typedef struct {
@@ -160,11 +168,13 @@ Weapon NoWeapon();
 Weapon Fists();
 Weapon Claws();
 Weapon Dagger();
+Weapon CombatKnife();
 Weapon Shortsword();
 Weapon Quarterstaff();
 Weapon Longsword();
 Weapon Cutlass();
 Weapon Scimitar();
+Weapon BattleAxe();
 Weapon Greatsword();
 Weapon ChromeFists();
 Weapon Slingshot();
