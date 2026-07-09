@@ -307,8 +307,10 @@ void CastSummonSkeleton() {
     skeletonPOS.y = y;
     skeletonPOS.x = x;
     if (map[y][x].noCollision && map[y][x].visible){
-        AssignNPC(skeletonPOS, NPC_SKELETON_WARRIOR, ENTITY_ID);
         player->playerStats.mana -= (player->equippedAbility.manaCost);
+        int NPCInList = AddToNPCList(nptr, skeletonPOS, NPC_SKELETON_WARRIOR);
+        player->follower = nptr[NPCInList];
+        UpdateNPCMap(&nptr[NPCInList], MAX_ONSCREEN_NPCS);
         ClearFOV(player);
         MakeFOV(player);
     }
@@ -357,10 +359,16 @@ void CastSelfRepair(){
 }
 
 void RemoveSummonSkeleton() {
-    strcpy(combatHistory->event, "You're skeleton crumbles to dust.");
-    QueueEvent(q, combatHistory->event);
-    // Remove the NPC from the map here.
+    Entity emptyNPC = {0};
+
+    // Try and remove the NPC from the map here.
     player->passiveAbility = NoAbility();
+    AssignFloor(player->follower.pos.x, player->follower.pos.y);
+    nptr[player->follower.entityID] = emptyNPC;
+    player->follower = emptyNPC;
+
+    strcpy(combatHistory->event, "Your skeleton crumbles to dust.");
+    QueueEvent(q, combatHistory->event);
 }
 
 /* When Ice Armors duration is up, remove the armor.*/
@@ -468,7 +476,8 @@ void CheckPassiveAbilities(int n_monsters) {
                 ResetCombatHistory();
             }
         }
-        case SUMMON_SKELETON:// AggroMove(player->follower);
+        case SUMMON_SKELETON:
+            FollowPlayer(&player->follower);
         break;
         default:
         break;

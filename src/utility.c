@@ -55,3 +55,48 @@ Returns an integer between the given min and max number.
 int RandomNumber(int min, int max) {
     return rand() % (max - min + 1) + min;
 }
+
+void RecordEntitySeen(Entity* entity) {
+    if(!entity->seenByPlayer){
+        strcpy(combatHistory->event, "You see a ");
+        strcat(combatHistory->event, entity->entityName);
+        QueueEvent(q, combatHistory->event);
+        strcpy(combatHistory->event, "to the ");
+        strcat(combatHistory->event, DIRECTIONS[EntityDirection(entity)]);
+        strcat(combatHistory->event, ".");
+        QueueEvent(q, combatHistory->event);
+        entity->seenByPlayer = true;
+        player->isResting = false;
+    }
+}
+
+/* Returns an int representing the entitys direction relative to the player. */
+int EntityDirection(Entity* entity) {
+    if((player->pos.x) < (entity->pos.x) && (player->pos.y) < (entity->pos.y)) {
+        return SOUTH_EAST;
+    }
+    else if ((player->pos.x) < (entity->pos.x) && (player->pos.y) > (entity->pos.y)) {
+        return NORTH_EAST;
+    }
+    else if ((player->pos.x) > (entity->pos.x) && (player->pos.y) > (entity->pos.y)) {
+        return NORTH_WEST;
+    }
+    else if ((player->pos.x) > (entity->pos.x) && (player->pos.y) < (entity->pos.y)) {
+        return SOUTH_WEST;
+    }
+    else if ((player->pos.x) < (entity->pos.x) && (player->pos.y) == (entity->pos.y)) {
+        return EAST;
+    }
+    else if ((player->pos.x) > (entity->pos.x) && (player->pos.y) == (entity->pos.y)) {
+        return WEST;
+    }
+    else if ((player->pos.x) == (entity->pos.x) && (player->pos.y) < (entity->pos.y)) {
+        return SOUTH;
+    }
+    else if ((player->pos.x) == (entity->pos.x) && (player->pos.y) > (entity->pos.y)) {
+        return NORTH;
+    } else {
+        // Should never occur
+        return NORTH;
+    }
+}

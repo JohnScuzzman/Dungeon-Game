@@ -61,6 +61,7 @@ typedef enum {
 } Levels;
 
 typedef enum {
+  NULL_ENTITY_TYPE,
   FLOOR,
   WALL,
   DOOR,
@@ -112,29 +113,6 @@ typedef struct {
 } Stats;
 
 typedef struct {
-  bool noCollision;
-  bool isResting;
-  char ch;
-  int raceID;
-  int color;
-  int abilityTimer;
-  int invTail;
-  int invHead;
-  Stats playerStats;
-  Position pos;
-  Weapon equippedMelee;
-  Weapon equippedRanged;
-  Ammo equippedAmmo;
-  Armor equippedArmor;
-  Ability equippedAbility;
-  Ability passiveAbility;
-  Class playerClass;
-  Item inventory[MAX_INVENTORY_SIZE];
-  char playerName[MAX_NAME_SIZE];
-  char playerRace[MAX_NAME_SIZE];
-} Player;
-  
-typedef struct {
   bool aggroFlag;
   bool hasMoved;
   bool noCollision;
@@ -164,6 +142,32 @@ typedef struct {
   char entityRace[MAX_NAME_SIZE];
   char entityClass[MAX_NAME_SIZE];
 } Entity;
+
+typedef struct {
+  bool noCollision;
+  bool isResting;
+  char ch;
+  int raceID;
+  int color;
+  int abilityTimer;
+  int invTail;
+  int invHead;
+  Stats playerStats;
+  Position pos;
+  Weapon equippedMelee;
+  Weapon equippedRanged;
+  Ammo equippedAmmo;
+  Armor equippedArmor;
+  Ability equippedAbility;
+  Ability passiveAbility;
+  Class playerClass;
+  Item inventory[MAX_INVENTORY_SIZE];
+  Entity follower;
+  char playerName[MAX_NAME_SIZE];
+  char playerRace[MAX_NAME_SIZE];
+} Player;
+  
+
 
 typedef struct {
     Entity defender;
@@ -341,10 +345,6 @@ void AssignChest(int x, int y);
 void AssignCorpse(Entity* entity, int n_monsters);
 void AssignStairsDown(int x, int y);
 void AssignFloor(int x, int y);
-Entity AssignNPC(Position pos, int npcName, int npcID);
-Entity AssignUniqueNPC(Position pos, int npcName, int npcID);
-void AssignNPCDefaults(Entity* npc, Position n_pos, int npcID);
-void PlaceNPC(Entity* npc, Position pos);
 
 // make_monster.c functions 
 void AssignRat(Entity* monster);
@@ -355,6 +355,14 @@ void AssignKoboldWarrior(Entity* monster);
 void AssignSkeletonWarrior(Entity* monster);
 Entity AssignMonster(Position pos, int RNG, int monsterID);
 void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
+
+// make_npcs.c functions
+Entity* NPCList(int totalNpcs);
+int AddToNPCList(Entity* npcs, Position pos, int npcType);
+Entity AssignNPC(Position pos, int npcType, int npcID);
+void AssignNPCDefaults(Entity* npc, Position n_pos, int npcID);
+Entity AssignUniqueNPC(Position pos, int npcName, int npcID);
+void PlaceNPC(Entity* npc, Position pos);
 
 // make_player.c functions
 bool AskPlayerInfo(Player* player);
@@ -420,32 +428,31 @@ void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options
 // monster.c functions
 void AggroMove(Entity* mptr);
 bool CheckAggro(Entity* mptr, Player* player);
-int EntityDirection(Entity* monster);
 int FindClosestMonster(Entity* mptr, int n_monsters);
 Entity* FindMonsterInList(int monsterID, int n_monsters);
-void KeepMonsterIntegrity(Entity* mptr);
-void KeepMonsterMapIntegrity(Entity* mptr);
 Entity* MonsterList(int n_monsters);
-void MoveMonster(Entity* monster, Position newPOS);
-void RecordEntitySeen(Entity* monster);
 void ResetMoveFlags(Entity* mptr, int n_monsters);
 void UpdateMonsterMap(Entity* monster, int n_monsters);
-void UpdateMonsterVisible(Entity* monster, Player* player);
 void Wander(Entity* mptr);
 
-// movemonster.c functions
+// move_npcs.c functions
 bool MoveTowards(Entity* entity, Position pos);
-void MoveUp(Entity* mptr);
-void MoveDown(Entity* mptr);
-void MoveLeft(Entity* mptr);
-void MoveRight(Entity* mptr);
-void MoveDownRight(Entity* mptr);
-void MoveDownLeft(Entity* mptr);
-void MoveUpRight(Entity* mptr);
-void MoveUpLeft(Entity* mptr);
+void MoveUp(Entity* npc);
+void MoveDown(Entity* npc);
+void MoveLeft(Entity* npc);
+void MoveRight(Entity* npc);
+void MoveDownRight(Entity* npc);
+void MoveDownLeft(Entity* npc);
+void MoveUpRight(Entity* npc);
+void MoveUpLeft(Entity* npc);
 
 // npc.c functions
+Entity* FindNPCInList(int entityID, int maxNPCS);
 void FollowPlayer(Entity* npc);
+void KeepNPCIntegrity(Entity* npc);
+void KeepNPCMapIntegrity(Entity* npc);
+void UpdateNPCMap(Entity* npc, int maxNPCS);
+void UpdateNPCVisible(Entity* npc, Player* player);
 
 // player.c functions
 bool CheckPlayerAdjacent(Position origin);
@@ -468,13 +475,18 @@ cJSON* SerializePlayerArmor(const Armor* equippedArmor);
 cJSON* SerializePlayerAbility(const Ability* ability);
 cJSON* SerializePlayerClass(const Class* class);
 cJSON* SerializePlayerInventory(const Player* player);
+cJSON* SerializeEntityInventory(const Entity* entity);
+cJSON* SerializeEntity(const Entity* entity);
+cJSON* SerializeMapInfo(const MapInfo* mapInfo);
 
 // utility.c functions
 bool CheckEscape(int ch);
 int CompareStrings(const void *a, const void *b);
 void Cursor(int x, int y, int length);
+int EntityDirection(Entity* monster);
 int GetNumberOfDigits(int input);
 int RandomNumber(int min, int max);
+void RecordEntitySeen(Entity* monster);
 void RemoveCursor(int x, int y, int length);
 
 // Externals 
@@ -482,6 +494,8 @@ void RemoveCursor(int x, int y, int length);
 extern int MAP_HEIGHT;
 extern int MAP_WIDTH;
 extern int MAX_MONSTER_NAME;
+extern int MAX_NPCS;
+extern int MAX_ONSCREEN_NPCS;
 extern int MAX_DUNGEON_FLOORS;
 extern int ENTITY_ID;
 extern int LOG_WIDTH;
@@ -499,12 +513,16 @@ extern Player* player;
 extern Entity** map;
 // Pointer to the list of monsters
 extern Entity* mptr;
+// Pointer to list of npcs
+extern Entity* nptr;
 // Combat History
 extern CombatHistory* combatHistory;
 // Combat Log
 extern LogQueue* q;
 // Item Table
 extern Item* items;
+// Npc Table;
+extern Entity* npcs;
 // Dungeon Info
 extern DungeonInfo* dungeonInfo;
 

@@ -3,6 +3,8 @@
 
 Player* CreatePlayer(Position start_pos) {
     Player* player = calloc(1, sizeof(Player));
+    Entity emptyNpc = {0};
+
     player->noCollision = false;
     player->isResting = false;
     player->ch = '@';
@@ -12,6 +14,7 @@ Player* CreatePlayer(Position start_pos) {
     player->invTail = 0;
     player->pos.y = start_pos.y;
     player->pos.x = start_pos.x;
+    player->follower = emptyNpc;
     for(int i = 0; i < MAX_ABILITIES; i++){
         player->playerClass.abilities[i] = NoAbility();
     }

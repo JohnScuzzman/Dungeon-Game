@@ -25,4 +25,27 @@ typedef enum {
     NPC_END
 } NPCs;
 
+typedef enum {
+    NULL_COMBAT_PROFILE,
+    MELEE_AGRESSIVE,
+    MELEE_SKIRMISHER,
+    MELEE_TIMID,
+    RANGED_AGGRESSIVE,
+    RANGED_SKIRMISHER,
+    RANGED_TIMID,
+    CASTER_AGRESSIVE,
+    CASTER_SKIRMISHER,
+    CASTER_TIMID,
+    SNIPER,
+    HARASSER,
+    AMBUSHER,
+    FLANKER,
+    IMMOBILE,
+    TURRET,
+    TANK,
+    HEALER,
+    SUPPORT,
+    END_COMBAT_PROFILE
+} CombatProfiles;
+
 #endif

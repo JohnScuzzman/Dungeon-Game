@@ -18,6 +18,8 @@ const int LVL_EXP_VALUES[MAX_LEVEL] = {
   LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
 };
 int MAX_MONSTER_NAME = 33;
+int MAX_NPCS = 512;
+int MAX_ONSCREEN_NPCS = 64;
 int MAP_HEIGHT = 50;
 int MAP_WIDTH = 125;
 int LOG_HEIGHT = 22;
@@ -33,6 +35,8 @@ int ENTITY_ID  = 256; // accounting for a theorhetical 256 monsters
 Player* player; //player->equippedWeapon.DMG
 Entity** map;
 Entity* mptr; 
+Entity* nptr;
+Entity* npcs;
 CombatHistory* combatHistory;
 LogQueue* q;
 Item* items;
@@ -92,6 +96,12 @@ int main(void)
     /* Make # of rooms -1 number of monsters. */
     /* Point mptr at monsterlist[0]. */
     mptr = MonsterList(n_monsters);
+
+    /* Generate empty npc list of (current) size 64 for localized floor use*/
+    nptr = NPCList(MAX_ONSCREEN_NPCS);
+
+    /* Generate global list of npcs similar to items*/
+    // npcs = NPCList(MAX_NPCS);
 
     /* Create a starting position for player and setup the floor in map.c*/
     /* Pass the monsterList to populate it.*/
