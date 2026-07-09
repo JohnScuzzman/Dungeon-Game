@@ -38,47 +38,39 @@ bool PlayerInput(int input, LogQueue *q, int* n_monsters, int* playerRegen, int*
             return true;
         case KEY_UP:
             newPos.y--;
-            MovePlayer(newPos, combatHistory, n_monsters);
-            return true;
+            return MovePlayer(newPos, combatHistory, n_monsters);
         //move down
         case KEY_DOWN:
             newPos.y++;
-            MovePlayer(newPos, combatHistory, n_monsters);
-            return true;
+            return MovePlayer(newPos, combatHistory, n_monsters);
         //move left
         case KEY_LEFT:
             newPos.x--;
-            MovePlayer(newPos, combatHistory, n_monsters);
-            return true;
+            return MovePlayer(newPos, combatHistory, n_monsters);
         //move right
         case KEY_RIGHT:
             newPos.x++;
-            MovePlayer(newPos, combatHistory, n_monsters);
-            return true;
+            return MovePlayer(newPos, combatHistory, n_monsters);
         //move up and left with insert
         case KEY_HOME:
             newPos.y--;
             newPos.x--;
-            MovePlayer(newPos, combatHistory, n_monsters);
-            return true;
+            return MovePlayer(newPos, combatHistory, n_monsters);
         //move down and left with End
         case KEY_END:
             newPos.y++;
             newPos.x--;
-            MovePlayer(newPos, combatHistory, n_monsters);
-            return true;
+            return MovePlayer(newPos, combatHistory, n_monsters);
         //move down and right with pagedown
         case KEY_NPAGE:
             newPos.y++;
             newPos.x++;
-            MovePlayer(newPos, combatHistory, n_monsters);
-            return true;
+            return MovePlayer(newPos, combatHistory, n_monsters);
         //move up and right with pageup
         case KEY_PPAGE:
             newPos.y--;
             newPos.x++;
-            MovePlayer(newPos, combatHistory, n_monsters);
-            return true;
+            return MovePlayer(newPos, combatHistory, n_monsters);
         case 1005: // keypad center
             return true;
         case 1040: // keypad center
@@ -127,7 +119,7 @@ bool PlayerInput(int input, LogQueue *q, int* n_monsters, int* playerRegen, int*
 }
 
 // Test for floor tile, move if one is detected.
-void MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) { 
+bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) { 
     if (map[newPos.y][newPos.x].noCollision && !combatHistory->monsterKilled) {
         // Update FOV
         ClearFOV(player);
@@ -135,27 +127,27 @@ void MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
         player->pos.x = newPos.x;
         MakeFOV(player);
         combatHistory->playerCombat = false;
-        return;
+        return true;
     }
     // Attempted to move into monster, flag and prepare for combat.
     else if (map[newPos.y][newPos.x].entityType == MONSTER && !combatHistory->monsterKilled){
         combatHistory->playerCombat = true;
         combatHistory->defender = map[newPos.y][newPos.x];
-        return;
+        return true;
     }
     // Stairway down, make new level.
     else if (map[newPos.y][newPos.x].entityType == STAIRS) {
-        dungeonInfo->currentFloor++;
-        MakeNewLevel(n_monsters);
+        if(MakeDescendWindow()) {
+            dungeonInfo->currentFloor++;
+            MakeNewLevel(n_monsters);
+            return true;
+        }
     }
-    // else if (map[newPos.y][newPos.x].entityType == CHEST) {
-    //     MakeInventoryMenu();
-    // }
     else if (!combatHistory->monsterKilled){
         combatHistory->monsterKilled = false;
-        return;
+        return false;
     }
-
+    else return false;
 }
 
 void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMove) {

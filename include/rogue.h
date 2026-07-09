@@ -388,6 +388,11 @@ Room CreateRoom(int y, int x, int height, int width);
 void ConnectRooms(Position centerOne, Position centerTwo);
 void AddChestToRoom(Position center, int width, int height);
 
+// menu_dialogue.c functions
+bool MakeDescendWindow();
+bool ProcessDescendSelect(int choice, WINDOW* descend);
+void RenderDescendMenu(WINDOW *descend, int cursor, int n_options, char** options);
+
 //menu_inventory.c functions
 bool MakeInventoryMenu();
 bool MakeItemOptionsWindow(Item** playerInv, int choice, int n_options, WINDOW *menu, WINDOW *loot);
@@ -445,7 +450,7 @@ void FollowPlayer(Entity* npc);
 // player.c functions
 bool CheckPlayerAdjacent(Position origin);
 void ManaRegen(int *manaRegen);
-void MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters);
+bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters);
 bool PlayerInput(int input, LogQueue *q, int* n_monsters, int* playerRegen, int* manaRegen);
 void PlayerRegen(int *playerRegen);
 void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMove);

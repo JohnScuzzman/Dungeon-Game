@@ -117,11 +117,11 @@ void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_
 bool MakeLootOptionsWindow(Item** playerInv, Item** entityInv, int choice, int n_options, WINDOW *menu, WINDOW *loot) {
 
     char *options[] = {
-    "Take",
-    "Take All",
-    "Equip",
-    "Examine",
-    "Exit",
+        "Take",
+        "Take All",
+        "Equip",
+        "Examine",
+        "Exit",
     };
 
     //Sorry about the magic numbers
