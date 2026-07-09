@@ -46,6 +46,7 @@ bool SavePlayerToJSON(const char *filename, const Player* player) {
     cJSON_AddItemToObject(root, "passiveAbility", SerializePlayerAbility(&player->passiveAbility));
     cJSON_AddItemToObject(root, "playerClass", SerializePlayerClass(&player->playerClass));
     cJSON_AddItemToObject(root, "inventory", SerializePlayerInventory(player));
+    cJSON_AddItemToObject(root, "follower", SerializeEntity(&player->follower));
     cJSON_AddStringToObject(root, "playerName", player->playerName);
     cJSON_AddStringToObject(root, "playerRace", player->playerRace);
     
@@ -258,6 +259,70 @@ cJSON* SerializePlayerInventory(const Player* player) {
         }
     }
     return playerInvArray;
+}
+
+cJSON* SerializeEntityInventory(const Entity* entity) {
+    cJSON* entityInvArray = cJSON_CreateArray();
+    if (entityInvArray == NULL) return NULL;
+   
+    for(int i = 0; i < MAX_INVENTORY_SIZE; i++){
+        cJSON* entityItemObj = SerializeItem(&entity->inventory[i]);
+
+        if (entityItemObj != NULL) {
+            cJSON_AddItemToArray(entityInvArray, entityItemObj);
+        }
+    }
+    return entityInvArray;
+}
+
+cJSON* SerializeEntity(const Entity* entity) {
+    cJSON* entityObj = cJSON_CreateObject();
+    if (entityObj == NULL) return NULL;
+   
+    cJSON_AddBoolToObject(entityObj, "aggroFlag", entity->aggroFlag);
+    cJSON_AddBoolToObject(entityObj, "hasMoved", entity->hasMoved);
+    cJSON_AddBoolToObject(entityObj, "noCollision", entity->noCollision);
+    cJSON_AddBoolToObject(entityObj, "seen", entity->seen);
+    cJSON_AddBoolToObject(entityObj, "transparent", entity->transparent);
+    cJSON_AddBoolToObject(entityObj, "visible", entity->visible);
+    cJSON_AddBoolToObject(entityObj, "seenByPlayer", entity->seenByPlayer);
+    cJSON_AddBoolToObject(entityObj, "wasLooted", entity->wasLooted);
+    cJSON_AddBoolToObject(entityObj, "wasReplaced", entity->wasReplaced);
+    cJSON_AddStringToObject(entityObj, "ch", &entity->ch);
+    cJSON_AddStringToObject(entityObj, "ch", &entity->staticCh);
+    cJSON_AddNumberToObject(entityObj, "aggroRange", entity->aggroRange);
+    cJSON_AddNumberToObject(entityObj, "color", entity->color);
+    cJSON_AddNumberToObject(entityObj, "entityID", entity->entityID);
+    cJSON_AddNumberToObject(entityObj, "entityType", entity->entityType);
+    cJSON_AddNumberToObject(entityObj, "invTail", entity->invTail);
+    cJSON_AddNumberToObject(entityObj, "invHead", entity->invHead);
+    cJSON_AddItemToObject(entityObj, "entityStats", SerializePlayerStats(&entity->entityStats));
+    cJSON_AddItemToObject(entityObj, "entityPosition", SerializePlayerPOS(&entity->pos));
+    cJSON_AddItemToObject(entityObj, "entityLastPosition", SerializePlayerPOS(&entity->lastPos));
+    cJSON_AddItemToObject(entityObj, "entityPlayerLastPosition", SerializePlayerPOS(&entity->playerLastPos));
+    cJSON_AddItemToObject(entityObj, "entityMapInfo", SerializeMapInfo(&entity->mapInfo));
+    cJSON_AddItemToObject(entityObj, "entityArmor", SerializePlayerArmor(&entity->entityArmor));
+    cJSON_AddItemToObject(entityObj, "entityWeapon", SerializePlayerWeapon(&entity->entityWeapon));
+    cJSON_AddItemToObject(entityObj, "entityInv", SerializeEntityInventory(entity));
+    cJSON_AddStringToObject(entityObj, "entityName", entity->entityName);
+    cJSON_AddStringToObject(entityObj, "entityRace", entity->entityRace);
+    cJSON_AddStringToObject(entityObj, "entityClass", entity->entityClass);
+
+    return entityObj;
+}
+
+cJSON* SerializeMapInfo(const MapInfo* mapInfo) {
+    cJSON* mapInfoObj = cJSON_CreateObject();
+    if (mapInfoObj == NULL) return NULL;
+
+    cJSON_AddBoolToObject(mapInfoObj, "oldSeen", mapInfo->oldSeen);
+    cJSON_AddBoolToObject(mapInfoObj, "newSeen", mapInfo->newSeen);
+    cJSON_AddBoolToObject(mapInfoObj, "oldVisible", mapInfo->oldVisible);
+    cJSON_AddBoolToObject(mapInfoObj, "newVisible", mapInfo->newVisible);
+    cJSON_AddStringToObject(mapInfoObj, "oldChar", &mapInfo->oldChar);
+    cJSON_AddStringToObject(mapInfoObj, "newChar", &mapInfo->newChar);
+   
+    return mapInfoObj;
 }
 
 /*

@@ -82,6 +82,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     MakeFOV(player);
     DrawEverything();
+    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
     // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
