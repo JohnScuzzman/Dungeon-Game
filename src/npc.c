@@ -9,6 +9,40 @@ Entity* FindNPCInList(int entityID, int maxNPCS) {
     return NULL;
 }
 
+/* Basic logic for how a friendly npc follower interacts and moves.*/
+void FollowerLogic(Entity* follower, int n_monsters) {
+    for (int i = 0; i < n_monsters; i++) {
+        /* If an enemy monster is in aggro range and not adjacent, move towards them.*/
+        if (((GetDistance(player->follower.pos, (mptr + i)->pos)) <= (player->follower.aggroRange)) && 
+            (!CheckMonsterAdjacent(player->follower.pos, (mptr + i))) &&
+            LineOfSight(player->follower.pos, (mptr + i)->pos) &&
+            (!player->follower.hasMoved) &&
+            (mptr + i)->visible) {
+                int closestMonster = FindClosestMonster(mptr, n_monsters);
+                MoveTowards(&player->follower, (mptr + closestMonster)->pos);
+                player->follower.hasMoved = false;
+                return;
+        }
+        /* If a monster is adjacent, don't move, and attack them.*/
+        if (CheckMonsterAdjacent(player->follower.pos, (mptr + i))) {
+            // make them attack monster if there is one adjacent
+            ResetCombatHistory();
+            if(NPCAttackEntity(&player->follower, (mptr + i), combatHistory, n_monsters)) {
+                player->follower.hasMoved = false;
+                return;
+            }
+        }
+    }
+    /* otherwise, move towards the player.*/
+    if (!player->follower.hasMoved) {
+        FollowPlayer(&player->follower); //TODO: Do something with this bool later.
+        player->follower.hasMoved = false;
+        return;
+    }
+    else player->follower.hasMoved = false;
+    return;
+}
+
 void FollowPlayer(Entity* npc) {
     npc->hasMoved = false;
     if(MoveTowards(npc, player->pos)){

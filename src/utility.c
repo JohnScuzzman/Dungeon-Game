@@ -15,6 +15,7 @@ bool CheckAdjacent(Position origin, Position target) {
 }
 
 bool CheckMonsterAdjacent(Position origin, Entity* monster) {
+    if(monster->entityType == CORPSE) return false;
     if (origin.y == monster->pos.y || origin.y == (monster->pos.y - 1) || origin.y == (monster->pos.y + 1)) {
         if (origin.x == (monster->pos.x - 1) || origin.x == (monster->pos.x + 1)) {
             return true;

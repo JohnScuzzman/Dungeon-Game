@@ -476,18 +476,7 @@ void CheckPassiveAbilities(int n_monsters) {
             }
             break;
         case SUMMON_SKELETON:
-            for (int i = 0; i < n_monsters; i++) {
-                if (CheckMonsterAdjacent(player->follower.pos, (mptr + i)) && (mptr + i)->entityType != CORPSE) {
-                    // make them attack monster if there is one adjacent
-                    if(NPCAttackEntity(&player->follower, (mptr + i), combatHistory, n_monsters)) return;
-                }
-            }
-            if (!player->follower.hasMoved) {
-                FollowPlayer(&player->follower);
-                player->follower.hasMoved = false;
-            }
-            else player->follower.hasMoved = false;
-            break;
+            FollowerLogic(&player->follower, n_monsters);
         default:
             break;
     }
