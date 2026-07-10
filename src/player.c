@@ -143,6 +143,18 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
             return true;
         }
     }
+    else if (map[newPos.y][newPos.x].entityID == player->follower.entityID) {
+        AssignFloor(player->follower.pos.x, player->follower.pos.y);
+        ClearFOV(player);
+        player->follower.pos = player->pos;
+        player->pos.y = newPos.y;
+        player->pos.x = newPos.x;
+        UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
+        // UpdateNPCVisible(nptr, player);
+        MakeFOV(player);
+        combatHistory->playerCombat = false;
+        return true;
+    }
     else if (!combatHistory->monsterKilled){
         combatHistory->monsterKilled = false;
         return false;
