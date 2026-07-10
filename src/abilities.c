@@ -255,8 +255,7 @@ void CastSummonSkeleton() {
     strcpy(combatHistory->event, "Choose where to place a skeleton.");
     QueueEvent(q, combatHistory->event);
     DrawCombatLog();
-    // char event[] = "Choose a direction to Dash.";
-    // DrawCombatEvent(event);
+
     while((ch = getch()) != 10 && ch != 32 && !(CheckEscape(ch))) {
         RemoveCursor(y, x, 1);
         x = player->pos.x;
@@ -308,9 +307,8 @@ void CastSummonSkeleton() {
     skeletonPOS.x = x;
     if (map[y][x].noCollision && map[y][x].visible){
         player->playerStats.mana -= (player->equippedAbility.manaCost);
-        int NPCInList = AddToNPCList(nptr, skeletonPOS, NPC_SKELETON_WARRIOR);
-        player->follower = nptr[NPCInList];
-        UpdateNPCMap(&nptr[NPCInList], MAX_ONSCREEN_NPCS);
+        // int NPCInList = AddToNPCList(nptr, skeletonPOS, NPC_SKELETON_WARRIOR);
+        player->follower = AddToNPCList(nptr, skeletonPOS, NPC_SKELETON_WARRIOR);
         ClearFOV(player);
         MakeFOV(player);
     }
@@ -467,20 +465,27 @@ void CheckPassiveAbilities(int n_monsters) {
     }
     switch(player->passiveAbility.abilityID) {
         case VENGEANCE:
-        if((combatHistory->attackerDMG > 0) && (combatHistory->defender.entityType == MONSTER)) {
-            strcpy(combatHistory->event, "You take vengeance on your enemy.");
-            QueueEvent(q, combatHistory->event);
-            Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
-            if (target->entityType == MONSTER) {
-                combatHistory->playerCombat = AttackEntity(target, combatHistory, player, n_monsters);
-                ResetCombatHistory();
+            if((combatHistory->attackerDMG > 0) && (combatHistory->defender.entityType == MONSTER)) {
+                strcpy(combatHistory->event, "You take vengeance on your enemy.");
+                QueueEvent(q, combatHistory->event);
+                Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
+                if (target->entityType == MONSTER) {
+                    combatHistory->playerCombat = AttackEntity(target, combatHistory, player, n_monsters);
+                    ResetCombatHistory();
+                }
             }
-        }
+            break;
         case SUMMON_SKELETON:
+            for (int i = 0; i < n_monsters; i++) {
+                if (CheckMonsterAdjacent(player->follower.pos, (mptr + i)) && (mptr + i)->entityType != CORPSE) {
+                    // make them attack monster if there is one adjacent
+                    if(NPCAttackEntity(&player->follower, (mptr + i), combatHistory, n_monsters)) return;
+                }
+            }
             FollowPlayer(&player->follower);
-        break;
+            break;
         default:
-        break;
+            break;
     }
 }
 

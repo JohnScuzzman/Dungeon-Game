@@ -113,6 +113,22 @@ void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int player
     QueueEvent(q, combatHistory->event);
 }
 
+void RecordNPCKill(Entity* defender, Entity* attacker, CombatHistory* combatHistory, int attackerAccRoll, int attackerDMG) {
+    char eventDMGBuffer[DMG_BUFFER];
+    combatHistory->defender = *defender;
+    combatHistory->playerAccRoll = attackerAccRoll;
+    combatHistory->playerDMG = attackerDMG;
+    combatHistory->playerResult = false;
+    combatHistory->monsterKilled = true;
+    strcpy(combatHistory->event, "The ");
+    strcat(combatHistory->event, attacker->entityName);
+    strcat(combatHistory->event, " Kills the ");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, combatHistory->defender.entityName);
+    strcat(combatHistory->event, ".");
+    QueueEvent(q, combatHistory->event);
+}
+
 void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC) {
     combatHistory->defender = *attacker;
     combatHistory->playerAccRoll = playerAccRoll;
@@ -122,6 +138,21 @@ void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int player
     RecordAbilityUse();
     strcpy(combatHistory->event, "You miss the ");
     strcat(combatHistory->event, combatHistory->defender.entityName);
+    strcat(combatHistory->event, ".");
+    QueueEvent(q, combatHistory->event);
+}
+
+void RecordNPCMiss(Entity* defender, Entity* attackingNPC, CombatHistory* combatHistory, int attackerAccRoll, int defenderAC) {
+    combatHistory->defender = *defender;
+    combatHistory->playerAccRoll = attackerAccRoll;
+    combatHistory->defenderAC = defenderAC;
+    combatHistory->playerResult = false;
+    combatHistory->monsterKilled = false;
+    strcpy(combatHistory->event, "The ");
+    strcat(combatHistory->event, attackingNPC->entityName);
+    strcat(combatHistory->event, " missed the ");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, defender->entityName);
     strcat(combatHistory->event, ".");
     QueueEvent(q, combatHistory->event);
 }
@@ -140,6 +171,24 @@ void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerA
     snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", playerDMG);
     strcat(combatHistory->event, eventDMGBuffer);
     // strcat(combatHistory->event, " .\n");
+    QueueEvent(q, combatHistory->event);
+}
+
+void RecordNPCHit(Entity* defender, Entity* attackingNPC, CombatHistory* combatHistory, int attackerAccRoll, int attackerDMG) {
+    char eventDMGBuffer[DMG_BUFFER];
+    combatHistory->defender = *defender;
+    combatHistory->playerAccRoll = attackerAccRoll;
+    combatHistory->playerDMG = attackerDMG;
+    combatHistory->monsterKilled = false;
+    combatHistory->playerResult = false;
+    strcpy(combatHistory->event, "The ");
+    strcat(combatHistory->event, attackingNPC->entityName);
+    strcat(combatHistory->event, " hits the ");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, combatHistory->defender.entityName);
+    strcat(combatHistory->event, " for ");
+    snprintf(eventDMGBuffer, sizeof(eventDMGBuffer), "%d.", attackerDMG);
+    strcat(combatHistory->event, eventDMGBuffer);
     QueueEvent(q, combatHistory->event);
 }
 

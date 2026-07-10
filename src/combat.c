@@ -48,6 +48,26 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     return true;
 }
 
+bool NPCAttackEntity(Entity* attacker, Entity* defender, CombatHistory* combatHistory, int n_monsters) {
+    int defenderAC = CalculateEntityAC(defender);
+    int attackerAccRoll = CalculateEntityAccuracy(attacker);
+    int attackerDMG = CalculateEntityDMG(attacker);
+    int defenderHP = defender->entityStats.HP;
+
+    if (attackerAccRoll >= defenderAC) {
+        defender->entityStats.HP = (defenderHP - attackerDMG);
+        if (defender->entityStats.HP <= 0) {
+            RecordNPCKill(defender, attacker, combatHistory, attackerAccRoll, attackerDMG);
+            AssignCorpse(defender, n_monsters);
+            return true;
+        }
+        RecordNPCHit(defender, attacker, combatHistory, attackerAccRoll, attackerDMG);
+        return true;
+    }
+    RecordNPCMiss(defender, attacker, combatHistory, attackerAccRoll, defenderAC);
+    return true;
+}
+
 /* Called from PlayerInput in player.c
 Returns true if the selected combat ability detects a monster in its range and LOS of player.
 Melee abilties still use this function, but with a range of 1.

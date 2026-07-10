@@ -7,20 +7,21 @@ Entity* NPCList(int totalNpcs) {
     return npc_ptr; // return pointer to the array.
 }
 
-/* Returns the position in localized list where the NPC was just added. */
+/* Returns the NPC that was just added. */
 /* Used for adding an NPC to the map to later track its actions, movement, etc.*/
 /* Return MAX_ONSCREEN_NPCS if failed to find or make*/
-int AddToNPCList(Entity* npcs, Position pos, int npcType) {
+Entity AddToNPCList(Entity* npcs, Position pos, int npcType) {
+    Entity emptyNPC = {0};
     if (npcs[MAX_ONSCREEN_NPCS - 1].entityType == NPC) {
-        return MAX_ONSCREEN_NPCS;
+        return emptyNPC;
     }
     for (int i = 0; i < MAX_ONSCREEN_NPCS; i++) {
         if (npcs[i].entityType != NPC) {
-            npcs[i] = AssignNPC(pos, npcType, i);
-            return i;
+            npcs[i] = AssignNPC(pos, npcType, i + 64);
+            return npcs[i];
         }
     }
-    return MAX_ONSCREEN_NPCS;
+    return emptyNPC;
 }
 
 Entity AssignNPC(Position pos, int npcType, int npcID) {
@@ -37,7 +38,7 @@ Entity AssignNPC(Position pos, int npcType, int npcID) {
         npc.entityStats.mana = npc.entityStats.maxMana;
         npc.entityStats.HP = npc.entityStats.maxHP;
         npc.entityStats.EXP = 0;
-        PlaceNPC(&npc, pos);
+        // PlaceNPC(&npc, pos);
         return npc;
     }
     else {
@@ -58,7 +59,7 @@ Entity AssignUniqueNPC(Position pos, int npcName, int npcID) {
         }
         npc.entityStats.mana = npc.entityStats.maxMana;
         npc.entityStats.HP = npc.entityStats.maxHP;
-        PlaceNPC(&npc, pos);
+        // PlaceNPC(&npc, pos);
         return npc;
     }
     else {
@@ -82,7 +83,7 @@ void AssignNPCDefaults(Entity* npc, Position n_pos, int npcID) {
     npc->seenByPlayer = false;
     npc->wasLooted = false;
     npc->wasReplaced = false;
-    npc->entityID = ENTITY_ID + npcID; // LIES BETWEEN 256 AND 320, 64 TOTAL
+    npc->entityID = npcID; // LIES BETWEEN 256 AND 320, 64 TOTAL
     npc->entityType = NPC;
     npc->color = COLOR_PAIR(VISIBLE_COLOR);
     npc->pos.y = n_pos.y;
@@ -93,8 +94,8 @@ void AssignNPCDefaults(Entity* npc, Position n_pos, int npcID) {
     npc->playerLastPos.y = 0;
 }
 
-void PlaceNPC(Entity* npc, Position pos) {
-    AssignFloor(pos.x, pos.y);
-    map[pos.y][pos.x] = *npc;
-}
+// void PlaceNPC(Entity* npc, Position pos) {
+//     AssignFloor(pos.x, pos.y);
+//     map[pos.y][pos.x] = *npc;
+// }
 

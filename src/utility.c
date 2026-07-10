@@ -1,5 +1,33 @@
 #include <rogue.h>
 
+bool CheckAdjacent(Position origin, Position target) {
+    if (origin.y == target.y || origin.y == (target.y - 1) || origin.y == (target.y + 1)) {
+        if (origin.x == (target.x - 1) || origin.x == (target.x + 1)) {
+            return true;
+    }
+    }
+    if (origin.x == target.x || origin.x == (target.x - 1) || origin.x == (target.x + 1)){
+        if (origin.y == (target.y - 1) || origin.y == (target.y + 1)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool CheckMonsterAdjacent(Position origin, Entity* monster) {
+    if (origin.y == monster->pos.y || origin.y == (monster->pos.y - 1) || origin.y == (monster->pos.y + 1)) {
+        if (origin.x == (monster->pos.x - 1) || origin.x == (monster->pos.x + 1)) {
+            return true;
+    }
+    }
+    if (origin.x == monster->pos.x || origin.x == (monster->pos.x - 1) || origin.x == (monster->pos.x + 1)){
+        if (origin.y == (monster->pos.y - 1) || origin.y == (monster->pos.y + 1)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /*
 Helper method for Sort Inventory.
 Currently not implemented but will be used later in conjuction with Q-sort.

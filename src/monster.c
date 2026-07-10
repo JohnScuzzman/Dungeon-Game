@@ -98,7 +98,7 @@ void UpdateMonsterMap(Entity* monster, int n_monsters) {
             monster[i] = map[y][x];
             map[y][x] = monster[i];
         }
-        else if((monster + i)->entityType == CORPSE && !(monster + i)->wasReplaced && !map[y][x].wasLooted) {
+        else if((monster + i)->entityType == CORPSE && !(monster + i)->wasReplaced && !map[y][x].wasLooted && map[y][x].entityType == FLOOR) {
             map[y][x] = monster[i];
         }
     }
