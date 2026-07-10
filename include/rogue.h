@@ -232,6 +232,7 @@ int CalculateEntityAC(Entity* defender);
 int CalculatePlayerAccuracy();
 int CalculatePlayerDamage();
 int CalculatePlayerAC();
+bool NPCAttackEntity(Entity* attacker, Entity* defender, CombatHistory* combatHistory, int n_monsters);
 bool ProcessRangedAttack(bool abilityUsed, int x, int y);
 void ResetCombatHistory();
 bool ShootTarget(int x, int y);
@@ -239,7 +240,7 @@ bool ShootTargetWithAbility(int x, int y);
 bool ShootWithAmmo(int ammoType, int x, int y);
 bool ShootAbilityWithAmmo(int ammoType, int x, int y);
 
-// combatlog.c functions
+// combat_log.c functions
 void DequeueEvent (LogQueue *q);
 bool IsEmpty(LogQueue *q);
 bool IsFull(LogQueue *q);
@@ -251,6 +252,9 @@ void PlayerPrepareCombat(int n_monsters);
 bool PlayerRangedAttack(int n_monsters);
 void PrintCombatQueue (LogQueue*q, WINDOW *pad);
 void QueueEvent(LogQueue *q, char* event);
+void RecordNPCHit(Entity* defender, Entity* attackingNPC, CombatHistory* combatHistory, int attackerAccRoll, int attackerDMG);
+void RecordNPCKill(Entity* defender, Entity* attacker, CombatHistory* combatHistory, int attackerAccRoll, int attackerDMG);
+void RecordNPCMiss(Entity* defender, Entity* attackingNPC, CombatHistory* combatHistory, int attackerAccRoll, int defenderAC);
 void RecordPlayerKill(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
 void RecordPlayerMiss(Entity* attacker, CombatHistory* combatHistory, int playerAccRoll, int defenderAC);
 void RecordPlayerHit(Entity* defender, CombatHistory* combatHistory, int playerAccRoll, int playerDMG);
@@ -358,11 +362,11 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID);
 
 // make_npcs.c functions
 Entity* NPCList(int totalNpcs);
-int AddToNPCList(Entity* npcs, Position pos, int npcType);
+Entity AddToNPCList(Entity* npcs, Position pos, int npcType);
 Entity AssignNPC(Position pos, int npcType, int npcID);
 void AssignNPCDefaults(Entity* npc, Position n_pos, int npcID);
 Entity AssignUniqueNPC(Position pos, int npcName, int npcID);
-void PlaceNPC(Entity* npc, Position pos);
+// void PlaceNPC(Entity* npc, Position pos);
 
 // make_player.c functions
 bool AskPlayerInfo(Player* player);
@@ -480,6 +484,8 @@ cJSON* SerializeEntity(const Entity* entity);
 cJSON* SerializeMapInfo(const MapInfo* mapInfo);
 
 // utility.c functions
+bool CheckAdjacent(Position origin, Position target);
+bool CheckMonsterAdjacent(Position origin, Entity* monster);
 bool CheckEscape(int ch);
 int CompareStrings(const void *a, const void *b);
 void Cursor(int x, int y, int length);

@@ -40,7 +40,7 @@ void UpdateNPCMap(Entity* npc, int maxNPCS) {
         int y, x;
         y = (npc + i)->pos.y;
         x = (npc + i)->pos.x;
-        if((npc + i)->entityType == NPC) map[y][x] = npc[i];
+        if((npc + i)->entityType == NPC && (npc + i)->entityID != player->follower.entityID) map[y][x] = npc[i];
     }
 }
 
