@@ -452,6 +452,7 @@ void MoveUpLeft(Entity* npc);
 
 // npc.c functions
 Entity* FindNPCInList(int entityID, int maxNPCS);
+void FollowerLogic(Entity* follower, int n_monsters);
 void FollowPlayer(Entity* npc);
 void KeepNPCIntegrity(Entity* npc);
 void KeepNPCMapIntegrity(Entity* npc);
