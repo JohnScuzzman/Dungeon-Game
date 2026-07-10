@@ -482,7 +482,11 @@ void CheckPassiveAbilities(int n_monsters) {
                     if(NPCAttackEntity(&player->follower, (mptr + i), combatHistory, n_monsters)) return;
                 }
             }
-            FollowPlayer(&player->follower);
+            if (!player->follower.hasMoved) {
+                FollowPlayer(&player->follower);
+                player->follower.hasMoved = false;
+            }
+            else player->follower.hasMoved = false;
             break;
         default:
             break;

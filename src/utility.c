@@ -85,7 +85,7 @@ int RandomNumber(int min, int max) {
 }
 
 void RecordEntitySeen(Entity* entity) {
-    if(!entity->seenByPlayer){
+    if(!entity->seenByPlayer && entity->entityID != player->follower.entityID){
         strcpy(combatHistory->event, "You see a ");
         strcat(combatHistory->event, entity->entityName);
         QueueEvent(q, combatHistory->event);
