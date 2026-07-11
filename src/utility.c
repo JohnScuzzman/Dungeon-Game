@@ -129,3 +129,61 @@ int EntityDirection(Entity* entity) {
         return NORTH;
     }
 }
+
+/*
+Tries to place the passed entity next to the player.
+returns false if there is not a valid tile to place it.
+*/
+bool PlaceAdjacentToPlayer(Entity* entity) {
+    Position closestTile = CheckAdjacentCollisions(entity->pos);
+    if (closestTile.x == entity->pos.x && closestTile.y == entity->pos.y) return false;
+    entity->pos = closestTile;
+    return true;
+}
+
+/*
+Attempts to find the closest adjacent tile without collision.
+If fails, returns the original pos.
+*/
+Position CheckAdjacentCollisions(Position pos) { 
+    int y = pos.y;
+    int x = pos.x;  
+    Position temp = pos;
+    if (map[(y - 1)][(x - 1)].noCollision) {
+        temp.x--;
+        temp.y--;
+        return temp;
+    }
+    else if (map[(y + 1)][(x - 1)].noCollision) {
+        temp.x--;
+        temp.y++;
+        return temp;
+    }
+    else if (map[(y + 1)][(x + 1)].noCollision) {
+        temp.x--;
+        temp.y++;
+        return temp;
+    }
+    else if (map[(y - 1)][(x + 1)].noCollision) {
+        temp.x++;
+        temp.y--;
+        return temp;
+    }
+    if (map[(y - 1)][x].noCollision) {
+        temp.y--;
+        return temp;
+    }
+    else if (map[y][(x - 1)].noCollision) {
+        temp.x--;
+        return temp;
+    }
+    else if (map[(y + 1)][x].noCollision) {
+        temp.y++;
+        return temp;
+    }
+    else if (map[y][(x + 1)].noCollision) {
+        temp.x++;
+        return temp;
+    }
+    return temp;
+}

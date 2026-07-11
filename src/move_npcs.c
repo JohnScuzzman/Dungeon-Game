@@ -7,7 +7,7 @@ Returns true if entity moved towards given coords.
 bool MoveTowards(Entity* entity, Position pos) {
     int x = entity->pos.x;
     int y = entity->pos.y;
-    if (!CheckPlayerAdjacent(entity->pos)) {
+    if (!CheckPlayerAdjacent(entity->pos) || entity->entityID == player->follower.entityID) {
         // up and left
         // up & left
         if (y > pos.y && x > pos.x) {

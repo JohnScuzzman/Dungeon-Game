@@ -257,10 +257,16 @@ void CastSummonSkeleton() {
         player->playerStats.mana -= (player->equippedAbility.manaCost);
         // int NPCInList = AddToNPCList(nptr, skeletonPOS, NPC_SKELETON_WARRIOR);
         player->follower = AddToNPCList(nptr, skeletonPOS, NPC_SKELETON_WARRIOR);
+        player->follower.hasMoved = true;
+        UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
+        UpdateNPCVisible(nptr, player);
         ClearFOV(player);
         MakeFOV(player);
     }
     else{
+        player->abilityTimer = 0;
+        player->equippedAbility.abilityID = NO_ABILITY;
+        player->passiveAbility.abilityID = NO_ABILITY;
         strcpy(combatHistory->event, "Could not Place skeleton.");
         QueueEvent(q, combatHistory->event);
     }
