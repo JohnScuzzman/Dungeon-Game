@@ -1,51 +1,10 @@
 #include <rogue.h>
 #define DMG_BUFFER 8
-#define MAX_ENTITY 
-
 
 void CastCharge(){
     ChargePlacement();
     player->playerStats.mana -= (player->equippedAbility.manaCost);
     // combatHistory->defender.hasMoved = true; // "stun" the enemy.
-}
-
-void ChargePlacement(){
-    if((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)) {
-        player->pos.x = ((combatHistory->defender.pos.x) - 1);
-        player->pos.y = ((combatHistory->defender.pos.y) - 1);
-        return;
-    }
-    else if ((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) - 1);
-        player->pos.y = ((combatHistory->defender.pos.y) + 1);
-        return;
-    }
-    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) + 1);
-        player->pos.y = ((combatHistory->defender.pos.y) - 1);
-        return;
-    }
-    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) + 1);
-        player->pos.y = ((combatHistory->defender.pos.y) + 1);
-        return;
-    }
-    else if ((player->pos.x) > (combatHistory->defender.pos.x) && (player->pos.y) == (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) + 1);
-        return;
-    }
-    else if ((player->pos.x) < (combatHistory->defender.pos.x) && (player->pos.y) == (combatHistory->defender.pos.y)){
-        player->pos.x = ((combatHistory->defender.pos.x) - 1);
-        return;
-    }
-    else if ((player->pos.x) == (combatHistory->defender.pos.x) && (player->pos.y) > (combatHistory->defender.pos.y)){
-        player->pos.y = ((combatHistory->defender.pos.y) + 1);
-        return;
-    }
-    else if ((player->pos.x) == (combatHistory->defender.pos.x) && (player->pos.y) < (combatHistory->defender.pos.y)){
-        player->pos.y = ((combatHistory->defender.pos.y) - 1);
-        return;
-    }
 }
 
 void CastDash() {
@@ -137,17 +96,6 @@ void CastDash() {
         strcpy(combatHistory->event, "Too far away to Dash.");
         QueueEvent(q, combatHistory->event);
     }
-}
-
-
-bool DashPOSHelper(int x, int y) {
-    if (map[y][x].noCollision) {
-        return true;
-    }
-    if (y == player->pos.y && x == player->pos.x){
-        return true;
-    }
-    return false;
 }
 
 void CastDrainLife(){
@@ -320,6 +268,7 @@ void CastSummonSkeleton() {
 
 /* 
 Undoes the bonus provided by fire volley in precombat effects.
+Since the bonus is given prior to combat, the casted version removes the bonus since casts occur after player's attack.
 */
 void CastFireVolley(){
     player->playerStats.mana -= (player->equippedAbility.manaCost);
@@ -354,184 +303,4 @@ void CastSelfRepair(){
         strcpy(combatHistory->event, "You are already at full HP.");
         QueueEvent(q, combatHistory->event);
     }
-}
-
-void RemoveSummonSkeleton() {
-    Entity emptyNPC = {0};
-
-    // Try and remove the NPC from the map here.
-    player->passiveAbility = NoAbility();
-    AssignFloor(player->follower.pos.x, player->follower.pos.y);
-    nptr[player->follower.entityID] = emptyNPC;
-    player->follower = emptyNPC;
-
-    strcpy(combatHistory->event, "Your skeleton crumbles to dust.");
-    QueueEvent(q, combatHistory->event);
-}
-
-/* When Ice Armors duration is up, remove the armor.*/
-void RemoveIceArmor(){
-    strcpy(combatHistory->event, "You're icy armor melts.");
-    QueueEvent(q, combatHistory->event);
-    int shieldVal = player->passiveAbility.miscStat;
-    player->playerStats.AC -= shieldVal;
-    player->passiveAbility = NoAbility();
-}
-
-void RemoveVengeance(){
-    strcpy(combatHistory->event, "You're thirst for revenge fades.");
-    QueueEvent(q, combatHistory->event);
-    player->passiveAbility = NoAbility();
-}
-
-/* Only applies to abilities that are attacks with effects.*/
-void PostCombatEffects() {
-    if (player->equippedAbility.postCombatEffects) {
-        PostCombatAbilities(player->equippedAbility.abilityID);
-    }
-    player->equippedAbility = NoAbility();
-}
-
-void PreCombatEffects() {
-    if (player->equippedAbility.preCombatEffects) {
-        PreCombatAbilities(player->equippedAbility.abilityID);
-    }
-}
-
-
-/* Called if the players input is processed in UsePlayerAbility from player.c, including attacking a monster.*/
-/* Handles both attacks and non attacking abilities.*/
-/* This runs before the monster attacks back, so healing the player will save them from an otherwise killing blow.*/
-/* If an ability is just an attack with no effects, no CastAbility function is needed.*/
-void PostCombatAbilities(int abilityID){
-    if ((player->playerStats.mana) >= (player->equippedAbility.manaCost)) {
-        switch (abilityID) {
-        case CHARGE: CastCharge();
-            break;
-        case DASH: CastDash();
-            break;
-        case DRAIN_LIFE: CastDrainLife();
-            break;
-        case FIRE_VOLLEY: CastFireVolley();
-            break;
-        case ICE_ARMOR: CastIceArmor();
-            break;
-        case SECOND_WIND: CastSecondWind();
-            break;
-        case SELF_REPAIR: CastSelfRepair();
-            break;
-        case SUMMON_SKELETON: CastSummonSkeleton();
-            break;
-        case VENGEANCE:
-            ResetCombatHistory();
-            CastVengeance();
-            break;
-        default:
-            break;
-        }
-
-        return;
-    }
-    else if ((player->playerStats.mana) < (player->equippedAbility.manaCost) && !(player->equippedAbility.isAttack)) {
-        NotEnoughMana();
-    }
-}
-
-/*
-Same as above, but happens prior to combat.
-*/
-void PreCombatAbilities(int abilityID) {
-    if ((player->playerStats.mana) >= (player->equippedAbility.manaCost)) {
-        switch (abilityID) {
-            case FIRE_VOLLEY:
-                if(CheckPlayerAdjacent(combatHistory->defender.pos)) {
-                    player->equippedAbility.abilitySave += 10;
-                }
-                else if (GetDistance(player->pos, combatHistory->defender.pos) <= 3) {
-                    player->equippedAbility.abilitySave += 4;
-                } 
-                break;
-            default:
-                break;
-        }
-    }
-}
-
-/* If the player has an active passive ability, deincrement the timer.*/
-/* If the timer reaches 0, undo the effects cooresponding to the ability.*/
-void CheckPassiveAbilities(int n_monsters) {
-    if(!DeincrementAbilityTimer()) {
-        ResetPassiveAbility(player->passiveAbility.abilityID);
-    }
-    switch(player->passiveAbility.abilityID) {
-        case VENGEANCE:
-            if((combatHistory->attackerDMG > 0) && (combatHistory->defender.entityType == MONSTER)) {
-                strcpy(combatHistory->event, "You take vengeance on your enemy.");
-                QueueEvent(q, combatHistory->event);
-                Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
-                if (target->entityType == MONSTER) {
-                    combatHistory->playerCombat = AttackEntity(target, combatHistory, player, n_monsters);
-                    ResetCombatHistory();
-                }
-            }
-            break;
-        case SUMMON_SKELETON:
-            FollowerLogic(&player->follower, n_monsters);
-        default:
-            break;
-    }
-}
-
-
-/* Returns true if the abilityTimer was deincremented.*/
-bool DeincrementAbilityTimer() {
-    if ((player->abilityTimer) > 0) {
-        player->abilityTimer--;
-        return true;
-    }
-    return false;
-}
-
-void ResetPassiveAbility(int abilityID) {
-        switch (abilityID) {
-        case ICE_ARMOR:
-            RemoveIceArmor();
-        break;
-        case SUMMON_SKELETON:
-            RemoveSummonSkeleton();
-        break;
-        case VENGEANCE:
-            RemoveVengeance();
-        break;
-        default:
-            player->passiveAbility = NoAbility();
-        break;
-    }
-
-}
-
-
-/* Called from PlayerRangedAttack in player.c*/
-/* We use PlayerRangedAttack since melee abilities technically have a range of 1.*/
-/* A normal melee attack is made when a player simply moves into a monster, range of 0.*/
-/* Thus to differentiate a melee ability, we borrow the RangedAttack function. */
-/* PlayerRanged is in combat.c and PostCombatAbilities is in abilities.c*/
-/* If False, dont charge the player for mana yet, look for it later in PostCombatEffects in engine.c*/
-bool UsePlayerAbility(int n_monsters, int chosenAbility) {
-    combatHistory->playerUsedAbility = true;
-    player->equippedAbility = player->playerClass.abilities[chosenAbility];
-    if(player->equippedAbility.isAttack) {
-        if(PlayerRangedAttack(n_monsters) && !(player->equippedAbility.postCombatEffects)) {
-            player->playerStats.mana -= player->equippedAbility.manaCost;
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    else {
-            PostCombatAbilities(player->equippedAbility.abilityID);
-            return true;
-        }
-    return false;
 }

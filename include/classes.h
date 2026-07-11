@@ -105,8 +105,7 @@ Ability Dash();
 Ability DevastatingInsult();
 Ability ThornBolt();
 
-// abilities.c functions
-
+// ability_casts.c functions
 void CastCharge();
 void CastDash();
 void CastDrainLife();
@@ -116,20 +115,24 @@ void CastSecondWind();
 void CastSelfRepair();
 void CastSummonSkeleton();
 void CastVengeance();
+
+// ability_misc.c functions
 void ChargePlacement();
-void CheckPassiveAbilities(int n_monsters);
 bool DashPOSHelper(int x, int y);
-bool DeincrementAbilityTimer();
 void PostCombatEffects();
 void PostCombatAbilities(int abilityID);
 void PreCombatAbilities(int abilityID);
 void PreCombatEffects();
 void PostChargeInfo();
+bool UsePlayerAbility(int n_monsters, int chosenAbility);
+
+// ability_passive.c functions
+void CheckPassiveAbilities(int n_monsters);
+bool DeincrementAbilityTimer();
 void RemoveIceArmor();
 void RemoveVengeance();
 void RemoveSummonSkeleton();
 void ResetPassiveAbility(int abilityID);
-bool UsePlayerAbility(int n_monsters, int chosenAbility);
 
 // make_classes.c functions
 Class Knight();

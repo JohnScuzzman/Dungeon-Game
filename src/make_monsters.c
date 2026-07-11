@@ -1,5 +1,7 @@
 #include <rogue.h>
 
+/* These functions are used to generate non-unique npcs. */
+
 /* 
 Populates a monster struct with a char and their position.
 monsterID is a random int 0-3 passed from map.c
