@@ -495,19 +495,22 @@ int GetNumberOfDigits(int input);
 int RandomNumber(int min, int max);
 void RecordEntitySeen(Entity* monster);
 void RemoveCursor(int x, int y, int length);
+bool PlaceAdjacentToPlayer(Entity* entity);
+Position CheckAdjacentCollisions(Position pos);
 
 // Externals 
 // Used in tandem with main to let any functions use these outside of main.
+extern int ENTITY_ID;
+extern int LOG_WIDTH;
+extern int LOG_HEIGHT;
+extern int LOG_SIZE;
 extern int MAP_HEIGHT;
 extern int MAP_WIDTH;
 extern int MAX_MONSTER_NAME;
 extern int MAX_NPCS;
 extern int MAX_ONSCREEN_NPCS;
 extern int MAX_DUNGEON_FLOORS;
-extern int ENTITY_ID;
-extern int LOG_WIDTH;
-extern int LOG_HEIGHT;
-extern int LOG_SIZE;
+extern int RADIUS;
 extern const int EVENT_SIZE;
 extern const int INVENTORY_SIZE;
 extern const int LVL_EXP_VALUES[MAX_LEVEL];

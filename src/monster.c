@@ -52,6 +52,7 @@ bool CheckAggro(Entity* mptr, Player* player) {
 /* returns i value of closest monster */
 /* use this to find an int to add to mptr to get the monster */
 int FindClosestMonster(Entity* mptr, int n_monsters) {
+    int floorEntity = -2;
     int closestMonster = 0;
     int closestDist = 16; //RADIUS + 1
     int tempDist = 0;
@@ -65,14 +66,16 @@ int FindClosestMonster(Entity* mptr, int n_monsters) {
             }
         }
     }
-    /* no monsters in LOS*/
-    /* returns a floor entity */
-    if (((mptr + closestMonster)->entityType == MONSTER) && ((mptr + closestMonster)->visible)){
+
+    if (tempDist != 0){
         return (closestMonster);
     }
-    return -2;
+    /* no monsters in LOS*/
+    /* returns a floor entity */
+    return floorEntity;
 }
 
+// [0, 1, 2]
 
 Entity* FindMonsterInList(int monsterID, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {

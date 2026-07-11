@@ -143,16 +143,17 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
             return true;
         }
     }
+    // Handle trying to move into player's own follower.
     else if (map[newPos.y][newPos.x].entityID == player->follower.entityID) {
-        AssignFloor(player->follower.pos.x, player->follower.pos.y);
+        Position oldPOS = player->pos;
         ClearFOV(player);
-        player->follower.pos = player->pos;
+        AssignFloor(player->follower.pos.x, player->follower.pos.y);
+        player->follower.pos = oldPOS;
         player->pos.y = newPos.y;
         player->pos.x = newPos.x;
-        UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
-        // UpdateNPCVisible(nptr, player);
-        MakeFOV(player);
-        combatHistory->playerCombat = false;
+        player->follower.hasMoved = true;
+        RefreshGamestate(mptr, *n_monsters);
+        // UpdateMonsterVisible(nptr, player);
         return true;
     }
     else if (!combatHistory->monsterKilled){

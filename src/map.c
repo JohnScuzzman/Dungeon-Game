@@ -132,7 +132,6 @@ int MonsterSpawnFloor(int dungeonFloor) {
 // /* return players pos if no valid unexplored tile.*/
 // Position FindClosestUnexplored() {
 //     int y, x, distance;
-// 	int RADIUS = 15;
 // 	Position target;
 
 //     for (y = player->pos.y - RADIUS; y < player->pos.y + RADIUS; y++) { 
@@ -177,7 +176,6 @@ int MonsterSpawnFloor(int dungeonFloor) {
 
 // Position FindClosestDoor() {
 //     int y, x, distance;
-// 	int RADIUS = 15;
 // 	Position target;
 
 //     for (y = player->pos.y - RADIUS; y < player->pos.y + RADIUS; y++) { 

@@ -49,6 +49,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
 }
 
 bool NPCAttackEntity(Entity* attacker, Entity* defender, CombatHistory* combatHistory, int n_monsters) {
+    if(defender->entityType == FLOOR) return true;
     int defenderAC = CalculateEntityAC(defender);
     int attackerAccRoll = CalculateEntityAccuracy(attacker);
     int attackerDMG = CalculateEntityDMG(attacker);

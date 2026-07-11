@@ -472,13 +472,13 @@ void ClearClassStats() {
 }
 
 void ClearRaceStats() {
-    mvprintw(23, 10, "       ");
     mvprintw(24, 10, "       ");
     mvprintw(25, 10, "       ");
     mvprintw(26, 10, "       ");
-    mvprintw(24, 18, "       ");
+    mvprintw(27, 10, "       ");
     mvprintw(25, 18, "       ");
     mvprintw(26, 18, "       ");
+    mvprintw(27, 18, "       ");
 }
 
 

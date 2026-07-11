@@ -7,7 +7,6 @@ To increase the radius, increase the variable RADIUS below.
 void MakeFOV(Player* player)
 	{ 
 	int y, x, distance;
-	int RADIUS = 15;
 	Position target;
 	map[player->pos.y][player->pos.x].visible = true;
 	map[player->pos.y][player->pos.x].seen = true;
@@ -39,7 +38,6 @@ Clear the player's FOV to create it again after moving.
 void ClearFOV(Player* player)
 { 
   int y, x;
-  int RADIUS = 15;
 
   for (y = player->pos.y - RADIUS; y < player->pos.y + RADIUS; y++)
   { 
