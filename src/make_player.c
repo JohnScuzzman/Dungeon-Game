@@ -43,7 +43,7 @@ bool AskPlayerInfo(Player* player) {
         return false;
     }
     
-    keypad(stdscr, TRUE);
+    keypad(stdscr, FALSE);
 
     ChooseName(name);
     free(name);
@@ -279,65 +279,65 @@ void PrintClasses() {
 void PrintClassStats(int input){
     switch(input){
         case KNIGHT:
-            mvprintw(30, 10, "HP/LVL: %d", 6);
-            mvprintw(31, 10, "MAIN STAT: %s", "STR");
-            mvprintw(32, 10, "SECOND STAT: %s", "CON");
+            mvprintw(31, 10, "HP/LVL: %d", 6);
+            mvprintw(32, 10, "MAIN STAT: %s", "STR");
+            mvprintw(33, 10, "SECOND STAT: %s", "CON");
             break;
         case SWASHBUCKLER:
-            mvprintw(30, 10, "HP/LVL: %d", 4);
-            mvprintw(31, 10, "MAIN STAT: %s", "CHA");
-            mvprintw(32, 10, "SECOND STAT: %s", "DEX");
+            mvprintw(31, 10, "HP/LVL: %d", 4);
+            mvprintw(32, 10, "MAIN STAT: %s", "CHA");
+            mvprintw(33, 10, "SECOND STAT: %s", "DEX");
             break;
         case WIZARD:
-            mvprintw(30, 10, "HP/LVL: %d", 2);
-            mvprintw(31, 10, "MAIN STAT: %s", "INT");
-            mvprintw(32, 10, "SECOND STAT: %s", " ");
+            mvprintw(31, 10, "HP/LVL: %d", 2);
+            mvprintw(32, 10, "MAIN STAT: %s", "INT");
+            mvprintw(33, 10, "SECOND STAT: %s", " ");
             break;
         case NECROMANCER:
-            mvprintw(30, 10, "HP/LVL: %d", 2);
-            mvprintw(31, 10, "MAIN STAT: %s", "INT");
-            mvprintw(32, 10, "SECOND STAT: %s", "WIS");
+            mvprintw(31, 10, "HP/LVL: %d", 2);
+            mvprintw(32, 10, "MAIN STAT: %s", "INT");
+            mvprintw(33, 10, "SECOND STAT: %s", "WIS");
             break;
         case GUNSLINGER:
-            mvprintw(30, 10, "HP/LVL: %d", 4);
-            mvprintw(31, 10, "MAIN STAT: %s", "DEX");
-            mvprintw(32, 10, "SECOND STAT: %s", " ");
+            mvprintw(31, 10, "HP/LVL: %d", 4);
+            mvprintw(32, 10, "MAIN STAT: %s", "DEX");
+            mvprintw(33, 10, "SECOND STAT: %s", " ");
             break;
             break;
         case DRUID:
-            mvprintw(30, 10, "HP/LVL: %d", 4);
-            mvprintw(31, 10, "MAIN STAT: %s", "WIS");
-            mvprintw(32, 10, "SECOND STAT: %s", " ");
+            mvprintw(31, 10, "HP/LVL: %d", 4);
+            mvprintw(32, 10, "MAIN STAT: %s", "WIS");
+            mvprintw(33, 10, "SECOND STAT: %s", " ");
             break;
         case RANGER:
-            mvprintw(30, 10, "HP/LVL: %d", 5);
-            mvprintw(31, 10, "MAIN STAT: %s", "DEX");
-            mvprintw(32, 10, "SECOND STAT: %s", "WIS");
+            mvprintw(31, 10, "HP/LVL: %d", 5);
+            mvprintw(32, 10, "MAIN STAT: %s", "DEX");
+            mvprintw(33, 10, "SECOND STAT: %s", "WIS");
             break;
         case DARK_KNIGHT:
-            mvprintw(30, 10, "HP/LVL: %d", 6);
-            mvprintw(31, 10, "MAIN STAT: %s", "STR");
-            mvprintw(32, 10, "SECOND STAT: %s", " ");
+            mvprintw(31, 10, "HP/LVL: %d", 6);
+            mvprintw(32, 10, "MAIN STAT: %s", "STR");
+            mvprintw(33, 10, "SECOND STAT: %s", " ");
             break;
         case WARLOCK:
-            mvprintw(30, 10, "HP/LVL: %d", 2);
-            mvprintw(31, 10, "MAIN STAT: %s", "CHA");
-            mvprintw(32, 10, "SECOND STAT: %s", " ");
+            mvprintw(31, 10, "HP/LVL: %d", 2);
+            mvprintw(32, 10, "MAIN STAT: %s", "CHA");
+            mvprintw(33, 10, "SECOND STAT: %s", " ");
             break;
         case CONJURER:
-            mvprintw(30, 10, "HP/LVL: %d", 2);
-            mvprintw(31, 10, "MAIN STAT: %s", "CHA");
-            mvprintw(32, 10, "SECOND STAT: %s", "INT");
+            mvprintw(31, 10, "HP/LVL: %d", 2);
+            mvprintw(32, 10, "MAIN STAT: %s", "CHA");
+            mvprintw(33, 10, "SECOND STAT: %s", "INT");
             break;
         case CYBORG:
-            mvprintw(30, 10, "HP/LVL: %d", 6);
-            mvprintw(31, 10, "MAIN STAT: %s", "STR");
-            mvprintw(32, 10, "SECOND STAT: %s", "DEX");
+            mvprintw(31, 10, "HP/LVL: %d", 6);
+            mvprintw(32, 10, "MAIN STAT: %s", "STR");
+            mvprintw(33, 10, "SECOND STAT: %s", "DEX");
             break;
         case BARD:
-            mvprintw(30, 10, "HP/LVL: %d", 3);
-            mvprintw(31, 10, "MAIN STAT: %s", "CHA");
-            mvprintw(32, 10, "SECOND STAT: %s", "DEX");
+            mvprintw(31, 10, "HP/LVL: %d", 3);
+            mvprintw(32, 10, "MAIN STAT: %s", "CHA");
+            mvprintw(33, 10, "SECOND STAT: %s", "DEX");
             break;
             break;
     }
@@ -346,129 +346,129 @@ void PrintClassStats(int input){
 void PrintRaceStats(int input) {
     switch(input){
         case HUMAN:
-            mvprintw(23, 10, "HP: %d", 10);
-            mvprintw(24, 10, "CHA: %d", 12);
-            mvprintw(25, 10, "CON: %d", 12);
-            mvprintw(26, 10, "DEX: %d", 12);
-            mvprintw(24, 18, "INT: %d", 12);
-            mvprintw(25, 18, "STR: %d", 12);
-            mvprintw(26, 18, "WIS: %d", 12);
+            mvprintw(24, 10, "HP: %d", 10);
+            mvprintw(25, 10, "CHA: %d", 12);
+            mvprintw(26, 10, "CON: %d", 12);
+            mvprintw(27, 10, "DEX: %d", 12);
+            mvprintw(25, 18, "INT: %d", 12);
+            mvprintw(26, 18, "STR: %d", 12);
+            mvprintw(27, 18, "WIS: %d", 12);
             break;
         case ELF:
-            mvprintw(23, 10, "HP: %d", 8);
-            mvprintw(24, 10, "CHA: %d", 12);
-            mvprintw(25, 10, "CON: %d", 10);
-            mvprintw(26, 10, "DEX: %d", 16);
-            mvprintw(24, 18, "INT: %d", 14);
-            mvprintw(25, 18, "STR: %d", 10);
-            mvprintw(26, 18, "WIS: %d", 12);
+            mvprintw(24, 10, "HP: %d", 8);
+            mvprintw(25, 10, "CHA: %d", 12);
+            mvprintw(26, 10, "CON: %d", 10);
+            mvprintw(27, 10, "DEX: %d", 16);
+            mvprintw(25, 18, "INT: %d", 14);
+            mvprintw(26, 18, "STR: %d", 10);
+            mvprintw(27, 18, "WIS: %d", 12);
             break;
         case DWARF:
-            mvprintw(23, 10, "HP: %d", 10);
-            mvprintw(24, 10, "CHA: %d", 10);
-            mvprintw(25, 10, "CON: %d", 14);
-            mvprintw(26, 10, "DEX: %d", 10);
-            mvprintw(24, 18, "INT: %d", 10);
-            mvprintw(25, 18, "STR: %d", 14);
-            mvprintw(26, 18, "WIS: %d", 16);
+            mvprintw(24, 10, "HP: %d", 10);
+            mvprintw(25, 10, "CHA: %d", 10);
+            mvprintw(26, 10, "CON: %d", 14);
+            mvprintw(27, 10, "DEX: %d", 10);
+            mvprintw(25, 18, "INT: %d", 10);
+            mvprintw(26, 18, "STR: %d", 14);
+            mvprintw(27, 18, "WIS: %d", 16);
             break;
         case DRAGONBORN:
-            mvprintw(23, 10, "HP: %d", 12);
-            mvprintw(24, 10, "CHA: %d", 10);
-            mvprintw(25, 10, "CON: %d", 16);
-            mvprintw(26, 10, "DEX: %d", 8);
-            mvprintw(24, 18, "INT: %d", 10);
-            mvprintw(25, 18, "STR: %d", 16);
-            mvprintw(26, 18, "WIS: %d", 10);
+            mvprintw(24, 10, "HP: %d", 12);
+            mvprintw(25, 10, "CHA: %d", 10);
+            mvprintw(26, 10, "CON: %d", 16);
+            mvprintw(27, 10, "DEX: %d", 8);
+            mvprintw(25, 18, "INT: %d", 10);
+            mvprintw(26, 18, "STR: %d", 16);
+            mvprintw(27, 18, "WIS: %d", 10);
             break;
         case GNOLL:
-            mvprintw(23, 10, "HP: %d", 12);
-            mvprintw(24, 10, "CHA: %d", 10);
-            mvprintw(25, 10, "CON: %d", 16);
-            mvprintw(26, 10, "DEX: %d", 10);
-            mvprintw(24, 18, "INT: %d", 8);
-            mvprintw(25, 18, "STR: %d", 16);
-            mvprintw(26, 18, "WIS: %d", 10);
+            mvprintw(24, 10, "HP: %d", 12);
+            mvprintw(25, 10, "CHA: %d", 10);
+            mvprintw(26, 10, "CON: %d", 16);
+            mvprintw(27, 10, "DEX: %d", 10);
+            mvprintw(25, 18, "INT: %d", 8);
+            mvprintw(26, 18, "STR: %d", 16);
+            mvprintw(27, 18, "WIS: %d", 10);
             break;
         case CANIDAE:
-            mvprintw(23, 10, "HP: %d", 12);
-            mvprintw(24, 10, "CHA: %d", 12);
-            mvprintw(25, 10, "CON: %d", 16);
-            mvprintw(26, 10, "DEX: %d", 10);
-            mvprintw(24, 18, "INT: %d", 8);
-            mvprintw(25, 18, "STR: %d", 14);
-            mvprintw(26, 18, "WIS: %d", 10);
+            mvprintw(24, 10, "HP: %d", 12);
+            mvprintw(25, 10, "CHA: %d", 12);
+            mvprintw(26, 10, "CON: %d", 16);
+            mvprintw(27, 10, "DEX: %d", 10);
+            mvprintw(25, 18, "INT: %d", 8);
+            mvprintw(26, 18, "STR: %d", 14);
+            mvprintw(27, 18, "WIS: %d", 10);
             break;
         case SKELETON:
-            mvprintw(23, 10, "HP: %d", 8);
-            mvprintw(24, 10, "CHA: %d", 10);
-            mvprintw(25, 10, "CON: %d", 14);
-            mvprintw(26, 10, "DEX: %d", 12);
-            mvprintw(24, 18, "INT: %d", 16);
-            mvprintw(25, 18, "STR: %d", 8);
-            mvprintw(26, 18, "WIS: %d", 14);
+            mvprintw(24, 10, "HP: %d", 8);
+            mvprintw(25, 10, "CHA: %d", 10);
+            mvprintw(26, 10, "CON: %d", 14);
+            mvprintw(27, 10, "DEX: %d", 12);
+            mvprintw(25, 18, "INT: %d", 16);
+            mvprintw(26, 18, "STR: %d", 8);
+            mvprintw(27, 18, "WIS: %d", 14);
             break;
         case MANTIS:
-            mvprintw(23, 10, "HP: %d", 12);
-            mvprintw(24, 10, "CHA: %d", 8);
-            mvprintw(25, 10, "CON: %d", 14);
-            mvprintw(26, 10, "DEX: %d", 12);
-            mvprintw(24, 18, "INT: %d", 10);
-            mvprintw(25, 18, "STR: %d", 16);
-            mvprintw(26, 18, "WIS: %d", 10);
+            mvprintw(24, 10, "HP: %d", 12);
+            mvprintw(25, 10, "CHA: %d", 8);
+            mvprintw(26, 10, "CON: %d", 14);
+            mvprintw(27, 10, "DEX: %d", 12);
+            mvprintw(25, 18, "INT: %d", 10);
+            mvprintw(26, 18, "STR: %d", 16);
+            mvprintw(27, 18, "WIS: %d", 10);
             break;
         case AUTOMATON:
-            mvprintw(23, 10, "HP: %d", 10);
-            mvprintw(24, 10, "CHA: %d", 10);
-            mvprintw(25, 10, "CON: %d", 16);
-            mvprintw(26, 10, "DEX: %d", 10);
-            mvprintw(24, 18, "INT: %d", 12);
-            mvprintw(25, 18, "STR: %d", 14);
-            mvprintw(26, 18, "WIS: %d", 10);
+            mvprintw(24, 10, "HP: %d", 10);
+            mvprintw(25, 10, "CHA: %d", 10);
+            mvprintw(26, 10, "CON: %d", 16);
+            mvprintw(27, 10, "DEX: %d", 10);
+            mvprintw(25, 18, "INT: %d", 12);
+            mvprintw(26, 18, "STR: %d", 14);
+            mvprintw(27, 18, "WIS: %d", 10);
             break;
         case WEREWOLF:
-            mvprintw(23, 10, "HP: %d", 12);
-            mvprintw(24, 10, "CHA: %d", 10);
-            mvprintw(25, 10, "CON: %d", 16);
-            mvprintw(26, 10, "DEX: %d", 14);
-            mvprintw(24, 18, "INT: %d", 8);
-            mvprintw(25, 18, "STR: %d", 16);
-            mvprintw(26, 18, "WIS: %d", 8);
+            mvprintw(24, 10, "HP: %d", 12);
+            mvprintw(25, 10, "CHA: %d", 10);
+            mvprintw(26, 10, "CON: %d", 16);
+            mvprintw(27, 10, "DEX: %d", 14);
+            mvprintw(25, 18, "INT: %d", 8);
+            mvprintw(26, 18, "STR: %d", 16);
+            mvprintw(27, 18, "WIS: %d", 8);
             break;
         case VAMPIRE:
-            mvprintw(23, 10, "HP: %d", 10);
-            mvprintw(24, 10, "CHA: %d", 16);
-            mvprintw(25, 10, "CON: %d", 10);
-            mvprintw(26, 10, "DEX: %d", 12);
-            mvprintw(24, 18, "INT: %d", 14);
-            mvprintw(25, 18, "STR: %d", 10);
-            mvprintw(26, 18, "WIS: %d", 10);
+            mvprintw(24, 10, "HP: %d", 10);
+            mvprintw(25, 10, "CHA: %d", 16);
+            mvprintw(26, 10, "CON: %d", 10);
+            mvprintw(27, 10, "DEX: %d", 12);
+            mvprintw(25, 18, "INT: %d", 14);
+            mvprintw(26, 18, "STR: %d", 10);
+            mvprintw(27, 18, "WIS: %d", 10);
             break;
         case SUCCUBUS:
-            mvprintw(23, 10, "HP: %d", 8);
-            mvprintw(24, 10, "CHA: %d", 16);
-            mvprintw(25, 10, "CON: %d", 10);
-            mvprintw(26, 10, "DEX: %d", 12);
-            mvprintw(24, 18, "INT: %d", 14);
-            mvprintw(25, 18, "STR: %d", 8);
-            mvprintw(26, 18, "WIS: %d", 12);
+            mvprintw(24, 10, "HP: %d", 8);
+            mvprintw(25, 10, "CHA: %d", 16);
+            mvprintw(26, 10, "CON: %d", 10);
+            mvprintw(27, 10, "DEX: %d", 12);
+            mvprintw(25, 18, "INT: %d", 14);
+            mvprintw(26, 18, "STR: %d", 8);
+            mvprintw(27, 18, "WIS: %d", 12);
             break;
         default:
-            mvprintw(23, 10, "HP: %d", 10);
-            mvprintw(24, 10, "CHA: %d", 12);
-            mvprintw(25, 10, "CON: %d", 12);
-            mvprintw(26, 10, "DEX: %d", 12);
-            mvprintw(24, 18, "INT: %d", 12);
-            mvprintw(25, 18, "STR: %d", 12);
-            mvprintw(26, 18, "WIS: %d", 12);
+            mvprintw(24, 10, "HP: %d", 10);
+            mvprintw(25, 10, "CHA: %d", 12);
+            mvprintw(26, 10, "CON: %d", 12);
+            mvprintw(27, 10, "DEX: %d", 12);
+            mvprintw(25, 18, "INT: %d", 12);
+            mvprintw(26, 18, "STR: %d", 12);
+            mvprintw(27, 18, "WIS: %d", 12);
             break;
     }
 }
 
 void ClearClassStats() {
-    mvprintw(30, 10, "                 ");
-     mvprintw(31, 10, "                 ");
+    mvprintw(31, 10, "                 ");
     mvprintw(32, 10, "                 ");
+    mvprintw(33, 10, "                 ");
 }
 
 void ClearRaceStats() {

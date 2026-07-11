@@ -11,6 +11,8 @@ Item* CreateItemTable() {
     return items;
 }
 
+/* Creates empty item objects used to separate actual, populated items.*/
+/* This makes for loops easier to upkeep, keeping the i, and i < values the same every time they run.*/
 void MakeHeaderItems(Item* items) {
     for (int i = NULL_ITEM_ID; i < _END_; i++){
         if(i == NULL_ITEM_ID || i == _MELEE_ || i == _RANGED_ || i == _AMMO_ || i == _ARMOR_ || i == _END_)

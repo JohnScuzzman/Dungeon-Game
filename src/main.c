@@ -71,6 +71,7 @@ int main(void)
 	define_key("\033[1~", 1031); // Home
 	define_key("\033[4~", 1034); // End
 	define_key("\033[E",  1040); // center arrow
+
 	// Handle middle mouse clicks
     mousemask(BUTTON1_CLICKED, NULL);
 
@@ -100,7 +101,7 @@ int main(void)
     /* Generate empty npc list of (current) size 64 for localized floor use*/
     nptr = NPCList(MAX_ONSCREEN_NPCS);
 
-    /* Generate global list of npcs similar to items*/
+    /* Generate global list of unique npcs somewhat similar to items*/
     // npcs = NPCList(MAX_NPCS);
 
     /* Create a starting position for player and setup the floor in map.c*/
