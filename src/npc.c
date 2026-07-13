@@ -28,9 +28,10 @@ void FollowerLogic(Entity* follower, int n_monsters) {
             ((mptr + i)->visible) &&
             ((mptr + i)->entityID) != CORPSE) {
                 int closestMonster = FindClosestMonster(mptr, n_monsters);
-                MoveTowards(&player->follower, (mptr + closestMonster)->pos);
-                player->follower.hasMoved = true;
-                return;
+                if(MoveTowards(&player->follower, (mptr + closestMonster)->pos)) {
+                    player->follower.hasMoved = true;
+                    return;
+                }
         }
     }
     /* otherwise, move towards the player.*/

@@ -136,7 +136,7 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
         return true;
     }
     // Stairway down, make new level.
-    else if (map[newPos.y][newPos.x].entityType == STAIRS) {
+    else if (map[newPos.y][newPos.x].entityType == WALL) {
         if(MakeDescendWindow()) {
             dungeonInfo->currentFloor++;
             MakeNewLevel(n_monsters);
@@ -146,7 +146,7 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
     // Handle trying to move into player's own follower.
     else if (map[newPos.y][newPos.x].entityID == player->follower.entityID) {
         ClearFOV(player);
-        MoveTowards(&player->follower, player->pos);
+        ForceMoveTowards(&player->follower, player->pos);
         player->pos.y = newPos.y;
         player->pos.x = newPos.x;
         MakeFOV(player);
