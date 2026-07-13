@@ -443,6 +443,7 @@ void UpdateMonsterMap(Entity* monster, int n_monsters);
 void Wander(Entity* mptr);
 
 // move_npcs.c functions
+bool ForceMoveTowards(Entity* entity, Position pos);
 bool MoveTowards(Entity* entity, Position pos);
 void MoveUp(Entity* npc);
 void MoveDown(Entity* npc);
