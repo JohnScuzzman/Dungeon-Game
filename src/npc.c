@@ -12,16 +12,6 @@ Entity* FindNPCInList(int entityID, int maxNPCS) {
 /* Basic logic for how a friendly npc follower interacts and moves.*/
 void FollowerLogic(Entity* follower, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
-        /* If an enemy monster is in aggro range and not adjacent, move towards them.*/
-        if (((GetDistance(player->follower.pos, (mptr + i)->pos)) <= (player->follower.aggroRange)) && 
-            (!CheckMonsterAdjacent(player->follower.pos, (mptr + i))) &&
-            (!player->follower.hasMoved) &&
-            (mptr + i)->visible) {
-                int closestMonster = FindClosestMonster(mptr, n_monsters);
-                MoveTowards(&player->follower, (mptr + closestMonster)->pos);
-                player->follower.hasMoved = true;
-                return;
-        }
         /* If a monster is adjacent, don't move, and attack them.*/
         if (CheckMonsterAdjacent(player->follower.pos, (mptr + i))) {
             // make them attack monster if there is one adjacent
@@ -31,6 +21,17 @@ void FollowerLogic(Entity* follower, int n_monsters) {
                 return;
             }
         }
+        /* If an enemy monster is in aggro range and not adjacent, move towards them.*/
+        if (((GetDistance(player->follower.pos, (mptr + i)->pos)) <= (player->follower.aggroRange)) && 
+            (!CheckMonsterAdjacent(player->follower.pos, (mptr + i))) &&
+            (!player->follower.hasMoved) &&
+            ((mptr + i)->visible) &&
+            ((mptr + i)->entityID) != CORPSE) {
+                int closestMonster = FindClosestMonster(mptr, n_monsters);
+                MoveTowards(&player->follower, (mptr + closestMonster)->pos);
+                player->follower.hasMoved = true;
+                return;
+        }
     }
     /* otherwise, move towards the player.*/
     if (!player->follower.hasMoved && !CheckPlayerAdjacent(player->follower.pos)) {
@@ -38,10 +39,10 @@ void FollowerLogic(Entity* follower, int n_monsters) {
         player->follower.hasMoved = true;
         return;
     }
-    // if ((GetDistance(player->follower.pos, player->pos) == 0) || GetDistance(player->follower.pos, player->pos) >= RADIUS + 2) {
-    //     PlaceAdjacentToPlayer(&player->follower);
-    // }
-    else player->follower.hasMoved = true;
+    if ((GetDistance(player->follower.pos, player->pos) == 0) || GetDistance(player->follower.pos, player->pos) >= RADIUS + 2) {
+        PlaceAdjacentToPlayer(&player->follower);
+    }
+    else player->follower.hasMoved = false;
     return;
 }
 
@@ -126,22 +127,8 @@ void UpdateNPCVisible(Entity* npc, Player* player){
         map[npc->pos.y][npc->pos.x].visible = true;
         npc->ch = npc->staticCh;
         map[npc->pos.y][npc->pos.x].ch = npc->ch;
-        RecordEntitySeen(npc);
-        if (GetDistance(npc->pos, player->pos) < 6) {
-            npc->transparent = true;
-        }
-        else {
-            npc->transparent = false;
-        } 
-    }
-    else if (LineOfSight(npc->pos, player->pos) && 
-    GetDistance(npc->pos, player->pos) < 15) {
-        npc->visible = true;
-        npc->seen = true;
-        map[npc->pos.y][npc->pos.x].visible = true;
-        npc->ch = npc->staticCh;
-        map[npc->pos.y][npc->pos.x].ch = npc->ch;
-        RecordEntitySeen(npc);
+        if(npc->entityID != player->follower.entityID) RecordEntitySeen(npc);
+        else npc->seenByPlayer = true;
         if (GetDistance(npc->pos, player->pos) < 6) {
             npc->transparent = true;
         }

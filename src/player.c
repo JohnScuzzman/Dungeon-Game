@@ -140,20 +140,18 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
         if(MakeDescendWindow()) {
             dungeonInfo->currentFloor++;
             MakeNewLevel(n_monsters);
+            PlaceAdjacentToPlayer(&player->follower);
             return true;
         }
     }
     // Handle trying to move into player's own follower.
     else if (map[newPos.y][newPos.x].entityID == player->follower.entityID) {
-        Position oldPOS = player->pos;
         ClearFOV(player);
-        AssignFloor(player->follower.pos.x, player->follower.pos.y);
-        player->follower.pos = oldPOS;
+        MoveTowards(&player->follower, player->pos);
         player->pos.y = newPos.y;
         player->pos.x = newPos.x;
-        player->follower.hasMoved = true;
-        RefreshGamestate(mptr, *n_monsters);
-        // UpdateMonsterVisible(nptr, player);
+        MakeFOV(player);
+        combatHistory->playerCombat = false;
         return true;
     }
     else if (!combatHistory->monsterKilled){

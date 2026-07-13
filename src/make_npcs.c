@@ -24,6 +24,74 @@ Entity AddToNPCList(Entity* npcs, Position pos, int npcType) {
     return emptyNPC;
 }
 
+// /* Fills the onscreen npc table with empty npcs.*/
+// void FillNullNPCs(Entity* npcs) {
+//     for (int i = 0; i < MAX_ONSCREEN_NPCS; i++) {
+//         AssignEmptyNPC((npcs + i));
+//     }
+// }
+
+void ZeroEntity(Entity* entity) {
+    entity->aggroFlag = false;
+    entity->hasMoved = false;
+    entity->noCollision = true;
+    entity->seen = false;
+    entity->transparent = false;
+    entity->visible = false;
+    entity->seenByPlayer = false;
+    entity->wasLooted = false;
+    entity->wasReplaced = false;
+    entity->ch = ' ';
+    entity->staticCh = ' ';
+    entity->aggroRange = 0;
+    entity->color = COLOR_PAIR(VISIBLE_COLOR);
+    entity->entityID = 0;
+    entity->entityType = FLOOR;
+    ClearEntityInventory(entity);
+    ZeroEntityStats(entity);
+    ZeroEntityMapInfo(entity);
+    entity->entityArmor = NoArmor(); // armor and weapons located in items.h
+    entity->entityWeapon = NoWeapon();
+    strcpy(entity->entityName, " ");
+    strcpy(entity->entityRace, " ");
+    strcpy(entity->entityClass, " ");
+}
+
+void ZeroEntityStats(Entity* entity) {
+    entity->entityStats.ATK = 0;
+    entity->entityStats.CHA = 0;
+    entity->entityStats.CON = 0;
+    entity->entityStats.DEX = 0;
+    entity->entityStats.INT = 0;
+    entity->entityStats.STR = 0;
+    entity->entityStats.WIS = 0;
+    entity->entityStats.AC = 0;
+    entity->entityStats.HP = 0;
+    entity->entityStats.mana = 0;
+    entity->entityStats.maxHP = 0;
+    entity->entityStats.maxMana = 0;
+    entity->entityStats.LVL = 0;
+    entity->entityStats.EXP = 0;
+    entity->entityStats.nextLVLEXP = 0;
+    entity->entityStats.maxDMG = 0;
+    entity->entityStats.minDMG = 0;
+}
+
+void ZeroEntityMapInfo(Entity* entity) {
+    entity->pos.x = 0;
+    entity->pos.y = 0;
+    entity->lastPos.x = 0;
+    entity->lastPos.y = 0;
+    entity->playerLastPos.x = 0;
+    entity->playerLastPos.y = 0;
+    entity->mapInfo.oldSeen = false;
+    entity->mapInfo.newSeen = false;
+    entity->mapInfo.oldVisible = false;
+    entity->mapInfo.newVisible = false;
+    entity->mapInfo.oldChar = '.';
+    entity->mapInfo.newChar = '.';
+}
+
 Entity AssignNPC(Position pos, int npcType, int npcID) {
     if (map[pos.y][pos.x].noCollision) {
         Entity npc = {0};
@@ -42,11 +110,11 @@ Entity AssignNPC(Position pos, int npcType, int npcID) {
         return npc;
     }
     else {
-        AssignFloor(pos.x, pos.y);
         Entity emptyNpc = {0};
+        ZeroEntity(&emptyNpc);
+        AssignFloor(emptyNpc.pos.x, emptyNpc.pos.y);
         return emptyNpc;
     }
-
 }
 
 Entity AssignUniqueNPC(Position pos, int npcName, int npcID) {
@@ -63,8 +131,9 @@ Entity AssignUniqueNPC(Position pos, int npcName, int npcID) {
         return npc;
     }
     else {
-        AssignFloor(pos.x, pos.y);
-        Entity emptyNpc= {0};
+        Entity emptyNpc = {0};
+        ZeroEntity(&emptyNpc);
+        AssignFloor(emptyNpc.pos.x, emptyNpc.pos.y);
         return emptyNpc;
     }
 }

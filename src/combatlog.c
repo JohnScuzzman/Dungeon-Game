@@ -120,6 +120,7 @@ void RecordNPCKill(Entity* defender, Entity* attacker, CombatHistory* combatHist
     combatHistory->playerDMG = attackerDMG;
     combatHistory->playerResult = false;
     combatHistory->monsterKilled = true;
+    if(attacker->entityID == player->follower.entityID) player->playerStats.EXP += (defender->entityStats.EXP);
     strcpy(combatHistory->event, "The ");
     strcat(combatHistory->event, attacker->entityName);
     strcat(combatHistory->event, " Kills the ");

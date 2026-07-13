@@ -15,6 +15,7 @@ typedef enum {
 
 typedef enum {
     NULL_NPC_TYPE,
+    NPC_CHEST,
     NPC_RAT,
     NPC_GOBLIN_WARRIOR,
 	NPC_KOBOLD_WARRIOR,
