@@ -349,6 +349,9 @@ void AssignChest(int x, int y);
 void AssignCorpse(Entity* entity, int n_monsters);
 void AssignStairsDown(int x, int y);
 void AssignFloor(int x, int y);
+void ZeroEntity(Entity* entity);
+void ZeroEntityStats(Entity* entity);
+void ZeroEntityMapInfo(Entity* entity);
 
 // make_monster.c functions 
 void AssignRat(Entity* monster);
