@@ -113,6 +113,7 @@ bool PlayerInput(int input, LogQueue *q, int* n_monsters, int* playerRegen, int*
         //     player->playerStats.EXP += 90;
         //     break;
         default:
+            
             break;
     }
     return false;

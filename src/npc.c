@@ -12,6 +12,17 @@ Entity* FindNPCInList(int entityID, int maxNPCS) {
 /* Basic logic for how a friendly npc follower interacts and moves.*/
 void FollowerLogic(Entity* follower, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
+        /* If an enemy monster is in aggro range and not adjacent, move towards them.*/
+        if (((GetDistance(player->follower.pos, (mptr + i)->pos)) <= (player->follower.aggroRange)) && 
+            (!CheckMonsterAdjacent(player->follower.pos, (mptr + i))) &&
+            ((mptr + i)->visible) &&
+            ((mptr + i)->entityID) != CORPSE) {
+                int closestMonster = FindClosestMonster(mptr, n_monsters);
+                if(ForceMoveTowards(&player->follower, (mptr + closestMonster)->pos)) {
+                    player->follower.hasMoved = true;
+                    return;
+                }
+        }
         /* If a monster is adjacent, don't move, and attack them.*/
         if (CheckMonsterAdjacent(player->follower.pos, (mptr + i))) {
             // make them attack monster if there is one adjacent
@@ -20,18 +31,6 @@ void FollowerLogic(Entity* follower, int n_monsters) {
                 player->follower.hasMoved = true;
                 return;
             }
-        }
-        /* If an enemy monster is in aggro range and not adjacent, move towards them.*/
-        if (((GetDistance(player->follower.pos, (mptr + i)->pos)) <= (player->follower.aggroRange)) && 
-            (!CheckMonsterAdjacent(player->follower.pos, (mptr + i))) &&
-            (!player->follower.hasMoved) &&
-            ((mptr + i)->visible) &&
-            ((mptr + i)->entityID) != CORPSE) {
-                int closestMonster = FindClosestMonster(mptr, n_monsters);
-                if(MoveTowards(&player->follower, (mptr + closestMonster)->pos)) {
-                    player->follower.hasMoved = true;
-                    return;
-                }
         }
     }
     /* otherwise, move towards the player.*/
@@ -42,6 +41,8 @@ void FollowerLogic(Entity* follower, int n_monsters) {
     }
     if ((GetDistance(player->follower.pos, player->pos) == 0) || GetDistance(player->follower.pos, player->pos) >= RADIUS + 2) {
         PlaceAdjacentToPlayer(&player->follower);
+        player->follower.hasMoved = true;
+        return;
     }
     else player->follower.hasMoved = false;
     return;
