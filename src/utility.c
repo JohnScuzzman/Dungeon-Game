@@ -135,7 +135,7 @@ Tries to place the passed entity next to the player.
 returns false if there is not a valid tile to place it.
 */
 bool PlaceAdjacentToPlayer(Entity* entity) {
-    Position closestTile = CheckAdjacentCollisions(entity->pos);
+    Position closestTile = CheckAdjacentCollisions(player->pos);
     if (closestTile.x == entity->pos.x && closestTile.y == entity->pos.y) return false;
     entity->pos = closestTile;
     return true;

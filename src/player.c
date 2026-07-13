@@ -140,7 +140,6 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
         if(MakeDescendWindow()) {
             dungeonInfo->currentFloor++;
             MakeNewLevel(n_monsters);
-            PlaceAdjacentToPlayer(&player->follower);
             return true;
         }
     }
