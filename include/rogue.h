@@ -443,8 +443,8 @@ void UpdateMonsterMap(Entity* monster, int n_monsters);
 void Wander(Entity* mptr);
 
 // move_npcs.c functions
+bool CheckNPCDiagonals(Entity* entity, int x, int y, Position pos);
 bool MoveTowards(Entity* entity, Position pos);
-void MoveTowardsHelper(Entity* entity);
 void MoveUp(Entity* npc);
 void MoveDown(Entity* npc);
 void MoveLeft(Entity* npc);
@@ -453,6 +453,14 @@ void MoveDownRight(Entity* npc);
 void MoveDownLeft(Entity* npc);
 void MoveUpRight(Entity* npc);
 void MoveUpLeft(Entity* npc);
+void ProcessMoveUp(Entity* npc);
+void ProcessMoveDown(Entity* npc);
+void ProcessMoveLeft(Entity* npc);
+void ProcessMoveRight(Entity* npc);
+void ProcessMoveDownRight(Entity* npc);
+void ProcessMoveDownLeft(Entity* npc);
+void ProcessMoveUpRight(Entity* npc);
+void ProcessMoveUpLeft(Entity* npc);
 
 // npc.c functions
 Entity* FindNPCInList(int entityID, int maxNPCS);

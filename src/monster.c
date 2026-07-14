@@ -16,7 +16,6 @@ void AggroMove(Entity* mptr) {
         mptr->playerLastPos.x = player->pos.x;
         mptr->playerLastPos.y = player->pos.y;
         mptr->hasMoved = MoveTowards(mptr, player->pos);
-        UpdateNPCVisible(mptr, player);
         mptr->aggroFlag = true;
     }
 
@@ -27,12 +26,10 @@ void AggroMove(Entity* mptr) {
             mptr->playerLastPos.x = player->pos.x;
             mptr->playerLastPos.y = player->pos.y;
             mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
-            UpdateNPCVisible(mptr, player);
             mptr->aggroFlag = true;
         }
         else {
             mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
-            UpdateNPCVisible(mptr, player);
             mptr->aggroFlag = true;
         }
     }
