@@ -435,7 +435,7 @@ void RenderPauseMenu(WINDOW *menu_win, int cursor, int n_options, char** options
 // monster.c functions
 void AggroMove(Entity* mptr);
 bool CheckAggro(Entity* mptr, Player* player);
-int FindClosestMonster(Entity* mptr, int n_monsters);
+int FindClosestMonster(Entity* mptr, int n_monsters, Position origin);
 Entity* FindMonsterInList(int monsterID, int n_monsters);
 Entity* MonsterList(int n_monsters);
 void ResetMoveFlags(Entity* mptr, int n_monsters);
@@ -443,8 +443,8 @@ void UpdateMonsterMap(Entity* monster, int n_monsters);
 void Wander(Entity* mptr);
 
 // move_npcs.c functions
-bool ForceMoveTowards(Entity* entity, Position pos);
 bool MoveTowards(Entity* entity, Position pos);
+void MoveTowardsHelper(Entity* entity);
 void MoveUp(Entity* npc);
 void MoveDown(Entity* npc);
 void MoveLeft(Entity* npc);

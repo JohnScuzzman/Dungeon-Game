@@ -221,12 +221,12 @@ Ability SummonSkeleton() {
     summonSkeleton.postCombatEffects = true;
     summonSkeleton.abilityID = SUMMON_SKELETON;
     summonSkeleton.duration = 3000; // skeleton lives until it dies
-    summonSkeleton.minDMG = 1; // skeletons dmg
-    summonSkeleton.maxDMG = 6;
+    summonSkeleton.minDMG = (player->playerStats.LVL) % 2; // skeletons dmg
+    summonSkeleton.maxDMG = 5 + (player->playerStats.LVL) % 2;
     summonSkeleton.manaCost = 16;
     summonSkeleton.range = 1;
-    summonSkeleton.abilitySave = 0;
-    summonSkeleton.miscStat = 8; // skeletons HP
+    summonSkeleton.abilitySave = (player->playerStats.LVL) % 2;
+    summonSkeleton.miscStat = 8 + ((player->playerStats.INT) - 10) / 2; // skeletons HP
     strcpy(summonSkeleton.abilityName, "Summon Skeleton");
     strcpy(summonSkeleton.abilityDesc, "none");
     return summonSkeleton;

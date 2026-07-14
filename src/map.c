@@ -104,6 +104,7 @@ void MakeNewLevel(int* old_n_monsters) {
     player->pos.y = start_pos.y;
     player->pos.x = start_pos.x;
     AssignFloor(start_pos.x, start_pos.y);
+    map[start_pos.y][start_pos.x].noCollision = false;
     PlaceAdjacentToPlayer(&player->follower);
     UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
     UpdateNPCVisible(&player->follower, player);

@@ -2,11 +2,10 @@
 
 /* Try and remove the NPC from the map and the player's follower value. */
 void RemoveSummonSkeleton() {
-    Entity emptyNPC = {0};
     player->passiveAbility = NoAbility();
     AssignFloor(player->follower.pos.x, player->follower.pos.y);
-    nptr[player->follower.entityID] = emptyNPC;
-    player->follower = emptyNPC;
+    ClearEntityInventory(FindNPCInList(player->follower.entityID, MAX_ONSCREEN_NPCS));
+    ZeroEntity(FindNPCInList(player->follower.entityID, MAX_ONSCREEN_NPCS));
     strcpy(combatHistory->event, "Your skeleton crumbles to dust.");
     QueueEvent(q, combatHistory->event);
 }

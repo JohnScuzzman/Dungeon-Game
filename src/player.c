@@ -6,7 +6,7 @@ bool CheckPlayerAdjacent(Position origin) {
     if (origin.y == (player->pos.y) || origin.y == ((player->pos.y) - 1) || origin.y == ((player->pos.y) + 1)) {
         if (origin.x == (player->pos.x - 1) || origin.x == (player->pos.x + 1)) {
             return true;
-    }
+        }
     }
     if (origin.x == (player->pos.x) || origin.x == ((player->pos.x) - 1) || origin.x == ((player->pos.x) + 1)){
         if (origin.y == (player->pos.y - 1) || origin.y == (player->pos.y + 1)) {
@@ -124,8 +124,10 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
     if (map[newPos.y][newPos.x].noCollision && !combatHistory->monsterKilled) {
         // Update FOV
         ClearFOV(player);
+        map[player->pos.y][player->pos.x].noCollision = true;
         player->pos.y = newPos.y;
         player->pos.x = newPos.x;
+        map[player->pos.y][player->pos.x].noCollision = false;
         MakeFOV(player);
         combatHistory->playerCombat = false;
         return true;
@@ -147,11 +149,14 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
     // Handle trying to move into player's own follower.
     else if (map[newPos.y][newPos.x].entityID == player->follower.entityID) {
         ClearFOV(player);
-        ForceMoveTowards(&player->follower, player->pos);
+        map[player->pos.y][player->pos.x].noCollision = true;
+        MoveTowards(&player->follower, player->pos);
         player->pos.y = newPos.y;
         player->pos.x = newPos.x;
+        map[player->pos.y][player->pos.x].noCollision = false;
         MakeFOV(player);
         combatHistory->playerCombat = false;
+        player->follower.hasMoved  = true;
         return true;
     }
     else if (!combatHistory->monsterKilled){
