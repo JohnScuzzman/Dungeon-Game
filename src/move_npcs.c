@@ -7,191 +7,109 @@ Returns true if entity moved towards given coords.
 bool MoveTowards(Entity* entity, Position pos) {
     int x = entity->pos.x;
     int y = entity->pos.y;
-    if (y > pos.y && x > pos.x) {
-        if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-            MoveUpLeft(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
-            return true;
-        }
-    }
-    // down & left
-    else if (y < pos.y && x > pos.x) {
-        if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-            MoveDownLeft(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
-            return true;
-        }
-    }
-    // down & right
-    else if (y < pos.y && x < pos.x) {
-        if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-            MoveDownRight(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
-            return true;
-        }
-    }
-    // move up & right
-    else if (y > pos.y && x < pos.x) {
-        if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-            MoveUpRight(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
-            return true;
-        }
-    }
-    //move up, y--
+    if(CheckNPCDiagonals(entity, x, y, pos)) return true;
     if (y > pos.y) {
         if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
             MoveUp(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y + 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveUp(entity);
             return true;
         }
         else if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)) {
             MoveUpRight(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveUpRight(entity);
             return true;
         }
         else if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)) {
             MoveUpLeft(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveUpLeft(entity);
             return true;
         }
     }
-    //move left, x--
     else if (x > pos.x) {
         if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
             MoveLeft(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveLeft(entity);
             return true;
         }
         else if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)) {
             MoveDownLeft(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveDownLeft(entity);
             return true;
         }
         else if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)) {
             MoveUpLeft(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveUpLeft(entity);
             return true;
         }
     }
-    //move down, y++
     else if (y < pos.y) {
         if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
             MoveDown(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y - 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveDown(entity);
             return true;
         }
         else if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)) {
             MoveDownRight(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveDownRight(entity);
             return true;
         }
         else if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)) {
             MoveDownLeft(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveDownLeft(entity);
             return true;
         }
     }
-    //move right, x++
     else if (x < pos.x) {
         if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
             MoveRight(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveRight(entity);
             return true;
         }
         else if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)) {
             MoveDownRight(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveDownRight(entity);
             return true;
         }
         else if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)) {
             MoveUpRight(entity);
-            KeepNPCIntegrity(entity);
-            AssignFloor(entity->pos.x, entity->pos.y);
-            map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-            map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-            map[entity->pos.y][entity->pos.x] = *entity;
-            UpdateNPCVisible(entity, player);
+            ProcessMoveUpRight(entity);
             return true;
         }
     }
     UpdateNPCVisible(entity, player);
     return false;
+}
+
+bool CheckNPCDiagonals(Entity* entity, int x, int y, Position pos) {
+    if (y > pos.y && x > pos.x) {
+        if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+            MoveUpLeft(entity);
+            ProcessMoveUpLeft(entity);
+            return true;
+        }
+    }
+    else if (y < pos.y && x > pos.x) {
+        if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+            MoveDownLeft(entity);
+            ProcessMoveDownLeft(entity);
+            return true;
+        }
+    }
+    else if (y < pos.y && x < pos.x) {
+        if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+            MoveDownRight(entity);
+            ProcessMoveDownRight(entity);
+            return true;
+        }
+    }
+    else if (y > pos.y && x < pos.x) {
+        if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+            MoveUpRight(entity);
+            ProcessMoveUpRight(entity);
+            return true;
+        }
+    }
+    else return false;
 }
 
 void MoveUp(Entity* npc){
@@ -368,4 +286,76 @@ void MoveUpLeft(Entity* npc){
     if(npc->mapInfo.newChar == 'X') {
         npc->mapInfo.newChar = npc->staticCh;
     }
+}
+
+void ProcessMoveUp(Entity* npc){
+    KeepNPCIntegrity(npc);
+    AssignFloor(npc->pos.x, npc->pos.y);
+    map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
+    map[npc->pos.y + 1][npc->pos.x] = map[npc->pos.y][npc->pos.x];
+    map[npc->pos.y][npc->pos.x] = *npc;
+    UpdateNPCVisible(npc, player);
+}
+
+void ProcessMoveDown(Entity* npc){
+    KeepNPCIntegrity(npc);
+    AssignFloor(npc->pos.x, npc->pos.y);
+    map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
+    map[npc->pos.y - 1][npc->pos.x] = map[npc->pos.y][npc->pos.x];
+    map[npc->pos.y][npc->pos.x] = *npc;
+    UpdateNPCVisible(npc, player);
+}
+
+void ProcessMoveLeft(Entity* npc){
+    KeepNPCIntegrity(npc);
+    AssignFloor(npc->pos.x, npc->pos.y);
+    map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
+    map[npc->pos.y][npc->pos.x + 1] = map[npc->pos.y][npc->pos.x];
+    map[npc->pos.y][npc->pos.x] = *npc;
+    UpdateNPCVisible(npc, player);
+}
+
+void ProcessMoveRight(Entity* npc){
+    KeepNPCIntegrity(npc);
+    AssignFloor(npc->pos.x, npc->pos.y);
+    map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
+    map[npc->pos.y][npc->pos.x - 1] = map[npc->pos.y][npc->pos.x];
+    map[npc->pos.y][npc->pos.x] = *npc;
+    UpdateNPCVisible(npc, player);
+}
+
+void ProcessMoveDownRight(Entity* npc){
+    KeepNPCIntegrity(npc);
+    AssignFloor(npc->pos.x, npc->pos.y);
+    map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
+    map[npc->pos.y - 1][npc->pos.x - 1] = map[npc->pos.y][npc->pos.x];
+    map[npc->pos.y][npc->pos.x] = *npc;
+    UpdateNPCVisible(npc, player);
+}
+
+void ProcessMoveDownLeft(Entity* npc){
+    KeepNPCIntegrity(npc);
+    AssignFloor(npc->pos.x, npc->pos.y);
+    map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
+    map[npc->pos.y - 1][npc->pos.x + 1] = map[npc->pos.y][npc->pos.x];
+    map[npc->pos.y][npc->pos.x] = *npc;
+    UpdateNPCVisible(npc, player);
+}
+
+void ProcessMoveUpRight(Entity* npc){
+    KeepNPCIntegrity(npc);
+    AssignFloor(npc->pos.x, npc->pos.y);
+    map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
+    map[npc->pos.y + 1][npc->pos.x - 1] = map[npc->pos.y][npc->pos.x];
+    map[npc->pos.y][npc->pos.x] = *npc;
+    UpdateNPCVisible(npc, player);
+}
+
+void ProcessMoveUpLeft(Entity* npc){
+    KeepNPCIntegrity(npc);
+    AssignFloor(npc->pos.x, npc->pos.y);
+    map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
+    map[npc->pos.y + 1][npc->pos.x + 1] = map[npc->pos.y][npc->pos.x];
+    map[npc->pos.y][npc->pos.x] = *npc;
+    UpdateNPCVisible(npc, player);
 }

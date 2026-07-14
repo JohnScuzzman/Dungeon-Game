@@ -27,7 +27,6 @@ void FollowerLogic(Entity* follower, int n_monsters) {
             (mptr + i)->visible) {
                 int closestMonster = FindClosestMonster(mptr, n_monsters, follower->pos);
                 if(MoveTowards(&player->follower, (mptr + closestMonster)->pos)) {
-                    UpdateNPCVisible(&player->follower, player);
                     player->follower.hasMoved = true;
                     return;
                 }
@@ -56,7 +55,6 @@ void FollowPlayer(Entity* npc) {
         return;
     }
     if(MoveTowards(npc, player->pos)){
-        UpdateNPCVisible(&player->follower, player);
         npc->hasMoved = true;
     }
     else{
