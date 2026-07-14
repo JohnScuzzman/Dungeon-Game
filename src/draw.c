@@ -27,7 +27,7 @@ void UpdateCameraAndLayout(void) {
     if (current_map_view_width > MAP_WIDTH) current_map_view_width = MAP_WIDTH;
 
     // 3. Vertical layout allocation (Reserve 2 rows at bottom for abilities if needed)
-    current_map_view_height = LINES - 3; 
+    current_map_view_height = LINES - 4; 
     if (current_map_view_height > MAP_HEIGHT) current_map_view_height = MAP_HEIGHT;
 
     // 4. Center the camera viewport around the player's physical location
@@ -139,8 +139,9 @@ void DrawCombatLog() {
 }
 
 void DrawAbilities() { 
-  int ability_y = current_map_view_height + 1;
+  int ability_y = current_map_view_height + 2;
   int buffer;
+  mvprintw(ability_y, 0, "|");
   mvprintw(ability_y, ABILITY_BAR_STARTX, "1: %s - %d |", 
   player->playerClass.abilities[ABILITY_1].abilityName, 
   player->playerClass.abilities[ABILITY_1].manaCost);
@@ -167,6 +168,8 @@ void DrawAbilities() {
     "5: %s - %d |", player->playerClass.abilities[ABILITY_5].abilityName,
     player->playerClass.abilities[ABILITY_5].manaCost);
   }
+
+  mvprintw(ability_y, current_map_view_width + 1, "|");
 }
 
 void DrawBorder(void) {
@@ -178,19 +181,26 @@ void DrawBorder(void) {
 
   for (int x = 0; x <= current_map_view_width + 1; x++) {
     mvprintw(0, x, "=");
-    mvprintw(current_map_view_height + 1, x, "=");
+    mvprintw(LINES - 1, x, "=");
   }
 
-  // Draw box around dynamic sidebar panel
   int right_border_edge = dynamic_sidebar_x + STATS_WIDTH;
+
+  // Draw box around dynamic sidebar panel
   for (int x = 0; x <= STATS_WIDTH; x++) {
     mvprintw(0, dynamic_sidebar_x + x, "=");
     mvprintw(20, dynamic_sidebar_x + x, "=");
-    mvprintw(current_map_view_height + 1, dynamic_sidebar_x + x, "=");
+    mvprintw(LINES - 1, dynamic_sidebar_x + x, "=");
   }
 
-  for (int y = 1; y <= current_map_view_height; y++) {
+  // Right border
+  for (int y = 1; y <= current_map_view_height + 2; y++) {
     mvprintw(y, right_border_edge, "|");
+  }
+
+  // Bottom map border
+  for (int x = 0; x < current_map_view_width + 1; x++) {
+    mvprintw(current_map_view_height + 1, x, "=");
   }
 }
 
