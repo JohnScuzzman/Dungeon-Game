@@ -49,7 +49,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
 }
 
 bool NPCAttackEntity(Entity* attacker, Entity* defender, CombatHistory* combatHistory, int n_monsters) {
-    if(defender->entityType == FLOOR) return true;
+    if(defender->entityType == FLOOR || defender->entityType == CORPSE) return true;
     int defenderAC = CalculateEntityAC(defender);
     int attackerAccRoll = CalculateEntityAccuracy(attacker);
     int attackerDMG = CalculateEntityDMG(attacker);
@@ -58,9 +58,17 @@ bool NPCAttackEntity(Entity* attacker, Entity* defender, CombatHistory* combatHi
     if (attackerAccRoll >= defenderAC) {
         defender->entityStats.HP = (defenderHP - attackerDMG);
         if (defender->entityStats.HP <= 0) {
-            RecordNPCKill(defender, attacker, combatHistory, attackerAccRoll, attackerDMG);
-            AssignCorpse(defender, n_monsters);
-            return true;
+            if(defender->entityID == player->follower.entityID){
+                RecordNPCKill(defender, attacker, combatHistory, attackerAccRoll, attackerDMG);
+                AssignFloor(defender->pos.x, defender->pos.y);
+                RemovePlayerFollower(&player->follower);
+                return true;
+            } 
+            else {
+                RecordNPCKill(defender, attacker, combatHistory, attackerAccRoll, attackerDMG);
+                AssignCorpse(defender, n_monsters);
+                return true;
+            }
         }
         RecordNPCHit(defender, attacker, combatHistory, attackerAccRoll, attackerDMG);
         return true;

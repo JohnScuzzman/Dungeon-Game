@@ -437,7 +437,9 @@ void AggroMove(Entity* mptr);
 bool CheckAggro(Entity* mptr, Player* player);
 int FindClosestMonster(Entity* mptr, int n_monsters, Position origin);
 Entity* FindMonsterInList(int monsterID, int n_monsters);
+bool MeleeMonsterLogic(Entity* monster, int n_monsters, Position pos);
 Entity* MonsterList(int n_monsters);
+bool RangedMonsterLogic(Entity* monster, int n_monsters, Position pos);
 void ResetMoveFlags(Entity* mptr, int n_monsters);
 void UpdateMonsterMap(Entity* monster, int n_monsters);
 void Wander(Entity* mptr);
@@ -468,6 +470,7 @@ void FollowerLogic(Entity* follower, int n_monsters);
 void FollowPlayer(Entity* npc);
 void KeepNPCIntegrity(Entity* npc);
 void KeepNPCMapIntegrity(Entity* npc);
+void RemovePlayerFollower(Entity* follower);
 void UpdateNPCMap(Entity* npc, int maxNPCS);
 void UpdateNPCVisible(Entity* npc, Player* player);
 

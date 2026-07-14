@@ -127,7 +127,7 @@ void PostChargeInfo();
 bool UsePlayerAbility(int n_monsters, int chosenAbility);
 
 // ability_passive.c functions
-void CheckPassiveAbilities(int n_monsters);
+void CheckPassiveAbilities(int n_monsters, bool playerMoved);
 bool DeincrementAbilityTimer();
 void RemoveIceArmor();
 void RemoveVengeance();

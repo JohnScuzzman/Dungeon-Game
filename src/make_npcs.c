@@ -12,11 +12,11 @@ Entity* NPCList(int totalNpcs) {
 /* Return MAX_ONSCREEN_NPCS if failed to find or make*/
 Entity AddToNPCList(Entity* npcs, Position pos, int npcType) {
     Entity emptyNPC = {0};
-    if (npcs[MAX_ONSCREEN_NPCS - 1].entityType == NPC) {
+    if (npcs[MAX_ONSCREEN_NPCS - 1].entityType != NULL_NPC_TYPE) {
         return emptyNPC;
     }
     for (int i = 0; i < MAX_ONSCREEN_NPCS; i++) {
-        if (npcs[i].entityType != NPC) {
+        if (npcs[i].entityType == NULL_ENTITY_TYPE) {
             npcs[i] = AssignNPC(pos, npcType, i + 64);
             return npcs[i];
         }
