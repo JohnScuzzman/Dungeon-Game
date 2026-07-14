@@ -21,17 +21,16 @@ void FollowerLogic(Entity* follower, int n_monsters) {
                 return;
             }
         }
-        /* If an enemy monster is in aggro range and not adjacent, move towards them.*/
-        else if ((((GetDistance(player->follower.pos, (mptr + i)->pos)) <= (player->follower.aggroRange)) && 
-            ((mptr + i)->entityID) != CORPSE) &&
-            (mptr + i)->visible) {
-                int closestMonster = FindClosestMonster(mptr, n_monsters, follower->pos);
-                if(MoveTowards(&player->follower, (mptr + closestMonster)->pos)) {
-                    player->follower.hasMoved = true;
-                    return;
-                }
+    }
+    int closestMonster = FindClosestMonster(mptr, n_monsters, follower->pos);
+    /* If an enemy monster is in aggro range and not adjacent, move towards them.*/
+    if ((((GetDistance(player->follower.pos, (mptr + closestMonster)->pos)) <= (player->follower.aggroRange)) && 
+    ((mptr + closestMonster)->entityID) != CORPSE) &&
+    (mptr + closestMonster)->visible) {
+        if(MoveTowards(&player->follower, (mptr + closestMonster)->pos)) {
+            player->follower.hasMoved = true;
+            return;
         }
-
     }
     /* otherwise, move towards the player.*/
     if (!player->follower.hasMoved && !CheckPlayerAdjacent(player->follower.pos)) {
@@ -61,6 +60,16 @@ void FollowPlayer(Entity* npc) {
         npc->hasMoved = false;
     }
 }
+void RemovePlayerFollower(Entity* follower) {
+    switch(player->passiveAbility.abilityID) {
+        case SUMMON_SKELETON:
+            RemoveSummonSkeleton();
+            break;
+        default:
+            break;
+    }
+    player->passiveAbility = NoAbility();
+}
 
 /* update monster positions on map from mptr. */
 /* update corpses, then npcs to place them on top. */
@@ -78,6 +87,7 @@ void UpdateNPCMap(Entity* npc, int maxNPCS) {
         else if((npc + i)->entityType == CORPSE && !(npc + i)->wasReplaced && !map[y][x].wasLooted) {
             map[y][x] = npc[i];
         }
+        else if((npc + i)->entityType == NULL_ENTITY_TYPE) return;
     }
     for (int i = 0; i < maxNPCS; i++) {
         int y, x;
@@ -85,7 +95,8 @@ void UpdateNPCMap(Entity* npc, int maxNPCS) {
         x = (npc + i)->pos.x;
         if((npc + i)->entityType == NPC && (npc + i)->entityID != player->follower.entityID) map[y][x] = npc[i];
     }
-    if(player->follower.entityType == NPC && map[player->follower.pos.y][player->follower.pos.x].entityType != CORPSE){
+    if (player->follower.entityType == NULL_ENTITY_TYPE) return;
+    else if (player->follower.entityType == NPC && map[player->follower.pos.y][player->follower.pos.x].entityType != CORPSE){
         map[player->follower.pos.y][player->follower.pos.x] = player->follower;
     }
 }

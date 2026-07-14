@@ -13,24 +13,36 @@ void AggroMove(Entity* mptr) {
 
     /* If they are in both LOS and range, move towards them. */
     if (CheckAggro(mptr, player)) {
-        mptr->playerLastPos.x = player->pos.x;
-        mptr->playerLastPos.y = player->pos.y;
-        mptr->hasMoved = MoveTowards(mptr, player->pos);
-        mptr->aggroFlag = true;
+        if(GetDistance(mptr->pos, player->follower.pos) < GetDistance(mptr->pos, player->pos)) {
+            mptr->playerLastPos.x = player->follower.pos.x;
+            mptr->playerLastPos.y = player->follower.pos.y;
+            mptr->hasMoved = MoveTowards(mptr, player->follower.pos);
+            mptr->aggroFlag = true;
+        }
+        else{
+            mptr->playerLastPos.x = player->pos.x;
+            mptr->playerLastPos.y = player->pos.y;
+            mptr->hasMoved = MoveTowards(mptr, player->pos);
+            mptr->aggroFlag = true;
+        }
     }
 
     /* If they are not in LOS/Range but are still aggro, move towards last seen position.*/
     /* lastPos > 0 means a players was last seen at that x/y location. */
     else if (mptr->aggroFlag && (mptr->playerLastPos.x != mptr->pos.x || mptr->playerLastPos.y != mptr->pos.y)){
         if(CheckAggro(mptr, player)) {
-            mptr->playerLastPos.x = player->pos.x;
-            mptr->playerLastPos.y = player->pos.y;
-            mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
-            mptr->aggroFlag = true;
-        }
-        else {
-            mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
-            mptr->aggroFlag = true;
+            if(GetDistance(mptr->pos, player->follower.pos) < GetDistance(mptr->pos, player->pos)) {
+                mptr->playerLastPos.x = player->follower.pos.x;
+                mptr->playerLastPos.y = player->follower.pos.y;
+                mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
+                mptr->aggroFlag = true;
+            }
+            else {
+                mptr->playerLastPos.x = player->pos.x;
+                mptr->playerLastPos.y = player->pos.y;
+                mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
+                mptr->aggroFlag = true;
+            }
         }
     }
 
@@ -41,9 +53,13 @@ void AggroMove(Entity* mptr) {
     }
 }
 
-/* Check if a monster has LOS of player and is in their aggro range, or if player was seen previously.*/
+/* Check if a monster has LOS of player or their follower and is in their aggro range, or if player was seen previously.*/
 bool CheckAggro(Entity* mptr, Player* player) {
     if (GetDistance(mptr->pos, player->pos) < mptr->aggroRange && LineOfSight(mptr->pos, player->pos)) {
+        return true;
+    }
+    if (GetDistance(mptr->pos, player->follower.pos) < mptr->aggroRange && 
+    LineOfSight(mptr->pos, player->follower.pos)) {
         return true;
     }
     return false;
@@ -86,6 +102,32 @@ Entity* FindMonsterInList(int monsterID, int n_monsters) {
     }
 
     return NULL;
+}
+
+/*
+Returns true if the player is a valid melee target, used in engine .c's MoveMonsterLoop.
+*/
+bool MeleeMonsterLogic(Entity* monster, int n_monsters, Position pos) {
+    if ((monster->entityWeapon.isRanged) &&
+    (GetDistance(monster->pos, pos) <= monster->entityWeapon.range) &&
+    (LineOfSight(monster->pos, pos)) &&
+    (monster->entityType == MONSTER)) {
+        return true;
+    }
+    return false;
+}
+
+/*
+Returns true if the player is a valid rnged target, used in engine .c's MoveMonsterLoop.
+*/
+bool RangedMonsterLogic(Entity* monster, int n_monsters, Position pos) {
+    if ((monster->entityWeapon.isRanged) &&
+    (GetDistance(monster->pos, pos) <= monster->entityWeapon.range) &&
+    (LineOfSight(monster->pos, pos)) &&
+    (monster->entityType == MONSTER)){
+        return true;
+    }
+    return false;
 }
 
 /* update monster positions on map from mptr. */

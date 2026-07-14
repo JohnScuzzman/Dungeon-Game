@@ -3,9 +3,17 @@
 /* Try and remove the NPC from the map and the player's follower value. */
 void RemoveSummonSkeleton() {
     player->passiveAbility = NoAbility();
-    AssignFloor(player->follower.pos.x, player->follower.pos.y);
     ClearEntityInventory(FindNPCInList(player->follower.entityID, MAX_ONSCREEN_NPCS));
+    Entity* temp = FindNPCInList(player->follower.entityID, MAX_ONSCREEN_NPCS);
+    AssignFloor(temp->pos.x, temp->pos.y);
     ZeroEntity(FindNPCInList(player->follower.entityID, MAX_ONSCREEN_NPCS));
+    ClearEntityInventory(&player->follower);
+    AssignFloor(player->follower.pos.x, player->follower.pos.y);
+    ZeroEntity(&player->follower);
+    ClearFOV(player);
+    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
+    UpdateNPCVisible(&player->follower, player);
+    MakeFOV(player);
     strcpy(combatHistory->event, "Your skeleton crumbles to dust.");
     QueueEvent(q, combatHistory->event);
 }
@@ -27,7 +35,7 @@ void RemoveVengeance(){
 
 /* If the player has an active passive ability, deincrement the timer.*/
 /* If the timer reaches 0, undo the effects cooresponding to the ability.*/
-void CheckPassiveAbilities(int n_monsters) {
+void CheckPassiveAbilities(int n_monsters, bool playerMoved) {
     if(!DeincrementAbilityTimer()) {
         ResetPassiveAbility(player->passiveAbility.abilityID);
     }
@@ -44,7 +52,7 @@ void CheckPassiveAbilities(int n_monsters) {
             }
             break;
         case SUMMON_SKELETON:
-            FollowerLogic(&player->follower, n_monsters);
+            if(playerMoved) FollowerLogic(&player->follower, n_monsters);
         default:
             break;
     }
@@ -64,16 +72,18 @@ void ResetPassiveAbility(int abilityID) {
         switch (abilityID) {
         case ICE_ARMOR:
             RemoveIceArmor();
-        break;
+            break;
         case SUMMON_SKELETON:
-            RemoveSummonSkeleton();
-        break;
+            if(player->follower.entityType != NPC){
+                player->passiveAbility = NoAbility();
+            }
+            break;
         case VENGEANCE:
             RemoveVengeance();
-        break;
+            break;
         default:
             player->passiveAbility = NoAbility();
-        break;
+            break;
     }
 
 }

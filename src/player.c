@@ -98,6 +98,11 @@ bool PlayerInput(int input, LogQueue *q, int* n_monsters, int* playerRegen, int*
                     return UsePlayerAbility(*n_monsters , ABILITY_5);
             }
             break;
+        case 117: // (u key for unsummon)
+            if(player->follower.entityType == NPC){
+                RemovePlayerFollower(&player->follower);
+            }
+            break;
         // case 65: // c key
         //     //Player menu function here
         //     break;
@@ -200,7 +205,7 @@ void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMov
         ManaRegen(manaRegen);
         ManaRegen(manaRegen);
         moveMonsters = MoveMonsterLoop(mptr, n_monsters, PMove);
-        CheckPassiveAbilities(n_monsters);
+        CheckPassiveAbilities(n_monsters, PMove);
         UpdateMonsterMap(mptr, n_monsters);
         ResetMoveFlags(mptr, n_monsters); 
         turnCount++;

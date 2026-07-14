@@ -40,25 +40,27 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
             Wander(mptr + i);
             i++;
         }
-        /* If adjacent to player, attack them in melee.*/
-        else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->entityType == MONSTER){
+        /* If adjacent to player or follower, attack them in melee.*/
+        else if (CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->entityType == MONSTER){
             monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
             /* If monsterCombat = false, player died, end the game.*/
-            if (monsterCombat == false) {
-                return true;
-            }
+            if (!monsterCombat) return true;
             i++;
         }
-        /* If in range of player and have a ranged weapon equipped, attack them at range.*/
-        else if (((mptr + i)->entityWeapon.isRanged) &&
-        (GetDistance((mptr + i)->pos, player->pos) <= (mptr + i)->entityWeapon.range) &&
-        (LineOfSight((mptr + i)->pos, player->pos)) &&
-        ((mptr + i)->entityType == MONSTER)){
+        else if (CheckAdjacent((mptr + i)->pos, player->follower.pos) && (mptr + i)->entityType == MONSTER){
+            monsterCombat = NPCAttackEntity((mptr + i), &player->follower, combatHistory, n_monsters);
+            if (!monsterCombat) return false;
+            i++;
+        }   
+        /* If in range of player or follower and have a ranged weapon equipped, attack them at range.*/
+        else if (RangedMonsterLogic((mptr + i), n_monsters, player->pos)) {
             monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
-            /* If monsterCombat = false, player died, end the game.*/
-            if (monsterCombat == false) {
-                return true;
-            }
+            if (!monsterCombat) return true;
+            i++;
+        }
+        else if (RangedMonsterLogic((mptr + i), n_monsters, player->follower.pos)) {
+            monsterCombat = NPCAttackEntity((mptr + i), &player->follower, combatHistory, n_monsters);
+            if (!monsterCombat) return false;
             i++;
         }
         /* If player was seen, move towards player.*/
@@ -135,7 +137,7 @@ void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* i
                 }
             }
         }
-        CheckPassiveAbilities(n_monsters);
+        CheckPassiveAbilities(n_monsters, PMove);
         RefreshGamestate(mptr, n_monsters);
         PMove = false;  
     }

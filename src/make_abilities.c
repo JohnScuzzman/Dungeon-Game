@@ -220,7 +220,7 @@ Ability SummonSkeleton() {
     summonSkeleton.preCombatEffects = false;
     summonSkeleton.postCombatEffects = true;
     summonSkeleton.abilityID = SUMMON_SKELETON;
-    summonSkeleton.duration = 3000; // skeleton lives until it dies
+    summonSkeleton.duration = 0; // skeleton lives until it dies
     summonSkeleton.minDMG = (player->playerStats.LVL) % 2; // skeletons dmg
     summonSkeleton.maxDMG = 5 + (player->playerStats.LVL) % 2;
     summonSkeleton.manaCost = 16;
