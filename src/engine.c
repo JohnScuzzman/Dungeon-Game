@@ -145,7 +145,7 @@ void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* i
 }
 
 void Gameover() {
-    clear();
+    erase();
     keypad(stdscr, TRUE);
     mvprintw(20, 40, "Game Over.");
     getch();
