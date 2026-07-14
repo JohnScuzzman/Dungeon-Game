@@ -16,6 +16,7 @@ void AggroMove(Entity* mptr) {
         mptr->playerLastPos.x = player->pos.x;
         mptr->playerLastPos.y = player->pos.y;
         mptr->hasMoved = MoveTowards(mptr, player->pos);
+        UpdateNPCVisible(mptr, player);
         mptr->aggroFlag = true;
     }
 
@@ -26,10 +27,12 @@ void AggroMove(Entity* mptr) {
             mptr->playerLastPos.x = player->pos.x;
             mptr->playerLastPos.y = player->pos.y;
             mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
+            UpdateNPCVisible(mptr, player);
             mptr->aggroFlag = true;
         }
         else {
             mptr->hasMoved = MoveTowards(mptr, (mptr->playerLastPos));
+            UpdateNPCVisible(mptr, player);
             mptr->aggroFlag = true;
         }
     }
@@ -51,7 +54,7 @@ bool CheckAggro(Entity* mptr, Player* player) {
 
 /* returns i value of closest monster */
 /* use this to find an int to add to mptr to get the monster */
-int FindClosestMonster(Entity* mptr, int n_monsters) {
+int FindClosestMonster(Entity* mptr, int n_monsters, Position origin) {
     int floorEntity = -2;
     int closestMonster = 0;
     int closestDist = 16; //RADIUS + 1
@@ -59,7 +62,7 @@ int FindClosestMonster(Entity* mptr, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
         if (CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->entityType == MONSTER) return i;
         else if(((mptr + i)->visible) && ((mptr + i)->entityType == MONSTER)) {
-            tempDist = GetDistance(player->pos, (mptr + i)->pos);
+            tempDist = GetDistance(origin, (mptr + i)->pos);
             if(tempDist <= closestDist) {
                 closestDist = tempDist;
                 closestMonster = i;

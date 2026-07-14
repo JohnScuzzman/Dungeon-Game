@@ -12,19 +12,8 @@ Entity* FindNPCInList(int entityID, int maxNPCS) {
 /* Basic logic for how a friendly npc follower interacts and moves.*/
 void FollowerLogic(Entity* follower, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
-        /* If an enemy monster is in aggro range and not adjacent, move towards them.*/
-        if (((GetDistance(player->follower.pos, (mptr + i)->pos)) <= (player->follower.aggroRange)) && 
-            (!CheckMonsterAdjacent(player->follower.pos, (mptr + i))) &&
-            ((mptr + i)->visible) &&
-            ((mptr + i)->entityID) != CORPSE) {
-                int closestMonster = FindClosestMonster(mptr, n_monsters);
-                if(ForceMoveTowards(&player->follower, (mptr + closestMonster)->pos)) {
-                    player->follower.hasMoved = true;
-                    return;
-                }
-        }
         /* If a monster is adjacent, don't move, and attack them.*/
-        if (CheckMonsterAdjacent(player->follower.pos, (mptr + i))) {
+        if (CheckMonsterAdjacent(player->follower.pos, (mptr + i)) == true) {
             // make them attack monster if there is one adjacent
             ResetCombatHistory();
             if(NPCAttackEntity(&player->follower, (mptr + i), combatHistory, n_monsters)) {
@@ -32,6 +21,18 @@ void FollowerLogic(Entity* follower, int n_monsters) {
                 return;
             }
         }
+        /* If an enemy monster is in aggro range and not adjacent, move towards them.*/
+        else if ((((GetDistance(player->follower.pos, (mptr + i)->pos)) <= (player->follower.aggroRange)) && 
+            ((mptr + i)->entityID) != CORPSE) &&
+            (mptr + i)->visible) {
+                int closestMonster = FindClosestMonster(mptr, n_monsters, follower->pos);
+                if(MoveTowards(&player->follower, (mptr + closestMonster)->pos)) {
+                    UpdateNPCVisible(&player->follower, player);
+                    player->follower.hasMoved = true;
+                    return;
+                }
+        }
+
     }
     /* otherwise, move towards the player.*/
     if (!player->follower.hasMoved && !CheckPlayerAdjacent(player->follower.pos)) {
@@ -55,6 +56,7 @@ void FollowPlayer(Entity* npc) {
         return;
     }
     if(MoveTowards(npc, player->pos)){
+        UpdateNPCVisible(&player->follower, player);
         npc->hasMoved = true;
     }
     else{

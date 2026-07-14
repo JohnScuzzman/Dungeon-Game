@@ -190,7 +190,7 @@ FindClosestMonster is located in monster.c
 */
 bool PlayerRangedAttack(int n_monsters){
     int ch;
-    int closest = FindClosestMonster(mptr, n_monsters);
+    int closest = FindClosestMonster(mptr, n_monsters, player->pos);
     int x = player->pos.x;
     int y = player->pos.y;
 
