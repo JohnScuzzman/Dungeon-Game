@@ -254,11 +254,13 @@ void CastSummonSkeleton() {
     skeletonPOS.y = y;
     skeletonPOS.x = x;
     if (map[y][x].noCollision && map[y][x].visible){
+        AssignFloor(x,y);
         player->playerStats.mana -= (player->equippedAbility.manaCost);
         // int NPCInList = AddToNPCList(nptr, skeletonPOS, NPC_SKELETON_WARRIOR);
         player->follower = AddToNPCList(nptr, skeletonPOS, NPC_SKELETON_WARRIOR);
         player->follower.hasMoved = true;
         UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
+        UpdateFollower(&player->follower);
         UpdateNPCVisible(nptr, player);
         ClearFOV(player);
         MakeFOV(player);
