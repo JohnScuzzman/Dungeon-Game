@@ -473,6 +473,7 @@ void KeepNPCIntegrity(Entity* npc);
 void KeepNPCMapIntegrity(Entity* npc);
 void RemovePlayerFollower(Entity* follower);
 void UpdateNPCMap(Entity* npc, int maxNPCS);
+void UpdateFollower(Entity* follower);
 void UpdateNPCVisible(Entity* npc, Player* player);
 
 // player.c functions
