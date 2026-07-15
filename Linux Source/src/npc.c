@@ -93,11 +93,15 @@ void UpdateNPCMap(Entity* npc, int maxNPCS) {
         int y, x;
         y = (npc + i)->pos.y;
         x = (npc + i)->pos.x;
-        if((npc + i)->entityType == NPC && (npc + i)->entityID != player->follower.entityID) map[y][x] = npc[i];
+        if((npc + i)->entityType > NULL_NPC_TYPE && (npc + i)->entityType < NPC_END && (npc + i)->entityID != player->follower.entityID) map[y][x] = npc[i];
+        else if((npc + i)->entityType == NULL_ENTITY_TYPE) return;
     }
-    if (player->follower.entityType == NULL_ENTITY_TYPE) return;
-    else if (player->follower.entityType == NPC && map[player->follower.pos.y][player->follower.pos.x].entityType != CORPSE){
-        map[player->follower.pos.y][player->follower.pos.x] = player->follower;
+}
+
+void UpdateFollower(Entity* follower) {
+    if (follower->entityType == NULL_ENTITY_TYPE) return;
+    else if (follower->entityType > NULL_NPC_TYPE && follower->entityType > NULL_NPC_TYPE < NPC_END && map[follower->pos.y][follower->pos.x].entityType != CORPSE){
+        map[follower->pos.y][follower->pos.x] = player->follower;
     }
 }
 

@@ -156,7 +156,7 @@ void DrawDebug(Entity* mptr, int n_monsters) {
   // Position closest = FindClosestUnexplored();
     for (int i = 0; i < (MAX_ONSCREEN_NPCS) ; i++) {
     // mvprintw(52, 2, "ATK %d, ACC:%d", player->playerStats.ATK, combatHistory->playerAccRoll);
-    mvprintw(i, 170, "NPC_ID: %d, nptr[i]: %d, followerID: %d", nptr[i].entityID, i, player->follower.entityID);
+    mvprintw(i, 170, "NPC_ID: %d, nptr[i]: %d, followerID: %d POS_X:%d POS_Y:%d", nptr[i].entityID, i, player->follower.entityID, nptr[i].pos.x, nptr[i].pos.y);
 	  // mvprintw(52, 2, "Player POS x:%d, y:%d, Tail:%d, inv[0].ID:%d", player->pos.x, player->pos.y, player->invTail, player->inventory[0].itemID);
     // mvprintw(52, 2, "Armor Req:%d, Armor Stat:%d, Melee Req:%d, Ranged Req:%d", player->equippedArmor.statReq, player->equippedArmor.statUsed, player->equippedMelee.statReq, player->equippedRanged.statReq);
     // mvprintw(23 + i, 128, "Playerlast x:%d y:%d ", mptr[i].playerLastPos.x, mptr[i].playerLastPos.y);

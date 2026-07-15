@@ -12,6 +12,7 @@ void RemoveSummonSkeleton() {
     ZeroEntity(&player->follower);
     ClearFOV(player);
     UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
+    UpdateFollower(&player->follower);
     UpdateNPCVisible(&player->follower, player);
     MakeFOV(player);
     strcpy(combatHistory->event, "Your skeleton crumbles to dust.");
