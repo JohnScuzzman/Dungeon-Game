@@ -122,10 +122,6 @@ void PostCombatAbilities(int abilityID){
             break;
         }
         clear();
-        DrawEverything();
-        DrawBorder();
-        DrawPlayerStats();
-        DrawPlayerEquipment();
         return;
     }
     else if ((player->playerStats.mana) < (player->equippedAbility.manaCost) && !(player->equippedAbility.isAttack)) {

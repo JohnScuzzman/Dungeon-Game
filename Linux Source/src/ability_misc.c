@@ -77,16 +77,13 @@ bool DashPOSHelper(int x, int y) {
 /* Only applies to abilities that are attacks with effects. */
 /* Applies directly after player attack, but before monster movements/attacks. */
 void PostCombatEffects() {
-    DrawMap();
     if (player->equippedAbility.postCombatEffects) {
         PostCombatAbilities(player->equippedAbility.abilityID);
     }
-    if (combatHistory->playerCombat == true) DrawPlayerStats();
     player->equippedAbility = NoAbility();
 }
 
 void PreCombatEffects() {
-    DrawMap();
     if (player->equippedAbility.preCombatEffects) {
         PreCombatAbilities(player->equippedAbility.abilityID);
     }
@@ -123,11 +120,6 @@ void PostCombatAbilities(int abilityID){
         default:
             break;
         }
-        clear();
-        DrawEverything();
-        DrawBorder();
-        DrawPlayerStats();
-        DrawPlayerEquipment();
         return;
     }
     else if ((player->playerStats.mana) < (player->equippedAbility.manaCost) && !(player->equippedAbility.isAttack)) {

@@ -158,9 +158,11 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
         player->pos.y = newPos.y;
         player->pos.x = newPos.x;
         map[player->pos.y][player->pos.x].noCollision = false;
+        map[player->pos.y][player->pos.x].transparent = true;
         MakeFOV(player);
         combatHistory->playerCombat = false;
         player->follower.hasMoved  = true;
+        player->follower.transparent  = true;
         return true;
     }
     else if (!combatHistory->monsterKilled){
@@ -225,7 +227,6 @@ void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMov
 void PlayerRegen(int *playerRegen){
         if (*playerRegen >= 20 && (player->playerStats.HP < player->playerStats.maxHP)) {
             player->playerStats.HP++;
-            DrawPlayerStats();
             *playerRegen = 0;
         }
         else{
@@ -237,7 +238,6 @@ void PlayerRegen(int *playerRegen){
 void ManaRegen(int *manaRegen){
         if (*manaRegen >= 15 && (player->playerStats.mana < player->playerStats.maxMana)) {
             player->playerStats.mana++;
-            DrawPlayerStats();
             *manaRegen = 0;
         }
         else{

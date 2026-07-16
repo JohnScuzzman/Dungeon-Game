@@ -37,11 +37,11 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     if (playerAccRoll >= defenderAC) {
         defender->entityStats.HP = (defenderHP - playerDMG);
         if (defender->entityStats.HP <= 0) {
-            int blood = ((rand() % 3) + 1);
+            int blood = ((rand() % 2));
             RecordPlayerKill(defender, combatHistory, playerAccRoll, playerDMG);
             AssignCorpse(defender, n_monsters);
             if (combatHistory->crit == true) CritBloodSplatter(player->pos, defender->pos);
-            else if(blood == 3) BloodSplatter(player->pos, defender->pos);
+            else if(blood) BloodSplatter(player->pos, defender->pos);
             CheckForLevelUp();
             return true;
         }
