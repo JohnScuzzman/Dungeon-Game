@@ -10,6 +10,7 @@ bool NcursesSetup(void) {
 	}
 	#endif
 	setenv("ESCDELAY", "25", 1);
+
     /* Starts Ncurses. */
     initscr();
     /* Disable Ncurses from immediately drawing to the screen. */ 
@@ -23,6 +24,7 @@ bool NcursesSetup(void) {
         init_pair(SEEN_COLOR, COLOR_BLUE, COLOR_BLACK);
         init_pair(HIGHLIGHT_COLOR, COLOR_BLACK, COLOR_WHITE);
         init_pair(HIGHLIGHT_OFF, COLOR_WHITE, COLOR_BLACK);
+        init_pair(BLOOD_COLOR, COLOR_RED, COLOR_BLACK); 
         return true;
     }
     else {
@@ -175,6 +177,12 @@ void CloseGame(void) {
 } 
 
 void Greeting(){
+    strcpy(combatHistory->event, "IMPORTANT:");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, "To zoom in, increase the font size.");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, "Click 'Font' in the very top left.");
+    QueueEvent(q, combatHistory->event);
     strcpy(combatHistory->event, "Welcome to the dungeon,");
     QueueEvent(q, combatHistory->event);
     strcpy(combatHistory->event, player->playerName);
