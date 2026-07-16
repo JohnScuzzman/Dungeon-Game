@@ -2,6 +2,11 @@
 
 #define ABILITY_BAR_STARTX 2
 #define ABILITIY_BAR_BUFFERX 12
+#define ABILITY_BAR_Y (MAP_HEIGHT - 1)
+
+/* Sidebar/layout helpers */
+#define SIDEBAR_X (MAP_WIDTH + 2)
+#define STATS_COL2 (SIDEBAR_X + 29)
 #define STATS_WIDTH 40
 #define ABILITY_BAR_Y (LINES - 1)
 #define QUEUE_START_Y 22
@@ -45,10 +50,9 @@ void UpdateCameraAndLayout(void) {
 /* Draw the Map to the screen using our sliding camera viewport. */
 void DrawMap()
 { 
-  // We only iterate through what can physically fit on screen right now!
-  for (int y = 0; y < current_map_view_height; y++)
+  for (int y = 0; y < MAP_HEIGHT; y++)
   { 
-    for (int x = 0; x < current_map_view_width; x++)
+    for (int x = 0; x < MAP_WIDTH; x++)
     { 
         // Translate screen coordinate to our internal large virtual map index
         int map_y = camera_y + y;
@@ -238,17 +242,13 @@ void DrawDebug(Entity* mptr, int n_monsters) {
 }
 
 void DrawEverything() {
-	clear();
-	
-	// Force recalculating limits dynamically based on current window boundaries
-	UpdateCameraAndLayout();
-	
+	erase();
 	DrawMap();
 	DrawPlayer(player);
-	DrawBorder();
 	DrawPlayerEquipment();
 	DrawPlayerStats();
 	DrawAbilities();
 	DrawCombatLog();
+	DrawBorder();
 }
 
