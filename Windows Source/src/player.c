@@ -226,6 +226,7 @@ void RestUntilHealed(int n_monsters, int* playerRegen, int* manaRegen, bool PMov
 void PlayerRegen(int *playerRegen){
         if (*playerRegen >= 20 && (player->playerStats.HP < player->playerStats.maxHP)) {
             player->playerStats.HP++;
+            DrawPlayerStats();
             *playerRegen = 0;
         }
         else{
@@ -237,6 +238,7 @@ void PlayerRegen(int *playerRegen){
 void ManaRegen(int *manaRegen){
         if (*manaRegen >= 15 && (player->playerStats.mana < player->playerStats.maxMana)) {
             player->playerStats.mana++;
+            DrawPlayerStats();
             *manaRegen = 0;
         }
         else{

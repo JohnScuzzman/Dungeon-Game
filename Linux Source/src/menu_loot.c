@@ -208,7 +208,8 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
         case 0: // Take
             AddToPlayerInventory(*entityInv[prevChoice], 1);
             RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice], 1);
-            DrawEverything();
+            DrawPlayerEquipment();
+            // DrawEverything();
             refresh();
             wrefresh(loot);
             delwin(lootOp);
@@ -218,7 +219,8 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             //while entity Quantity of item > 0
             AddToPlayerInventory(*entityInv[prevChoice], entityInv[prevChoice]->quantity);
             RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice], entityInv[prevChoice]->quantity);
-            DrawEverything();
+            DrawPlayerEquipment();
+            // DrawEverything();
             refresh();
             wrefresh(loot);
             delwin(lootOp);
@@ -228,7 +230,8 @@ bool LootOptionSelect(Item** playerInv, Item** entityInv, int prevChoice, int n_
             AddToPlayerInventory(*entityInv[prevChoice], 1);
             Equip(*entityInv[prevChoice]);
             RemoveFromNPCInventory(&map[player->pos.y][player->pos.x], *entityInv[prevChoice], 1);
-            DrawEverything();
+            DrawPlayerEquipment();
+            // DrawEverything();
             refresh();
             wrefresh(loot);
             delwin(lootOp);

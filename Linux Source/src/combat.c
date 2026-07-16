@@ -17,6 +17,7 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
             return false;
         }
         RecordMonsterHit(attacker, combatHistory, attackerAccRoll, attackerDMG);
+        DrawPlayerStats();
         return true;
     }
     RecordMonsterMiss(attacker, combatHistory, attackerAccRoll, playerAC);

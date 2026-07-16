@@ -80,6 +80,7 @@ void PostCombatEffects() {
     if (player->equippedAbility.postCombatEffects) {
         PostCombatAbilities(player->equippedAbility.abilityID);
     }
+    if (combatHistory->playerCombat == true) DrawPlayerStats();
     player->equippedAbility = NoAbility();
 }
 
@@ -120,7 +121,11 @@ void PostCombatAbilities(int abilityID){
         default:
             break;
         }
-
+        clear();
+        DrawEverything();
+        DrawBorder();
+        DrawPlayerStats();
+        DrawPlayerEquipment();
         return;
     }
     else if ((player->playerStats.mana) < (player->equippedAbility.manaCost) && !(player->equippedAbility.isAttack)) {

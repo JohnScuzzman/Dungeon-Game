@@ -269,7 +269,8 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
             else {
                 DropFromPlayerInventory(*playerInv[prevChoice], 1);
             }
-            DrawEverything();
+            DrawPlayerEquipment();
+            // DrawEverything();
             refresh();
             delwin(invOp);
             return true;
@@ -282,14 +283,16 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
             else{
                 DropFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
             }
-            DrawEverything();
+            DrawPlayerEquipment();
+            // DrawEverything();
             refresh();
             delwin(invOp);
             return true;
             break;
         case 2: // Equip
             EquipOrUnequip(playerInv, unEquipMenu, prevChoice);
-            DrawEverything();
+            DrawPlayerEquipment();
+            // DrawEverything();
             refresh();
             wrefresh(loot);
             delwin(invOp);

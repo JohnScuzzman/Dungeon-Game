@@ -2,6 +2,7 @@
 
 #define ABILITY_BAR_STARTX 2
 #define ABILITIY_BAR_BUFFERX 12
+#define ABILITIY_BAR_BUFFERY 2
 #define ABILITY_BAR_Y (MAP_HEIGHT - 1)
 
 /* Sidebar/layout helpers */
@@ -13,14 +14,17 @@
 /* Draw the Map to the screen. */
 void DrawMap()
 { 
-  for (int y = 0; y < MAP_HEIGHT; y++)
+  for (int y = 1; y < MAP_HEIGHT - ABILITIY_BAR_BUFFERY; y++)
   { 
-    for (int x = 0; x < MAP_WIDTH; x++)
+    for (int x = 1; x < MAP_WIDTH; x++)
     { 
         if (map[y][x].visible) {
 			if (map[y][x].color == BLOOD_COLOR && map[y][x].miscTimer > 0) {
 				mvaddch(y, x, map[y][x].ch | COLOR_PAIR(BLOOD_COLOR) | A_DIM);
 				map[y][x].miscTimer--;
+			}
+			else if (map[y][x].color == CHEST_COLOR) {
+				mvaddch(y, x, map[y][x].ch | COLOR_PAIR(CHEST_COLOR) | A_DIM);
 			}
 			else mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR));
         	if(map[y][x].entityType == FLOOR && map[y][x].color != BLOOD_COLOR){
@@ -158,6 +162,8 @@ void DrawBorder(void) {
 /* Splatters the target across the map, yay! */
 void BloodSplatter(Position origin, Position target) {
 	int dir = (rand() % 3) + 1;
+	map[target.y][target.x].color = BLOOD_COLOR;
+	map[target.y][target.x].miscTimer = (rand() % 30) + 10;
     if ((target.x) < (origin.x) && (target.y) < (origin.y)) {
 		BloodSE(origin, target, dir);
     }
@@ -186,6 +192,8 @@ void BloodSplatter(Position origin, Position target) {
 
 /* Splatters the target across the map, yay! */
 void CritBloodSplatter(Position origin, Position target) {
+	map[target.y][target.x].color = BLOOD_COLOR;
+	map[target.y][target.x].miscTimer = (rand() % 30) + 10;
     if((target.x) < (origin.x) && (target.y) < (origin.y)) {
 		map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
 		map[target.y][(target.x) - 1].color = BLOOD_COLOR;
@@ -463,11 +471,8 @@ void DrawCombatLog() {
 /*Draw Everything*/ 
 //void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
 void DrawEverything() {
-	erase();
 	DrawMap();
 	DrawPlayer(player);
-	DrawPlayerEquipment();
-	DrawPlayerStats();
 	DrawAbilities();
 	DrawCombatLog();
 }

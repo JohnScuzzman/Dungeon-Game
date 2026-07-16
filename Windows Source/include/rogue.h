@@ -27,6 +27,7 @@
 #define HIGHLIGHT_COLOR 3
 #define HIGHLIGHT_OFF 4
 #define BLOOD_COLOR 5
+#define CHEST_COLOR 6
 #define HEADINGS 8
 #define MAX_LEVEL 10 // change later to 20
 #define MAX_NAME_SIZE 33
