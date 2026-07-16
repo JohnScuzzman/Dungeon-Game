@@ -25,6 +25,7 @@ bool NcursesSetup(void) {
         init_pair(HIGHLIGHT_COLOR, COLOR_BLACK, COLOR_WHITE);
         init_pair(HIGHLIGHT_OFF, COLOR_WHITE, COLOR_BLACK);
         init_pair(BLOOD_COLOR, COLOR_RED, COLOR_BLACK); 
+        init_pair(CHEST_COLOR, COLOR_YELLOW, COLOR_BLACK); 
         return true;
     }
     else {
@@ -92,6 +93,9 @@ It then resets the monsters moveflags and games combatHistory.
 */
 void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
+    for (int i = 0; i < n_monsters; i++) {
+        UpdateNPCVisible(mptr + i, player);
+    }
     MakeFOV(player);
     DrawEverything();
     UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
@@ -111,9 +115,10 @@ void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* i
     int playerRegen = 0;
     int manaRegen = 0;
 
-    DrawBorder();
     Greeting();
     RefreshGamestate(mptr, n_monsters);
+    DrawBorder();
+    DrawPlayerEquipment();
     DrawPlayerBlink(player);
     
     while(!leaveFlag){ 

@@ -54,6 +54,9 @@ void LevelUp(int classID){
             LevelBard();
         break;
     }
+    erase();
+    DrawPlayerStats();
+    DrawAbilities();
 }
 
 void LevelKnight() {

@@ -38,7 +38,7 @@ void AssignChest(int x, int y) {
     map[y][x].ch = '$';
     map[y][x].staticCh = '$';
     map[y][x].aggroRange = 0;
-    map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
+    map[y][x].color = CHEST_COLOR;
     map[y][x].entityID = 0;
     map[y][x].entityType = CHEST;
     map[y][x].miscTimer = 0;

@@ -9,68 +9,80 @@ bool MoveTowards(Entity* entity, Position pos) {
     int y = entity->pos.y;
     if(CheckNPCDiagonals(entity, x, y, pos)) return true;
     if (y > pos.y) {
-        if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
+        if ((map[(entity->pos.y - 1)][(entity->pos.x)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y - 1)][(entity->pos.x)].entityType != CHEST){
             MoveUp(entity);
             ProcessMoveUp(entity);
             return true;
         }
-        else if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)) {
+        else if ((map[(entity->pos.y - 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y - 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveUpRight(entity);
             ProcessMoveUpRight(entity);
             return true;
         }
-        else if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)) {
+        else if ((map[(entity->pos.y - 1)][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y - 1)][(entity->pos.x - 1)].entityType != CHEST){
             MoveUpLeft(entity);
             ProcessMoveUpLeft(entity);
             return true;
         }
     }
     else if (x > pos.x) {
-        if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+        if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved) &&
+            map[entity->pos.y][(entity->pos.x - 1)].entityType != CHEST){
             MoveLeft(entity);
             ProcessMoveLeft(entity);
             return true;
         }
-        else if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)) {
+        else if ((map[(entity->pos.y + 1)][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y + 1)][(entity->pos.x - 1)].entityType != CHEST){
             MoveDownLeft(entity);
             ProcessMoveDownLeft(entity);
             return true;
         }
-        else if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)) {
+        else if ((map[(entity->pos.y - 1)][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y - 1)][(entity->pos.x - 1)].entityType != CHEST){
             MoveUpLeft(entity);
             ProcessMoveUpLeft(entity);
             return true;
         }
     }
     else if (y < pos.y) {
-        if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
+        if ((map[(entity->pos.y + 1)][(entity->pos.x)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y + 1)][(entity->pos.x)].entityType != CHEST){
             MoveDown(entity);
             ProcessMoveDown(entity);
             return true;
         }
-        else if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)) {
+        else if ((map[(entity->pos.y + 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y + 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveDownRight(entity);
             ProcessMoveDownRight(entity);
             return true;
         }
-        else if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)) {
+        else if ((map[(entity->pos.y + 1)][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y + 1)][(entity->pos.x - 1)].entityType != CHEST){
             MoveDownLeft(entity);
             ProcessMoveDownLeft(entity);
             return true;
         }
     }
     else if (x < pos.x) {
-        if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+        if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y - 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveRight(entity);
             ProcessMoveRight(entity);
             return true;
         }
-        else if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)) {
+        else if ((map[(entity->pos.y + 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y + 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveDownRight(entity);
             ProcessMoveDownRight(entity);
             return true;
         }
-        else if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)) {
+        else if ((map[(entity->pos.y - 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y - 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveUpRight(entity);
             ProcessMoveUpRight(entity);
             return true;
@@ -82,28 +94,32 @@ bool MoveTowards(Entity* entity, Position pos) {
 
 bool CheckNPCDiagonals(Entity* entity, int x, int y, Position pos) {
     if (y > pos.y && x > pos.x) {
-        if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+        if ((map[(entity->pos.y - 1)][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y - 1)][(entity->pos.x - 1)].entityType != CHEST){
             MoveUpLeft(entity);
             ProcessMoveUpLeft(entity);
             return true;
         }
     }
     else if (y < pos.y && x > pos.x) {
-        if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
+        if ((map[(entity->pos.y + 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y + 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveDownLeft(entity);
             ProcessMoveDownLeft(entity);
             return true;
         }
     }
     else if (y < pos.y && x < pos.x) {
-        if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+        if ((map[(entity->pos.y + 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y + 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveDownRight(entity);
             ProcessMoveDownRight(entity);
             return true;
         }
     }
     else if (y > pos.y && x < pos.x) {
-        if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
+        if ((map[(entity->pos.y - 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
+            map[(entity->pos.y - 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveUpRight(entity);
             ProcessMoveUpRight(entity);
             return true;

@@ -14,8 +14,8 @@ void CastDash() {
     Cursor(y, x, 1);
     strcpy(combatHistory->event, "Choose a direction to Dash.");
     QueueEvent(q, combatHistory->event);
-    // char event[] = "Choose a direction to Dash.";
-    // DrawCombatEvent(event);
+    DrawCombatLog();
+    DrawEverything();
     while((ch = getch()) != 10 && ch != 32 && !(CheckEscape(ch))) {
         RemoveCursor(y, x, 1);
         x = player->pos.x;
@@ -203,7 +203,7 @@ void CastSummonSkeleton() {
     strcpy(combatHistory->event, "Choose where to place a skeleton.");
     QueueEvent(q, combatHistory->event);
     DrawCombatLog();
-
+    DrawEverything();
     while((ch = getch()) != 10 && ch != 32 && !(CheckEscape(ch))) {
         RemoveCursor(y, x, 1);
         x = player->pos.x;
@@ -253,7 +253,7 @@ void CastSummonSkeleton() {
     Position skeletonPOS;
     skeletonPOS.y = y;
     skeletonPOS.x = x;
-    if (map[y][x].noCollision && map[y][x].visible){
+    if (map[y][x].noCollision && map[y][x].visible && map[y][x].entityType != CHEST){
         AssignFloor(x,y);
         player->playerStats.mana -= (player->equippedAbility.manaCost);
         // int NPCInList = AddToNPCList(nptr, skeletonPOS, NPC_SKELETON_WARRIOR);

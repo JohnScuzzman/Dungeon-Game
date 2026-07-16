@@ -26,6 +26,7 @@
 #define MONSTER_COLOR 2
 #define HIGHLIGHT_COLOR 3
 #define BLOOD_COLOR 4
+#define CHEST_COLOR 5
 #define HEADINGS 8
 #define MAX_LEVEL 10 // change later to 20
 #define MAX_NAME_SIZE 33
