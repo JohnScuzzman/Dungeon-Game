@@ -42,15 +42,12 @@ bool AskPlayerInfo(Player* player) {
         printf("Memory allocation error when creating name buffer.\n");
         return false;
     }
-    
-    keypad(stdscr, FALSE);
 
     ChooseName(name);
     free(name);
     free(nameBuffer);
     
     noecho();           // Hide input again.
-    keypad(stdscr, TRUE);
     cbreak();           // Set back to raw.  
     return true;
 }   
@@ -231,7 +228,7 @@ Lets the player enter their name.
 void ChooseName(char* name) {
     echo();             
     nocbreak();   // character available immediately & no line buffering.
-    keypad(stdscr, FALSE);      
+    keypad(stdscr, TRUE);      
     mvprintw(18, 40, "Please Enter your name: ");
     mvprintw(20, 44, "                                ");
     mvgetnstr(20, 44, name, 32);

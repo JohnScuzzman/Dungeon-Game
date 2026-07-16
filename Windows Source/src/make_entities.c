@@ -11,6 +11,7 @@ Entity** CreateEntities(void) {
             map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
             map[y][x].entityID = 1;
             map[y][x].entityType = WALL;
+            map[y][x].miscTimer = 0;
             map[y][x].entityStats.AC = 30;
             map[y][x].entityStats.HP = 1000;
             strcpy(map[y][x].entityClass, "None");
@@ -40,6 +41,7 @@ void AssignChest(int x, int y) {
     map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
     map[y][x].entityID = 0;
     map[y][x].entityType = CHEST;
+    map[y][x].miscTimer = 0;
     map[y][x].entityStats.ATK = 0;
     map[y][x].entityStats.CHA = 0;
     map[y][x].entityStats.CON = 0;
@@ -91,6 +93,7 @@ void AssignCorpse(Entity* entity, int n_monsters) {
     entity->seenByPlayer = true;
     entity->aggroRange = 0;
     entity->entityType = CORPSE;
+    entity->miscTimer = 0;
     entity->entityStats.ATK = 0;
     entity->entityStats.CHA = 0;
     entity->entityStats.CON = 0;
@@ -138,6 +141,7 @@ void AssignStairsDown(int x, int y) {
     map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
     map[y][x].entityID = 0;
     map[y][x].entityType = STAIRS;
+    map[y][x].miscTimer = 0;
     map[y][x].entityStats.ATK = 0;
     map[y][x].entityStats.CHA = 0;
     map[y][x].entityStats.CON = 0;
@@ -189,6 +193,7 @@ void AssignFloor(int x, int y) {
     map[y][x].color = COLOR_PAIR(VISIBLE_COLOR);
     map[y][x].entityID = 0;
     map[y][x].entityType = FLOOR;
+    map[y][x].miscTimer = 0;
     map[y][x].entityStats.ATK = 0;
     map[y][x].entityStats.CHA = 0;
     map[y][x].entityStats.CON = 0;

@@ -26,12 +26,14 @@
 #define MONSTER_COLOR 2
 #define HIGHLIGHT_COLOR 3
 #define HIGHLIGHT_OFF 4
+#define BLOOD_COLOR 5
 #define HEADINGS 8
 #define MAX_LEVEL 10 // change later to 20
 #define MAX_NAME_SIZE 33
 #define MAX_EVENT_SIZE 64
 #define MAX_INVENTORY_SIZE 65
 #define MAX_LOG_SIZE 28
+#define TOTAL_NPCS 512
 
 /* IMPORTANT*/
 /* "typedef" is used instead of "struct cat_t" so that we dont have to */
@@ -127,6 +129,7 @@ typedef struct {
   char staticCh;
   int aggroRange;
   int color;
+  int miscTimer;
   int entityID;
   int entityType;
   int invTail;
@@ -168,8 +171,6 @@ typedef struct {
   char playerRace[MAX_NAME_SIZE];
 } Player;
   
-
-
 typedef struct {
     Entity defender;
     bool monsterKilled;
@@ -178,6 +179,7 @@ typedef struct {
     bool playerCombat; // true if player combat occurred
     bool playerUsedRanged;
     bool playerUsedAbility;
+    bool crit;
     int attackerAccRoll;
     int attackerDMG;
     int defenderAC;
@@ -264,6 +266,16 @@ void RecordMonsterMiss(Entity* defender, CombatHistory* combatHistory, int attac
 void RecordAbilityUse();
 
 // draw.c functions
+void BloodSplatter(Position origin, Position target);
+void BloodSE(Position origin, Position target, int dir);
+void BloodNE(Position origin, Position target, int dir);
+void BloodNW(Position origin, Position target, int dir);
+void BloodSW(Position origin, Position target, int dir);
+void BloodE(Position origin, Position target, int dir);
+void BloodW(Position origin, Position target, int dir);
+void BloodS(Position origin, Position target, int dir);
+void BloodN(Position origin, Position target, int dir);
+void CritBloodSplatter(Position origin, Position target);
 void DrawAbilities();
 void DrawBorder();
 void DrawCombatLog();
