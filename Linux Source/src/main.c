@@ -18,7 +18,7 @@ const int LVL_EXP_VALUES[MAX_LEVEL] = {
   LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
 };
 
-int ENTITY_ID  = 256; // accounting for a theorhetical 256 monsters
+int ENTITY_ID = 256; // accounting for a theoretical 256 monsters
 int LOG_HEIGHT = 22;
 int LOG_SIZE  = 27;
 int LOG_WIDTH = 128;

@@ -36,8 +36,11 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     if (playerAccRoll >= defenderAC) {
         defender->entityStats.HP = (defenderHP - playerDMG);
         if (defender->entityStats.HP <= 0) {
+            int blood = ((rand() % 3) + 1);
             RecordPlayerKill(defender, combatHistory, playerAccRoll, playerDMG);
             AssignCorpse(defender, n_monsters);
+            if (combatHistory->crit == true) CritBloodSplatter(player->pos, defender->pos);
+            else if(blood == 3) BloodSplatter(player->pos, defender->pos);
             CheckForLevelUp();
             return true;
         }
@@ -49,7 +52,7 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
 }
 
 bool NPCAttackEntity(Entity* attacker, Entity* defender, CombatHistory* combatHistory, int n_monsters) {
-    if(defender->entityType == FLOOR || defender->entityType == CORPSE) return true;
+    if (defender->entityType == FLOOR || defender->entityType == CORPSE) return true;
     int defenderAC = CalculateEntityAC(defender);
     int attackerAccRoll = CalculateEntityAccuracy(attacker);
     int attackerDMG = CalculateEntityDMG(attacker);
@@ -184,7 +187,7 @@ void PlayerPrepareCombat(int n_monsters) {
         combatHistory->playerCombat = AttackEntity(target, combatHistory, player, n_monsters);
     }
     // If a monster died, let other monsters still move.
-    if(combatHistory->monsterKilled){
+    if (combatHistory->monsterKilled){
         ResetMoveFlags(mptr, n_monsters);
         combatHistory->monsterKilled = false;
     }
@@ -280,7 +283,7 @@ bool ProcessRangedAttack(bool abilityUsed, int x, int y) {
     }
     // Standard ranged attack.
     else if (player->equippedAmmo.item.quantity > 0 && !player->equippedRanged.isMagic) return ShootWithAmmo(player->equippedAmmo.type, x, y);
-    else if (player->equippedRanged.isMagic) return ShootTarget(x, y);
+    else if (player->equippedRanged.isMagic) return ShootWithAmmo(player->equippedAmmo.type, x, y);
     else {
         strcpy(combatHistory->event, "You do not have enough ammo equipped.");
         QueueEvent(q, combatHistory->event);
@@ -298,6 +301,17 @@ bool ShootWithAmmo(int ammoType, int x, int y) {
                     strcat(combatHistory->event, ".");
                     QueueEvent(q, combatHistory->event);
                     return ShootTarget(x, y);
+            }
+            else if (player->equippedRanged.isMagic){ // TODO add a reload function for primitive weapons
+                if (player->equippedRanged.capacity > 0) {
+                    player->equippedRanged.capacity--;
+                    return ShootTarget(x, y);
+                }
+                else {
+                    strcpy(combatHistory->event, "Your weapon has no more charges.");
+                    QueueEvent(q, combatHistory->event);
+                    return false;
+                }
             }
             else {
                 RemoveFromPlayerInventory(player->equippedAmmo.item, 1);
@@ -322,6 +336,17 @@ bool ShootAbilityWithAmmo(int ammoType, int x, int y) {
                     QueueEvent(q, combatHistory->event);
                     return ShootTargetWithAbility(x, y);
             }
+            else if (player->equippedRanged.isMagic){ // TODO add a reload function for primitive weapons
+                if (player->equippedRanged.capacity > 0) {
+                    player->equippedRanged.capacity--;
+                    return ShootTargetWithAbility(x, y);
+                }
+                else {
+                    strcpy(combatHistory->event, "Your weapon has no more charges.");
+                    QueueEvent(q, combatHistory->event);
+                    return false;
+                }
+            }
             else {
                 RemoveFromPlayerInventory(player->equippedAmmo.item, 1);
                 return ShootTargetWithAbility(x, y);
@@ -341,6 +366,7 @@ void ResetCombatHistory() {
     combatHistory->playerCombat = false; // true if player combat occurred
     combatHistory->playerUsedRanged = false;
     combatHistory->playerUsedAbility = false;
+    combatHistory->crit = false;
     combatHistory->attackerAccRoll = 0;
     combatHistory->attackerDMG = 0;
     combatHistory->defenderAC = 0;
@@ -357,10 +383,10 @@ int CalculateEntityAccuracy(Entity* attacker) {
     int attackerATKMod = attacker->entityStats.ATK;
     int attackerAccRoll = (rand() % 20) + 1;
     /* Ranged weapon in melee suffers a minus 4 penalty.*/
-    if(attacker->entityWeapon.isRanged && CheckPlayerAdjacent(attacker->pos)){
+    if (attacker->entityWeapon.isRanged && CheckPlayerAdjacent(attacker->pos)){
         attackerAccRoll -= 4;
     }
-    if(attacker->entityWeapon.isEnchanted) {
+    if (attacker->entityWeapon.isEnchanted) {
         attackerAccRoll += attacker->entityWeapon.enchantLevel;
     }
     attackerAccRoll = attackerAccRoll + attackerATKMod;
@@ -371,7 +397,7 @@ int CalculateEntityDMG(Entity* attacker) {
     int maxDMG = attacker->entityStats.maxDMG;
     int minDMG = attacker->entityStats.minDMG;
     int attackerDMG = (rand() % maxDMG) + minDMG;
-    if(attacker->entityWeapon.isEnchanted) {
+    if (attacker->entityWeapon.isEnchanted) {
         attackerDMG += attacker->entityWeapon.enchantLevel;
     }
     return attackerDMG;
@@ -382,7 +408,7 @@ int CalculateEntityAC(Entity* defender) {
     int defenderAC = defender->entityStats.AC;
     defenderDodgeMod = ((defenderDodgeMod - 10) / 2);
     defenderAC = (defenderAC + defenderDodgeMod + 10);
-    if(defender->entityArmor.isEnchanted) {
+    if (defender->entityArmor.isEnchanted) {
         defenderAC += (defender->entityArmor.enchantLevel);
     }
     return defenderAC;
@@ -390,24 +416,33 @@ int CalculateEntityAC(Entity* defender) {
 
 /* playerATK Mod is already incorporated into the abilitySave if applicable in abilities.c*/
 int CalculatePlayerAccuracy() {
-    int playerATKMod;
-    if (combatHistory->playerUsedAbility == true && player->equippedAbility.isAttack == true){
-        playerATKMod += (player->equippedAbility.abilitySave);
-    }
-    else{
-        playerATKMod += (player->playerStats.ATK);
-    }
-    if(combatHistory->playerUsedRanged && player->equippedRanged.isEnchanted) {
-        playerATKMod += (player->equippedRanged.enchantLevel);
-    }
-    else if(!combatHistory->playerUsedRanged && player->equippedMelee.isEnchanted) {
-        playerATKMod += (player->equippedMelee.enchantLevel);
-    }
+    int playerATKMod = 0;
     int playerAccRoll = (rand() % 20) + 1;
-    if(combatHistory->playerUsedRanged && CheckPlayerAdjacent(combatHistory->defender.pos)){
-        playerAccRoll -= 4;
+    if (playerAccRoll == 20) {
+        combatHistory->crit = true;
+        strcpy(combatHistory->event, "You score a critical hit!");
+        QueueEvent(q, combatHistory->event);
+        DrawCombatLog();
     }
-    playerAccRoll = playerAccRoll + playerATKMod;
+    if ((combatHistory->playerUsedAbility)){
+        if (player->equippedAbility.isAttack) playerATKMod += (player->equippedAbility.abilitySave);
+        else return 0;
+    }
+    else {
+        if(combatHistory->playerUsedRanged && player->equippedRanged.isEnchanted) {
+            playerATKMod += (player->equippedRanged.enchantLevel);
+        }
+        else if(!(combatHistory->playerUsedRanged) && (player->equippedMelee.isEnchanted)) {
+            playerATKMod += (player->equippedRanged.enchantLevel);
+        }
+        else {
+            playerATKMod += (player->playerStats.ATK);
+        }
+        if(combatHistory->playerUsedRanged && CheckPlayerAdjacent(combatHistory->defender.pos)){
+            playerAccRoll -= 4;
+        }
+    }
+    playerAccRoll += playerATKMod;
     return playerAccRoll;
 }
 
@@ -415,10 +450,11 @@ int CalculatePlayerDamage() {
     int maxDMG = player->playerStats.maxDMG;
     int minDMG = player->playerStats.minDMG;
     int playerDMG = (rand() % maxDMG) + minDMG;
-    if(combatHistory->playerUsedRanged && player->equippedRanged.isEnchanted) {
+    if (combatHistory->crit == true) playerDMG = playerDMG * 2; // == true was needed here for some reason im dumb
+    if (combatHistory->playerUsedRanged && player->equippedRanged.isEnchanted) {
         playerDMG += (player->equippedRanged.enchantLevel);
     }
-    else if(!combatHistory->playerUsedRanged && player->equippedMelee.isEnchanted) {
+    else if (!combatHistory->playerUsedRanged && player->equippedMelee.isEnchanted) {
         playerDMG += (player->equippedMelee.enchantLevel);
     }
     return playerDMG;
@@ -429,8 +465,9 @@ int CalculatePlayerAC() {
     int playerAC = player->playerStats.AC;
     playerDodgeMod = ((playerDodgeMod - 10) / 2);
     playerAC = (playerAC + playerDodgeMod + 10);
-    if(player->equippedArmor.isEnchanted) {
+    if (player->equippedArmor.isEnchanted) {
         playerAC += (player->equippedArmor.enchantLevel);
     }
     return playerAC;
 }
+

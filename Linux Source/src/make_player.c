@@ -42,15 +42,12 @@ bool AskPlayerInfo(Player* player) {
         printf("Memory allocation error when creating name buffer.\n");
         return false;
     }
-    
-    keypad(stdscr, FALSE);
 
     ChooseName(name);
     free(name);
     free(nameBuffer);
     
     noecho();           // Hide input again.
-    keypad(stdscr, FALSE);
     cbreak();           // Set back to raw.  
     return true;
 }   
@@ -84,7 +81,7 @@ bool ChooseRace() {
         PrintRaces();
         Cursor(cursorBoundY, cursorBoundX, 11);
         switch(ch) {
-            case 'A':
+            case KEY_UP:
             if (cursorBoundY == 22) {
                 RemoveCursor(cursorBoundY, cursorBoundX, 11);
                 cursorBoundY = 27;
@@ -94,8 +91,7 @@ bool ChooseRace() {
                 cursorBoundY--;
             }
             break;
-            //move down
-            case 'B':
+            case KEY_DOWN:
                 if (cursorBoundY == 27) {
                     RemoveCursor(cursorBoundY, cursorBoundX, 11);
                     cursorBoundY = 22;
@@ -105,8 +101,7 @@ bool ChooseRace() {
                     cursorBoundY++;
                 }
                 break;
-            //move left
-            case 'D':
+            case KEY_LEFT:
                 if (cursorBoundX == 40) {
                     RemoveCursor(cursorBoundY, cursorBoundX, 11);
                     cursorBoundX = 60;
@@ -116,7 +111,7 @@ bool ChooseRace() {
                     cursorBoundX = cursorBoundX - 20;
                 }
                 break;
-            case 'C':
+            case KEY_RIGHT:
                 if (cursorBoundX == 60) {
                     RemoveCursor(cursorBoundY, cursorBoundX, 11);
                     cursorBoundX = 40;
@@ -171,8 +166,7 @@ void ChooseClass() {
         }
         Cursor(cursorBoundY, cursorBoundX, 13);
         switch(ch) {
-            //move up
-            case 'A':
+            case KEY_UP:
                 if (cursorBoundY == 29) {
                     RemoveCursor(cursorBoundY, cursorBoundX, 13);
                     cursorBoundY = 34;
@@ -182,8 +176,7 @@ void ChooseClass() {
                     cursorBoundY--;
                 }
             break;
-            //move down
-            case 'B':
+            case KEY_DOWN:
                 if (cursorBoundY == 34) {
                     RemoveCursor(cursorBoundY, cursorBoundX, 13);
                     cursorBoundY = 29;
@@ -193,8 +186,7 @@ void ChooseClass() {
                     cursorBoundY++;
                 }
                 break;
-            //move left
-            case 'D':
+            case KEY_LEFT:
                 if (cursorBoundX == 40) {
                     RemoveCursor(cursorBoundY, cursorBoundX, 13);
                     cursorBoundX = 60;
@@ -204,7 +196,7 @@ void ChooseClass() {
                     cursorBoundX = cursorBoundX - 20;
                 }
                 break;
-            case 'C':
+            case KEY_RIGHT:
                 if (cursorBoundX == 60) {
                     RemoveCursor(cursorBoundY, cursorBoundX, 13);
                     cursorBoundX = 40;
@@ -231,7 +223,7 @@ Lets the player enter their name.
 void ChooseName(char* name) {
     echo();             
     nocbreak();   // character available immediately & no line buffering.
-    keypad(stdscr, FALSE);      
+    keypad(stdscr, TRUE);      
     mvprintw(18, 40, "Please Enter your name: ");
     mvprintw(20, 44, "                                ");
     mvgetnstr(20, 44, name, 32);
