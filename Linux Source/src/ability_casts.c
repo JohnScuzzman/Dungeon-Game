@@ -200,8 +200,6 @@ void CastSummonSkeleton() {
     Cursor(y, x, 1);
     strcpy(combatHistory->event, "Choose where to place a skeleton.");
     QueueEvent(q, combatHistory->event);
-    DrawCombatLog();
-    DrawEverything();
     while((ch = getch()) != 10 && ch != 32 && !(CheckEscape(ch))) {
         RemoveCursor(y, x, 1);
         x = player->pos.x;
@@ -260,7 +258,6 @@ void CastSummonSkeleton() {
         UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
         UpdateFollower(&player->follower);
         UpdateNPCVisible(nptr, player);
-        map[y][x].seen = true;
         ClearFOV(player);
         MakeFOV(player);
     }

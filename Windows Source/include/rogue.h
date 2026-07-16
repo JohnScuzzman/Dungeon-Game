@@ -87,6 +87,8 @@ typedef struct {
     bool newSeen;
     bool oldVisible;
     bool newVisible;
+    int oldColor;
+    int newColor;
     char oldChar;
     char newChar;
 } MapInfo;
@@ -477,6 +479,8 @@ void ProcessMoveDownRight(Entity* npc);
 void ProcessMoveDownLeft(Entity* npc);
 void ProcessMoveUpRight(Entity* npc);
 void ProcessMoveUpLeft(Entity* npc);
+void KeepNPCIntegrity(Entity* npc);
+void KeepNPCMapIntegrity(Entity* npc);
 
 // npc.c functions
 Entity* FindNPCInList(int entityID, int maxNPCS);

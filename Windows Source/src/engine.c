@@ -93,20 +93,19 @@ It then resets the monsters moveflags and games combatHistory.
 */
 void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
-    for (int i = 0; i < n_monsters; i++) {
-        UpdateNPCVisible(mptr + i, player);
-    }
+    UpdateFollower(&player->follower);
+    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
     MakeFOV(player);
     DrawEverything();
-    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
-    UpdateFollower(&player->follower);
+    // for (int i = 0; i < n_monsters; i++) {
+    //     UpdateNPCVisible(mptr + i, player);
+    // }
     // UpdateNPCVisible(nptr, player);
     // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
     player->follower.hasMoved = false;
 }
-
 void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items) { 
     bool leaveFlag = false;
     bool PMove = false;
@@ -117,9 +116,6 @@ void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* i
 
     Greeting();
     RefreshGamestate(mptr, n_monsters);
-    DrawBorder();
-    DrawPlayerEquipment();
-    DrawPlayerBlink(player);
     
     while(!leaveFlag){ 
         ch = getch();
@@ -154,9 +150,11 @@ void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* i
                 }
             }
         }
-        CheckPassiveAbilities(n_monsters, PMove);
-        RefreshGamestate(mptr, n_monsters);
-        PMove = false;  
+        if(!leaveFlag) {
+            CheckPassiveAbilities(n_monsters, PMove);
+            RefreshGamestate(mptr, n_monsters);
+            PMove = false;
+        }  
     }
     Gameover();
 }

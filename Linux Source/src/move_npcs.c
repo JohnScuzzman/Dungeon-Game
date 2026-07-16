@@ -8,12 +8,16 @@ TODO split into 4 seperate CheckUp, CheckDown etc functions.
 bool MoveTowards(Entity* entity, Position pos) {
     int x = entity->pos.x;
     int y = entity->pos.y;
-    if(CheckNPCDiagonals(entity, x, y, pos)) return true;
+    if(CheckNPCDiagonals(entity, x, y, pos)) {
+        UpdateNPCVisible(entity, player);
+        return true;
+    }
     if (y > pos.y) {
         if ((map[(entity->pos.y - 1)][(entity->pos.x)].noCollision) && (!entity->hasMoved) &&
             map[(entity->pos.y - 1)][(entity->pos.x)].entityType != CHEST){
             MoveUp(entity);
             ProcessMoveUp(entity);
+            UpdateNPCVisible(entity, player);
             return true;
         }
         else if ((map[(entity->pos.y - 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
@@ -26,6 +30,7 @@ bool MoveTowards(Entity* entity, Position pos) {
             map[(entity->pos.y - 1)][(entity->pos.x - 1)].entityType != CHEST){
             MoveUpLeft(entity);
             ProcessMoveUpLeft(entity);
+            UpdateNPCVisible(entity, player);
             return true;
         }
     }
@@ -34,18 +39,21 @@ bool MoveTowards(Entity* entity, Position pos) {
             map[entity->pos.y][(entity->pos.x - 1)].entityType != CHEST){
             MoveLeft(entity);
             ProcessMoveLeft(entity);
+            UpdateNPCVisible(entity, player);
             return true;
         }
         else if ((map[(entity->pos.y + 1)][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved) &&
             map[(entity->pos.y + 1)][(entity->pos.x - 1)].entityType != CHEST){
             MoveDownLeft(entity);
             ProcessMoveDownLeft(entity);
+            UpdateNPCVisible(entity, player);
             return true;
         }
         else if ((map[(entity->pos.y - 1)][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved) &&
             map[(entity->pos.y - 1)][(entity->pos.x - 1)].entityType != CHEST){
             MoveUpLeft(entity);
             ProcessMoveUpLeft(entity);
+            UpdateNPCVisible(entity, player);
             return true;
         }
     }
@@ -54,18 +62,21 @@ bool MoveTowards(Entity* entity, Position pos) {
             map[(entity->pos.y + 1)][(entity->pos.x)].entityType != CHEST){
             MoveDown(entity);
             ProcessMoveDown(entity);
+            UpdateNPCVisible(entity, player);
             return true;
         }
         else if ((map[(entity->pos.y + 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
             map[(entity->pos.y + 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveDownRight(entity);
             ProcessMoveDownRight(entity);
+            UpdateNPCVisible(entity, player);
             return true;
         }
         else if ((map[(entity->pos.y + 1)][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved) &&
             map[(entity->pos.y + 1)][(entity->pos.x - 1)].entityType != CHEST){
             MoveDownLeft(entity);
             ProcessMoveDownLeft(entity);
+            UpdateNPCVisible(entity, player);
             return true;
         }
     }
@@ -74,12 +85,14 @@ bool MoveTowards(Entity* entity, Position pos) {
             map[(entity->pos.y - 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveRight(entity);
             ProcessMoveRight(entity);
+            UpdateNPCVisible(entity, player);
             return true;
         }
         else if ((map[(entity->pos.y + 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
             map[(entity->pos.y + 1)][(entity->pos.x + 1)].entityType != CHEST){
             MoveDownRight(entity);
             ProcessMoveDownRight(entity);
+            
             return true;
         }
         else if ((map[(entity->pos.y - 1)][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
@@ -140,8 +153,8 @@ void MoveUp(Entity* npc){
     npc->mapInfo.newVisible = map[npc->pos.y][npc->pos.x].seen;
     npc->mapInfo.oldChar = map[(npc->pos.y + 1)][npc->pos.x].ch;
     npc->mapInfo.newChar = map[npc->pos.y][npc->pos.x].ch;
-    npc->mapInfo.oldColor = map[(npc->pos.y + 1)][npc->pos.x].color;
-    npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
+    // npc->mapInfo.oldColor = map[(npc->pos.y + 1)][npc->pos.x].color;
+    // npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
     if(map[npc->pos.y][npc->pos.x].ch == 'X') {
         map[npc->pos.y][npc->pos.x].ch = '.';
     }
@@ -163,8 +176,8 @@ void MoveDown(Entity* npc){
     npc->mapInfo.newVisible = map[npc->pos.y][npc->pos.x].seen;
     npc->mapInfo.oldChar = map[(npc->pos.y - 1)][npc->pos.x].ch;
     npc->mapInfo.newChar = map[npc->pos.y][npc->pos.x].ch;
-    npc->mapInfo.oldColor = map[(npc->pos.y - 1)][npc->pos.x].color;
-    npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
+    // npc->mapInfo.oldColor = map[(npc->pos.y - 1)][npc->pos.x].color;
+    // npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
     if(map[npc->pos.y][npc->pos.x].ch == 'X') {
         map[npc->pos.y][npc->pos.x].ch = '.';
     }
@@ -186,8 +199,8 @@ void MoveLeft(Entity* npc){
     npc->mapInfo.newVisible = map[npc->pos.y][npc->pos.x].seen;
     npc->mapInfo.oldChar = map[npc->pos.y][(npc->pos.x + 1)].ch;
     npc->mapInfo.newChar = map[npc->pos.y][npc->pos.x].ch;
-    npc->mapInfo.oldColor = map[npc->pos.y][(npc->pos.x + 1)].color;
-    npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
+    // npc->mapInfo.oldColor = map[npc->pos.y][(npc->pos.x + 1)].color;
+    // npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
     if(map[npc->pos.y][npc->pos.x].ch == 'X') {
         map[npc->pos.y][npc->pos.x].ch = '.';
     }
@@ -209,8 +222,8 @@ void MoveRight(Entity* npc){
     npc->mapInfo.newVisible = map[npc->pos.y][npc->pos.x].seen;
     npc->mapInfo.oldChar = map[npc->pos.y][(npc->pos.x - 1)].ch;
     npc->mapInfo.newChar = map[npc->pos.y][npc->pos.x].ch;
-    npc->mapInfo.oldColor = map[npc->pos.y][(npc->pos.x - 1)].color;
-    npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
+    // npc->mapInfo.oldColor = map[npc->pos.y][(npc->pos.x - 1)].color;
+    // npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
     if(map[npc->pos.y][npc->pos.x].ch == 'X') {
         map[npc->pos.y][npc->pos.x].ch = '.';
     }
@@ -234,8 +247,8 @@ void MoveDownRight(Entity* npc){
     npc->mapInfo.newVisible = map[npc->pos.y][npc->pos.x].seen;
     npc->mapInfo.oldChar = map[(npc->pos.y - 1)][(npc->pos.x - 1)].ch;
     npc->mapInfo.newChar = map[npc->pos.y][npc->pos.x].ch;
-    npc->mapInfo.oldColor = map[(npc->pos.y - 1)][(npc->pos.x - 1)].color;
-    npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
+    // npc->mapInfo.oldColor = map[(npc->pos.y - 1)][(npc->pos.x - 1)].color;
+    // npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
     if(map[npc->pos.y][npc->pos.x].ch == 'X') {
         map[npc->pos.y][npc->pos.x].ch = '.';
     }
@@ -259,8 +272,8 @@ void MoveDownLeft(Entity* npc){
     npc->mapInfo.newVisible = map[npc->pos.y][npc->pos.x].seen;
     npc->mapInfo.oldChar = map[(npc->pos.y - 1)][(npc->pos.x + 1)].ch;
     npc->mapInfo.newChar = map[npc->pos.y][npc->pos.x].ch;
-    npc->mapInfo.oldColor = map[(npc->pos.y - 1)][(npc->pos.x + 1)].color;
-    npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
+    // npc->mapInfo.oldColor = map[(npc->pos.y - 1)][(npc->pos.x + 1)].color;
+    // npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
     if(map[npc->pos.y][npc->pos.x].ch == 'X') {
         map[npc->pos.y][npc->pos.x].ch = '.';
     }
@@ -284,8 +297,8 @@ void MoveUpRight(Entity* npc){
     npc->mapInfo.newVisible = map[npc->pos.y][npc->pos.x].seen;
     npc->mapInfo.oldChar = map[(npc->pos.y + 1)][(npc->pos.x - 1)].ch;
     npc->mapInfo.newChar = map[npc->pos.y][npc->pos.x].ch;
-    npc->mapInfo.oldColor = map[(npc->pos.y + 1)][(npc->pos.x - 1)].color;
-    npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
+    // npc->mapInfo.oldColor = map[(npc->pos.y + 1)][(npc->pos.x - 1)].color;
+    // npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
     if(map[npc->pos.y][npc->pos.x].ch == 'X') {
         map[npc->pos.y][npc->pos.x].ch = '.';
     }
@@ -309,8 +322,8 @@ void MoveUpLeft(Entity* npc){
     npc->mapInfo.newVisible = map[npc->pos.y][npc->pos.x].seen;
     npc->mapInfo.oldChar = map[(npc->pos.y + 1)][(npc->pos.x + 1)].ch;
     npc->mapInfo.newChar = map[npc->pos.y][npc->pos.x].ch;
-    npc->mapInfo.oldColor = map[(npc->pos.y + 1)][(npc->pos.x + 1)].color;
-    npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
+    // npc->mapInfo.oldColor = map[(npc->pos.y + 1)][(npc->pos.x + 1)].color;
+    // npc->mapInfo.newColor = map[npc->pos.y][npc->pos.x].color;
     if(map[npc->pos.y][npc->pos.x].ch == 'X') {
         map[npc->pos.y][npc->pos.x].ch = '.';
     }
@@ -326,7 +339,7 @@ void ProcessMoveUp(Entity* npc){
     KeepNPCIntegrity(npc);
     AssignFloor(npc->pos.x, npc->pos.y);
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
-    map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
+    // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
     map[npc->pos.y + 1][npc->pos.x] = map[npc->pos.y][npc->pos.x];
     map[npc->pos.y][npc->pos.x] = *npc;
     UpdateNPCVisible(npc, player);
@@ -336,7 +349,7 @@ void ProcessMoveDown(Entity* npc){
     KeepNPCIntegrity(npc);
     AssignFloor(npc->pos.x, npc->pos.y);
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
-    map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
+    // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
     map[npc->pos.y - 1][npc->pos.x] = map[npc->pos.y][npc->pos.x];
     map[npc->pos.y][npc->pos.x] = *npc;
     UpdateNPCVisible(npc, player);
@@ -346,7 +359,7 @@ void ProcessMoveLeft(Entity* npc){
     KeepNPCIntegrity(npc);
     AssignFloor(npc->pos.x, npc->pos.y);
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
-    map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
+    // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
     map[npc->pos.y][npc->pos.x + 1] = map[npc->pos.y][npc->pos.x];
     map[npc->pos.y][npc->pos.x] = *npc;
     UpdateNPCVisible(npc, player);
@@ -356,7 +369,7 @@ void ProcessMoveRight(Entity* npc){
     KeepNPCIntegrity(npc);
     AssignFloor(npc->pos.x, npc->pos.y);
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
-    map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
+    // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
     map[npc->pos.y][npc->pos.x - 1] = map[npc->pos.y][npc->pos.x];
     map[npc->pos.y][npc->pos.x] = *npc;
     UpdateNPCVisible(npc, player);
@@ -366,7 +379,7 @@ void ProcessMoveDownRight(Entity* npc){
     KeepNPCIntegrity(npc);
     AssignFloor(npc->pos.x, npc->pos.y);
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
-    map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
+    // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
     map[npc->pos.y - 1][npc->pos.x - 1] = map[npc->pos.y][npc->pos.x];
     map[npc->pos.y][npc->pos.x] = *npc;
     UpdateNPCVisible(npc, player);
@@ -376,7 +389,7 @@ void ProcessMoveDownLeft(Entity* npc){
     KeepNPCIntegrity(npc);
     AssignFloor(npc->pos.x, npc->pos.y);
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
-    map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
+    // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
     map[npc->pos.y - 1][npc->pos.x + 1] = map[npc->pos.y][npc->pos.x];
     map[npc->pos.y][npc->pos.x] = *npc;
     UpdateNPCVisible(npc, player);
@@ -386,7 +399,7 @@ void ProcessMoveUpRight(Entity* npc){
     KeepNPCIntegrity(npc);
     AssignFloor(npc->pos.x, npc->pos.y);
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
-    map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
+    // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
     map[npc->pos.y + 1][npc->pos.x - 1] = map[npc->pos.y][npc->pos.x];
     map[npc->pos.y][npc->pos.x] = *npc;
     UpdateNPCVisible(npc, player);
@@ -396,7 +409,7 @@ void ProcessMoveUpLeft(Entity* npc){
     KeepNPCIntegrity(npc);
     AssignFloor(npc->pos.x, npc->pos.y);
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.newSeen;
-    map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
+    // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.newColor;
     map[npc->pos.y + 1][npc->pos.x + 1] = map[npc->pos.y][npc->pos.x];
     map[npc->pos.y][npc->pos.x] = *npc;
     UpdateNPCVisible(npc, player);
@@ -420,7 +433,7 @@ void KeepNPCIntegrity(Entity* npc) {
 
 void KeepNPCMapIntegrity(Entity* npc) {
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.oldSeen;
-    map[npc->pos.y][npc->pos.x].color = npc->mapInfo.oldColor;
+    // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.oldColor;
     if (npc->mapInfo.oldVisible == false) {
         map[npc->pos.y][npc->pos.x].visible = false;
     }
