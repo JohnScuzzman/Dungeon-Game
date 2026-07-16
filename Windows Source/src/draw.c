@@ -467,7 +467,6 @@ void DrawEverything() {
 	erase();
 	DrawMap();
 	DrawPlayer(player);
-	DrawBorder();
   	DrawPlayerEquipment();
   	DrawPlayerStats();
   	DrawAbilities();

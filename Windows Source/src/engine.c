@@ -111,6 +111,7 @@ void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* i
     int playerRegen = 0;
     int manaRegen = 0;
 
+    DrawBorder();
     Greeting();
     RefreshGamestate(mptr, n_monsters);
     DrawPlayerBlink(player);
