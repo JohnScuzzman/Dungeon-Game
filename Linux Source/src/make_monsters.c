@@ -213,6 +213,7 @@ void AssignMonsterDefaults(Entity* monster, Position m_pos, int monsterID) {
     monster->wasReplaced = false;
     monster->entityID = monsterID;
     monster->entityType = MONSTER;
+    monster->miscTimer = 0;
     monster->color = COLOR_PAIR(VISIBLE_COLOR);
     monster->pos.y = m_pos.y;
     monster->pos.x = m_pos.x;

@@ -15,6 +15,7 @@ bool NcursesSetup(void) {
         init_pair(VISIBLE_COLOR, COLOR_WHITE, COLOR_BLACK);
         init_pair(SEEN_COLOR, COLOR_BLUE, COLOR_BLACK);
         init_pair(HIGHLIGHT_COLOR, COLOR_BLACK, COLOR_WHITE);
+        init_pair(BLOOD_COLOR, COLOR_RED, COLOR_BLACK); 
         return true;
     }
     else {
