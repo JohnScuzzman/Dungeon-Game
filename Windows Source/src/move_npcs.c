@@ -70,7 +70,7 @@ bool MoveTowards(Entity* entity, Position pos) {
     }
     else if (x < pos.x) {
         if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved) &&
-            map[(entity->pos.y - 1)][(entity->pos.x + 1)].entityType != CHEST){
+            map[(entity->pos.y)][(entity->pos.x + 1)].entityType != CHEST){
             MoveRight(entity);
             ProcessMoveRight(entity);
             return true;
