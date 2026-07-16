@@ -7,44 +7,56 @@
 
 typedef enum {
     NULL_ITEM_ID,
+    _MELEE_,
     FISTS,
     CLAWS,
     DAGGER,
+    COMBAT_KNIFE,
     SHORTSWORD,
     QUARTERSTAFF,
     LONGSWORD,
     CUTLASS,
     SCIMITAR,
+    BATTLE_AXE,
     GREATSWORD,
     CHROME_FISTS,
-    ACID_POTION,
+    _RANGED_,
+    SLINGSHOT,
     SHORTBOW,
     LONGBOW,
     FLINTLOCK_PISTOL,
+    FLINTLOCK_RIFLE,
+    LIGHT_PISTOL,
+    MEDIUM_PISTOL,
+    HEAVY_PISTOL,
     LIGHTNING_WAND,
-    DUAL_FLINTLOCKS,
+    _AMMO_,
 	ARROWS,
-    DARTS,
+    BOLTS,
 	ACID_POTION_AMMO,
-	BULLET_MUSKET,
+	BULLET_FLINTLOCK,
 	BULLET_5MM,
 	BULLET_9MM,
+    BULLET_45,
 	BULLET_556,
 	BULLET_762,
 	BULLET_308,
 	BULLET_50CAL,
-	BULLET_BUCKSHOT,
-	BULLET_SLUG,
-	BULLET_DRAGONS_BREATH,
+	SHELL_BUCKSHOT,
+	SHELL_SLUG,
+	SHELL_DRAGONS_BREATH,
 	MISSILES,
     ENERGY_PACKS,
 	HEAVY_ENERGY_PACKS,
+    _ARMOR_,
     RAGS,
     LEATHER_ARMOR,
     CHAINMAIL,
+    HALF_PLATE,
     ROBES,
     RANGERS_CLOAK,
-    METALLIC_SKIN
+    METALLIC_SKIN,
+    _END_
 } ItemIDs;
 
 typedef enum {
@@ -54,17 +66,27 @@ typedef enum {
     HEAVY,
     EXOSUIT,
     POWER_ARMOR,
-    MAGIC_ARMOR
+    MAGIC_ARMOR,
+    CYBERWARE
 } ArmorTypes;
 
 typedef enum {
 	NULL_AMMO_TYPE,
-    PRIMITIVE,
-	MAGIC,
-	FLINTLOCK,
-	BULLET,
-	EXPLOSIVE,
-	ENERGY
+	TYPE_MAGIC,
+    TYPE_ARROWS,
+    TYPE_BOLTS,
+    TYPE_FLINTLOCK,
+    TYPE_5MM,
+	TYPE_9MM,
+    TYPE_45,
+	TYPE_556,
+	TYPE_762,
+	TYPE_308,
+	TYPE_50CAL,
+	TYPE_SHOTGUN,
+	TYPE_EXPLOSIVE_MISSILE,
+    TYPE_THROWABLE,
+	TYPE_ENERGY,
 } AmmoTypes;
 
 typedef enum {
@@ -72,6 +94,7 @@ typedef enum {
     WEAPON,
 	AMMO,
     ARMOR,
+    PANTS,
     HELMET,
     SHOES,
     GLOVES,
@@ -85,38 +108,47 @@ typedef enum {
 } ItemTypes;
 
 typedef struct {
-  bool equippable;
-  bool lootable;
-  bool unequippable;
-  bool isEquipped;
-  int itemID;
-  int quantity;
-  int type;
-  int value;
-  char itemName[MAX_NAME_SIZE];
-  char itemDesc[ITEM_DESC_SIZE];
+    bool equippable;
+    bool lootable;
+    bool unequippable;
+    bool isEquipped;
+    int itemID;
+    int quantity;
+    int type;
+    int value;
+    char itemName[MAX_NAME_SIZE];
+    char itemDesc[ITEM_DESC_SIZE];
 }Item;
 
 typedef struct {
-  Item item;
-  bool isMagic;
-  bool isRanged;
-  int minDMG;
-  int maxDMG;
-  int range;
-  //int ammoType
+    Item item;
+    bool isMagic;
+    bool isEnchanted;
+    bool isRanged;
+    int capacity;
+    int enchantLevel;
+    int minDMG;
+    int maxDMG;
+    int range;
+    int ammoType;
+    int statReq;
+    int statUsed;
 } Weapon;
 
 typedef struct {
-  Item item;
-  int AC;
-  int type; // 1 = light, 2 = medium, 3 = heavy.
+    Item item;
+    bool isEnchanted;
+    int AC;
+    int enchantLevel;
+    int type; // 1 = light, 2 = medium, 3 = heavy.
+    int statReq;
+    int statUsed;
 } Armor;
 
 typedef struct {
-  Item item;
-  int bonusDamage;
-  int type; // Bullet or Arrow, etc.
+    Item item;
+    int bonusDamage;
+    int type; // Bullet or Arrow, etc.
 } Ammo;
 
 // typedef struct {
@@ -136,19 +168,24 @@ Weapon NoWeapon();
 Weapon Fists();
 Weapon Claws();
 Weapon Dagger();
+Weapon CombatKnife();
 Weapon Shortsword();
+Weapon Quarterstaff();
 Weapon Longsword();
-Weapon Greatsword();
 Weapon Cutlass();
 Weapon Scimitar();
-Weapon Quarterstaff();
+Weapon BattleAxe();
+Weapon Greatsword();
 Weapon ChromeFists();
-Weapon AcidPotion();
+Weapon Slingshot();
 Weapon Shortbow();
 Weapon Longbow();
 Weapon FlintlockPistol();
+Weapon FlintlockRifle();
+Weapon LightPistol();
+Weapon MediumPistol();
+Weapon HeavyPistol();
 Weapon LightningWand();
-Weapon DualFlintlocks();
 
 //make_armors.c functions
 Armor NoArmor();
@@ -156,17 +193,19 @@ Armor Robes();
 Armor Rags();
 Armor LeatherArmor();
 Armor Chainmail();
+Armor HalfPlate();
 Armor RangersCloak();
 Armor MetallicSkin();
 
 //make_ammos.c fucntions
 Ammo NoAmmo();
 Ammo Arrows();
-Ammo Darts();
+Ammo Bolts();
 Ammo AcidPotionAmmo();
-Ammo BulletMusket();
+Ammo BulletFlintlock();
 Ammo Bullet5mm();
 Ammo Bullet9mm();
+Ammo Bullet45();
 Ammo Bullet556();
 Ammo Bullet762();
 Ammo Bullet308();

@@ -26,22 +26,26 @@ Ammo Arrows() {
     arrows.item.quantity = 0;
     arrows.item.value = 1;
     arrows.bonusDamage = 0;
-    arrows.type = PRIMITIVE;
+    arrows.type = TYPE_ARROWS;
+    strcpy(arrows.item.itemName, "Arrows");
+    strcpy(arrows.item.itemDesc, "Arrows, able to be fired from a bow.");
     return arrows;
 }
 
-Ammo Darts() {
-    Ammo darts;
-    darts.item.equippable = true;
-    darts.item.unequippable = true;
-    darts.item.isEquipped = false;
-    darts.item.type = AMMO;
-    darts.item.itemID = DARTS;
-    darts.item.quantity = 0;
-    darts.item.value = 1;
-    darts.bonusDamage = 1;
-    darts.type = PRIMITIVE;
-    return darts;
+Ammo Bolts() {
+    Ammo bolts;
+    bolts.item.equippable = true;
+    bolts.item.unequippable = true;
+    bolts.item.isEquipped = false;
+    bolts.item.type = AMMO;
+    bolts.item.itemID = BOLTS;
+    bolts.item.quantity = 0;
+    bolts.item.value = 1;
+    bolts.bonusDamage = 1;
+    bolts.type = TYPE_BOLTS;
+    strcpy(bolts.item.itemName, "Bolts");
+    strcpy(bolts.item.itemDesc, "Small wooden bolts, fired by crossbows.");
+    return bolts;
 }
 
 Ammo AcidPotionAmmo() {
@@ -53,24 +57,27 @@ Ammo AcidPotionAmmo() {
     acidPotion.item.itemID = ACID_POTION_AMMO;
     acidPotion.item.quantity = 0;
     acidPotion.item.value = 25;
-    acidPotion.bonusDamage = 0;
-    acidPotion.type = MAGIC;
+    acidPotion.bonusDamage = 3;
+    acidPotion.type = TYPE_THROWABLE;
+    strcpy(acidPotion.item.itemName, "Acid Potions");
+    strcpy(acidPotion.item.itemDesc, "A green swirly potion, it burns the eyebrows.");
     return acidPotion;
 }
 
-
-Ammo BulletMusket() {
-    Ammo bulletMusket;
-    bulletMusket.item.equippable = true;
-    bulletMusket.item.unequippable = true;
-    bulletMusket.item.isEquipped = false;
-    bulletMusket.item.type = AMMO;
-    bulletMusket.item.itemID = BULLET_MUSKET;
-    bulletMusket.item.quantity = 0;
-    bulletMusket.item.value = 5;
-    bulletMusket.bonusDamage = 1;
-    bulletMusket.type = FLINTLOCK;
-    return bulletMusket;
+Ammo BulletFlintlock() {
+    Ammo bulletFlintlock;
+    bulletFlintlock.item.equippable = true;
+    bulletFlintlock.item.unequippable = true;
+    bulletFlintlock.item.isEquipped = false;
+    bulletFlintlock.item.type = AMMO;
+    bulletFlintlock.item.itemID = BULLET_FLINTLOCK;
+    bulletFlintlock.item.quantity = 0;
+    bulletFlintlock.item.value = 5;
+    bulletFlintlock.bonusDamage = 1;
+    bulletFlintlock.type = TYPE_FLINTLOCK;
+    strcpy(bulletFlintlock.item.itemName, "Flintlock Ammo");
+	strcpy(bulletFlintlock.item.itemDesc, "A small metal ball, fired with black powder.");
+    return bulletFlintlock;
 }
 
 Ammo Bullet5mm() {
@@ -83,7 +90,9 @@ Ammo Bullet5mm() {
     bullet5mm.item.quantity = 0;
     bullet5mm.item.value = 10;
     bullet5mm.bonusDamage = 1;
-    bullet5mm.type = BULLET;
+    bullet5mm.type = TYPE_5MM;
+    strcpy(bullet5mm.item.itemName, "5mm ammo");
+	strcpy(bullet5mm.item.itemDesc, "");
     return bullet5mm;
 }
 
@@ -97,8 +106,26 @@ Ammo Bullet9mm() {
     bullet9mm.item.quantity = 0;
     bullet9mm.item.value = 12;
     bullet9mm.bonusDamage = 1;
-    bullet9mm.type = BULLET;
+    bullet9mm.type = TYPE_9MM;
+    strcpy(bullet9mm.item.itemName, "9mm Ammo");
+	strcpy(bullet9mm.item.itemDesc, "Standard pistol ammunition.");
     return bullet9mm;
+}
+
+Ammo Bullet45() {
+    Ammo bullet45;
+    bullet45.item.equippable = true;
+    bullet45.item.unequippable = true;
+    bullet45.item.isEquipped = false;
+    bullet45.item.type = AMMO;
+    bullet45.item.itemID = BULLET_45;
+    bullet45.item.quantity = 0;
+    bullet45.item.value = 14;
+    bullet45.bonusDamage = 2;
+    bullet45.type = TYPE_45;
+    strcpy(bullet45.item.itemName, ".45 Ammo");
+	strcpy(bullet45.item.itemDesc, "Heavier pistol ammunition, packing more punch.");
+    return bullet45;
 }
 
 Ammo Bullet556() {
@@ -111,7 +138,9 @@ Ammo Bullet556() {
     bullet556.item.quantity = 0;
     bullet556.item.value = 16;
     bullet556.bonusDamage = 1;
-    bullet556.type = BULLET;
+    bullet556.type = TYPE_556;
+    strcpy(bullet556.item.itemName, "5.56 Ammo");
+	strcpy(bullet556.item.itemDesc, "");
     return bullet556;
 }
 
@@ -125,7 +154,9 @@ Ammo Bullet762() {
     bullet762.item.quantity = 0;
     bullet762.item.value = 18;
     bullet762.bonusDamage = 1;
-    bullet762.type = BULLET;
+    bullet762.type = TYPE_762;
+    strcpy(bullet762.item.itemName, "7.62 Ammo");
+	strcpy(bullet762.item.itemDesc, "");
     return bullet762;
 }
 
@@ -139,7 +170,9 @@ Ammo Bullet308() {
     bullet308.item.quantity = 0;
     bullet308.item.value = 22;
     bullet308.bonusDamage = 1;
-    bullet308.type = BULLET;
+    bullet308.type = TYPE_308;
+    strcpy(bullet308.item.itemName, ".308 Ammo");
+	strcpy(bullet308.item.itemDesc, "");
     return bullet308;
 }
 
@@ -153,50 +186,58 @@ Ammo Bullet50Cal() {
     bullet50Cal.item.quantity = 0;
     bullet50Cal.item.value = 28;
     bullet50Cal.bonusDamage = 1;
-    bullet50Cal.type = BULLET;
+    bullet50Cal.type = TYPE_50CAL;
+    strcpy(bullet50Cal.item.itemName, ".50 Cal Ammo");
+	strcpy(bullet50Cal.item.itemDesc, "For heavy weapons.");
     return bullet50Cal;
 }
 
 Ammo BulletBuckshot() {
-    Ammo bulletBuckshot;
-    bulletBuckshot.item.equippable = true;
-    bulletBuckshot.item.unequippable = true;
-    bulletBuckshot.item.isEquipped = false;
-    bulletBuckshot.item.type = AMMO;
-    bulletBuckshot.item.itemID = BULLET_BUCKSHOT;
-    bulletBuckshot.item.quantity = 0;
-    bulletBuckshot.item.value = 6;
-    bulletBuckshot.bonusDamage = 1;
-    bulletBuckshot.type = BULLET;
-    return bulletBuckshot;
+    Ammo shellBuckshot;
+    shellBuckshot.item.equippable = true;
+    shellBuckshot.item.unequippable = true;
+    shellBuckshot.item.isEquipped = false;
+    shellBuckshot.item.type = AMMO;
+    shellBuckshot.item.itemID = SHELL_BUCKSHOT;
+    shellBuckshot.item.quantity = 0;
+    shellBuckshot.item.value = 6;
+    shellBuckshot.bonusDamage = 1;
+    shellBuckshot.type = TYPE_SHOTGUN;
+    strcpy(shellBuckshot.item.itemName, "Buckshot Ammo");
+	strcpy(shellBuckshot.item.itemDesc, "");
+    return shellBuckshot;
 }
 
 Ammo BulletSlug() {
-    Ammo bulletSlug;
-    bulletSlug.item.equippable = true;
-    bulletSlug.item.unequippable = true;
-    bulletSlug.item.isEquipped = false;
-    bulletSlug.item.type = AMMO;
-    bulletSlug.item.itemID = BULLET_SLUG;
-    bulletSlug.item.quantity = 0;
-    bulletSlug.item.value = 7;
-    bulletSlug.bonusDamage = 1;
-    bulletSlug.type = BULLET;
-    return bulletSlug;
+    Ammo shellSlug;
+    shellSlug.item.equippable = true;
+    shellSlug.item.unequippable = true;
+    shellSlug.item.isEquipped = false;
+    shellSlug.item.type = AMMO;
+    shellSlug.item.itemID = SHELL_SLUG;
+    shellSlug.item.quantity = 0;
+    shellSlug.item.value = 7;
+    shellSlug.bonusDamage = 1;
+    shellSlug.type = TYPE_SHOTGUN;
+    strcpy(shellSlug.item.itemName, "Shotgun Slugs");
+	strcpy(shellSlug.item.itemDesc, "");
+    return shellSlug;
 }
 
 Ammo BulletDragonsBreath() {
-    Ammo bulletDragonsBreath;
-    bulletDragonsBreath.item.equippable = true;
-    bulletDragonsBreath.item.unequippable = true;
-    bulletDragonsBreath.item.isEquipped = false;
-    bulletDragonsBreath.item.type = AMMO;
-    bulletDragonsBreath.item.itemID = BULLET_DRAGONS_BREATH;
-    bulletDragonsBreath.item.quantity = 0;
-    bulletDragonsBreath.item.value = 12;
-    bulletDragonsBreath.bonusDamage = 1;
-    bulletDragonsBreath.type = BULLET;
-    return bulletDragonsBreath;
+    Ammo shellDragonsBreath;
+    shellDragonsBreath.item.equippable = true;
+    shellDragonsBreath.item.unequippable = true;
+    shellDragonsBreath.item.isEquipped = false;
+    shellDragonsBreath.item.type = AMMO;
+    shellDragonsBreath.item.itemID = SHELL_DRAGONS_BREATH;
+    shellDragonsBreath.item.quantity = 0;
+    shellDragonsBreath.item.value = 12;
+    shellDragonsBreath.bonusDamage = 1;
+    shellDragonsBreath.type = TYPE_SHOTGUN;
+    strcpy(shellDragonsBreath.item.itemName, "Dragon's Breath Rounds");
+	strcpy(shellDragonsBreath.item.itemDesc, "");
+    return shellDragonsBreath;
 }
 
 Ammo Missiles() {
@@ -209,7 +250,9 @@ Ammo Missiles() {
     missiles.item.quantity = 0;
     missiles.item.value = 210;
     missiles.bonusDamage = 1;
-    missiles.type = EXPLOSIVE;
+    missiles.type = TYPE_EXPLOSIVE_MISSILE;
+    strcpy(missiles.item.itemName, "Missiles");
+	strcpy(missiles.item.itemDesc, "");
     return missiles;
 }
 
@@ -223,7 +266,9 @@ Ammo EnergyPacks() {
     energyPacks.item.quantity = 0;
     energyPacks.item.value = 38;
     energyPacks.bonusDamage = 1;
-    energyPacks.type = ENERGY;
+    energyPacks.type = TYPE_ENERGY;
+    strcpy(energyPacks.item.itemName, "Energy Packs");
+    strcpy(energyPacks.item.itemDesc, "");
     return energyPacks;
 }
 
@@ -237,6 +282,8 @@ Ammo HeavyEnergyPacks() {
     heavyEnergyPacks.item.quantity = 0;
     heavyEnergyPacks.item.value = 124;
     heavyEnergyPacks.bonusDamage = 1;
-    heavyEnergyPacks.type = ENERGY;
+    heavyEnergyPacks.type = TYPE_ENERGY;
+    strcpy(heavyEnergyPacks.item.itemName, "Heavy Energy Packs");
+	strcpy(heavyEnergyPacks.item.itemDesc, "");
     return heavyEnergyPacks;
 }

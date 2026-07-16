@@ -72,9 +72,12 @@ void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_
     PrintInventoryHeaders(menu, desc, loot);
     
     for (int i = 0; i < player->invTail; i++){
-        if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID || playerInv[i]->itemID == player->equippedAmmo.item.itemID) {
+        if(playerInv[i]->itemID == player->equippedMelee.item.itemID ||
+             playerInv[i]->itemID == player->equippedRanged.item.itemID ||
+              playerInv[i]->itemID == player->equippedArmor.item.itemID ||
+               playerInv[i]->itemID == player->equippedAmmo.item.itemID) {
             wattron(menu, A_DIM);
-            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 5), " (Equipped)");
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + GetNumberOfDigits(playerInv[i]->quantity) + 4), " (Equipped)");
             wattroff(menu, A_DIM);
             mvwprintw(menu, y, 2, "%s", playerInv[i]->itemName);
             mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 3), "x%d", playerInv[i]->quantity);
@@ -114,17 +117,17 @@ void RenderLootMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, int n_
 bool MakeLootOptionsWindow(Item** playerInv, Item** entityInv, int choice, int n_options, WINDOW *menu, WINDOW *loot) {
 
     char *options[] = {
-    "Take",
-    "Take All",
-    "Equip",
-    "Examine",
-    "Exit",
+        "Take",
+        "Take All",
+        "Equip",
+        "Examine",
+        "Exit",
     };
 
     //Sorry about the magic numbers
     int m_options = sizeof(options) / sizeof(char*);
     int invX = (WINDOW_WIDTH + OFFSET * 2) + strlen(entityInv[choice]->itemName);
-    int invY = (WINDOW_HEIGHT / 2) + choice + 5;
+    int invY = choice + 5;
     bool escFlag = false;
     int cursor = 0;
     int newChoice = -1;

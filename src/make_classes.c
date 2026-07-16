@@ -204,7 +204,7 @@ Class Bard(){
     Class bard;
     bard.isCaster = false;
     bard.classID = CYBORG;
-    bard.hpPerLVL = 6;
+    bard.hpPerLVL = 3;
     bard.manaPerLVL = 5;
     bard.mainStat = 2;
     bard.secondaryStat = 2;

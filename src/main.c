@@ -17,12 +17,18 @@ const int LVL_EXP_VALUES[MAX_LEVEL] = {
   LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, 
   LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
 };
-int MAX_MONSTER_NAME = 33;
-int MAP_HEIGHT = 50;
-int MAP_WIDTH = 125;
+
+int ENTITY_ID  = 256; // accounting for a theorhetical 256 monsters
 int LOG_HEIGHT = 22;
 int LOG_SIZE  = 27;
 int LOG_WIDTH = 128;
+int MAX_MONSTER_NAME = 33;
+int MAX_NPCS = 512;
+int MAX_ONSCREEN_NPCS = 64;
+int MAP_HEIGHT = 50;
+int MAP_WIDTH = 125;
+int MAX_DUNGEON_FLOORS = 1024;
+int RADIUS = 15;
 
 
 
@@ -31,11 +37,12 @@ int LOG_WIDTH = 128;
 Player* player; //player->equippedWeapon.DMG
 Entity** map;
 Entity* mptr; 
+Entity* nptr;
+Entity* npcs;
 CombatHistory* combatHistory;
 LogQueue* q;
 Item* items;
-Weapon* weapons;
-Armor* armors;
+DungeonInfo* dungeonInfo;
 
 int main(void)
 {
@@ -67,8 +74,9 @@ int main(void)
 	define_key("\033[4~", 1034); // End
 	define_key("\033[E",  1040); // center arrow
 
+	// Handle middle mouse clicks
     mousemask(BUTTON1_CLICKED, NULL);
-    Position start_pos;
+
     /* Generate seeds */
     srand(time(NULL));
 
@@ -77,6 +85,10 @@ int main(void)
     int n_rooms =  (rand() % 11) + 10;
     int n_monsters = n_rooms - 1;
 
+	  Position start_pos;
+
+    /*Dungeon Information*/
+    dungeonInfo = MakeDungeonInfo();
 
     /* Item table */
     items = CreateItemTable();
@@ -87,6 +99,12 @@ int main(void)
     /* Make # of rooms -1 number of monsters. */
     /* Point mptr at monsterlist[0]. */
     mptr = MonsterList(n_monsters);
+
+    /* Generate empty npc list of (current) size 64 for localized floor use*/
+    nptr = NPCList(MAX_ONSCREEN_NPCS);
+
+    /* Generate global list of unique npcs somewhat similar to items*/
+    // npcs = NPCList(MAX_NPCS);
 
     /* Create a starting position for player and setup the floor in map.c*/
     /* Pass the monsterList to populate it.*/
@@ -105,15 +123,18 @@ int main(void)
     /* Call Title Screen from asciiart.c*/
     TitleScreen();
 
-    /* Ask info about the player's character from functions in player.c */
+    /* Ask info about the player's character from functions in make_player.c */
     AskPlayerInfo(player);
+    
+    ChooseClass(); // Choose Class && Race.
 
     keypad(stdscr, TRUE);
 
     /* Start main game loop located in engine.c */
     /* Pass the pointer to monsterList[0]. */
     /* Pass the number of monsters and rooms made. */
-    GameLoop(mptr, combatHistory, n_monsters, q, items);
+    GameLoop(combatHistory, n_monsters, q, items);
+    
     CloseGame();
   }
   else

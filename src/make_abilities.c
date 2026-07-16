@@ -12,7 +12,8 @@ Ability NoAbility() {
     Ability noAbility;
     noAbility.isAttack = false;
     noAbility.isMagic = false;
-    noAbility.hasEffects = false;
+    noAbility.preCombatEffects = false;
+    noAbility.postCombatEffects = false;
     noAbility.abilityID = NO_ABILITY;
     noAbility.duration = 0;
     noAbility.minDMG = 0;
@@ -30,7 +31,9 @@ Ability AimedShot() {
     Ability aimedShot;
     aimedShot.isAttack = true;
     aimedShot.isMagic = false;
-    aimedShot.hasEffects = false;
+    aimedShot.isRanged = true;
+    aimedShot.preCombatEffects = false;
+    aimedShot.postCombatEffects = false;
     aimedShot.abilityID = AIMED_SHOT;
     aimedShot.duration = 0;
     aimedShot.minDMG = (player->equippedRanged.minDMG) + 1;
@@ -48,7 +51,9 @@ Ability Charge() {
     Ability charge;
     charge.isAttack = true;
     charge.isMagic = false;
-    charge.hasEffects = true;
+    charge.isRanged = false; // Doesnt use ammo, not technically ranged
+    charge.preCombatEffects = false;
+    charge.postCombatEffects = true;
     charge.abilityID = CHARGE;
     charge.duration = 0;
     charge.minDMG = (player->equippedMelee.minDMG) + 1;
@@ -66,7 +71,9 @@ Ability DrainLife() {
     Ability drainLife;
     drainLife.isAttack = true;
     drainLife.isMagic = true;
-    drainLife.hasEffects = true;
+    drainLife.isRanged = true;
+    drainLife.preCombatEffects = false;
+    drainLife.postCombatEffects = true;
     drainLife.abilityID = DRAIN_LIFE;
     drainLife.duration = 0;
     drainLife.minDMG = 4;
@@ -83,11 +90,13 @@ Ability DrainLife() {
 Ability Electrify() {
     Ability electrify;
     electrify.isAttack = true;
-    electrify.isMagic = false;
-    electrify.hasEffects = false;
+    electrify.isMagic = true;
+    electrify.isRanged = true;
+    electrify.preCombatEffects = false;
+    electrify.postCombatEffects = false;
     electrify.abilityID = ELECTRIFY;
     electrify.duration = 0;
-    electrify.minDMG = 1;
+    electrify.minDMG = 3;
     electrify.maxDMG = 6;
     electrify.manaCost = 2;
     electrify.range = 3;
@@ -102,14 +111,16 @@ Ability FireVolley() {
     Ability fireVolley;
     fireVolley.isAttack = true;
     fireVolley.isMagic = false;
-    fireVolley.hasEffects = false;
+    fireVolley.isRanged = true;
+    fireVolley.preCombatEffects = true;
+    fireVolley.postCombatEffects = true;
     fireVolley.abilityID = FIRE_VOLLEY;
     fireVolley.duration = 0;
     fireVolley.minDMG = (player->equippedRanged.minDMG);
     fireVolley.maxDMG = (player->equippedRanged.maxDMG);
     fireVolley.manaCost = 5;
-    fireVolley.range = 5;
-    fireVolley.abilitySave = (player->playerStats.ATK) + 3;
+    fireVolley.range = (player->equippedRanged.range);
+    fireVolley.abilitySave = (player->playerStats.ATK);
     fireVolley.miscStat = (player->playerStats.LVL); // number of shots fired.
     fireVolley.miscStat++;
     fireVolley.minDMG = (fireVolley.minDMG) * (fireVolley.miscStat);
@@ -124,7 +135,9 @@ Ability IceArmor() {
     Ability iceArmor;
     iceArmor.isAttack = false;
     iceArmor.isMagic = true;
-    iceArmor.hasEffects = true;
+    iceArmor.isRanged = false;
+    iceArmor.preCombatEffects = false;
+    iceArmor.postCombatEffects = true;
     iceArmor.abilityID = ICE_ARMOR;
     iceArmor.duration = 240;
     iceArmor.minDMG = 0;
@@ -142,7 +155,9 @@ Ability MagicMissile() {
     Ability magicMissile;
     magicMissile.isAttack = true;
     magicMissile.isMagic = true;
-    magicMissile.hasEffects = false;
+    magicMissile.isRanged = true;
+    magicMissile.preCombatEffects = false;
+    magicMissile.postCombatEffects = false;
     magicMissile.abilityID = MAGIC_MISSILE;
     magicMissile.duration = 0;
     magicMissile.minDMG = (player->playerStats.LVL) + 1; //3d4 then 4d4 etc
@@ -161,7 +176,9 @@ Ability SecondWind() {
     Ability secondWind;
     secondWind.isAttack = false;
     secondWind.isMagic = false;
-    secondWind.hasEffects = true;
+    secondWind.isRanged = false;
+    secondWind.preCombatEffects = false;
+    secondWind.postCombatEffects = true;
     secondWind.abilityID = SECOND_WIND;
     secondWind.duration = 0;
     secondWind.minDMG = 2;
@@ -179,7 +196,9 @@ Ability SelfRepair() {
     Ability selfRepair;
     selfRepair.isAttack = false;
     selfRepair.isMagic = false;
-    selfRepair.hasEffects = true;
+    selfRepair.isRanged = false;
+    selfRepair.preCombatEffects = false;
+    selfRepair.postCombatEffects = true;
     selfRepair.abilityID = SELF_REPAIR;
     selfRepair.duration = 0;
     selfRepair.minDMG = 1;
@@ -197,9 +216,11 @@ Ability SummonSkeleton() {
     Ability summonSkeleton;
     summonSkeleton.isAttack = false;
     summonSkeleton.isMagic = true;
-    summonSkeleton.hasEffects = true;
+    summonSkeleton.isRanged = false;
+    summonSkeleton.preCombatEffects = false;
+    summonSkeleton.postCombatEffects = true;
     summonSkeleton.abilityID = SUMMON_SKELETON;
-    summonSkeleton.duration = 0; // skeleton lives until it dies
+    summonSkeleton.duration = 3000; // skeleton lives until it dies
     summonSkeleton.minDMG = 1; // skeletons dmg
     summonSkeleton.maxDMG = 6;
     summonSkeleton.manaCost = 16;
@@ -215,7 +236,9 @@ Ability ShadowBolt() {
     Ability shadowBolt;
     shadowBolt.isAttack = true;
     shadowBolt.isMagic = true;
-    shadowBolt.hasEffects = false;
+    shadowBolt.isRanged = true;
+    shadowBolt.preCombatEffects = false;
+    shadowBolt.postCombatEffects = false;
     shadowBolt.abilityID = SHADOW_BOLT;
     shadowBolt.duration = 0;
     shadowBolt.minDMG = 4;
@@ -233,7 +256,9 @@ Ability Vengeance() {
     Ability vengeance;
     vengeance.isAttack = false;
     vengeance.isMagic = false;
-    vengeance.hasEffects = true;
+    vengeance.isRanged = false;
+    vengeance.preCombatEffects = false;
+    vengeance.postCombatEffects = true;
     vengeance.abilityID = VENGEANCE;
     vengeance.duration = 240;
     vengeance.minDMG = (player->equippedMelee.minDMG) + 1;
@@ -251,7 +276,9 @@ Ability Dash() {
     Ability dash;
     dash.isAttack = false;
     dash.isMagic = false;
-    dash.hasEffects = true;
+    dash.isRanged = false;
+    dash.preCombatEffects = false;
+    dash.postCombatEffects = true;
     dash.abilityID = DASH;
     dash.duration = 0;
     dash.minDMG = 0;
@@ -269,7 +296,9 @@ Ability DevastatingInsult() {
     Ability devastatingInsult;
     devastatingInsult.isAttack = true;
     devastatingInsult.isMagic = true;
-    devastatingInsult.hasEffects = false;
+    devastatingInsult.isRanged = true;
+    devastatingInsult.preCombatEffects = false;
+    devastatingInsult.postCombatEffects = false;
     devastatingInsult.abilityID = DEVASTATING_INSULT;
     devastatingInsult.duration = 0;
     devastatingInsult.minDMG = 1;

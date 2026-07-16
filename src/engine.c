@@ -24,31 +24,6 @@ bool NcursesSetup(void) {
     }
 }
 
-/* Returns true if escape was passed in.*/
-/* Usually the passed in int 'ch' will be from getch().*/
-bool CheckEscape(int ch) {
-    int next_ch;
-    if (ch == 27) { 
-            // check for escape.
-            nodelay(stdscr, TRUE);
-            next_ch = getch();
-            nodelay(stdscr, FALSE);
-        }
-        if (next_ch == ERR) {
-            return true;
-        }
-    return false;
-}
-
-void Cursor(int x, int y, int length){
-    //A_BLINK 
-    mvchgat(x, y, length, A_BOLD | A_STANDOUT | A_DIM, VISIBLE_COLOR, NULL);
-}
-
-void RemoveCursor(int x, int y, int length) {
-    mvchgat(x, y, length, A_NORMAL, 0, NULL);
-}
-
 /* Moves monsters, returns false unless player dies.*/
 bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
     int i = 0;
@@ -61,12 +36,12 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
         }
 
         /* If no adjacent Player, Wander.*/
-        if (!CheckPlayerAdjacent((mptr + i)->pos) && !((mptr + i)->aggroFlag) && (mptr + i)->isMonster == true){
+        if (!CheckPlayerAdjacent((mptr + i)->pos) && !((mptr + i)->aggroFlag) && (mptr + i)->entityType == MONSTER){
             Wander(mptr + i);
             i++;
         }
         /* If adjacent to player, attack them in melee.*/
-        else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->isMonster == true){
+        else if (CheckPlayerAdjacent((mptr + i)->pos) == true && (mptr + i)->entityType == MONSTER){
             monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
             /* If monsterCombat = false, player died, end the game.*/
             if (monsterCombat == false) {
@@ -78,7 +53,7 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
         else if (((mptr + i)->entityWeapon.isRanged) &&
         (GetDistance((mptr + i)->pos, player->pos) <= (mptr + i)->entityWeapon.range) &&
         (LineOfSight((mptr + i)->pos, player->pos)) &&
-        ((mptr + i)->isMonster == true)){
+        ((mptr + i)->entityType == MONSTER)){
             monsterCombat = AttackPlayer((mptr + i), combatHistory, player);
             /* If monsterCombat = false, player died, end the game.*/
             if (monsterCombat == false) {
@@ -87,7 +62,7 @@ bool MoveMonsterLoop(Entity* mptr, int n_monsters, bool PMove){
             i++;
         }
         /* If player was seen, move towards player.*/
-        else if (((mptr + i)->aggroFlag) && ((mptr + i)->isMonster)){
+        else if (((mptr + i)->aggroFlag) && ((mptr + i)->entityType == MONSTER)){
             /* Move towards players last known locations.*/
             AggroMove(mptr + i);
             i++;
@@ -107,12 +82,15 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     MakeFOV(player);
     DrawEverything();
+    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
+    // UpdateNPCVisible(nptr, player);
     // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
+    player->follower.hasMoved = false;
 }
 
-void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items) { 
+void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items) { 
     bool leaveFlag = false;
     bool PMove = false;
     bool escPressed = false;
@@ -146,7 +124,7 @@ void GameLoop(Entity* mptr, CombatHistory* combatHistory, int n_monsters, LogQue
             else {
                 PlayerRegen(&playerRegen);
                 ManaRegen(&manaRegen);
-                PMove = PlayerInput(ch, q, n_monsters, &playerRegen, &manaRegen);
+                PMove = PlayerInput(ch, q, &n_monsters, &playerRegen, &manaRegen);
                 if (combatHistory->playerCombat) {
                     PlayerPrepareCombat(n_monsters);
                     PostCombatEffects();
@@ -173,11 +151,14 @@ void Gameover() {
 
 /* Free memory allocated by pointer. */
 void CloseGame(void) { 
+    free(dungeonInfo);
     free(items);
     free(q);
     free(combatHistory);
     free(player);
     free(mptr);
+    free(nptr);
+    free(npcs);
     endwin();
 
 } 
@@ -190,19 +171,16 @@ void Greeting(){
     QueueEvent(q, combatHistory->event);
     strcpy(combatHistory->event, "Use arrow keys to move & fight.");
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, "Press 'F' to use ranged attacks.");
+    strcpy(combatHistory->event, "Press 'F' + 'Space' to use ranged.");
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, "Press ESC to exit at anytime.");
+    strcpy(combatHistory->event, "Use keys 1-5 + 'Space' to use abilities.");
     QueueEvent(q, combatHistory->event);
-    strcpy(combatHistory->event, "Use keys 1-5 to use abilities.");
+    strcpy(combatHistory->event, "Press '~' to rest and regain HP/Mana.");
     QueueEvent(q, combatHistory->event);
-}
-
-/* Used to count number of digits in a number.*/
-int NumberOfDigits(int input) {
-  int count;
-  int temp = abs(input);
-  // condition ? expression_if_true : expression_if_false, this one handles a zero input.
-  count = (temp == 0) ? 0 : (int)log10(temp) + 1;
-  return count;
+    strcpy(combatHistory->event, "Press 'I' to open your inventory.");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, "Press 'Space' to loot tiles with items.");
+    QueueEvent(q, combatHistory->event);
+    strcpy(combatHistory->event, "Press ESC to open the pause menu.");
+    QueueEvent(q, combatHistory->event);
 }

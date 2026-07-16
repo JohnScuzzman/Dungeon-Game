@@ -12,6 +12,16 @@ typedef enum {
     ABILITY_4,
     ABILITY_5,
 } AbilityKeypress;
+
+typedef enum {
+    NULL_STAT_TYPE,
+    CHA,
+    CON,
+    DEX,
+    INT,
+    STR,
+    WIS
+} StatType;
     
 typedef enum {
     NO_ABILITY,
@@ -33,24 +43,26 @@ typedef enum {
 } AbilitiyIDs;
 
 typedef enum {
-    KNIGHT,
-    SWASHBUCKLER,
-    WIZARD,
-    NECROMANCER,
-    GUNSLINGER,
-    DRUID,
-    RANGER,
-    DARK_KNIGHT,
-    WARLOCK,
-    CONJURER,
-    CYBORG,
-    BARD
+    KNIGHT = 69,
+    SWASHBUCKLER = 70,
+    WIZARD = 71,
+    NECROMANCER = 72,
+    GUNSLINGER = 73,
+    DRUID = 74,
+    RANGER = 89,
+    DARK_KNIGHT = 90,
+    WARLOCK = 91,
+    CONJURER = 92,
+    CYBORG = 93,
+    BARD = 94
 } ClassIDs;
 
 typedef struct {
     bool isAttack;
     bool isMagic;
-    bool hasEffects;
+    bool isRanged;
+    bool preCombatEffects;
+    bool postCombatEffects;
     int abilityID;
     int duration;
     int minDMG;
@@ -93,25 +105,34 @@ Ability Dash();
 Ability DevastatingInsult();
 Ability ThornBolt();
 
-// abilities.c functions
-void AbilityEffects(int abilityID);
+// ability_casts.c functions
 void CastCharge();
 void CastDash();
-bool DashPOSHelper(int x, int y);
 void CastDrainLife();
+void CastFireVolley();
 void CastIceArmor();
 void CastSecondWind();
 void CastSelfRepair();
+void CastSummonSkeleton();
 void CastVengeance();
+
+// ability_misc.c functions
 void ChargePlacement();
+bool DashPOSHelper(int x, int y);
+void PostCombatEffects();
+void PostCombatAbilities(int abilityID);
+void PreCombatAbilities(int abilityID);
+void PreCombatEffects();
+void PostChargeInfo();
+bool UsePlayerAbility(int n_monsters, int chosenAbility);
+
+// ability_passive.c functions
 void CheckPassiveAbilities(int n_monsters);
 bool DeincrementAbilityTimer();
-void PostCombatEffects();
-void PostChargeInfo();
 void RemoveIceArmor();
 void RemoveVengeance();
+void RemoveSummonSkeleton();
 void ResetPassiveAbility(int abilityID);
-bool UsePlayerAbility(int n_monsters, int chosenAbility);
 
 // make_classes.c functions
 Class Knight();

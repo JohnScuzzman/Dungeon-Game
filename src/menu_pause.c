@@ -39,11 +39,11 @@ void RenderPauseMenu(WINDOW *menu, int cursor, int n_options, char** options) {
 /* Processes a new window and does a task if false. */
 bool MakePauseMenu() {
     char *options[] = {
-    "Resume",
-    "Options",
-    "Save Game",
-    "Load Game",
-    "Quit"
+        "Resume",
+        "Options",
+        "Save Game",
+        "Load Game",
+        "Quit"
     };
 
     // TODO make this into a window struct and make one anytime we need one.
@@ -100,7 +100,7 @@ bool MakePauseMenu() {
     }
 
 /* Returns true if we want to quit the game */
-bool ProcessPauseSelect(int choice, WINDOW* menu){
+bool ProcessPauseSelect(int choice, WINDOW* menu) {
     switch(choice){
         case 0: // Resume
             refresh();
@@ -117,6 +117,13 @@ bool ProcessPauseSelect(int choice, WINDOW* menu){
 
         case 2: // Save
             // Do the save window here
+            char saveName[32] = "Save 1";
+            if(SavePlayerToJSON(saveName, player)){
+                mvprintw(52, 2, "Saved Successfully!");
+            }
+            else{
+                mvprintw(52, 2, "Saved Failed!");
+            }
             refresh();
             delwin(menu);
             return false;

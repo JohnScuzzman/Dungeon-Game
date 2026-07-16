@@ -15,8 +15,8 @@ bool MakeInventoryMenu() {
 
     
     WINDOW *menu = newwin(WINDOW_HEIGHT, WINDOW_WIDTH, invY1, invX1);
-    WINDOW *desc = newwin((WINDOW_HEIGHT / 2), WINDOW_WIDTH, invY1, invX2);
-    WINDOW *loot = newwin((WINDOW_HEIGHT / 2), WINDOW_WIDTH, invY2, invX2);
+    WINDOW *desc = newwin((WINDOW_HEIGHT / 2), WINDOW_WIDTH, invY2, invX2);
+    WINDOW *loot = newwin((WINDOW_HEIGHT / 2), WINDOW_WIDTH, invY1, invX2);
     keypad(menu, TRUE);
     keypad(desc, FALSE);
     keypad(loot, FALSE); // Changed to TRUE when we swap to it with transfer
@@ -114,9 +114,12 @@ void RenderInventoryMenu(WINDOW *menu, WINDOW *desc, WINDOW *loot, int cursor, i
     
     for (int i = 0; i < player->invTail; i++) {
 
-        if(playerInv[i]->itemID == player->equippedMelee.item.itemID || playerInv[i]->itemID == player->equippedRanged.item.itemID || playerInv[i]->itemID == player->equippedArmor.item.itemID || playerInv[i]->itemID == player->equippedAmmo.item.itemID) {
+        if(playerInv[i]->itemID == player->equippedMelee.item.itemID ||
+            playerInv[i]->itemID == player->equippedRanged.item.itemID ||
+            playerInv[i]->itemID == player->equippedArmor.item.itemID ||
+            playerInv[i]->itemID == player->equippedAmmo.item.itemID) {
             wattron(menu, A_DIM);
-            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 5), " (Equipped)");
+            mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + GetNumberOfDigits(playerInv[i]->quantity) + 4), " (Equipped)");
             wattroff(menu, A_DIM);
             mvwprintw(menu, y, (strlen(playerInv[i]->itemName) + 3), "x%d", playerInv[i]->quantity);
         }
@@ -235,8 +238,6 @@ void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** option
     int y = 1;
     int titleRight = (WINDOW_WIDTH - OFFSET) / 2 + OFFSET;
     int center = (WINDOW_WIDTH / 2) - (OFFSET * 3) + 5;
-    int numLines = WINDOW_WIDTH - 2 - titleRight;
-    int top = 1;
     int centerY, centerX;
     getmaxyx(invOp, centerY, centerX);
     box(invOp, 0, 0);
@@ -259,11 +260,14 @@ void RenderInvOptionMenu(WINDOW *invOp, int cursor, int n_options, char** option
 /* Selects an option from the tiny one above and acts based on the chosen selection. */
 /* Returns true if the player drops their last item.*/
 bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newChoice, WINDOW* menu, WINDOW* invOp, WINDOW* loot, bool unEquipMenu) {
-    switch(newChoice){
-        case 0: // Drop
-            if(playerInv[prevChoice]->quantity == 1 && playerInv[prevChoice]->unequippable) {
+    switch(newChoice) {
+        case 0: // Drop{
+            if (playerInv[prevChoice]->isEquipped && playerInv[prevChoice]->unequippable) {
                 Unequip(*playerInv[prevChoice]);
-                RemoveFromPlayerInventory(*playerInv[prevChoice], 1);
+                DropFromPlayerInventory(*playerInv[prevChoice], 1);
+            }
+            else {
+                DropFromPlayerInventory(*playerInv[prevChoice], 1);
             }
             DrawEverything();
             refresh();
@@ -271,9 +275,12 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
             return true;
             break;
         case 1: // Drop All
-            if(playerInv[prevChoice]->unequippable) {
+            if(playerInv[prevChoice]->isEquipped && playerInv[prevChoice]->unequippable) {
                 Unequip(*playerInv[prevChoice]);
-                RemoveFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
+                DropFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
+            }
+            else{
+                DropFromPlayerInventory(*playerInv[prevChoice], playerInv[prevChoice]->quantity);
             }
             DrawEverything();
             refresh();
@@ -289,7 +296,7 @@ bool InvOptionSelect(Item** playerInv, int prevChoice, int n_options, int newCho
             return false;
             break;
         case 3: // Examine
-            // Do the load window here
+            // Do the examine window here
             refresh();
             delwin(invOp);
             return false;
@@ -324,9 +331,10 @@ void RenderItemInfo(WINDOW* desc, Item* item) {
         case AMMO:
             Ammo ammo;
             ammo = GetAmmoFromItem(item->itemID);
-            // char* ammoType = GetArmorType(ammo.type);
-            // mvwprintw(desc, 4, 2, "Type: %s", ammoType);
-            mvwprintw(desc, 3, 2, "Value: %d", ammo.item.value);
+            char* ammoType = GetAmmoType(ammo.type);
+            mvwprintw(desc, 3, 2, "Bonus DMG: %d", ammo.bonusDamage);
+            mvwprintw(desc, 4, 2, "Type: %s", ammoType);
+            mvwprintw(desc, 5, 2, "Value: %d", ammo.item.value);
             break;
         case ARMOR:
             Armor armor;
@@ -336,6 +344,7 @@ void RenderItemInfo(WINDOW* desc, Item* item) {
             mvwprintw(desc, 4, 2, "Type: %s", armorType);
             mvwprintw(desc, 5, 2, "Value: %d", armor.item.value);
             break;
+        
         default:
             break;
     }

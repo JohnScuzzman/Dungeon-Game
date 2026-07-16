@@ -48,6 +48,27 @@ bool AttackEntity(Entity* defender, CombatHistory* combatHistory, Player* player
     return true;
 }
 
+bool NPCAttackEntity(Entity* attacker, Entity* defender, CombatHistory* combatHistory, int n_monsters) {
+    if(defender->entityType == FLOOR) return true;
+    int defenderAC = CalculateEntityAC(defender);
+    int attackerAccRoll = CalculateEntityAccuracy(attacker);
+    int attackerDMG = CalculateEntityDMG(attacker);
+    int defenderHP = defender->entityStats.HP;
+
+    if (attackerAccRoll >= defenderAC) {
+        defender->entityStats.HP = (defenderHP - attackerDMG);
+        if (defender->entityStats.HP <= 0) {
+            RecordNPCKill(defender, attacker, combatHistory, attackerAccRoll, attackerDMG);
+            AssignCorpse(defender, n_monsters);
+            return true;
+        }
+        RecordNPCHit(defender, attacker, combatHistory, attackerAccRoll, attackerDMG);
+        return true;
+    }
+    RecordNPCMiss(defender, attacker, combatHistory, attackerAccRoll, defenderAC);
+    return true;
+}
+
 /* Called from PlayerInput in player.c
 Returns true if the selected combat ability detects a monster in its range and LOS of player.
 Melee abilties still use this function, but with a range of 1.
@@ -57,21 +78,21 @@ bool ShootTargetWithAbility(int x, int y) {
     bool targetHit = false;
     if ((player->playerStats.mana) >= (player->equippedAbility.manaCost)) {
         // Player selected a monster.
-        if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && 
+        if ((map[y][x].entityType == MONSTER) && LineOfSight(player->pos, map[y][x].pos) && 
         (GetDistance(player->pos, map[y][x].pos) <= player->equippedAbility.range)) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedAbility = true;
             combatHistory->defender = map[y][x];
             targetHit = true;
         }
-        else if (map[y][x].isMonster && !(LineOfSight(player->pos, map[y][x].pos)) && 
+        else if (map[y][x].entityType == MONSTER && !(LineOfSight(player->pos, map[y][x].pos)) && 
         GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
             combatHistory->playerUsedAbility = false;
             combatHistory->playerCombat = false;
             strcpy(combatHistory->event, "Target not in line of sight.");
             QueueEvent(q, combatHistory->event);
         }
-        else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
+        else if (map[y][x].entityType == MONSTER && LineOfSight(player->pos, map[y][x].pos) && 
         GetDistance(player->pos, map[y][x].pos) > player->equippedAbility.range){
             combatHistory->playerUsedAbility = false;
             combatHistory->playerCombat = false;
@@ -93,21 +114,21 @@ bool ShootTarget(int x, int y) {
     bool targetHit = false;
     if (player->equippedRanged.isRanged) {
             // Player selected a monster.
-        if ((map[y][x].isMonster) && LineOfSight(player->pos, map[y][x].pos) && 
+        if ((map[y][x].entityType == MONSTER || map[y][x].entityType == NPC) && LineOfSight(player->pos, map[y][x].pos) && 
         (GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range)) {
             combatHistory->playerCombat = true;
             combatHistory->playerUsedRanged = true;
             combatHistory->defender = map[y][x];
             targetHit = true;
         }
-        else if (map[y][x].isMonster && !(LineOfSight(player->pos, map[y][x].pos)) && 
+        else if ((map[y][x].entityType == MONSTER || map[y][x].entityType == NPC) && !(LineOfSight(player->pos, map[y][x].pos)) && 
         GetDistance(player->pos, map[y][x].pos) <= player->equippedRanged.range) {
             combatHistory->playerUsedRanged = false;
             combatHistory->playerCombat = false;
             strcpy(combatHistory->event, "Target not in line of sight.");
             QueueEvent(q, combatHistory->event);
         }
-        else if (map[y][x].isMonster && LineOfSight(player->pos, map[y][x].pos) && 
+        else if ((map[y][x].entityType == MONSTER || map[y][x].entityType == NPC) && LineOfSight(player->pos, map[y][x].pos) && 
         GetDistance(player->pos, map[y][x].pos) > player->equippedRanged.range){
             combatHistory->playerUsedRanged = false;
             combatHistory->playerCombat = false;
@@ -131,10 +152,9 @@ void PlayerMeleeOrRanged(Player* player){
         player->playerStats.maxDMG = player->equippedAbility.maxDMG;
         player->playerStats.minDMG = player->equippedAbility.minDMG;
         return;
-        
     }
     if (combatHistory->playerUsedRanged == true) {
-        player->playerStats.maxDMG = player->equippedRanged.maxDMG;
+        player->playerStats.maxDMG = (player->equippedRanged.maxDMG) + (player->equippedAmmo.bonusDamage);
         player->playerStats.minDMG = player->equippedRanged.minDMG;
         return;
     }
@@ -151,7 +171,8 @@ void PlayerMeleeOrRanged(Player* player){
 void PlayerPrepareCombat(int n_monsters) {
     PlayerMeleeOrRanged(player);
     Entity* target = FindMonsterInList(combatHistory->defender.entityID, n_monsters);
-    if (target->isMonster) {
+    PreCombatEffects();
+    if (target->entityType == MONSTER) {
         combatHistory->playerCombat = AttackEntity(target, combatHistory, player, n_monsters);
     }
     // If a monster died, let other monsters still move.
@@ -235,29 +256,77 @@ bool PlayerRangedAttack(int n_monsters){
     if (CheckEscape(ch) || y == player->pos.y && x == player->pos.x) {
         return false;
     }
-    if(combatHistory->playerUsedAbility){
-        return ShootTargetWithAbility(x, y);
-    }
-    else if (player->equippedAmmo.item.quantity > 0) {
-        ShootFromPlayerInventory(player->equippedAmmo.item, 1);
-        player->equippedAmmo.item.quantity--;
-        if(player->equippedAmmo.type == PRIMITIVE && !map[y][x].isMonster) { // Lets player pick up their arrows lol.
-            AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
-            strcpy(combatHistory->event, "You shoot the ");
-            strcat(combatHistory->event, map[y][x].entityName);
-            strcat(combatHistory->event, ".");
-            QueueEvent(q, combatHistory->event);
+    return ProcessRangedAttack(combatHistory->playerUsedAbility, x, y);
+}
+    
+/*
+Checks if the player shot at a monster, has enough ammo to shoot, and if they used an ability or not.
+*/
+bool ProcessRangedAttack(bool abilityUsed, int x, int y) {
+    /* If player uses a ranged, non magic ability, charge them ammo.*/
+    if (abilityUsed){
+        if (player->equippedAbility.isRanged && !player->equippedAbility.isMagic && player->equippedAmmo.item.quantity > 0){
+            return ShootAbilityWithAmmo(player->equippedAmmo.type, x, y);
         }
-        return ShootTarget(x, y);
+        return ShootTargetWithAbility(x, y); // Not a ranged attack, Do not consume ammo.
     }
+    // Standard ranged attack.
+    else if (player->equippedAmmo.item.quantity > 0 && !player->equippedRanged.isMagic) return ShootWithAmmo(player->equippedAmmo.type, x, y);
+    else if (player->equippedRanged.isMagic) return ShootTarget(x, y);
     else {
-        strcpy(combatHistory->event, "You do not have any ammo equipped.");
+        strcpy(combatHistory->event, "You do not have enough ammo equipped.");
         QueueEvent(q, combatHistory->event);
         return false;
     }
 }
 
-void ResetCombatHistory(){
+bool ShootWithAmmo(int ammoType, int x, int y) {
+    if (ammoType == player->equippedAmmo.type){
+            if ((player->equippedAmmo.type == TYPE_ARROWS || player->equippedAmmo.type == TYPE_BOLTS) && map[y][x].entityType == FLOOR) { 
+                    AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+                    RemoveFromPlayerInventory(player->equippedAmmo.item, 1);
+                    strcpy(combatHistory->event, "You shoot the ");
+                    strcat(combatHistory->event, map[y][x].entityName);
+                    strcat(combatHistory->event, ".");
+                    QueueEvent(q, combatHistory->event);
+                    return ShootTarget(x, y);
+            }
+            else {
+                RemoveFromPlayerInventory(player->equippedAmmo.item, 1);
+                return ShootTarget(x, y);
+            }
+        }
+    else {
+        strcpy(combatHistory->event, "You have the wrong ammo equipped.");
+        QueueEvent(q, combatHistory->event);
+        return false;
+    }
+}
+
+bool ShootAbilityWithAmmo(int ammoType, int x, int y) {
+    if (ammoType == player->equippedAmmo.type){
+            if ((player->equippedAmmo.type == TYPE_ARROWS || player->equippedAmmo.type == TYPE_BOLTS) && map[y][x].entityType == FLOOR) { 
+                    AddToNPCInventory(&map[y][x], items[player->equippedAmmo.item.itemID], 1);
+                    RemoveFromPlayerInventory(player->equippedAmmo.item, 1);
+                    strcpy(combatHistory->event, "You shoot the ");
+                    strcat(combatHistory->event, map[y][x].entityName);
+                    strcat(combatHistory->event, ".");
+                    QueueEvent(q, combatHistory->event);
+                    return ShootTargetWithAbility(x, y);
+            }
+            else {
+                RemoveFromPlayerInventory(player->equippedAmmo.item, 1);
+                return ShootTargetWithAbility(x, y);
+            }
+        }
+    else {
+        strcpy(combatHistory->event, "You have the wrong ammo equipped.");
+        QueueEvent(q, combatHistory->event);
+        return false;
+    }
+}
+
+void ResetCombatHistory() {
     combatHistory->monsterKilled = false;
     combatHistory->playerResult = false; // 0 = miss, 1 = hit
     combatHistory->entityResult = false;
@@ -272,12 +341,19 @@ void ResetCombatHistory(){
     combatHistory->playerAC = 0;
 }
 
+/*
+The following functions make dummy values based on the entity and player pointers,
+they then modify them, and return the modified int that is used for combat calculations.
+*/
 int CalculateEntityAccuracy(Entity* attacker) {
     int attackerATKMod = attacker->entityStats.ATK;
     int attackerAccRoll = (rand() % 20) + 1;
     /* Ranged weapon in melee suffers a minus 4 penalty.*/
     if(attacker->entityWeapon.isRanged && CheckPlayerAdjacent(attacker->pos)){
         attackerAccRoll -= 4;
+    }
+    if(attacker->entityWeapon.isEnchanted) {
+        attackerAccRoll += attacker->entityWeapon.enchantLevel;
     }
     attackerAccRoll = attackerAccRoll + attackerATKMod;
     return attackerAccRoll;
@@ -287,6 +363,9 @@ int CalculateEntityDMG(Entity* attacker) {
     int maxDMG = attacker->entityStats.maxDMG;
     int minDMG = attacker->entityStats.minDMG;
     int attackerDMG = (rand() % maxDMG) + minDMG;
+    if(attacker->entityWeapon.isEnchanted) {
+        attackerDMG += attacker->entityWeapon.enchantLevel;
+    }
     return attackerDMG;
 }
 
@@ -295,6 +374,9 @@ int CalculateEntityAC(Entity* defender) {
     int defenderAC = defender->entityStats.AC;
     defenderDodgeMod = ((defenderDodgeMod - 10) / 2);
     defenderAC = (defenderAC + defenderDodgeMod + 10);
+    if(defender->entityArmor.isEnchanted) {
+        defenderAC += (defender->entityArmor.enchantLevel);
+    }
     return defenderAC;
 }
 
@@ -302,10 +384,16 @@ int CalculateEntityAC(Entity* defender) {
 int CalculatePlayerAccuracy() {
     int playerATKMod;
     if (combatHistory->playerUsedAbility == true && player->equippedAbility.isAttack == true){
-        playerATKMod = player->equippedAbility.abilitySave;
+        playerATKMod += (player->equippedAbility.abilitySave);
     }
     else{
-        playerATKMod = player->playerStats.ATK;
+        playerATKMod += (player->playerStats.ATK);
+    }
+    if(combatHistory->playerUsedRanged && player->equippedRanged.isEnchanted) {
+        playerATKMod += (player->equippedRanged.enchantLevel);
+    }
+    else if(!combatHistory->playerUsedRanged && player->equippedMelee.isEnchanted) {
+        playerATKMod += (player->equippedMelee.enchantLevel);
     }
     int playerAccRoll = (rand() % 20) + 1;
     if(combatHistory->playerUsedRanged && CheckPlayerAdjacent(combatHistory->defender.pos)){
@@ -319,6 +407,12 @@ int CalculatePlayerDamage() {
     int maxDMG = player->playerStats.maxDMG;
     int minDMG = player->playerStats.minDMG;
     int playerDMG = (rand() % maxDMG) + minDMG;
+    if(combatHistory->playerUsedRanged && player->equippedRanged.isEnchanted) {
+        playerDMG += (player->equippedRanged.enchantLevel);
+    }
+    else if(!combatHistory->playerUsedRanged && player->equippedMelee.isEnchanted) {
+        playerDMG += (player->equippedMelee.enchantLevel);
+    }
     return playerDMG;
 }
 
@@ -327,5 +421,8 @@ int CalculatePlayerAC() {
     int playerAC = player->playerStats.AC;
     playerDodgeMod = ((playerDodgeMod - 10) / 2);
     playerAC = (playerAC + playerDodgeMod + 10);
+    if(player->equippedArmor.isEnchanted) {
+        playerAC += (player->equippedArmor.enchantLevel);
+    }
     return playerAC;
 }

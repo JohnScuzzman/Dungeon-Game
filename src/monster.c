@@ -52,27 +52,30 @@ bool CheckAggro(Entity* mptr, Player* player) {
 /* returns i value of closest monster */
 /* use this to find an int to add to mptr to get the monster */
 int FindClosestMonster(Entity* mptr, int n_monsters) {
+    int floorEntity = -2;
     int closestMonster = 0;
-    int closest = GetDistance(player->pos, (mptr)->pos);
-    int temp = 0;
+    int closestDist = 16; //RADIUS + 1
+    int tempDist = 0;
     for (int i = 0; i < n_monsters; i++) {
-        if (CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->isMonster) return i;
-        else if(((mptr + i)->visible) && ((mptr + i)->isMonster == true)) {
-            temp = GetDistance(player->pos, (mptr + i)->pos);
-            if(temp <= closest) {
-                closest = temp;
+        if (CheckPlayerAdjacent((mptr + i)->pos) && (mptr + i)->entityType == MONSTER) return i;
+        else if(((mptr + i)->visible) && ((mptr + i)->entityType == MONSTER)) {
+            tempDist = GetDistance(player->pos, (mptr + i)->pos);
+            if(tempDist <= closestDist) {
+                closestDist = tempDist;
                 closestMonster = i;
             }
         }
     }
-    /* no monsters in LOS*/
-    /* returns a floor entity */
-    if (((mptr + closestMonster)->isMonster) && ((mptr + closestMonster)->visible)){
+
+    if (tempDist != 0){
         return (closestMonster);
     }
-    return -2;
+    /* no monsters in LOS*/
+    /* returns a floor entity */
+    return floorEntity;
 }
 
+// [0, 1, 2]
 
 Entity* FindMonsterInList(int monsterID, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
@@ -85,130 +88,6 @@ Entity* FindMonsterInList(int monsterID, int n_monsters) {
     return NULL;
 }
 
-
-/* returns true if entity moved towards given coords.*/
-bool MoveTowards(Entity* entity, Position pos) {
-    int x = entity->pos.x;
-    int y = entity->pos.y;
-    if (!CheckPlayerAdjacent(entity->pos)) {
-        // up and left
-        // up & left
-        if (y > pos.y && x > pos.x) {
-            if ((map[entity->pos.y - 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                // if(map[entity->pos.y - 1][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x - 1)], entity);
-                MoveUpLeft(entity);
-                KeepMonsterIntegrity(entity);
-                AssignFloor(entity->pos.x, entity->pos.y);
-                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-                map[entity->pos.y + 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
-            }
-        }
-        // down & left
-        else if (y < pos.y && x > pos.x) {
-            if ((map[entity->pos.y + 1][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                // if (map[entity->pos.y + 1][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x - 1)], entity);
-                MoveDownLeft(entity);
-                KeepMonsterIntegrity(entity);
-                AssignFloor(entity->pos.x, entity->pos.y);
-                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-                map[entity->pos.y - 1][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
-            }
-        }
-        // down & right
-        else if (y < pos.y && x < pos.x) {
-            if ((map[entity->pos.y + 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                // if (map[entity->pos.y + 1][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x + 1)], entity);
-                MoveDownRight(entity);
-                KeepMonsterIntegrity(entity);
-                AssignFloor(entity->pos.x, entity->pos.y);
-                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-                map[entity->pos.y - 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
-            }
-        }
-        // move up & right
-        else if (y > pos.y && x < pos.x) {
-            if ((map[entity->pos.y - 1][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                // if (map[entity->pos.y - 1][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x + 1)], entity);
-                MoveUpRight(entity);
-                KeepMonsterIntegrity(entity);
-                AssignFloor(entity->pos.x, entity->pos.y);
-                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-                map[entity->pos.y + 1][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
-            }
-        }
-        //move up, y--
-        if (y > pos.y) {
-            if ((map[entity->pos.y - 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
-                // if (map[entity->pos.y - 1][(entity->pos.x)].isCorpse) CombineEntityInventories(&map[entity->pos.y - 1][(entity->pos.x)], entity);
-                MoveUp(entity);
-                KeepMonsterIntegrity(entity);
-                AssignFloor(entity->pos.x, entity->pos.y);
-                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-                map[entity->pos.y + 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
-            }
-        }
-        //move left, x--
-        else if (x > pos.x) {
-            if ((map[entity->pos.y][(entity->pos.x - 1)].noCollision) && (!entity->hasMoved)){
-                // if (map[entity->pos.y][(entity->pos.x - 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y][(entity->pos.x - 1)], entity);
-                MoveLeft(entity);
-                KeepMonsterIntegrity(entity);
-                AssignFloor(entity->pos.x, entity->pos.y);
-                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-                map[entity->pos.y][entity->pos.x + 1] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
-            }
-        }
-        //move down, y++
-        else if (y < pos.y) {
-            if ((map[entity->pos.y + 1][(entity->pos.x)].noCollision) && (!entity->hasMoved)){
-                // if (map[entity->pos.y + 1][(entity->pos.x)].isCorpse) CombineEntityInventories(&map[entity->pos.y + 1][(entity->pos.x)], entity);
-                MoveDown(entity);
-                KeepMonsterIntegrity(entity);
-                AssignFloor(entity->pos.x, entity->pos.y);
-                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-                map[entity->pos.y - 1][entity->pos.x] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
-            }
-        }
-        //move right, x++
-        else if (x < pos.x) {
-            if ((map[entity->pos.y][(entity->pos.x + 1)].noCollision) && (!entity->hasMoved)){
-                // if (map[entity->pos.y][(entity->pos.x + 1)].isCorpse) CombineEntityInventories(&map[entity->pos.y][(entity->pos.x + 1)], entity);
-                MoveRight(entity);
-                KeepMonsterIntegrity(entity);
-                AssignFloor(entity->pos.x, entity->pos.y);
-                map[entity->pos.y][entity->pos.x].seen = entity->mapInfo.newSeen;
-                map[entity->pos.y][entity->pos.x - 1] = map[entity->pos.y][entity->pos.x];
-                map[entity->pos.y][entity->pos.x] = *entity;
-                UpdateMonsterVisible(entity, player);
-                return true;
-            }
-        }
-    }
-    UpdateMonsterVisible(entity, player);
-    return false;
-}
-
 /* update monster positions on map from mptr. */
 /* update corpses, then monsters to place them on top. */
 void UpdateMonsterMap(Entity* monster, int n_monsters) {
@@ -217,12 +96,12 @@ void UpdateMonsterMap(Entity* monster, int n_monsters) {
         y = (monster + i)->pos.y;
         x = (monster + i)->pos.x;
         /* Draw monsters that died ontop of other monsters */
-        if((monster + i)->isCorpse && !(monster + i)->wasReplaced && map[y][x].wasLooted) {
+        if((monster + i)->entityType == CORPSE && !(monster + i)->wasReplaced && map[y][x].wasLooted) {
             map[y][x].wasLooted = false;
             monster[i] = map[y][x];
             map[y][x] = monster[i];
         }
-        else if((monster + i)->isCorpse && !(monster + i)->wasReplaced && !map[y][x].wasLooted) {
+        else if((monster + i)->entityType == CORPSE && !(monster + i)->wasReplaced && !map[y][x].wasLooted && map[y][x].entityType == FLOOR) {
             map[y][x] = monster[i];
         }
     }
@@ -230,7 +109,7 @@ void UpdateMonsterMap(Entity* monster, int n_monsters) {
         int y, x;
         y = (monster + i)->pos.y;
         x = (monster + i)->pos.x;
-        if(!(monster + i)->isCorpse) map[y][x] = monster[i];
+        if((monster + i)->entityType == MONSTER) map[y][x] = monster[i];
     }
 }
 
@@ -249,7 +128,7 @@ void UpdateMonsterMap(Entity* monster, int n_monsters) {
 /* This would have taken signifiantly longer without her, I owe her a case of monster for this.*/
 /* Monster attempts to move to a new tile chosen at random. */
 /* If legal spot, monster moves, then updates the previous square they moved from. */
-/* KeepMonsterIntegrity ensures the previous tile keeps all prior visible and seen values. */
+/* KeepNPCIntegrity ensures the previous tile keeps all prior visible and seen values. */
 void Wander(Entity* mptr){
     int randDirection = (rand() % 4); //0-3
     switch(randDirection) {
@@ -258,7 +137,7 @@ void Wander(Entity* mptr){
         //newPOS.y--;
             if ((map[mptr->pos.y - 1][(mptr->pos.x)].noCollision) && (!mptr->hasMoved)){
                 MoveUp(mptr);
-                KeepMonsterIntegrity(mptr);
+                KeepNPCIntegrity(mptr);
                 // set new location to old location (have mptr still)
                 map[mptr->pos.y + 1][mptr->pos.x] = map[mptr->pos.y][mptr->pos.x];
                 //finally set new location to mptr
@@ -269,7 +148,7 @@ void Wander(Entity* mptr){
             //newPOS.y++;
             if ((map[mptr->pos.y + 1][(mptr->pos.x)].noCollision) && (!mptr->hasMoved)){
                 MoveDown(mptr);
-                KeepMonsterIntegrity(mptr);
+                KeepNPCIntegrity(mptr);
                 map[mptr->pos.y - 1][mptr->pos.x] = map[mptr->pos.y][mptr->pos.x];
             }
         break;
@@ -278,7 +157,7 @@ void Wander(Entity* mptr){
             //newPOS.x--;
             if ((map[mptr->pos.y][(mptr->pos.x - 1)].noCollision) && (!mptr->hasMoved)){
                 MoveLeft(mptr);
-                KeepMonsterIntegrity(mptr);
+                KeepNPCIntegrity(mptr);
                 map[mptr->pos.y][mptr->pos.x + 1] = map[mptr->pos.y][mptr->pos.x];
             }
         break;
@@ -287,7 +166,7 @@ void Wander(Entity* mptr){
         //newPOS.x++;
             if ((map[mptr->pos.y][(mptr->pos.x + 1)].noCollision) && (!mptr->hasMoved)){
                 MoveRight(mptr);
-                KeepMonsterIntegrity(mptr);
+                KeepNPCIntegrity(mptr);
                 map[mptr->pos.y][mptr->pos.x - 1] = map[mptr->pos.y][mptr->pos.x];
             }
         break;
@@ -295,7 +174,7 @@ void Wander(Entity* mptr){
         break;
     }
     map[mptr->pos.y][mptr->pos.x] = *mptr;
-    UpdateMonsterVisible(mptr, player);
+    UpdateNPCVisible(mptr, player);
 
     /* If they move in range of the player, set aggro flag.*/
     if ((!(mptr)->aggroFlag)){
@@ -303,108 +182,10 @@ void Wander(Entity* mptr){
     }
 }
 
-void KeepMonsterIntegrity(Entity* mptr) {
-    // if new has been seen before fix mptr/old location
-    if (mptr->mapInfo.newSeen == true){
-        mptr->seen = true;
-        KeepMonsterMapIntegrity(mptr);
-    }
-    if (mptr->mapInfo.newSeen == false) {
-        mptr->seen = false;
-        KeepMonsterMapIntegrity(mptr);
-    }
-    if (mptr->mapInfo.newVisible == true) {
-        mptr->seen = true;
-        KeepMonsterMapIntegrity(mptr);
-    }                
-}
 
-void KeepMonsterMapIntegrity(Entity* mptr) {
-    if (mptr->mapInfo.oldSeen == false){
-        map[mptr->pos.y][mptr->pos.x].seen = false;
-    }
-    if (mptr->mapInfo.oldSeen == true){
-        map[mptr->pos.y][mptr->pos.x].seen = true;
-    }
-    if (mptr->mapInfo.oldVisible == false) {
-        map[mptr->pos.y][mptr->pos.x].visible = false;
-    }
-    if (mptr->mapInfo.oldVisible == true) {
-        map[mptr->pos.y][mptr->pos.x].visible = false;
-    }
-}
-
-void UpdateMonsterVisible(Entity* monster, Player* player){
-    if(LineOfSight(monster->pos, player->pos) && 
-    GetDistance(monster->pos, player->pos) < 15) {
-        monster->visible = true;
-        monster->seen = true;
-        map[monster->pos.y][monster->pos.x].visible = true;
-        monster->ch = monster->staticCh;
-        map[monster->pos.y][monster->pos.x].ch = monster->ch;
-        RecordMonsterSeen(monster);
-        if (GetDistance(monster->pos, player->pos) < 6) {
-            monster->transparent = true;
-        }
-        else {
-            monster->transparent = false;
-        } 
-    }
-    else {
-        monster->seenByPlayer = false;
-        monster->visible = false;
-        monster->transparent = false;
-        map[monster->pos.y][monster->pos.x].visible = false;
-    }
- }
 
 void ResetMoveFlags(Entity* mptr, int n_monsters) {
     for (int i = 0; i < n_monsters; i++) {
         mptr[i].hasMoved = false;
-    }
-}
-
-void RecordMonsterSeen(Entity* monster) {
-    if(!monster->seenByPlayer){
-        strcpy(combatHistory->event, "You see a ");
-        strcat(combatHistory->event, monster->entityName);
-        QueueEvent(q, combatHistory->event);
-        strcpy(combatHistory->event, "to the ");
-        strcat(combatHistory->event, DIRECTIONS[MonsterDirection(monster)]);
-        strcat(combatHistory->event, ".");
-        QueueEvent(q, combatHistory->event);
-        monster->seenByPlayer = true;
-        player->isResting = false;
-    }
-}
-
-/* Returns an int representing the monsters direction relative to the player. */
-int MonsterDirection(Entity* monster) {
-    if((player->pos.x) < (monster->pos.x) && (player->pos.y) < (monster->pos.y)) {
-        return SOUTH_EAST;
-    }
-    else if ((player->pos.x) < (monster->pos.x) && (player->pos.y) > (monster->pos.y)) {
-        return NORTH_EAST;
-    }
-    else if ((player->pos.x) > (monster->pos.x) && (player->pos.y) > (monster->pos.y)) {
-        return NORTH_WEST;
-    }
-    else if ((player->pos.x) > (monster->pos.x) && (player->pos.y) < (monster->pos.y)) {
-        return SOUTH_WEST;
-    }
-    else if ((player->pos.x) < (monster->pos.x) && (player->pos.y) == (monster->pos.y)) {
-        return EAST;
-    }
-    else if ((player->pos.x) > (monster->pos.x) && (player->pos.y) == (monster->pos.y)) {
-        return WEST;
-    }
-    else if ((player->pos.x) == (monster->pos.x) && (player->pos.y) < (monster->pos.y)) {
-        return SOUTH;
-    }
-    else if ((player->pos.x) == (monster->pos.x) && (player->pos.y) > (monster->pos.y)) {
-        return NORTH;
-    } else {
-        // Should never occur
-        return NORTH;
     }
 }

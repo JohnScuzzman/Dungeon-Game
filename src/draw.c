@@ -53,10 +53,14 @@ void DrawMap()
         // Translate screen coordinate to our internal large virtual map index
         int map_y = camera_y + y;
         int map_x = camera_x + x;
-
+        
         if (map[map_y][map_x].visible) {
-          mvaddch(y + 1, x + 1, map[map_y][map_x].ch | COLOR_PAIR(VISIBLE_COLOR));
-        }
+			    mvaddch(y + 1, x + 1, map[map_y][map_x].ch | COLOR_PAIR(VISIBLE_COLOR));
+
+        	if(map[map_y][map_x].entityType == FLOOR){
+        		if(map[map_y][map_x].inventory[0].itemID != NULL_ITEM_ID) mvaddch(y + 1, x + 1, map[map_y][map_x].ch | COLOR_PAIR(VISIBLE_COLOR) | A_DIM);
+        	}
+		    }
         else if (map[map_y][map_x].seen && map[map_y][map_x].entityID < 2){
           mvaddch(y + 1, x + 1, map[map_y][map_x].ch | COLOR_PAIR(SEEN_COLOR));
         }
@@ -107,8 +111,8 @@ void DrawPlayerEquipment(){
 /* Draw the players stats adjusting columns dynamically */
 void DrawPlayerStats() {
   int stats_col2 = dynamic_sidebar_x + 24; // shifted closer to look clean on tight layouts
-  int EXPLen = NumberOfDigits(player->playerStats.EXP);
-  int nextEXPLen = NumberOfDigits(player->playerStats.nextLVLEXP);
+  int EXPLen = GetNumberOfDigits(player->playerStats.EXP);
+  int nextEXPLen = GetNumberOfDigits(player->playerStats.nextLVLEXP);
   int EXPbuffer = (EXPLen + nextEXPLen);
 
   mvprintw(10, dynamic_sidebar_x, "Armor Class: %d", (player->playerStats.AC) + 10);
@@ -127,6 +131,7 @@ void DrawPlayerStats() {
   mvprintw(12, stats_col2, "STR: %d", player->playerStats.STR);
   mvprintw(14, stats_col2, "WIS: %d", player->playerStats.WIS);
   mvprintw(16, stats_col2 + 1 - EXPbuffer, "EXP: %d/%d", player->playerStats.EXP, player->playerStats.nextLVLEXP);
+  mvprintw(18, stats_col2, "FLR: %d", dungeonInfo->currentFloor);
 }
 
 void DrawCombatLog() {
@@ -135,7 +140,7 @@ void DrawCombatLog() {
   }
   // Let log draw starting below stats box bounding box
   for (int i = 0; i <= q->rear; i++) {
-    mvprintw(22 + i, dynamic_sidebar_x, "%s", q->events[i]);
+    mvprintw(LOG_HEIGHT + i, dynamic_sidebar_x, "%s", q->events[i]);
   }
 }
 
@@ -215,10 +220,13 @@ void DrawPlayerInventory() {
 
 void DrawDebug(Entity* mptr, int n_monsters) {
   // Position closest = FindClosestUnexplored();
-    for (int i = 0; i < n_monsters ; i++) {
-	  mvprintw(52, 2, "Player POS x:%d, y:%d, Tail:%d, inv[0].ID:%d", player->pos.x, player->pos.y, player->invTail, player->inventory[0].itemID);
+    for (int i = 0; i < (MAX_ONSCREEN_NPCS) ; i++) {
+    // mvprintw(52, 2, "ATK %d, ACC:%d", player->playerStats.ATK, combatHistory->playerAccRoll);
+    mvprintw(i, 170, "NPC_ID: %d, nptr[i]: %d, followerID: %d", nptr[i].entityID, i, player->follower.entityID);
+	  // mvprintw(52, 2, "Player POS x:%d, y:%d, Tail:%d, inv[0].ID:%d", player->pos.x, player->pos.y, player->invTail, player->inventory[0].itemID);
+    // mvprintw(52, 2, "Armor Req:%d, Armor Stat:%d, Melee Req:%d, Ranged Req:%d", player->equippedArmor.statReq, player->equippedArmor.statUsed, player->equippedMelee.statReq, player->equippedRanged.statReq);
     // mvprintw(23 + i, 128, "Playerlast x:%d y:%d ", mptr[i].playerLastPos.x, mptr[i].playerLastPos.y);
-    mvprintw(53 + i, 2, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c Tail:%d inv[0]ID:%d", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch, mptr[i].invTail, mptr[i].inventory[0].itemID);
+    // mvprintw(53 + i, 2, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c Tail:%d inv[0]ID:%d", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch, mptr[i].invTail, mptr[i].inventory[0].itemID);
     // mvprintw(27 + i, 2, "ID %c x:%d, y:%d MapID:%d, Mapc:%c", ((mptr + i)->entityID), mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
     // mvprintw(23 + i, 128, "isAggro: %d Range: %d Range: %d", mptr[i].aggroFlag, mptr[i].aggroRange, GetDistance(player->pos, (mptr + i)->pos));
 	  // mvprintw(30, 128, "CH: %c x:%d, y:%d ID:%d", combatHistory->defender.ch, combatHistory->defender.pos.x, combatHistory->defender.pos.y, combatHistory->defender.entityID);
@@ -241,7 +249,6 @@ void DrawEverything() {
   DrawPlayerEquipment();
   DrawPlayerStats();
   DrawAbilities();
-  // DrawPlayerInventory();
-  // DrawDebug(mptr, n_monsters);
-  DrawCombatLog();
+	DrawCombatLog();
 }
+

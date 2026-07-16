@@ -7,12 +7,12 @@
 /* Initializes the 1st level version of a class and assigns that class to the player.*/
 
 void AssignKnight() {
-    player->equippedArmor = Chainmail();
-    player->equippedMelee = Greatsword();
+    player->equippedArmor = LeatherArmor();
+    player->equippedMelee = Longsword();
     player->equippedRanged = Shortbow();
     player->equippedAmmo = Arrows();
-    AddToPlayerInventory(items[CHAINMAIL], 1);
-    AddToPlayerInventory(items[GREATSWORD], 1);
+    AddToPlayerInventory(items[LEATHER_ARMOR], 1);
+    AddToPlayerInventory(items[LONGSWORD], 1);
     AddToPlayerInventory(items[SHORTBOW], 1);
     AddToPlayerInventory(items[ARROWS], 20);
     player->equippedAmmo.item.quantity = 20;
@@ -33,11 +33,11 @@ void AssignSwashbuckler() {
     player->equippedArmor = LeatherArmor();
     player->equippedMelee = Cutlass();
     player->equippedRanged = FlintlockPistol();
-    player->equippedAmmo = BulletMusket();
+    player->equippedAmmo = BulletFlintlock();
     AddToPlayerInventory(items[LEATHER_ARMOR], 1);
     AddToPlayerInventory(items[CUTLASS], 1);
     AddToPlayerInventory(items[FLINTLOCK_PISTOL], 1);
-    AddToPlayerInventory(items[BULLET_MUSKET], 20);
+    AddToPlayerInventory(items[BULLET_FLINTLOCK], 20);
     player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
@@ -74,10 +74,13 @@ void AssignWizard() {
 void AssignNecromancer() {
     player->equippedArmor = Robes();
     player->equippedMelee = Dagger();
-    player->equippedRanged = AcidPotion();
+    player->equippedRanged = Slingshot();
+    player->equippedAmmo = AcidPotionAmmo();
     AddToPlayerInventory(items[ROBES], 1);
     AddToPlayerInventory(items[DAGGER], 1);
-    AddToPlayerInventory(items[ACID_POTION], 1);
+    AddToPlayerInventory(items[SLINGSHOT], 1);
+    AddToPlayerInventory(items[ACID_POTION_AMMO], 10);
+    player->equippedAmmo.item.quantity = 10;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -93,12 +96,13 @@ void AssignNecromancer() {
 
 void AssignGunslinger() {
     player->equippedArmor = LeatherArmor();
-    player->equippedMelee = Fists();
-    player->equippedRanged = DualFlintlocks();
-    player->equippedAmmo = BulletMusket();
+    player->equippedMelee = CombatKnife();
+    player->equippedRanged = FlintlockRifle();
+    player->equippedAmmo = BulletFlintlock();
     AddToPlayerInventory(items[LEATHER_ARMOR], 1);
-    AddToPlayerInventory(items[DUAL_FLINTLOCKS], 1);
-    AddToPlayerInventory(items[BULLET_MUSKET], 20);
+    AddToPlayerInventory(items[COMBAT_KNIFE], 1);
+    AddToPlayerInventory(items[FLINTLOCK_RIFLE], 1);
+    AddToPlayerInventory(items[BULLET_FLINTLOCK], 20);
     player->equippedAmmo.item.quantity = 20;
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
@@ -136,7 +140,7 @@ void AssignRanger() {
     player->equippedRanged = Longbow();
     player->equippedAmmo = Arrows();
     AddToPlayerInventory(items[RANGERS_CLOAK], 1);
-    AddToPlayerInventory(items[LONGSWORD], 1);
+    AddToPlayerInventory(items[COMBAT_KNIFE], 1);
     AddToPlayerInventory(items[LONGBOW], 1);
     AddToPlayerInventory(items[ARROWS], 20);
     player->equippedAmmo.item.quantity = 20;
@@ -154,12 +158,12 @@ void AssignRanger() {
 }
 
 void AssignDarkKnight() {
-    player->equippedArmor = Chainmail();
-    player->equippedMelee = Greatsword();
+    player->equippedArmor = LeatherArmor();
+    player->equippedMelee = Longsword();
     player->equippedRanged = NoWeapon();
     player->equippedAmmo = NoAmmo();
-    AddToPlayerInventory(items[CHAINMAIL], 1);
-    AddToPlayerInventory(items[GREATSWORD], 1);
+    AddToPlayerInventory(items[LEATHER_ARMOR], 1);
+    AddToPlayerInventory(items[LONGSWORD], 1);
     player->playerStats.mana = 16;
     player->playerStats.maxMana = 16;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -196,10 +200,13 @@ void AssignWarlock() {
 void AssignConjurer() {
     player->equippedArmor = Robes();
     player->equippedMelee = Quarterstaff();
-    player->equippedRanged = NoWeapon();
-    player->equippedAmmo = NoAmmo();
+    player->equippedRanged = Slingshot();
+    player->equippedAmmo = AcidPotionAmmo();
     AddToPlayerInventory(items[ROBES], 1);
     AddToPlayerInventory(items[QUARTERSTAFF], 1);
+    AddToPlayerInventory(items[SLINGSHOT], 1);
+    AddToPlayerInventory(items[ACID_POTION_AMMO], 10);
+    player->equippedAmmo.item.quantity = 10;
     player->playerStats.mana = 20;
     player->playerStats.maxMana = 20;
     player->playerStats.AC = player->equippedArmor.AC;
@@ -264,40 +271,40 @@ The numbers are the combination of x + y coordinates in MakePlayer
 */
 void AssignClass(int input) {
     switch(input){
-        case 69:
+        case KNIGHT:
             AssignKnight();
             break;
-        case 70:
+        case SWASHBUCKLER:
             AssignSwashbuckler();
             break;
-        case 71:
+        case WIZARD:
             AssignWizard();
             break;
-        case 72:
+        case NECROMANCER:
             AssignNecromancer();
             break;
-        case 73:
+        case GUNSLINGER:
             AssignGunslinger();
             break;
-        case 74:
+        case DRUID:
             AssignDruid();
             break;
-        case 89:
+        case RANGER:
             AssignRanger();
             break;
-        case 90:
+        case DARK_KNIGHT:
             AssignDarkKnight();
             break;
-        case 91:
+        case WARLOCK:
             AssignWarlock();
             break;
-        case 92:
+        case CONJURER:
             AssignConjurer();
             break;
-        case 93:
+        case CYBORG:
             AssignCyborg();
             break;
-        case 94:
+        case BARD:
             AssignBard();
             break;
         default:
@@ -313,7 +320,7 @@ TODO Currently only adjusts HP, but will later adjust CHA, WIS, STR, etc.
 void AssignStats(int input) {
     player->playerStats.nextLVLEXP = LEVEL_2;
     switch(input){
-        case 62:
+        case HUMAN:
             player->raceID = HUMAN;
             strcpy(player->playerRace, "Human");
             player->playerStats.maxHP = 10;
@@ -324,7 +331,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 12;
             player->playerStats.WIS = 12;
         break;
-        case 63:
+        case ELF:
             player->raceID = ELF;
             strcpy(player->playerRace, "Elf");
             player->playerStats.maxHP = 8;
@@ -335,7 +342,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 10;
             player->playerStats.WIS = 12;
         break;
-        case 64:
+        case DWARF:
             player->raceID = DWARF;
             strcpy(player->playerRace, "Dwarf");
             player->playerStats.maxHP = 10;
@@ -346,7 +353,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 14;
             player->playerStats.WIS = 16;
         break;
-        case 65:
+        case DRAGONBORN:
             player->raceID = DRAGONBORN;
             strcpy(player->playerRace, "Dragonborn");
             player->playerStats.maxHP = 12;
@@ -357,7 +364,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 16;
             player->playerStats.WIS = 10;
         break;
-        case 66:
+        case GNOLL:
             player->raceID = GNOLL;
             strcpy(player->playerRace, "Gnoll");
             player->playerStats.maxHP = 12;
@@ -368,7 +375,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 16;
             player->playerStats.WIS = 10;
         break;
-        case 67:
+        case CANIDAE:
             player->raceID = CANIDAE;
             strcpy(player->playerRace, "Canidae");
             player->playerStats.maxHP = 12;
@@ -379,7 +386,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 14;
             player->playerStats.WIS = 10;
         break;
-        case 82:
+        case SKELETON:
             player->raceID = SKELETON;
             strcpy(player->playerRace, "Skeleton");
             player->playerStats.maxHP = 8;
@@ -390,7 +397,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 8;
             player->playerStats.WIS = 14;
         break;
-        case 83:
+        case MANTIS:
             player->raceID = MANTIS;
             strcpy(player->playerRace, "Mantis");
             player->playerStats.maxHP = 12;
@@ -401,7 +408,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 16;
             player->playerStats.WIS = 10;
         break;
-        case 84:
+        case AUTOMATON:
             player->raceID = AUTOMATON;
             strcpy(player->playerRace, "Automaton");
             player->playerStats.maxHP = 10;
@@ -412,7 +419,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 14;
             player->playerStats.WIS = 10;
         break;
-        case 85:
+        case WEREWOLF:
             player->raceID = WEREWOLF;
             strcpy(player->playerRace, "Werewolf");
             player->playerStats.maxHP = 12;
@@ -423,7 +430,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 16;
             player->playerStats.WIS = 8;
         break;
-        case 86:
+        case VAMPIRE:
             player->raceID = VAMPIRE;
             strcpy(player->playerRace, "Vampire");
             player->playerStats.maxHP = 10;
@@ -434,7 +441,7 @@ void AssignStats(int input) {
             player->playerStats.STR = 10;
             player->playerStats.WIS = 10;
         break;
-        case 87:
+        case SUCCUBUS:
             player->raceID = SUCCUBUS;
             strcpy(player->playerRace, "Succubus");
             player->playerStats.maxHP = 8;
@@ -458,3 +465,4 @@ void AssignStats(int input) {
         break;
     }
 }
+

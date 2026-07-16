@@ -57,7 +57,65 @@ void AddRoomToMap(Room room)
         {
             AssignFloor(x, y);
         }
-
     }
 }
 
+
+/* Code to place chests in corners of the passed rooms center.*/
+void AddChestToRoom(Position center, int width, int height) {
+    int bottom, top, right, left;
+    bottom = center.y + (height / 2);
+    top = center.y - (height / 2);
+    right = center.x + (width / 2);
+    left = center.x - (width / 2);
+    bool chestPlaced = false;
+    while(!chestPlaced){
+        int randCorner = (rand() % 4) + 1;
+        switch(randCorner){
+            case 1:
+                if(map[top][left].entityType == FLOOR);{
+                    AssignChest(left, top);
+                    chestPlaced = true;
+                }
+                break;
+            case 2:
+                if(map[top][right].entityType == FLOOR);{
+                    AssignChest(right, top);
+                    chestPlaced = true;
+                }
+                break;
+            case 3:
+                if(map[bottom][left].entityType == FLOOR);{
+                    AssignChest(left, bottom);
+                    chestPlaced = true;
+                }
+                break;
+            case 4:
+                if(map[bottom][right].entityType == FLOOR);{
+                    AssignChest(right, bottom);
+                    chestPlaced = true;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+// Crashes the game :()
+// void AddChestToRoom(Position center, int width, int height) {
+//     int bottom, top, right, left,randX, randY;
+//     bottom = center.y + (height / 2);
+//     top = center.y - (height / 2);
+//     right = center.x + (width / 2);
+//     left = center.x - (width / 2);
+//     bool chestPlaced = false;
+//     while(!chestPlaced){
+//         randX = (rand() % right) + left;
+//         randY = (rand() % bottom) + top;
+//         if(map[randY][randX].entityType == FLOOR){
+//             AssignChest(randX, randY);
+//             chestPlaced = true;
+//         }
+//     }
+// }

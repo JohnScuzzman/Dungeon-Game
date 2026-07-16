@@ -2,13 +2,13 @@
 #define RACES_H
 
 typedef enum {
-    HUMAN,
+    HUMAN = 62,
     ELF,
     DWARF,
     DRAGONBORN,
     GNOLL,
     CANIDAE,
-    SKELETON,
+    SKELETON = 82,
     MANTIS,
     AUTOMATON,
     WEREWOLF,
