@@ -31,10 +31,6 @@ bool IsFull(LogQueue *q) {
 
 /* Queues a combat event as a string, if full, dequeues the front by incrementing it by one.*/
 void QueueEvent(LogQueue *q, char* event) {
-    erase();
-    DrawBorder();
-    DrawPlayerEquipment();
-    DrawPlayerStats();
     if (IsFull(q)) {
         strcpy(q->events[q->rear], event);
         DequeueEvent(q);

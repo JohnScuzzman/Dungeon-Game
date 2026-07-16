@@ -2,7 +2,6 @@
 
 #define ABILITY_BAR_STARTX 2
 #define ABILITIY_BAR_BUFFERX 12
-#define ABILITIY_BAR_BUFFERY 2
 #define ABILITY_BAR_Y (MAP_HEIGHT - 1)
 
 /* Sidebar/layout helpers */
@@ -14,9 +13,9 @@
 /* Draw the Map to the screen. */
 void DrawMap()
 { 
-  for (int y = 1; y < MAP_HEIGHT - ABILITIY_BAR_BUFFERY; y++)
+  for (int y = 0; y < MAP_HEIGHT; y++)
   { 
-    for (int x = 1; x < MAP_WIDTH; x++)
+    for (int x = 0; x < MAP_WIDTH; x++)
     { 
         if (map[y][x].visible) {
 			if (map[y][x].color == BLOOD_COLOR && map[y][x].miscTimer > 0) {
@@ -471,9 +470,13 @@ void DrawCombatLog() {
 /*Draw Everything*/ 
 //void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
 void DrawEverything() {
+	erase();
 	DrawMap();
 	DrawPlayer(player);
+	DrawPlayerEquipment();
+	DrawPlayerStats();
 	DrawAbilities();
 	DrawCombatLog();
+	DrawBorder();
 }
 
