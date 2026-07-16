@@ -18,7 +18,7 @@ const int LVL_EXP_VALUES[MAX_LEVEL] = {
   LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10
 };
 
-int ENTITY_ID  = 256; // accounting for a theorhetical 256 monsters
+int ENTITY_ID = 256; // accounting for a theorhetical 256 monsters
 int LOG_HEIGHT = 22;
 int LOG_SIZE  = 27;
 int LOG_WIDTH = 128;
@@ -29,8 +29,6 @@ int MAP_HEIGHT = 50;
 int MAP_WIDTH = 125;
 int MAX_DUNGEON_FLOORS = 1024;
 int RADIUS = 15;
-
-
 
 /* These are like global pointers.*/ 
 /* We can use these in any function without declaring them over and over.*/
@@ -51,17 +49,24 @@ int main(void)
 	#define SIGBUS SIGSEGV
 	#endif
 	#endif
-  // Register crash handlers before doing anything else
-  signal(SIGBUS, handle_crash);
-  signal(SIGSEGV, handle_crash);
-  // Optional: Catch Ctrl+C if you want to clean up on manual exits
-  // signal(SIGINT, handle_crash);
-  
-  /* Check if user is playing in a compatible terminal. */
-  bool compatibleTerminal;
-  compatibleTerminal = NcursesSetup(); 
-  if (compatibleTerminal)
-  {
+	// Register crash handlers before doing anything else
+	signal(SIGBUS, handle_crash);
+	signal(SIGSEGV, handle_crash);
+	// Optional: Catch Ctrl+C if you want to clean up on manual exits
+	// signal(SIGINT, handle_crash);
+
+	/* Check if user is playing in a compatible terminal. */
+	bool compatibleTerminal;
+	compatibleTerminal = NcursesSetup(); 
+	if (compatibleTerminal) {
+	int maxX, maxY;
+    // For windows version
+    resize_term(2000, 2000); // something larger than 1920 
+
+    getmaxyx(stdscr, maxY, maxX);
+
+    resize_term(maxY - 1, maxX - 1); 
+
     /* Generate seeds */
     srand(time(NULL));
 
@@ -70,7 +75,7 @@ int main(void)
     int n_rooms =  (rand() % 11) + 10;
     int n_monsters = n_rooms - 1;
 
-	  Position start_pos;
+	Position start_pos;
 
     /*Dungeon Information*/
     dungeonInfo = MakeDungeonInfo();

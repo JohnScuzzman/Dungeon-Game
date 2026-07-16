@@ -296,6 +296,7 @@ cJSON* SerializeEntity(const Entity* entity) {
     cJSON_AddNumberToObject(entityObj, "entityType", entity->entityType);
     cJSON_AddNumberToObject(entityObj, "invTail", entity->invTail);
     cJSON_AddNumberToObject(entityObj, "invHead", entity->invHead);
+    cJSON_AddNumberToObject(entityObj, "miscTimer", entity->miscTimer);
     cJSON_AddItemToObject(entityObj, "entityStats", SerializePlayerStats(&entity->entityStats));
     cJSON_AddItemToObject(entityObj, "entityPosition", SerializePlayerPOS(&entity->pos));
     cJSON_AddItemToObject(entityObj, "entityLastPosition", SerializePlayerPOS(&entity->lastPos));
