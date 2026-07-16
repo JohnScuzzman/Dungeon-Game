@@ -18,7 +18,7 @@
 #include <races.h>
 #include <classes.h>
 #include <npcs.h>
-#include <cjson/cJSON.h>
+#include <cJSON.h>
 
 // color pairs
 #define VISIBLE_COLOR 1

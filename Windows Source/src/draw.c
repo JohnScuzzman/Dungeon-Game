@@ -2,474 +2,253 @@
 
 #define ABILITY_BAR_STARTX 2
 #define ABILITIY_BAR_BUFFERX 12
-#define ABILITY_BAR_Y (MAP_HEIGHT - 1)
-
-/* Sidebar/layout helpers */
-#define SIDEBAR_X (MAP_WIDTH + 2)
-#define STATS_COL2 (SIDEBAR_X + 29)
 #define STATS_WIDTH 40
-#define RIGHT_BORDER (SIDEBAR_X + STATS_WIDTH)
+#define ABILITY_BAR_Y (LINES - 1)
+#define QUEUE_START_Y 22
 
-/* Draw the Map to the screen. */
+/* * DYNAMIC LAYOUT ENGINE
+ * Instead of hardcoding, we compute coordinates relative to the screen dimensions
+ */
+static int camera_x = 0;
+static int camera_y = 0;
+static int current_map_view_width = 0;
+static int current_map_view_height = 0;
+static int dynamic_sidebar_x = 0;
+
+void UpdateCameraAndLayout(void) {
+    // 1. Determine how much room we have for the sidebar
+    // Stats width is 40. Let's give the sidebar absolute priority on screen space.
+    dynamic_sidebar_x = COLS - 42; 
+    if (dynamic_sidebar_x > MAP_WIDTH + 2) {
+        dynamic_sidebar_x = MAP_WIDTH + 2; // Cap it at its max beautiful layout size
+    }
+
+    // 2. The map gets whatever space is left over on the left side
+    current_map_view_width = dynamic_sidebar_x - 2;
+    if (current_map_view_width > MAP_WIDTH) current_map_view_width = MAP_WIDTH;
+
+    // 3. Vertical layout allocation (Reserve 2 rows at bottom for abilities if needed)
+    current_map_view_height = LINES - 4; 
+    if (current_map_view_height > MAP_HEIGHT) current_map_view_height = MAP_HEIGHT;
+
+    // 4. Center the camera viewport around the player's physical location
+    camera_x = player->pos.x - (current_map_view_width / 2);
+    camera_y = player->pos.y - (current_map_view_height / 2);
+
+    // 5. Clamp the camera viewport bounds so we don't look into empty code void
+    if (camera_x < 0) camera_x = 0;
+    if (camera_y < 0) camera_y = 0;
+    if (camera_x > MAP_WIDTH - current_map_view_width)   camera_x = MAP_WIDTH - current_map_view_width;
+    if (camera_y > MAP_HEIGHT - current_map_view_height) camera_y = MAP_HEIGHT - current_map_view_height;
+}
+
+/* Draw the Map to the screen using our sliding camera viewport. */
 void DrawMap()
 { 
-  for (int y = 1; y < MAP_HEIGHT - ABILITIY_BAR_BUFFERY; y++)
+  // We only iterate through what can physically fit on screen right now!
+  for (int y = 0; y < current_map_view_height; y++)
   { 
-    for (int x = 1; x < MAP_WIDTH; x++)
+    for (int x = 0; x < current_map_view_width; x++)
     { 
-        if (map[y][x].visible) {
-			if (map[y][x].color == BLOOD_COLOR && map[y][x].miscTimer > 0) {
-				mvaddch(y, x, map[y][x].ch | COLOR_PAIR(BLOOD_COLOR) | A_DIM);
-				map[y][x].miscTimer--;
-			}
-			else mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR));
-        	if(map[y][x].entityType == FLOOR && map[y][x].color != BLOOD_COLOR){
-        		if(map[y][x].inventory[0].itemID != NULL_ITEM_ID) mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR) | A_DIM);
+        // Translate screen coordinate to our internal large virtual map index
+        int map_y = camera_y + y;
+        int map_x = camera_x + x;
+        
+        if (map[map_y][map_x].visible) {
+			    mvaddch(y + 1, x + 1, map[map_y][map_x].ch | COLOR_PAIR(VISIBLE_COLOR));
+
+        	if(map[map_y][map_x].entityType == FLOOR){
+        		if(map[map_y][map_x].inventory[0].itemID != NULL_ITEM_ID) mvaddch(y + 1, x + 1, map[map_y][map_x].ch | COLOR_PAIR(VISIBLE_COLOR) | A_DIM);
         	}
-		}
-        else if (map[y][x].seen && map[y][x].entityID < 2){
-          mvaddch(y, x, map[y][x].ch | COLOR_PAIR(SEEN_COLOR));
+		    }
+        else if (map[map_y][map_x].seen && map[map_y][map_x].entityID < 2){
+          mvaddch(y + 1, x + 1, map[map_y][map_x].ch | COLOR_PAIR(SEEN_COLOR));
         }
-        else if (map[y][x].seen && map[y][x].entityID > 1){
-          mvaddch(y, x, '.' | COLOR_PAIR(SEEN_COLOR));
+        else if (map[map_y][map_x].seen && map[map_y][map_x].entityID > 1){
+          mvaddch(y + 1, x + 1, '.' | COLOR_PAIR(SEEN_COLOR));
         }
-        else if (!map[y][x].seen && map[y][x].entityID > 1){
-          mvaddch(y, x, ' ' | COLOR_PAIR(SEEN_COLOR));
+        else if (!map[map_y][map_x].seen && map[map_y][map_x].entityID > 1){
+          mvaddch(y + 1, x + 1, ' ' | COLOR_PAIR(SEEN_COLOR));
         }
         else {
-          mvaddch(y, x, ' ');
+          mvaddch(y + 1, x + 1, ' ');
         }
     } 
   } 
 }
 
-/* Draw Player based on position. */
+/* Draw Player adjusting for camera position offset */
 void DrawPlayer(Player* player) { 
-	mvaddch(player->pos.y, player->pos.x, (chtype)(player->ch | COLOR_PAIR(VISIBLE_COLOR) | A_BOLD));
-  refresh();
-	} 
+  int screen_x = (player->pos.x - camera_x) + 1;
+  int screen_y = (player->pos.y - camera_y) + 1;
 
-/* Makes the players avatar blink when called.*/
+  // Only draw player if they are physically within our screen bounds
+  if (screen_x > 0 && screen_x <= current_map_view_width && screen_y > 0 && screen_y <= current_map_view_height) {
+      mvaddch(screen_y, screen_x, player->ch | player->color | A_BOLD | A_DIM);
+  }
+  refresh();
+} 
+
 void DrawPlayerBlink(Player* player) { 
-	// attron(A_STANDOUT);
-	mvaddch(player->pos.y, player->pos.x, (chtype)(player->ch | COLOR_PAIR(HIGHLIGHT_COLOR) | A_BLINK));
-  refresh();
-	// attroff(A_STANDOUT); 
-	}  
+  int screen_x = (player->pos.x - camera_x) + 1;
+  int screen_y = (player->pos.y - camera_y) + 1;
 
-/* Draws equipped items.*/
-void DrawPlayerEquipment(){
-  mvprintw(2, SIDEBAR_X, "Name: %s", player->playerName);
-  mvprintw(4, SIDEBAR_X, "Race: %s", player->playerRace);
-  mvprintw(6, SIDEBAR_X, "Class: %s", player->playerClass.className);
-  mvprintw(8, SIDEBAR_X, "Armor: %s", player->equippedArmor.item.itemName);
-  mvprintw(12, SIDEBAR_X, "Melee: %s", player->equippedMelee.item.itemName);
-  mvprintw(14, SIDEBAR_X, "Ranged: %s", player->equippedRanged.item.itemName);
-  // mvprintw(8, 128, "Armor: %s", player->equippedArmor.armorName);
-  // mvprintw(12, 128, "Melee: %s", player->equippedMelee.weaponName);
-  // mvprintw(14, 128, "Ranged: %s", player->equippedRanged.weaponName);
+  if (screen_x > 0 && screen_x <= current_map_view_width && screen_y > 0 && screen_y <= current_map_view_height) {
+      mvaddch(screen_y, screen_x, player->ch | player->color | A_BOLD | A_DIM | A_BLINK);
+  }
 }
 
-/* Draw the players stats like INT, HP, EXP, LVL, etc.*/
-void DrawPlayerStats() {
+/* Draws equipped items based on dynamic layout anchor */
+void DrawPlayerEquipment(){
+  mvprintw(2, dynamic_sidebar_x, "Name: %s", player->playerName);
+  mvprintw(4, dynamic_sidebar_x, "Race: %s", player->playerRace);
+  mvprintw(6, dynamic_sidebar_x, "Class: %s", player->playerClass.className);
+  mvprintw(8, dynamic_sidebar_x, "Armor: %s", player->equippedArmor.item.itemName);
+  mvprintw(12, dynamic_sidebar_x, "Melee: %s", player->equippedMelee.item.itemName);
+  mvprintw(14, dynamic_sidebar_x, "Ranged: %s", player->equippedRanged.item.itemName);
+}
 
+/* Draw the players stats adjusting columns dynamically */
+void DrawPlayerStats() {
+  int stats_col2 = dynamic_sidebar_x + 24; // shifted closer to look clean on tight layouts
   int EXPLen = GetNumberOfDigits(player->playerStats.EXP);
   int nextEXPLen = GetNumberOfDigits(player->playerStats.nextLVLEXP);
   int EXPbuffer = (EXPLen + nextEXPLen);
-  mvprintw(10, SIDEBAR_X, "Armor Class: %d", (player->playerStats.AC) + 10);
-  mvprintw(16, SIDEBAR_X, "HP: %d", player->playerStats.HP);
+
+  mvprintw(10, dynamic_sidebar_x, "Armor Class: %d", (player->playerStats.AC) + 10);
+  mvprintw(16, dynamic_sidebar_x, "HP: %d", player->playerStats.HP);
   if(player->playerClass.isCaster) {
-    mvprintw(18, SIDEBAR_X, "Mana: %d", player->playerStats.mana);
+    mvprintw(18, dynamic_sidebar_x, "Mana: %d", player->playerStats.mana);
   }
   else {
-    mvprintw(18, SIDEBAR_X, "Energy: %d", player->playerStats.mana);
+    mvprintw(18, dynamic_sidebar_x, "Energy: %d", player->playerStats.mana);
   }
-  mvprintw(2, STATS_COL2, "LVL: %d", player->playerStats.LVL);
-  mvprintw(4, STATS_COL2, "CHA: %d", player->playerStats.CHA);
-  mvprintw(6, STATS_COL2, "CON: %d", player->playerStats.CON);
-  mvprintw(8, STATS_COL2, "DEX: %d", player->playerStats.DEX);
-  mvprintw(10, STATS_COL2, "INT: %d", player->playerStats.INT);
-  mvprintw(12, STATS_COL2, "STR: %d", player->playerStats.STR);
-  mvprintw(14, STATS_COL2, "WIS: %d", player->playerStats.WIS);
-  mvprintw(16, STATS_COL2 + 1 - EXPbuffer, "EXP: %d/%d", player->playerStats.EXP, player->playerStats.nextLVLEXP);
-  mvprintw(18, STATS_COL2, "FLR: %d", dungeonInfo->currentFloor);
+  mvprintw(2, stats_col2, "LVL: %d", player->playerStats.LVL);
+  mvprintw(4, stats_col2, "CHA: %d", player->playerStats.CHA);
+  mvprintw(6, stats_col2, "CON: %d", player->playerStats.CON);
+  mvprintw(8, stats_col2, "DEX: %d", player->playerStats.DEX);
+  mvprintw(10, stats_col2, "INT: %d", player->playerStats.INT);
+  mvprintw(12, stats_col2, "STR: %d", player->playerStats.STR);
+  mvprintw(14, stats_col2, "WIS: %d", player->playerStats.WIS);
+  mvprintw(16, stats_col2 + 1 - EXPbuffer, "EXP: %d/%d", player->playerStats.EXP, player->playerStats.nextLVLEXP);
+  mvprintw(18, stats_col2, "FLR: %d", dungeonInfo->currentFloor);
 }
 
-/* Draw the players Abilities in the bottom left of screen. */
-/*1: %s - %d |, 2: %s - %d |, etc, are ABILITY_BAR_BUFFERX*/
+void DrawCombatLog() {
+  if (IsEmpty(q)){
+        return;
+  }
+  // Let log draw starting below stats box bounding box
+  for (int i = 0; i <= q->rear; i++) {
+    mvprintw(LOG_HEIGHT + i, dynamic_sidebar_x, "%s", q->events[i]);
+  }
+}
+
 void DrawAbilities() { 
+  int ability_y = current_map_view_height + 2;
   int buffer;
-  mvprintw(ABILITY_BAR_Y, ABILITY_BAR_STARTX, "1: %s - %d |", 
+  mvprintw(ability_y, 0, "|");
+  mvprintw(ability_y, ABILITY_BAR_STARTX, "1: %s - %d |", 
   player->playerClass.abilities[ABILITY_1].abilityName, 
   player->playerClass.abilities[ABILITY_1].manaCost);
 
   buffer = strlen(player->playerClass.abilities[ABILITY_1].abilityName) + ABILITIY_BAR_BUFFERX;
-  mvprintw(ABILITY_BAR_Y, buffer, "2: %s - %d |", player->playerClass.abilities[ABILITY_2].abilityName,
+  mvprintw(ability_y, buffer, "2: %s - %d |", player->playerClass.abilities[ABILITY_2].abilityName,
   player->playerClass.abilities[ABILITY_2].manaCost);
   buffer -= ABILITY_BAR_STARTX;
   if (player->playerClass.abilities[ABILITY_3].abilityID > NO_ABILITY) {
     buffer += (strlen(player->playerClass.abilities[ABILITY_2].abilityName) + ABILITIY_BAR_BUFFERX);
-    mvprintw(ABILITY_BAR_Y, buffer, 
+    mvprintw(ability_y, buffer, 
     "3: %s - %d |", player->playerClass.abilities[ABILITY_3].abilityName,
     player->playerClass.abilities[ABILITY_3].manaCost);
   }
   if (player->playerClass.abilities[ABILITY_4].abilityID > NO_ABILITY){
     buffer += (strlen(player->playerClass.abilities[ABILITY_3].abilityName) + ABILITIY_BAR_BUFFERX);
-    mvprintw(ABILITY_BAR_Y, buffer,
+    mvprintw(ability_y, buffer,
     "4: %s - %d |", player->playerClass.abilities[ABILITY_4].abilityName,
     player->playerClass.abilities[ABILITY_4].manaCost);
   } 
   if (player->playerClass.abilities[ABILITY_5].abilityID > NO_ABILITY) {
     buffer += (strlen(player->playerClass.abilities[ABILITY_4].abilityName) + ABILITIY_BAR_BUFFERX);
-    mvprintw(ABILITY_BAR_Y, buffer,
+    mvprintw(ability_y, buffer,
     "5: %s - %d |", player->playerClass.abilities[ABILITY_5].abilityName,
     player->playerClass.abilities[ABILITY_5].manaCost);
   }
+
+  mvprintw(ability_y, current_map_view_width + 1, "|");
 }
 
-
-/* Draw a pretty border around the map and stats.*/
 void DrawBorder(void) {
-  for (int y = 0; y < MAP_HEIGHT; y++) {
+  int bottom_border = current_map_view_height + 3;
+  // Draw box around dynamic map viewport
+  for (int y = 0; y <= current_map_view_height + 1; y++) {
     mvprintw(y, 0, "|");
-    mvprintw(y, MAP_WIDTH, "|");
+    mvprintw(y, current_map_view_width + 1, "|");
   }
 
-  for (int x = 0; x <= MAP_WIDTH + 1; x++) {
+  for (int x = 0; x <= current_map_view_width + 1; x++) {
     mvprintw(0, x, "=");
-    mvprintw(MAP_HEIGHT, x, "=");
+    mvprintw(bottom_border, x, "=");
   }
 
-  /* Internal borders for stats & abilites */
-  for (int x = 0; x < STATS_WIDTH + 1; x++) {
-    mvprintw(0, SIDEBAR_X + x, "=");
-    mvprintw(20, SIDEBAR_X + x, "=");
-    mvprintw(MAP_HEIGHT, SIDEBAR_X + x, "=");
+  int right_border_edge = dynamic_sidebar_x + STATS_WIDTH;
+
+  // Draw box around dynamic sidebar panel
+  for (int x = 0; x <= STATS_WIDTH; x++) {
+    mvprintw(0, dynamic_sidebar_x + x, "=");
+    mvprintw(20, dynamic_sidebar_x + x, "=");
+    mvprintw(bottom_border, dynamic_sidebar_x + x, "=");
   }
 
-  for (int y = 1; y < MAP_HEIGHT; y ++) {
-    mvprintw(y, RIGHT_BORDER, "|");
+  // Right border
+  for (int y = 1; y <= current_map_view_height + 2; y++) {
+    mvprintw(y, right_border_edge, "|");
   }
 
-  for (int x = 0; x < MAP_WIDTH; x++) {
-    mvprintw(ABILITY_BAR_Y - 1, x, "=");
+  // Bottom map border
+  for (int x = 0; x < current_map_view_width + 1; x++) {
+    mvprintw(current_map_view_height + 1, x, "=");
   }
 }
 
-/* Splatters the target across the map, yay! */
-void BloodSplatter(Position origin, Position target) {
-	int dir = (rand() % 3) + 1;
-	map[target.y][target.x].color = BLOOD_COLOR;
-	map[target.y][target.x].miscTimer = (rand() % 30) + 10;
-    if ((target.x) < (origin.x) && (target.y) < (origin.y)) {
-		BloodSE(origin, target, dir);
-    }
-    else if ((target.x) < (origin.x) && (target.y) > (origin.y)) {
-		BloodNE(origin, target, dir);	
-    }
-    else if ((target.x) > (origin.x) && (target.y) > (origin.y)) {
-		BloodNW(origin, target, dir);
-    }
-    else if ((target.x) > (origin.x) && (target.y) < (origin.y)) {
-		BloodSW(origin, target, dir);
-    }
-    else if ((target.x) < (origin.x) && (target.y) == (origin.y)) {
-		BloodE(origin, target, dir);
-    }
-    else if ((target.x) > (origin.x) && (target.y) == (origin.y)) {
-		BloodW(origin, target, dir);
-    }
-    else if ((target.x) == (origin.x) && (target.y) < (origin.y)) {
-		BloodS(origin, target, dir);
-    }
-    else if ((target.x) == (origin.x) && (target.y) > (origin.y)) {
-		BloodN(origin, target, dir);
-	}
-}
 
-/* Splatters the target across the map, yay! */
-void CritBloodSplatter(Position origin, Position target) {
-	map[target.y][target.x].color = BLOOD_COLOR;
-	map[target.y][target.x].miscTimer = (rand() % 30) + 10;
-    if((target.x) < (origin.x) && (target.y) < (origin.y)) {
-		map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y - 1)][target.x].miscTimer = (rand() % 30) + 10;
+void DrawPlayerInventory() {
+    for(int i = player->invHead; i < player->invTail; i++) {
+        mvprintw(26 + i, 2, "ItemID:%d, Item:%s", player->inventory[i].itemID, player->inventory[i].itemName);
     }
-    else if ((target.x) < (origin.x) && (target.y) > (origin.y)) {
-		map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-    }
-    else if ((target.x) > (origin.x) && (target.y) > (origin.y)) {
-		map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-    }
-    else if ((target.x) > (origin.x) && (target.y) < (origin.y)) {
-		map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
-    }
-    else if ((target.x) < (origin.x) && (target.y) == (origin.y)) {
-		map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-    }
-    else if ((target.x) > (origin.x) && (target.y) == (origin.y)) {
-		map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-    }
-    else if ((target.x) == (origin.x) && (target.y) < (origin.y)) {
-		map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
-		map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-    }
-    else if ((target.x) == (origin.x) && (target.y) > (origin.y)) {
-		map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-	}
-}
-
-void BloodSE(Position origin, Position target, int dir){
-	switch (dir) {
-		case 1:
-			map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 2:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 3:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		default:
-			break;
-	}
-}
-void BloodNE(Position origin, Position target, int dir){
-	switch (dir) {
-		case 1:
-			map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 2:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 3:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-			break;
-		default:
-			break;
-	}
-}
-void BloodNW(Position origin, Position target, int dir){
-	switch (dir) {
-		case 1:
-			map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 2:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 3:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-			break;
-		default:
-			break;
-	}
-}
-void BloodSW(Position origin, Position target, int dir){
-	switch (dir) {
-		case 1:
-			map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 2:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 3:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
-			break;
-		default:
-			break;
-	}
-}
-void BloodE(Position origin, Position target, int dir){
-	switch (dir) {
-		case 1:
-			map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 2:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 3:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		default:
-			break;
-	}
-}
-void BloodW(Position origin, Position target, int dir){
-	switch (dir) {
-		case 1:
-			map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 2:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			break;
-		case 3:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			break;
-		default:
-			break;
-	}
-}
-void BloodS(Position origin, Position target, int dir){
-	switch (dir) {
-		case 1:
-			map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
-			break;
-		case 2:
-			map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
-			break;
-		case 3:
-			map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
-			map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		default:
-			break;
-	}
-}
-void BloodN(Position origin, Position target, int dir){
-	switch (dir) {
-		case 1:
-			map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-			break;
-		case 2:
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-			break;
-		case 3:
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			break;
-		default:
-			break;
-	}
 }
 
 void DrawDebug(Entity* mptr, int n_monsters) {
   // Position closest = FindClosestUnexplored();
-    // for (int i = 0; i < (MAX_ONSCREEN_NPCS) ; i++) {
-    mvprintw(54, 2, "ATK %d, ACC:%d", player->playerStats.ATK, combatHistory->playerAccRoll);
-    // mvprintw(i, 170, "NPC_ID: %d, nptr[i]: %d, followerID: %d POS_X:%d POS_Y:%d", nptr[i].entityID, i, player->follower.entityID, nptr[i].pos.x, nptr[i].pos.y);
-	// mvprintw(52, 2, "Player POS x:%d, y:%d, Tail:%d, inv[0].ID:%d", player->pos.x, player->pos.y, player->invTail, player->inventory[0].itemID);
+    for (int i = 0; i < (MAX_ONSCREEN_NPCS) ; i++) {
+    // mvprintw(52, 2, "ATK %d, ACC:%d", player->playerStats.ATK, combatHistory->playerAccRoll);
+    mvprintw(i, 170, "NPC_ID: %d, nptr[i]: %d, followerID: %d", nptr[i].entityID, i, player->follower.entityID);
+	  // mvprintw(52, 2, "Player POS x:%d, y:%d, Tail:%d, inv[0].ID:%d", player->pos.x, player->pos.y, player->invTail, player->inventory[0].itemID);
     // mvprintw(52, 2, "Armor Req:%d, Armor Stat:%d, Melee Req:%d, Ranged Req:%d", player->equippedArmor.statReq, player->equippedArmor.statUsed, player->equippedMelee.statReq, player->equippedRanged.statReq);
     // mvprintw(23 + i, 128, "Playerlast x:%d y:%d ", mptr[i].playerLastPos.x, mptr[i].playerLastPos.y);
     // mvprintw(53 + i, 2, "Mchar %c x:%d, y:%d ID:%d, Mapc:%c Tail:%d inv[0]ID:%d", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch, mptr[i].invTail, mptr[i].inventory[0].itemID);
     // mvprintw(27 + i, 2, "ID %c x:%d, y:%d MapID:%d, Mapc:%c", ((mptr + i)->entityID), mptr[i].pos.x, mptr[i].pos.y, mptr[i].entityID, map[mptr[i].pos.y][mptr[i].pos.x].ch);
     // mvprintw(23 + i, 128, "isAggro: %d Range: %d Range: %d", mptr[i].aggroFlag, mptr[i].aggroRange, GetDistance(player->pos, (mptr + i)->pos));
-	// mvprintw(30, 128, "CH: %c x:%d, y:%d ID:%d", combatHistory->defender.ch, combatHistory->defender.pos.x, combatHistory->defender.pos.y, combatHistory->defender.entityID);
+	  // mvprintw(30, 128, "CH: %c x:%d, y:%d ID:%d", combatHistory->defender.ch, combatHistory->defender.pos.x, combatHistory->defender.pos.y, combatHistory->defender.entityID);
     // mvprintw(47, 2, "CH:%c x:%d, y:%d ID:%d", combatHistory->defender.ch, combatHistory->defender.pos.x, combatHistory->defender.pos.y, combatHistory->defender.entityID);
     // mvprintw(27 + i, 2, "CH:%c x:%d, y:%d px:%d, py:%d AGR:%d ", mptr[i].ch, mptr[i].pos.x, mptr[i].pos.y, mptr[i].playerLastPos.x, mptr[i].playerLastPos.y, mptr[i].aggroFlag);
-    // }
+    }
     // mvprintw(22, 128, "Closest Unexplored: %d, %d", closest.y, closest.x);
   
 }
 
-/* 
-Draws the combatlog Queue to the rightmost display area under player's stats.
-*/
-void DrawCombatLog() {
- 	if (IsEmpty(q)){
-        return;
-    }
-    for (int i = 0; i <= q->rear; i++) {
-    	mvprintw(LOG_HEIGHT + i, SIDEBAR_X, "%s", q->events[i]);
-  	}
-}
-
-/*Draw Everything*/ 
-//void DrawEverything(Entity* mptr, int n_monsters, CombatHistory* combatHistory) {
 void DrawEverything() {
+	clear();
+	
+	// Force recalculating limits dynamically based on current window boundaries
+	UpdateCameraAndLayout();
+	
 	DrawMap();
 	DrawPlayer(player);
-  	DrawPlayerEquipment();
+	DrawBorder();
+	DrawPlayerEquipment();
+	DrawPlayerStats();
+	DrawAbilities();
 	DrawCombatLog();
 }
+
