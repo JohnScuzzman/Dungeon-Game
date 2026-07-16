@@ -11,7 +11,6 @@ Entity* FindNPCInList(int entityID, int maxNPCS) {
 
 /* Basic logic for how a friendly npc follower interacts and moves.*/
 void FollowerLogic(Entity* follower, int n_monsters) {
-
     for (int i = 0; i < n_monsters; i++) {
         /* If a monster is adjacent, don't move, and attack them.*/
         if (CheckMonsterAdjacent(player->follower.pos, (mptr + i)) == true) {
@@ -109,17 +108,10 @@ void UpdateFollower(Entity* follower) {
 }
 
 void UpdateNPCVisible(Entity* npc, Player* player){
-    if (GetDistance(npc->pos, player->pos) < 6) {
-        npc->transparent = true;
-    }
-    else {
-        npc->transparent = false;
-    } 
     if(LineOfSight(npc->pos, player->pos) && 
-    GetDistance(npc->pos, player->pos) < 15 && npc->entityType != CORPSE) {
+    GetDistance(npc->pos, player->pos) < 15) {
         npc->visible = true;
         npc->seen = true;
-        if((npc->transparent)) map[npc->pos.y][npc->pos.x].transparent = true;
         map[npc->pos.y][npc->pos.x].visible = true;
         npc->ch = npc->staticCh;
         map[npc->pos.y][npc->pos.x].ch = npc->ch;

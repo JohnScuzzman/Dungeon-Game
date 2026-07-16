@@ -158,6 +158,7 @@ bool MovePlayer(Position newPos, CombatHistory* combatHistory, int* n_monsters) 
         player->pos.y = newPos.y;
         player->pos.x = newPos.x;
         map[player->pos.y][player->pos.x].noCollision = false;
+        map[player->pos.y][player->pos.x].transparent = true;
         MakeFOV(player);
         combatHistory->playerCombat = false;
         player->follower.hasMoved  = true;
