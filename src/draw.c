@@ -4,6 +4,7 @@
 #define ABILITIY_BAR_BUFFERX 12
 #define STATS_WIDTH 40
 #define ABILITY_BAR_Y (LINES - 1)
+#define QUEUE_START_Y 22
 
 /* * DYNAMIC LAYOUT ENGINE
  * Instead of hardcoding, we compute coordinates relative to the screen dimensions
@@ -152,19 +153,19 @@ void DrawAbilities() {
   buffer -= ABILITY_BAR_STARTX;
   if (player->playerClass.abilities[ABILITY_3].abilityID > NO_ABILITY) {
     buffer += (strlen(player->playerClass.abilities[ABILITY_2].abilityName) + ABILITIY_BAR_BUFFERX);
-    mvprintw(ABILITY_BAR_Y, buffer, 
+    mvprintw(ability_y, buffer, 
     "3: %s - %d |", player->playerClass.abilities[ABILITY_3].abilityName,
     player->playerClass.abilities[ABILITY_3].manaCost);
   }
   if (player->playerClass.abilities[ABILITY_4].abilityID > NO_ABILITY){
     buffer += (strlen(player->playerClass.abilities[ABILITY_3].abilityName) + ABILITIY_BAR_BUFFERX);
-    mvprintw(ABILITY_BAR_Y, buffer,
+    mvprintw(ability_y, buffer,
     "4: %s - %d |", player->playerClass.abilities[ABILITY_4].abilityName,
     player->playerClass.abilities[ABILITY_4].manaCost);
   } 
   if (player->playerClass.abilities[ABILITY_5].abilityID > NO_ABILITY) {
     buffer += (strlen(player->playerClass.abilities[ABILITY_4].abilityName) + ABILITIY_BAR_BUFFERX);
-    mvprintw(ABILITY_BAR_Y, buffer,
+    mvprintw(ability_y, buffer,
     "5: %s - %d |", player->playerClass.abilities[ABILITY_5].abilityName,
     player->playerClass.abilities[ABILITY_5].manaCost);
   }
@@ -173,6 +174,7 @@ void DrawAbilities() {
 }
 
 void DrawBorder(void) {
+  int bottom_border = current_map_view_height + 3;
   // Draw box around dynamic map viewport
   for (int y = 0; y <= current_map_view_height + 1; y++) {
     mvprintw(y, 0, "|");
@@ -181,7 +183,7 @@ void DrawBorder(void) {
 
   for (int x = 0; x <= current_map_view_width + 1; x++) {
     mvprintw(0, x, "=");
-    mvprintw(LINES - 1, x, "=");
+    mvprintw(bottom_border, x, "=");
   }
 
   int right_border_edge = dynamic_sidebar_x + STATS_WIDTH;
@@ -190,7 +192,7 @@ void DrawBorder(void) {
   for (int x = 0; x <= STATS_WIDTH; x++) {
     mvprintw(0, dynamic_sidebar_x + x, "=");
     mvprintw(20, dynamic_sidebar_x + x, "=");
-    mvprintw(LINES - 1, dynamic_sidebar_x + x, "=");
+    mvprintw(bottom_border, dynamic_sidebar_x + x, "=");
   }
 
   // Right border
