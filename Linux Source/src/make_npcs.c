@@ -88,8 +88,6 @@ void ZeroEntityMapInfo(Entity* entity) {
     entity->mapInfo.newSeen = false;
     entity->mapInfo.oldVisible = false;
     entity->mapInfo.newVisible = false;
-    entity->mapInfo.newColor = COLOR_PAIR(VISIBLE_COLOR);
-    entity->mapInfo.oldColor = COLOR_PAIR(VISIBLE_COLOR);
     entity->mapInfo.oldChar = '.';
     entity->mapInfo.newChar = '.';
 }

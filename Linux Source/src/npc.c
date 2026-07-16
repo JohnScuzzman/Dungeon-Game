@@ -11,7 +11,6 @@ Entity* FindNPCInList(int entityID, int maxNPCS) {
 
 /* Basic logic for how a friendly npc follower interacts and moves.*/
 void FollowerLogic(Entity* follower, int n_monsters) {
-
     for (int i = 0; i < n_monsters; i++) {
         /* If a monster is adjacent, don't move, and attack them.*/
         if (CheckMonsterAdjacent(player->follower.pos, (mptr + i)) == true) {
@@ -94,9 +93,7 @@ void UpdateNPCMap(Entity* npc, int maxNPCS) {
         int y, x;
         y = (npc + i)->pos.y;
         x = (npc + i)->pos.x;
-        if((npc + i)->entityType > NULL_NPC_TYPE && (npc + i)->entityType < NPC_END && (npc + i)->entityID != player->follower.entityID) {
-            map[y][x] = npc[i];
-        }
+        if((npc + i)->entityType > NULL_NPC_TYPE && (npc + i)->entityType < NPC_END && (npc + i)->entityID != player->follower.entityID) map[y][x] = npc[i];
         else if((npc + i)->entityType == NULL_ENTITY_TYPE) return;
     }
 }
@@ -108,18 +105,42 @@ void UpdateFollower(Entity* follower) {
     }
 }
 
-void UpdateNPCVisible(Entity* npc, Player* player){
-    if (GetDistance(npc->pos, player->pos) < 6) {
-        npc->transparent = true;
+void KeepNPCIntegrity(Entity* npc) {
+    // if new has been seen before fix mptr/old location
+    if (npc->mapInfo.newSeen == true){
+        npc->seen = true;
+        KeepNPCMapIntegrity(npc);
     }
-    else {
-        npc->transparent = false;
-    } 
+    if (npc->mapInfo.newSeen == false) {
+        npc->seen = false;
+        KeepNPCMapIntegrity(npc);
+    }
+    if (npc->mapInfo.newVisible == true) {
+        npc->seen = true;
+        KeepNPCMapIntegrity(npc);
+    }                
+}
+
+void KeepNPCMapIntegrity(Entity* npc) {
+    if (npc->mapInfo.oldSeen == false){
+        map[npc->pos.y][npc->pos.x].seen = false;
+    }
+    if (npc->mapInfo.oldSeen == true){
+        map[npc->pos.y][npc->pos.x].seen = true;
+    }
+    if (npc->mapInfo.oldVisible == false) {
+        map[npc->pos.y][npc->pos.x].visible = false;
+    }
+    if (npc->mapInfo.oldVisible == true) {
+        map[npc->pos.y][npc->pos.x].visible = false;
+    }
+}
+
+void UpdateNPCVisible(Entity* npc, Player* player){
     if(LineOfSight(npc->pos, player->pos) && 
     GetDistance(npc->pos, player->pos) < 15 && npc->entityType != CORPSE) {
         npc->visible = true;
         npc->seen = true;
-        if((npc->transparent)) map[npc->pos.y][npc->pos.x].transparent = true;
         map[npc->pos.y][npc->pos.x].visible = true;
         npc->ch = npc->staticCh;
         map[npc->pos.y][npc->pos.x].ch = npc->ch;

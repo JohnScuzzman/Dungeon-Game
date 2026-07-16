@@ -64,8 +64,6 @@ void AssignChest(int x, int y) {
     map[y][x].mapInfo.newSeen = false;
     map[y][x].mapInfo.oldVisible = false;
     map[y][x].mapInfo.newSeen = false;
-    map[y][x].mapInfo.newColor = CHEST_COLOR;
-    map[y][x].mapInfo.oldColor = CHEST_COLOR;
     map[y][x].mapInfo.oldChar = '$';
     map[y][x].mapInfo.newChar = '$';
     map[y][x].entityArmor = NoArmor();
@@ -166,8 +164,6 @@ void AssignStairsDown(int x, int y) {
     map[y][x].mapInfo.newSeen = false;
     map[y][x].mapInfo.oldVisible = false;
     map[y][x].mapInfo.newSeen = false;
-    map[y][x].mapInfo.newColor = COLOR_PAIR(VISIBLE_COLOR);
-    map[y][x].mapInfo.oldColor = COLOR_PAIR(VISIBLE_COLOR);
     map[y][x].mapInfo.oldChar = '=';
     map[y][x].mapInfo.newChar = '=';
     map[y][x].entityArmor = NoArmor();
@@ -220,8 +216,6 @@ void AssignFloor(int x, int y) {
     map[y][x].mapInfo.newSeen = false;
     map[y][x].mapInfo.oldVisible = false;
     map[y][x].mapInfo.newSeen = false;
-    map[y][x].mapInfo.newColor = COLOR_PAIR(VISIBLE_COLOR);
-    map[y][x].mapInfo.oldColor = COLOR_PAIR(VISIBLE_COLOR);
     map[y][x].mapInfo.oldChar = '.';
     map[y][x].mapInfo.newChar = '.';
     map[y][x].entityArmor = NoArmor();
