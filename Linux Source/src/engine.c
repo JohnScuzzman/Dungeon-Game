@@ -83,16 +83,15 @@ Updates the monsters info, playersFOV, draws the updated info of both.
 It then resets the monsters moveflags and games combatHistory.
 */
 void RefreshGamestate(Entity* mptr, int n_monsters) {
-    UpdateMonsterMap(mptr, n_monsters);
-    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
-    UpdateFollower(&player->follower);
+     UpdateMonsterMap(mptr, n_monsters);
     for (int i = 0; i < n_monsters; i++) {
         UpdateNPCVisible((mptr + i), player);
     }
+    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
+    UpdateFollower(&player->follower);
     ClearFOV(player);
     MakeFOV(player);
     DrawEverything();
-
     // UpdateNPCVisible(nptr, player);
     // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
