@@ -18,16 +18,14 @@ void DrawMap()
     for (int x = 0; x < MAP_WIDTH; x++)
     { 
         if (map[y][x].visible) {
-			if (map[y][x].color == BLOOD_COLOR && map[y][x].miscTimer > 0) {
-				mvaddch(y, x, map[y][x].ch | COLOR_PAIR(BLOOD_COLOR) | A_DIM);
-				map[y][x].miscTimer--;
-			}
-			else if (map[y][x].color == CHEST_COLOR) {
+			if (map[y][x].color == CHEST_COLOR) {
 				mvaddch(y, x, map[y][x].ch | COLOR_PAIR(CHEST_COLOR) | A_DIM);
 			}
-			else mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR));
-        	if(map[y][x].entityType == FLOOR && map[y][x].color != BLOOD_COLOR){
-        		if(map[y][x].inventory[0].itemID != NULL_ITEM_ID) mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR) | A_DIM);
+			else if(map[y][x].color != BLOOD_COLOR){
+				mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR));
+			}
+        	if(map[y][x].entityType == FLOOR && (map[y][x].inventory[0].itemID != NULL_ITEM_ID)){
+        		mvaddch(y, x, map[y][x].ch | COLOR_PAIR(VISIBLE_COLOR) | A_DIM);
         	}
 		}
         else if (map[y][x].seen && map[y][x].entityID < 2){
@@ -162,285 +160,242 @@ void DrawBorder(void) {
 /* Splatters the target across the map, yay! */
 void BloodSplatter(Position origin, Position target) {
 	int dir = (rand() % 3) + 1;
-	map[target.y][target.x].color = BLOOD_COLOR;
-	map[target.y][target.x].miscTimer = (rand() % 30) + 10;
-    if ((target.x) < (origin.x) && (target.y) < (origin.y)) {
-		BloodSE(origin, target, dir);
-    }
-    else if ((target.x) < (origin.x) && (target.y) > (origin.y)) {
-		BloodNE(origin, target, dir);	
-    }
-    else if ((target.x) > (origin.x) && (target.y) > (origin.y)) {
-		BloodNW(origin, target, dir);
-    }
-    else if ((target.x) > (origin.x) && (target.y) < (origin.y)) {
-		BloodSW(origin, target, dir);
-    }
-    else if ((target.x) < (origin.x) && (target.y) == (origin.y)) {
-		BloodE(origin, target, dir);
-    }
-    else if ((target.x) > (origin.x) && (target.y) == (origin.y)) {
-		BloodW(origin, target, dir);
-    }
-    else if ((target.x) == (origin.x) && (target.y) < (origin.y)) {
-		BloodS(origin, target, dir);
-    }
-    else if ((target.x) == (origin.x) && (target.y) > (origin.y)) {
-		BloodN(origin, target, dir);
-	}
+	StoreBloodTile(target.x, target.y);
+    if ((target.x) < (origin.x) && (target.y) < (origin.y)) BloodSE(target, dir);
+    else if ((target.x) < (origin.x) && (target.y) > (origin.y)) BloodNE(target, dir);	
+    else if ((target.x) > (origin.x) && (target.y) > (origin.y)) BloodNW(target, dir);
+    else if ((target.x) > (origin.x) && (target.y) < (origin.y)) BloodSW(target, dir);
+    else if ((target.x) < (origin.x) && (target.y) == (origin.y)) BloodE(target, dir);
+    else if ((target.x) > (origin.x) && (target.y) == (origin.y)) BloodW(target, dir);
+    else if ((target.x) == (origin.x) && (target.y) < (origin.y)) BloodS(target, dir);
+    else if ((target.x) == (origin.x) && (target.y) > (origin.y)) BloodN(target, dir);
 }
 
 /* Splatters the target across the map, yay! */
 void CritBloodSplatter(Position origin, Position target) {
-	map[target.y][target.x].color = BLOOD_COLOR;
-	map[target.y][target.x].miscTimer = (rand() % 30) + 10;
+	StoreBloodTile(target.x, target.y);
     if((target.x) < (origin.x) && (target.y) < (origin.y)) {
-		map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y - 1)][target.x].miscTimer = (rand() % 30) + 10;
+		StoreBloodTile((target.x) - 1, (target.y) - 1);
+		StoreBloodTile((target.x) - 1, (target.y));
+		StoreBloodTile((target.x) , (target.y) - 1);
     }
     else if ((target.x) < (origin.x) && (target.y) > (origin.y)) {
-		map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
+		StoreBloodTile((target.x) - 1, (target.y) + 1);
+		StoreBloodTile((target.x) - 1, (target.y));
+		StoreBloodTile((target.x), (target.y) + 1);
     }
     else if ((target.x) > (origin.x) && (target.y) > (origin.y)) {
-		map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
+		StoreBloodTile((target.x) + 1, (target.y) + 1);
+		StoreBloodTile((target.x) + 1, (target.y));
+		StoreBloodTile((target.x), (target.y) + 1);
     }
     else if ((target.x) > (origin.x) && (target.y) < (origin.y)) {
-		map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
+		StoreBloodTile((target.x) + 1, (target.y) - 1);
+		StoreBloodTile((target.x) + 1, (target.y));
+		StoreBloodTile((target.x), (target.y) - 1);
     }
     else if ((target.x) < (origin.x) && (target.y) == (origin.y)) {
-		map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+		StoreBloodTile((target.x) - 1, (target.y) - 1);
+		StoreBloodTile((target.x) - 1, (target.y));
+		StoreBloodTile((target.x) - 1, (target.y) + 1);
     }
     else if ((target.x) > (origin.x) && (target.y) == (origin.y)) {
-		map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
+		StoreBloodTile((target.x) + 1, (target.y) - 1);
+		StoreBloodTile((target.x) + 1, (target.y));
+		StoreBloodTile((target.x) + 1, (target.y) + 1);
     }
     else if ((target.x) == (origin.x) && (target.y) < (origin.y)) {
-		map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
-		map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+		StoreBloodTile((target.x) + 1, (target.y) - 1);
+		StoreBloodTile((target.x), (target.y) - 1);
+		StoreBloodTile((target.x) - 1, (target.y) - 1);
     }
     else if ((target.x) == (origin.x) && (target.y) > (origin.y)) {
-		map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-		map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-		map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+		StoreBloodTile((target.x) + 1, (target.y) + 1);
+		StoreBloodTile((target.x), (target.y) + 1);
+		StoreBloodTile((target.x) - 1, (target.y) + 1);
 	}
 }
 
-void BloodSE(Position origin, Position target, int dir){
+void BloodSE(Position target, int dir){
 	switch (dir) {
 		case 1:
-			map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) - 1, (target.y) - 1);
+			StoreBloodTile((target.x) - 1, (target.y));
 			break;
 		case 2:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) - 1, (target.y));
 			break;
 		case 3:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) - 1, (target.y));
+			StoreBloodTile((target.x) - 1, (target.y) + 1);
 			break;
 		default:
 			break;
-	}
+	}	
 }
-void BloodNE(Position origin, Position target, int dir){
+void BloodNE(Position target, int dir){
 	switch (dir) {
 		case 1:
-			map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) - 1, (target.y) + 1);
+			StoreBloodTile((target.x) - 1, (target.y));
 			break;
 		case 2:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) - 1, (target.y));
 			break;
 		case 3:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) - 1, (target.y));
+			StoreBloodTile((target.x) - 1, (target.y) - 1);
 			break;
 		default:
 			break;
-	}
+	}	
 }
-void BloodNW(Position origin, Position target, int dir){
+void BloodNW(Position target, int dir){
 	switch (dir) {
 		case 1:
-			map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y) + 1);
+			StoreBloodTile((target.x) + 1, (target.y));
 			break;
 		case 2:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y));
 			break;
 		case 3:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y));
+			StoreBloodTile((target.x), (target.y) + 1);
 			break;
 		default:
 			break;
-	}
+	}	
 }
-void BloodSW(Position origin, Position target, int dir){
+void BloodSW(Position target, int dir){
 	switch (dir) {
 		case 1:
-			map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y) - 1);
+			StoreBloodTile((target.x) + 1, (target.y));
 			break;
 		case 2:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y));
 			break;
 		case 3:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y));
+			StoreBloodTile((target.x), (target.y) - 1);
 			break;
 		default:
 			break;
-	}
+	}	
 }
-void BloodE(Position origin, Position target, int dir){
+void BloodE(Position target, int dir){
 	switch (dir) {
 		case 1:
-			map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) - 1, (target.y) - 1);
+			StoreBloodTile((target.x) - 1, (target.y));
 			break;
 		case 2:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) - 1, (target.y));
 			break;
 		case 3:
-			map[target.y][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) - 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) - 1, (target.y) + 1);
+			StoreBloodTile((target.x) - 1, (target.y) + 1);
 			break;
 		default:
 			break;
-	}
+	}	
 }
-void BloodW(Position origin, Position target, int dir){
+void BloodW(Position target, int dir){
 	switch (dir) {
 		case 1:
-			map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y) - 1);
+			StoreBloodTile((target.x) + 1, (target.y));
 			break;
 		case 2:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y));
 			break;
 		case 3:
-			map[target.y][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[target.y][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y));
+			StoreBloodTile((target.x) + 1, (target.y) + 1);
 			break;
 		default:
 			break;
-	}
+	}	
 }
-void BloodS(Position origin, Position target, int dir){
+void BloodS(Position target, int dir){
 	switch (dir) {
 		case 1:
-			map[(target.y) - 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y) - 1);
+			StoreBloodTile((target.x), (target.y) - 1);
 			break;
 		case 2:
-			map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x), (target.y) - 1);
 			break;
 		case 3:
-			map[(target.y) - 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) - 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) - 1][target.x].miscTimer = (rand() % 30) + 10;
-			map[(target.y) - 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x), (target.y) - 1);
+			StoreBloodTile((target.x) - 1, (target.y) - 1);
 			break;
 		default:
 			break;
-	}
+	}	
 }
-void BloodN(Position origin, Position target, int dir){
+void BloodN(Position target, int dir){
 	switch (dir) {
 		case 1:
-			map[(target.y) + 1][(target.x) + 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) + 1].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x) + 1, (target.y) + 1);
+			StoreBloodTile((target.x), (target.y) + 1);
 			break;
 		case 2:
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x), (target.y) + 1);
 			break;
 		case 3:
-			map[(target.y) + 1][target.x].color = BLOOD_COLOR;
-			map[(target.y) + 1][(target.x) - 1].color = BLOOD_COLOR;
-			map[(target.y) + 1][target.x].miscTimer = (rand() % 30) + 10;
-			map[(target.y) + 1][(target.x) - 1].miscTimer = (rand() % 30) + 10;
+			StoreBloodTile((target.x), (target.y) + 1);
+			StoreBloodTile((target.x) - 1, (target.y) + 1);
 			break;
 		default:
 			break;
 	}	
 }
 
+void StoreBloodTile(int x, int y) {
+	for(int i = 0; i < MAX_NPCS; i++) {
+		if ((dungeonInfo->bloodTimers[i]) == 0) {
+			dungeonInfo->bloodTiles[i].y = y;
+			dungeonInfo->bloodTiles[i].x = x;
+			dungeonInfo->bloodTimers[i] = (rand() % 30) + 10;
+			return;
+		}
+	}
+}
+
+void DrawBloodTiles() {
+	for(int i = 0; i < MAX_NPCS; i++) {
+		int timer = dungeonInfo->bloodTimers[i];
+		if (timer > 0) {
+			Position pos;
+			pos.x = dungeonInfo->bloodTiles[i].x;
+			pos.y = dungeonInfo->bloodTiles[i].y;
+			if (map[pos.y][pos.x].color != BLOOD_COLOR) {
+				map[pos.y][pos.x].color = BLOOD_COLOR;
+			}
+			if (map[pos.y][pos.x].visible && 
+			map[pos.y][pos.x].entityType > NULL_ENTITY_TYPE &&
+			map[pos.y][pos.x].entityType <= CORPSE) {
+				mvaddch(pos.y, pos.x , map[pos.y][pos.x].ch | COLOR_PAIR(BLOOD_COLOR) | A_DIM);
+			}
+			dungeonInfo->bloodTimers[i] = timer - 1;
+			if (dungeonInfo->bloodTimers[i] == 0) {
+				map[pos.y][pos.x].color = 0;
+				pos.x = 0;
+				pos.y = 0;
+			}
+		}
+	}
+}
+
 void DrawDebug(Entity* mptr, int n_monsters) {
   // Position closest = FindClosestUnexplored();
     // for (int i = 0; i < (MAX_ONSCREEN_NPCS) ; i++) {
-    mvprintw(54, 2, "ATK %d, ACC:%d", player->playerStats.ATK, combatHistory->playerAccRoll);
+    for(int i = 0; i < MAX_NPCS; i++) {
+		mvprintw(i, 170, "X: %d, Y: %d, BloodTimer: %d", dungeonInfo->bloodTiles[i].x, dungeonInfo->bloodTiles[i].y, dungeonInfo->bloodTimers[i]);
+	}
+	 // mvprintw(54, 2, "ATK %d, ACC:%d", player->playerStats.ATK, combatHistory->playerAccRoll);
     // mvprintw(i, 170, "NPC_ID: %d, nptr[i]: %d, followerID: %d POS_X:%d POS_Y:%d", nptr[i].entityID, i, player->follower.entityID, nptr[i].pos.x, nptr[i].pos.y);
 	  // mvprintw(52, 2, "Player POS x:%d, y:%d, Tail:%d, inv[0].ID:%d", player->pos.x, player->pos.y, player->invTail, player->inventory[0].itemID);
     // mvprintw(52, 2, "Armor Req:%d, Armor Stat:%d, Melee Req:%d, Ranged Req:%d", player->equippedArmor.statReq, player->equippedArmor.statUsed, player->equippedMelee.statReq, player->equippedRanged.statReq);
@@ -473,6 +428,7 @@ void DrawCombatLog() {
 void DrawEverything() {
 	erase();
 	DrawMap();
+	DrawBloodTiles();
 	DrawPlayer(player);
 	DrawPlayerEquipment();
 	DrawPlayerStats();

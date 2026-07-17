@@ -103,6 +103,7 @@ void UpdateFollower(Entity* follower) {
     else if (follower->entityType > NULL_NPC_TYPE && follower->entityType > NULL_NPC_TYPE < NPC_END && map[follower->pos.y][follower->pos.x].entityType != CORPSE){
         map[follower->pos.y][follower->pos.x] = player->follower;
     }
+    UpdateNPCVisible(follower, player);
 }
 
 void UpdateNPCVisible(Entity* npc, Player* player){

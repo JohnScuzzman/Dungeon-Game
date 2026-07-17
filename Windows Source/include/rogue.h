@@ -70,9 +70,9 @@ typedef enum {
   WALL,
   DOOR,
   STAIRS,
-  MONSTER,
-  CORPSE,
   CHEST,
+  CORPSE,
+  MONSTER,
   NPC
 } EntityTypes;
 
@@ -132,7 +132,6 @@ typedef struct {
   char staticCh;
   int aggroRange;
   int color;
-  int miscTimer;
   int entityID;
   int entityType;
   int invTail;
@@ -204,6 +203,8 @@ typedef struct
 typedef struct
 {
   int currentFloor;
+  Position bloodTiles[TOTAL_NPCS];
+  int bloodTimers[TOTAL_NPCS];
   // Entity** visitedFloors[MAX_DUNGEON_FLOORS];
 } DungeonInfo;
 
@@ -270,16 +271,17 @@ void RecordAbilityUse();
 
 // draw.c functions
 void BloodSplatter(Position origin, Position target);
-void BloodSE(Position origin, Position target, int dir);
-void BloodNE(Position origin, Position target, int dir);
-void BloodNW(Position origin, Position target, int dir);
-void BloodSW(Position origin, Position target, int dir);
-void BloodE(Position origin, Position target, int dir);
-void BloodW(Position origin, Position target, int dir);
-void BloodS(Position origin, Position target, int dir);
-void BloodN(Position origin, Position target, int dir);
+void BloodSE(Position target, int dir);
+void BloodNE(Position target, int dir);
+void BloodNW(Position target, int dir);
+void BloodSW(Position target, int dir);
+void BloodE(Position target, int dir);
+void BloodW(Position target, int dir);
+void BloodS(Position target, int dir);
+void BloodN(Position target, int dir);
 void CritBloodSplatter(Position origin, Position target);
 void DrawAbilities();
+void DrawBloodTiles();
 void DrawBorder();
 void DrawCombatLog();
 void DrawDebug(Entity* mptr, int n_monsters);
@@ -290,6 +292,8 @@ void DrawMap();
 void DrawMonsters(Entity* mptr, int n_monsters);
 void DrawPlayer(Player* player);
 void DrawPlayerBlink(Player* player);
+bool RemoveBloodTile(Position target);
+void StoreBloodTile(int x, int y);
 
 // engine.c functions
 void CloseGame(void);
@@ -486,8 +490,6 @@ void KeepNPCMapIntegrity(Entity* npc);
 Entity* FindNPCInList(int entityID, int maxNPCS);
 void FollowerLogic(Entity* follower, int n_monsters);
 void FollowPlayer(Entity* npc);
-void KeepNPCIntegrity(Entity* npc);
-void KeepNPCMapIntegrity(Entity* npc);
 void RemovePlayerFollower(Entity* follower);
 void UpdateNPCMap(Entity* npc, int maxNPCS);
 void UpdateFollower(Entity* follower);
