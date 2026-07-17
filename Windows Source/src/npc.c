@@ -138,7 +138,7 @@ void KeepNPCMapIntegrity(Entity* npc) {
 
 void UpdateNPCVisible(Entity* npc, Player* player){
     if(LineOfSight(npc->pos, player->pos) && 
-    GetDistance(npc->pos, player->pos) < 15 && npc->entityType != CORPSE) {
+    GetDistance(npc->pos, player->pos) < 15) {
         npc->visible = true;
         npc->seen = true;
         map[npc->pos.y][npc->pos.x].visible = true;

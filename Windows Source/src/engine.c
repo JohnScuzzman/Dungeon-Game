@@ -96,7 +96,7 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateFollower(&player->follower);
     MakeFOV(player);
     DrawEverything();
-    UpdateNPCVisible(nptr, player);
+    // UpdateNPCVisible(nptr, player);
     // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
