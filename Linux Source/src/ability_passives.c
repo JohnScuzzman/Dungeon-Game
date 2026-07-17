@@ -12,7 +12,6 @@ void RemoveSummonSkeleton() {
     UpdateNPCVisible(&player->follower, player);
     ClearFOV(player);
     MakeFOV(player);
-    player->hasMoved = true;
     strcpy(combatHistory->event, "Your skeleton crumbles to dust.");
     QueueEvent(q, combatHistory->event);
 }
