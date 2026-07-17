@@ -94,13 +94,9 @@ It then resets the monsters moveflags and games combatHistory.
 void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     UpdateFollower(&player->follower);
-    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
     MakeFOV(player);
     DrawEverything();
-    // for (int i = 0; i < n_monsters; i++) {
-    //     UpdateNPCVisible(mptr + i, player);
-    // }
-    // UpdateNPCVisible(nptr, player);
+    UpdateNPCVisible(nptr, player);
     // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
