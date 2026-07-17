@@ -95,7 +95,9 @@ void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
     UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
     UpdateFollower(&player->follower);
-    // UpdateNPCVisible(&player->follower, player);
+    for (int i = 0; i < n_monsters; i++) {
+        UpdateNPCVisible((mptr + i), player);
+    }
     ClearFOV(player);
     MakeFOV(player);
     DrawEverything();
