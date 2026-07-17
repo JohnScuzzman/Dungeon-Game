@@ -417,14 +417,10 @@ void ProcessMoveUpLeft(Entity* npc){
 
 void KeepNPCIntegrity(Entity* npc) {
     // if new has been seen before fix mptr/old location
-    if (npc->mapInfo.newSeen == true){
-        npc->seen = true;
+        npc->seen = npc->mapInfo.newSeen;
         KeepNPCMapIntegrity(npc);
-    }
-    if (npc->mapInfo.newSeen == false) {
-        npc->seen = false;
+        npc->seen = npc->mapInfo.newSeen ;
         KeepNPCMapIntegrity(npc);
-    }
     if (npc->mapInfo.newVisible == true) {
         npc->seen = true;
         KeepNPCMapIntegrity(npc);
@@ -434,37 +430,6 @@ void KeepNPCIntegrity(Entity* npc) {
 void KeepNPCMapIntegrity(Entity* npc) {
     map[npc->pos.y][npc->pos.x].seen = npc->mapInfo.oldSeen;
     // map[npc->pos.y][npc->pos.x].color = npc->mapInfo.oldColor;
-    if (npc->mapInfo.oldVisible == false) {
-        map[npc->pos.y][npc->pos.x].visible = false;
-    }
-    if (npc->mapInfo.oldVisible == true) {
-        map[npc->pos.y][npc->pos.x].visible = false;
-    }
-}
-
-void KeepNPCIntegrity(Entity* npc) {
-    // if new has been seen before fix mptr/old location
-    if (npc->mapInfo.newSeen == true){
-        npc->seen = true;
-        KeepNPCMapIntegrity(npc);
-    }
-    if (npc->mapInfo.newSeen == false) {
-        npc->seen = false;
-        KeepNPCMapIntegrity(npc);
-    }
-    if (npc->mapInfo.newVisible == true) {
-        npc->seen = true;
-        KeepNPCMapIntegrity(npc);
-    }                
-}
-
-void KeepNPCMapIntegrity(Entity* npc) {
-    if (npc->mapInfo.oldSeen == false){
-        map[npc->pos.y][npc->pos.x].seen = false;
-    }
-    if (npc->mapInfo.oldSeen == true){
-        map[npc->pos.y][npc->pos.x].seen = true;
-    }
     if (npc->mapInfo.oldVisible == false) {
         map[npc->pos.y][npc->pos.x].visible = false;
     }

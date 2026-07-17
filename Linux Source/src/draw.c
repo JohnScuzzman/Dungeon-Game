@@ -56,6 +56,7 @@ void DrawPlayer(Player* player) {
 void DrawPlayerBlink(Player* player) { 
 	// attron(A_STANDOUT);
 	mvaddch(player->pos.y, player->pos.x, player->ch | player->color | A_BOLD | A_DIM | A_BLINK);
+	refresh();
 	// attroff(A_STANDOUT); 
 	}  
 
@@ -479,4 +480,3 @@ void DrawEverything() {
 	DrawCombatLog();
 	DrawBorder();
 }
-

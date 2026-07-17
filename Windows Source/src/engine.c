@@ -93,15 +93,20 @@ It then resets the monsters moveflags and games combatHistory.
 */
 void RefreshGamestate(Entity* mptr, int n_monsters) {
     UpdateMonsterMap(mptr, n_monsters);
+    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
     UpdateFollower(&player->follower);
+    // UpdateNPCVisible(&player->follower, player);
+    ClearFOV(player);
     MakeFOV(player);
     DrawEverything();
+
     // UpdateNPCVisible(nptr, player);
     // DrawDebug(mptr, n_monsters); // Toggle if you would like to see the debugger!
     ResetMoveFlags(mptr, n_monsters);
     ResetCombatHistory();
     player->follower.hasMoved = false;
 }
+
 void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* items) { 
     bool leaveFlag = false;
     bool PMove = false;
@@ -112,6 +117,7 @@ void GameLoop(CombatHistory* combatHistory, int n_monsters, LogQueue *q, Item* i
 
     Greeting();
     RefreshGamestate(mptr, n_monsters);
+    DrawPlayerBlink(player);
     
     while(!leaveFlag){ 
         ch = getch();

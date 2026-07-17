@@ -17,7 +17,6 @@ bool AttackPlayer(Entity* attacker, CombatHistory* combatHistory, Player* player
             return false;
         }
         RecordMonsterHit(attacker, combatHistory, attackerAccRoll, attackerDMG);
-        DrawPlayerStats();
         return true;
     }
     RecordMonsterMiss(attacker, combatHistory, attackerAccRoll, playerAC);
@@ -409,7 +408,7 @@ int CalculateEntityAC(Entity* defender) {
     int defenderAC = defender->entityStats.AC;
     defenderDodgeMod = ((defenderDodgeMod - 10) / 2);
     defenderAC = (defenderAC + defenderDodgeMod + 10);
-    if(defender->entityArmor.isEnchanted) {
+    if (defender->entityArmor.isEnchanted) {
         defenderAC += (defender->entityArmor.enchantLevel);
     }
     return defenderAC;

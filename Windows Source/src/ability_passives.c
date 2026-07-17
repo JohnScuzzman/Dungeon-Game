@@ -16,7 +16,6 @@ void RemoveSummonSkeleton() {
     QueueEvent(q, combatHistory->event);
 }
 
-
 /* When Ice Armors duration is up, remove the armor.*/
 void RemoveIceArmor(){
     strcpy(combatHistory->event, "You're icy armor melts.");

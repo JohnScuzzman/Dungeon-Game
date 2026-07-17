@@ -470,4 +470,3 @@ int CalculatePlayerAC() {
     }
     return playerAC;
 }
-

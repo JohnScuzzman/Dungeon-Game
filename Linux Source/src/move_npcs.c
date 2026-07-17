@@ -417,14 +417,10 @@ void ProcessMoveUpLeft(Entity* npc){
 
 void KeepNPCIntegrity(Entity* npc) {
     // if new has been seen before fix mptr/old location
-    if (npc->mapInfo.newSeen == true){
-        npc->seen = true;
+        npc->seen = npc->mapInfo.newSeen;
         KeepNPCMapIntegrity(npc);
-    }
-    if (npc->mapInfo.newSeen == false) {
-        npc->seen = false;
+        npc->seen = npc->mapInfo.newSeen ;
         KeepNPCMapIntegrity(npc);
-    }
     if (npc->mapInfo.newVisible == true) {
         npc->seen = true;
         KeepNPCMapIntegrity(npc);

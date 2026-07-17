@@ -13,7 +13,7 @@
 /* Draw the Map to the screen. */
 void DrawMap()
 { 
-  for (int y = 0; y < MAP_HEIGHT y++)
+  for (int y = 0; y < MAP_HEIGHT; y++)
   { 
     for (int x = 0; x < MAP_WIDTH; x++)
     { 
@@ -49,14 +49,14 @@ void DrawMap()
 /* Draw Player based on position. */
 void DrawPlayer(Player* player) { 
 	mvaddch(player->pos.y, player->pos.x, (chtype)(player->ch | COLOR_PAIR(VISIBLE_COLOR) | A_BOLD));
-  refresh();
+  	refresh();
 	} 
 
 /* Makes the players avatar blink when called.*/
 void DrawPlayerBlink(Player* player) { 
 	// attron(A_STANDOUT);
 	mvaddch(player->pos.y, player->pos.x, (chtype)(player->ch | COLOR_PAIR(HIGHLIGHT_COLOR) | A_BLINK));
-  refresh();
+  	refresh();
 	// attroff(A_STANDOUT); 
 	}  
 
