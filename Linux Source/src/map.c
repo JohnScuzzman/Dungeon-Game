@@ -105,10 +105,11 @@ void MakeNewLevel(int* old_n_monsters) {
     player->pos.x = start_pos.x;
     AssignFloor(start_pos.x, start_pos.y);
     map[start_pos.y][start_pos.x].noCollision = false;
-    if (player->follower.entityID != NULL_ENTITY_TYPE) PlaceAdjacentToPlayer(&player->follower);
-    UpdateNPCMap(nptr, MAX_ONSCREEN_NPCS);
-    UpdateFollower(&player->follower);
-    UpdateNPCVisible(&player->follower, player);
+    if (player->follower.entityID != NULL_ENTITY_TYPE) {
+        AssignFloor(player->follower.pos.x, player->follower.pos.y);
+        PlaceAdjacentToPlayer(&player->follower);
+        UpdateNPCVisible(&player->follower, player);
+    }
 }
 
 // returns max - min + 1 to get ceiling

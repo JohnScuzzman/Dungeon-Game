@@ -18,7 +18,7 @@ void DrawMap()
     for (int x = 0; x < MAP_WIDTH; x++)
     { 
         if (map[y][x].visible) {
-			if (map[y][x].color == CHEST_COLOR) {
+			if (map[y][x].color == CHEST_COLOR || map[y][x]. == STAIRS) {
 				mvaddch(y, x, map[y][x].ch | COLOR_PAIR(CHEST_COLOR) | A_DIM);
 			}
 			else if(map[y][x].color != BLOOD_COLOR){

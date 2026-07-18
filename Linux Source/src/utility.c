@@ -138,6 +138,7 @@ bool PlaceAdjacentToPlayer(Entity* entity) {
     Position closestTile = CheckAdjacentCollisions(player->pos);
     if (closestTile.x == entity->pos.x && closestTile.y == entity->pos.y) return false;
     entity->pos = closestTile;
+    AssignFloor(entity->pos.x, entity->pos.y);
     return true;
 }
 

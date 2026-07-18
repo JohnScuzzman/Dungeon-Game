@@ -114,7 +114,7 @@ void UpdateNPCVisible(Entity* npc, Player* player){
         map[npc->pos.y][npc->pos.x].visible = true;
         npc->ch = npc->staticCh;
         map[npc->pos.y][npc->pos.x].ch = npc->ch;
-        if(npc->entityID != player->follower.entityID) RecordEntitySeen(npc);
+        if(npc->entityType == MONSTER) RecordEntitySeen(npc);
         else npc->seenByPlayer = true;
         if (GetDistance(npc->pos, player->pos) < 6) {
             npc->transparent = true;
